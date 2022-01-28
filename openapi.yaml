@@ -1,0 +1,1900 @@
+openapi: 3.0.3
+
+info:
+  description: |
+    Draft of the APIs of the ecolytiq SaaS
+  version: 3.0.0 (Preview - Draft)
+  title: ecolytiq SaaS
+  contact:
+    email: support@ecolytiq.com
+    name: ecolytiq GmbH
+    url: https://ecolytiq.com
+  termsOfService: https://ecolytiq.com/imprint
+  x-logo:
+    url: "https://ecolytiq-team.github.io/ecolytiq-official-api-docs/assets/logo.png"
+    backgroundColor: "#F9F9F9"
+    altText: "ecolytiq GmbH"
+servers:
+  - description: ecolytiq API (Sandbox)
+    url: https://api.sandbox.api-ecolytiq.com
+  - description: ecolytiq API (Stage)
+    url: https://stage-apps.ecolytiq.io
+  - description: ecolytiq API (Production)
+    url: https://apps.ecolytiq.io
+tags:
+  - name: Errors
+    description: |
+      ## 1 Http Status Code Summary
+      |                        Status Code | Description                                                                                      |
+      |------------------------------------|--------------------------------------------------------------------------------------------------|
+      |                           200 - OK | Everything worked as expected.                                                                   |
+      |                      201 - Created | Everything worked as expected. Resource created.                                                 |
+      |                   204 - No Content | Everything worked as expected.                                                                   |
+      |                  400 - Bad Request | The request was unacceptable, often due to missing a required parameter.                         |
+      |                 401 - Unauthorized | No valid Access Token provided.                                                                  |
+      |                    403 - Forbidden | The API key doesn't have permissions to perform the request.                                     |
+      |                    404 - Not Found | The requested resource doesn't exist.                                                            |
+      |                      409 - Conflict | The request conflicts with another request (perhaps due to using the same idempotent key).        |
+      |         422 - Unprocessable Entity | Unprocessable Entity                                                                             |
+      |            429 - Too Many Requests | Too many requests hit the API too quickly. We recommend an exponential backoff of your requests. |
+      | 500, 502, 503, 504 - Server Errors | Something went wrong on ecolytiq's end.                                                          |
+  - name: Transaction API
+  - name: Content API
+  - name: Profiling API
+
+security:
+  - bearerAuth: [ ]
+
+paths:
+  /transactions/v1/transactions:
+    post:
+      description: Save Transactions.
+      summary: Process transactions
+      tags:
+        - Transaction API
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransactionRequest'
+            examples:
+              Minimal-Request:
+                $ref: '#/components/examples/Transaction-Request-Example-01'
+              Request-With-Merchant:
+                $ref: '#/components/examples/Transaction-Request-Example-02'
+      responses:
+        '200':
+          description: |
+            Result of Transaction processing.
+          headers:
+            X-RateLimit-Limit:
+              $ref: '#/components/headers/X-RateLimit-Limit'
+            X-RateLimit-Remaining:
+              $ref: '#/components/headers/X-RateLimit-Remaining'
+            X-RateLimit-Reset:
+              $ref: '#/components/headers/X-RateLimit-Reset'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransactionResponse'
+              examples:
+                Response-Without-Request:
+                  $ref: '#/components/examples/Transaction-Response-Example-01'
+                Response-With-Request:
+                  $ref: '#/components/examples/Transaction-Response-Example-02'
+
+    get:
+      summary: Get Transactions by IDs
+      description: Get Transactions by IDs
+      tags:
+        - Transaction API
+      parameters:
+        - in: query
+          name: ids
+          schema:
+            type: array
+            minItems: 1
+            maxItems: 100
+            items:
+              $ref: '#/components/schemas/TransactionId'
+          style: form
+          explode: false
+      responses:
+        '200':
+          description: List of requested Transactions
+          headers:
+            X-RateLimit-Limit:
+              $ref: '#/components/headers/X-RateLimit-Limit'
+            X-RateLimit-Remaining:
+              $ref: '#/components/headers/X-RateLimit-Remaining'
+            X-RateLimit-Reset:
+              $ref: '#/components/headers/X-RateLimit-Reset'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransactionResponse'
+
+  /content/v1/comparables/random:
+    get:
+      tags:
+        - Content API
+      description: Get Comparables for a given co2 footprint
+      parameters:
+        - in: query
+          name: co2_footprint
+          description: CO2 footprint in grams
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+        - in: query
+          name: size
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 5
+            default: 1
+        - in: query
+          name: lang
+          description: language
+          required: false
+          style: form
+          explode: false
+          schema:
+            type: array
+            default:
+              - en
+            items:
+              $ref: '#/components/schemas/LanguageCode'
+      responses:
+        '200':
+          headers:
+            X-RateLimit-Limit:
+              $ref: '#/components/headers/X-RateLimit-Limit'
+            X-RateLimit-Remaining:
+              $ref: '#/components/headers/X-RateLimit-Remaining'
+            X-RateLimit-Reset:
+              $ref: '#/components/headers/X-RateLimit-Reset'
+          description: A list of random comparables
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ComparableResponse'
+
+  /content/v1/insights/random:
+    get:
+      tags:
+        - Content API
+      description: Get Insights (for a given category)
+      parameters:
+        - in: query
+          name: category
+          description: category
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: size
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 5
+            default: 1
+        - in: query
+          name: lang
+          description: language
+          required: false
+          style: form
+          explode: true
+          schema:
+            type: array
+            default:
+              - en
+            items:
+              $ref: '#/components/schemas/LanguageCode'
+      responses:
+        '200':
+          description: A list of random insights
+          headers:
+            X-RateLimit-Limit:
+              $ref: '#/components/headers/X-RateLimit-Limit'
+            X-RateLimit-Remaining:
+              $ref: '#/components/headers/X-RateLimit-Remaining'
+            X-RateLimit-Reset:
+              $ref: '#/components/headers/X-RateLimit-Reset'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InsightsResponse'
+
+  /profiling/v1/onboardings:
+    get:
+      summary: Get a List of Onboardings
+      description: |
+        Get a List of Onboardings. An Onboarding is a Set of Questions and Answers to build a profile for end-users.
+      tags:
+        - Profiling API
+      responses:
+        '200':
+          description: List of Onboardings
+          headers:
+            X-RateLimit-Limit:
+              $ref: '#/components/headers/X-RateLimit-Limit'
+            X-RateLimit-Remaining:
+              $ref: '#/components/headers/X-RateLimit-Remaining'
+            X-RateLimit-Reset:
+              $ref: '#/components/headers/X-RateLimit-Reset'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OnboardingResponse'
+
+  /profiling/v1/onboardings/{onboarding_id}/start:
+    get:
+      summary: Start or continue Onboarding
+      description: |
+        Start or continue Onboarding
+      tags:
+        - Profiling API
+      parameters:
+        - in: query
+          name: account_id
+          description: Account ID
+          schema:
+            $ref: '#/components/schemas/AccountId'
+      responses:
+        '200':
+          description: List of onboardings
+          headers:
+            X-RateLimit-Limit:
+              $ref: '#/components/headers/X-RateLimit-Limit'
+            X-RateLimit-Remaining:
+              $ref: '#/components/headers/X-RateLimit-Remaining'
+            X-RateLimit-Reset:
+              $ref: '#/components/headers/X-RateLimit-Reset'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NextQuestionResponse'
+
+  /profiling/v1/onboardings/{onboarding_id}/next:
+    post:
+      summary: Save Onboarding Question and get next one
+      description: |
+        Get a List of Onboardings. An Onboarding is a Set of Questions and Answers to build a profile for end-users.
+      tags:
+        - Profiling API
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BulkAnswersRequest'
+      responses:
+        '200':
+          description: List of onboardings
+          headers:
+            X-RateLimit-Limit:
+              $ref: '#/components/headers/X-RateLimit-Limit'
+            X-RateLimit-Remaining:
+              $ref: '#/components/headers/X-RateLimit-Remaining'
+            X-RateLimit-Reset:
+              $ref: '#/components/headers/X-RateLimit-Reset'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NextQuestionResponse'
+
+  /profiling/v1/questions:
+    get:
+      summary: Get Questions by IDs
+      description: Get Questions and Answers by IDs
+      tags:
+        - Profiling API
+      parameters:
+        - in: query
+          name: ids
+          style: form
+          required: true
+          explode: false
+          schema:
+            type: array
+            minItems: 1
+            maxItems: 20
+            items:
+              type: string
+      responses:
+        '200':
+          headers:
+            X-RateLimit-Limit:
+              $ref: '#/components/headers/X-RateLimit-Limit'
+            X-RateLimit-Remaining:
+              $ref: '#/components/headers/X-RateLimit-Remaining'
+            X-RateLimit-Reset:
+              $ref: '#/components/headers/X-RateLimit-Reset'
+          description: A list of Questions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QuestionResponse'
+
+  /profiling/v1/answer:
+    post:
+      description: Save Answer for a given Question
+      tags:
+        - Profiling API
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BulkAnswersRequest'
+      responses:
+        '200':
+          description: Confirmation that answer is saved
+          headers:
+            X-RateLimit-Limit:
+              $ref: '#/components/headers/X-RateLimit-Limit'
+            X-RateLimit-Remaining:
+              $ref: '#/components/headers/X-RateLimit-Remaining'
+            X-RateLimit-Reset:
+              $ref: '#/components/headers/X-RateLimit-Reset'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BulkAnswerResponse'
+
+components:
+  headers:
+    X-RateLimit-Limit:
+      schema:
+        type: integer
+      description: Request limit per hour.
+    X-RateLimit-Remaining:
+      schema:
+        type: integer
+      description: The number of requests left for the time window.
+    X-RateLimit-Reset:
+      schema:
+        type: string
+        format: date-time
+      description: The UTC date/time at which the current rate limit window resets.
+
+  securitySchemes:
+    bearerAuth: # arbitrary name for the security scheme
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  examples:
+    Transaction-Request-Example-01:
+      value:
+        transactions:
+          - transaction_id: 71b24bdd-8aa4-4b8d-893b-4e74b05a1c98
+            account_id: 10547323-5594-45a7-a58f-3b8618770b7c
+            category:
+              system: MCC
+              value: "768"
+            amount:
+              value: -20.59
+              currency_code: EUR
+            datetime: "2021-01-17T12:45:00Z"
+          - transaction_id: fbc78d6b-122b-4ae3-8b5b-50f45230a39f
+            account_id: 10547323-5594-45a7-a58f-3b8618770b7c
+            category:
+              system: MCC
+              value: "768"
+            amount:
+              value: -20.59
+              currency_code: EUR
+            datetime: "2021-01-17T12:45:00Z"
+    Transaction-Request-Example-02:
+      value:
+        transactions:
+          - transaction_id: 71b24bdd-8aa4-4b8d-893b-4e74b05a1c98
+            account_id: 10547323-5594-45a7-a58f-3b8618770b7c
+            category:
+              system: MCC
+              value: "768"
+            amount:
+              value: -20.59
+              currency_code: EUR
+            datetime: "2021-01-17T12:45:00Z"
+            merchant:
+              name: Fancy Supermarket
+              address:
+                city: Berlin
+                country_code: DE
+          - transaction_id: fbc78d6b-122b-4ae3-8b5b-50f45230a39f
+            account_id: 10547323-5594-45a7-a58f-3b8618770b7c
+            category:
+              system: MCC
+              value: "768"
+            amount:
+              value: -20.59
+              currency_code: EUR
+            datetime: "2021-01-17T12:45:00Z"
+            merchant:
+              name: Fancy Airline
+              address:
+                city: London
+                country_code: GB
+    Transaction-Response-Example-01:
+      value:
+        request_id: "456ab35a19cc35"
+        results:
+          - transaction_id: 71b24bdd-8aa4-4b8d-893b-4e74b05a1c98
+            account_id: 10547323-5594-45a7-a58f-3b8618770b7c
+            category:
+              system: ECOLYTIQ
+              value: "ex:misc"
+            co2_footprint:
+              unit: gram
+              value: 748
+          - transaction_id: fbc78d6b-122b-4ae3-8b5b-50f45230a39f
+            account_id: 10547323-5594-45a7-a58f-3b8618770b7c
+            category:
+              system: ECOLYTIQ
+              value: "ex:food.groceries"
+            co2_footprint:
+              unit: gram
+              value: 1260
+    Transaction-Response-Example-02:
+      value:
+        request_id: "456ab35a19cc35"
+        results:
+          - transaction_id: 71b24bdd-8aa4-4b8d-893b-4e74b05a1c98
+            account_id: 10547323-5594-45a7-a58f-3b8618770b7c
+            category:
+              system: ECOLYTIQ
+              value: "ex:misc"
+            co2_footprint:
+              unit: gram
+              value: 748
+            request:
+              transaction_id: 71b24bdd-8aa4-4b8d-893b-4e74b05a1c98
+              account_id: 10547323-5594-45a7-a58f-3b8618770b7c
+              amount:
+                value: -3.22
+                currency_code: EUR
+          - transaction_id: fbc78d6b-122b-4ae3-8b5b-50f45230a39f
+            account_id: 10547323-5594-45a7-a58f-3b8618770b7c
+            category:
+              system: ECOLYTIQ
+              value: "ex:food.groceries"
+            co2_footprint:
+              unit: gram
+              value: 1260
+  schemas:
+
+    RequestId:
+      type: string
+      example: "1a2bef73a0"
+
+    OnboardingResponse:
+      type: object
+      required:
+        - request_id
+        - results
+      properties:
+        request_id:
+          $ref: '#/components/schemas/RequestId'
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Onboarding'
+
+    Onboarding:
+      type: object
+      required:
+        - id
+      properties:
+        id:
+          description: ID of onboarding scenario
+          type: string
+          example: "vcc80kePB0Uc8Yb0"
+        name:
+          description: Name of onboarding scene
+          type: string
+          example: "Conditional Food Questions"
+
+    QuestionResponse:
+      type: object
+      properties:
+        request_id:
+          $ref: '#/components/schemas/RequestId'
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Question'
+
+    InsightsResponse:
+      type: object
+      required:
+        - co2_footprint
+        - insights
+      properties:
+        category:
+          $ref: '#/components/schemas/Category'
+        insights:
+          type: array
+          items:
+            $ref: '#/components/schemas/Insight'
+
+    Insight:
+      type: object
+      properties:
+        id:
+          type: string
+        texts:
+          type: array
+          items:
+            $ref: '#/components/schemas/Translation'
+
+    ComparableResponse:
+      type: object
+      required:
+        - co2_footprint
+        - comparables
+      properties:
+        co2_footprint:
+          $ref: '#/components/schemas/CO2Footprint'
+        comparables:
+          type: array
+          items:
+            $ref: '#/components/schemas/Comparable'
+
+    Comparable:
+      type: object
+      properties:
+        id:
+          type: string
+        texts:
+          type: array
+          items:
+            $ref: '#/components/schemas/Translation'
+
+    NextQuestionResponse:
+      type: object
+      properties:
+        account_id:
+          $ref: '#/components/schemas/AccountId'
+        questions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Question'
+        has_next:
+          description: true, iff an unanswered question is available
+          type: boolean
+
+    ListOfFeedbackLoopsResponse:
+      type: object
+      properties:
+        loops:
+          type: array
+          items:
+            $ref: '#/components/schemas/FeedbackLoops'
+
+    FeedbackLoops:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        type:
+          $ref: '#/components/schemas/FeedbackLoopType'
+
+    FeedbackLoopType:
+      type: string
+      enum:
+        - PROFILE
+        - TRANSACTION
+
+    Error:
+      description: |
+        Error messages for API clients.
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+
+    CurrencyExchangeInfo:
+      description: |
+        Currency rate for transaction currency and model currency
+      type: object
+      required:
+        - from
+        - to
+        - rate
+      properties:
+        from:
+          $ref: '#/components/schemas/Amount'
+        to:
+          $ref: '#/components/schemas/Amount'
+        rate:
+          type: string
+          format: bigdecimal
+          example: 1
+
+
+    ###########################
+
+    TransactionRequest:
+      description: "holds information about invalid transactions"
+      type: object
+      required:
+        - transactions
+      properties:
+        transactions:
+          type: array
+          minItems: 1
+          maxItems: 100
+          items:
+            $ref: '#/components/schemas/Transaction'
+
+    CO2Footprint:
+      description: |
+        CO2Footprint object
+      type: object
+      required:
+        - value
+        - unit
+      properties:
+        value:
+          description: value of co2 footprint
+          type: number
+          format: bigdecimal
+          example: 10
+        unit:
+          description: unit of co2 footprint
+          type: string
+          enum:
+            - g
+            - kg
+          example: g
+
+    TransactionResponse:
+      description: "holds information about invalid transactions"
+      type: object
+      required:
+        - request_id
+        - results
+        - errors
+      properties:
+        request_id:
+          $ref: '#/components/schemas/RequestId'
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/TransactionResult'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/TransactionError'
+
+    TransactionResult:
+      description: "holds information about invalid transactions"
+      type: object
+      required:
+        - transaction_id
+        - category
+        - co2_footprint
+      properties:
+        transaction_id:
+          type: string
+        category:
+          $ref: '#/components/schemas/Category'
+        co2_footprint:
+          $ref: '#/components/schemas/CO2Footprint'
+
+    TransactionError:
+      description: "holds information about invalid transactions"
+      type: object
+      required:
+        - transaction_id
+      properties:
+        transaction_id:
+          type: string
+        error_description:
+          type: string
+
+    TransactionId:
+      description: identifies a transaction
+      type: string
+      maxLength: 64
+      example: 74263e87-93cb-46be-a132-9cd260716f07
+
+    AccountId:
+      description: identifies a bank account / user.
+      type: string
+      maxLength: 64
+      example: 1c974398-4d2b-44fa-b292-64a46c0e6577
+
+    Datetime:
+      description: identifies a bank account / user.
+      type: string
+      format: date-time
+      example: 1c974398-4d2b-44fa-b292-64a46c0e6577
+
+
+    Transaction:
+      description: "holds information about bank transactions"
+      type: object
+      required:
+        - transaction_id
+        - account_id
+        - amount
+        - category
+        - co2_model
+        - booking_datetime
+      properties:
+        transaction_id:
+          $ref: '#/components/schemas/TransactionId'
+        account_id:
+          $ref: '#/components/schemas/AccountId'
+        amount:
+          $ref: '#/components/schemas/Amount'
+        category:
+          $ref: '#/components/schemas/Category'
+        co2_model:
+          $ref: '#/components/schemas/SupportedCO2Model'
+        datetime:
+          type: string
+          format: date-time
+        merchant:
+          $ref: '#/components/schemas/Merchant'
+        description:
+          type: string
+          maxLength: 400
+          description: Purpose / Description of transaction
+
+    Category:
+      description: |
+        holds category information
+      type: object
+      required:
+        - value
+        - category_system
+      properties:
+        value:
+          description: category value
+          type: string
+        category_system:
+          $ref: '#/components/schemas/SupportedCategorySystem'
+
+    Amount:
+      description: |
+        holds amount information
+      type: object
+      required:
+        - value
+        - currency_code
+      properties:
+        value:
+          description: decimal fraction depends on currency and can be between 0 and 3
+          type: number
+          maximum: 0
+          minimum: -999999999999999.999
+        currency_code:
+          $ref: '#/components/schemas/CurrencyCode'
+
+    Merchant:
+      description: |
+        holds merchant information
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          description: name of merchant
+          type: string
+          maxLength: 2048
+        web:
+          description: web url of merchant
+          type: string
+          format: url
+          maxLength: 2048
+        address:
+          description: address of merchant
+          $ref: '#/components/schemas/Address'
+        gps:
+          description: gps location of merchant
+          $ref: '#/components/schemas/GPS'
+
+    GPS:
+      description: |
+        holds geographic coordinates as decimal fractions (decimal places = 6) of a degree.
+      type: object
+      required:
+        - latitude
+        - longitude
+      properties:
+        latitude:
+          description: latitude as decimal fractions (decimal places = 6) of a degree
+          type: number
+          minimum: -90
+          maximum: 90
+        longitude:
+          description: longitude as decimal fractions (decimal places = 6) of a degree
+          type: number
+          minimum: -180
+          maximum: 180
+
+    Address:
+      description: |
+        holds address information
+      type: object
+      required:
+        - "city"
+      properties:
+        street:
+          description: Name of the street
+          type: string
+          maxLength: 100
+        street_no:
+          description: Street No. Can be also a range
+          type: string
+        postal_code:
+          description: Postal code
+          type: string
+          maxLength: 12
+        city:
+          description: Name of the City
+          type: string
+          maxLength: 180
+        country_code:
+          $ref: '#/components/schemas/CountryCode'
+      example:
+        street: Second Street
+        street_no: 42
+        postal_code: 11223
+        city: Berlin
+        country_code: DE
+
+    SupportedCategorySystem:
+      type: string
+      enum:
+        - MCC
+        - FTS
+        - ECOLYTIQ
+
+    SupportedCO2Model:
+      type: string
+      enum:
+        - DE
+        - FR
+        - IT
+        - PL
+        - UK
+        - US
+
+    Question:
+      type: object
+      required:
+        - id
+        - type
+        - text
+      properties:
+        id:
+          type: string
+        text:
+          type: array
+          items:
+            $ref: '#/components/schemas/Translation'
+        type:
+          $ref: '#/components/schemas/AnswerType'
+        selectable:
+          description: List of selectable answers. Present, iff type == SELECTABLE
+          type: array
+          items:
+            $ref: '#/components/schemas/Answer'
+        input:
+          $ref: '#/components/schemas/ExpectedAnswerInput'
+
+    ExpectedAnswerInput:
+      type: object
+      description: Describes a valid
+      required:
+        - datatype
+        - validation
+      properties:
+        datatype:
+          type: string
+          enum:
+            - STRING
+            - NUMBER
+        validation:
+          type: array
+          items:
+            $ref: '#/components/schemas/InputValidation'
+
+    InputValidation:
+      type: object
+      required:
+        - name
+        - condition
+      properties:
+        name:
+          type: string
+          enum:
+            - GREATER
+            - LESS
+            - MIN_LENGTH
+            - MAX_LENGTH
+        condition:
+          type: string
+
+    AnswerType:
+      type: string
+      enum:
+        - SELECTABLE
+        - INPUT
+
+    Answer:
+      type: object
+      required:
+        - id
+        - text
+      properties:
+        id:
+          type: string
+        text:
+          type: array
+          items:
+            $ref: '#/components/schemas/Translation'
+
+    BulkAnswerResponse:
+      type: object
+      properties:
+        request_id:
+          type: string
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/BulkAnswerResult'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/BulkAnswerError'
+
+    BulkAnswerResult:
+      type: object
+      properties:
+        question_id:
+          type: string
+
+    BulkAnswerError:
+      type: object
+      properties:
+        question_id:
+          type: string
+        error_code:
+          type: string
+        error_description:
+          type: string
+
+    BulkAnswersRequest:
+      type: object
+      properties:
+        answers:
+          type: array
+          items:
+            $ref: '#/components/schemas/AnswerRequest'
+
+    AnswerRequest:
+      type: object
+      required:
+        - question_id
+        - account_id
+      properties:
+        question_id:
+          type: string
+        account_id:
+          $ref: '#/components/schemas/AccountId'
+        selection:
+          type: string
+          description: selected answer ID
+        input:
+          type: string
+          description: user input
+
+    Translation:
+      type: object
+      properties:
+        language:
+          $ref: '#/components/schemas/LanguageCode'
+        text:
+          type: string
+
+    CountryCode:
+      type: string
+      enum:
+        - AD
+        - AE
+        - AF
+        - AG
+        - AI
+        - AL
+        - AM
+        - AO
+        - AQ
+        - AR
+        - AS
+        - AT
+        - AU
+        - AW
+        - AX
+        - AZ
+        - BA
+        - BB
+        - BD
+        - BE
+        - BF
+        - BG
+        - BH
+        - BI
+        - BJ
+        - BL
+        - BM
+        - BN
+        - BO
+        - BQ
+        - BR
+        - BS
+        - BT
+        - BV
+        - BW
+        - BY
+        - BZ
+        - CA
+        - CC
+        - CD
+        - CF
+        - CG
+        - CH
+        - CI
+        - CK
+        - CL
+        - CM
+        - CN
+        - CO
+        - CR
+        - CU
+        - CV
+        - CW
+        - CX
+        - CY
+        - CZ
+        - DE
+        - DJ
+        - DK
+        - DM
+        - DO
+        - DZ
+        - EC
+        - EE
+        - EG
+        - EH
+        - ER
+        - ES
+        - ET
+        - FI
+        - FJ
+        - FK
+        - FM
+        - FO
+        - FR
+        - GA
+        - GB
+        - GD
+        - GE
+        - GF
+        - GG
+        - GH
+        - GI
+        - GL
+        - GM
+        - GN
+        - GP
+        - GQ
+        - GR
+        - GS
+        - GT
+        - GU
+        - GW
+        - GY
+        - HK
+        - HM
+        - HN
+        - HR
+        - HT
+        - HU
+        - ID
+        - IE
+        - IL
+        - IM
+        - IN
+        - IO
+        - IQ
+        - IR
+        - IS
+        - IT
+        - JE
+        - JM
+        - JO
+        - JP
+        - KE
+        - KG
+        - KH
+        - KI
+        - KM
+        - KN
+        - KP
+        - KR
+        - KW
+        - KY
+        - KZ
+        - LA
+        - LB
+        - LC
+        - LI
+        - LK
+        - LR
+        - LS
+        - LT
+        - LU
+        - LV
+        - LY
+        - MA
+        - MC
+        - MD
+        - ME
+        - MF
+        - MG
+        - MH
+        - MK
+        - ML
+        - MM
+        - MN
+        - MO
+        - MP
+        - MQ
+        - MR
+        - MS
+        - MT
+        - MU
+        - MV
+        - MW
+        - MX
+        - MY
+        - MZ
+        - NA
+        - NC
+        - NE
+        - NF
+        - NG
+        - NI
+        - NL
+        - NO
+        - NP
+        - NR
+        - NU
+        - NZ
+        - OM
+        - PA
+        - PE
+        - PF
+        - PG
+        - PH
+        - PK
+        - PL
+        - PM
+        - PN
+        - PR
+        - PS
+        - PT
+        - PW
+        - PY
+        - QA
+        - RE
+        - RO
+        - RS
+        - RU
+        - RW
+        - SA
+        - SB
+        - SC
+        - SD
+        - SE
+        - SG
+        - SH
+        - SI
+        - SJ
+        - SK
+        - SL
+        - SM
+        - SN
+        - SO
+        - SR
+        - SS
+        - ST
+        - SV
+        - SX
+        - SY
+        - SZ
+        - TC
+        - TD
+        - TF
+        - TG
+        - TH
+        - TJ
+        - TK
+        - TL
+        - TM
+        - TN
+        - TO
+        - TR
+        - TT
+        - TV
+        - TW
+        - TZ
+        - UA
+        - UG
+        - UM
+        - US
+        - UY
+        - UZ
+        - VA
+        - VC
+        - VE
+        - VG
+        - VI
+        - VN
+        - VU
+        - WF
+        - WS
+        - YE
+        - YT
+        - ZA
+        - ZM
+        - ZW
+
+    LanguageCode:
+      type: string
+      enum:
+        - aa
+        - ab
+        - ae
+        - af
+        - af-NA
+        - agq
+        - ak
+        - am
+        - an
+        - ar
+        - ar-AE
+        - ar-BH
+        - ar-DJ
+        - ar-DZ
+        - ar-EG
+        - ar-EH
+        - ar-ER
+        - ar-IL
+        - ar-IQ
+        - ar-JO
+        - ar-KM
+        - ar-KW
+        - ar-LB
+        - ar-LY
+        - ar-MA
+        - ar-MR
+        - ar-OM
+        - ar-PS
+        - ar-QA
+        - ar-SA
+        - ar-SD
+        - ar-SO
+        - ar-SS
+        - ar-SY
+        - ar-TD
+        - ar-TN
+        - ar-YE
+        - as
+        - asa
+        - ast
+        - av
+        - ay
+        - az
+        - az-Cyrl
+        - az-Latn
+        - ba
+        - bas
+        - be
+        - be-tarask
+        - bem
+        - bez
+        - bg
+        - bh
+        - bi
+        - bm
+        - bn
+        - bn-IN
+        - bo
+        - bo-IN
+        - br
+        - brx
+        - bs
+        - bs-Cyrl
+        - bs-Latn
+        - ca
+        - ca-AD
+        - ca-ES-valencia
+        - ca-FR
+        - ca-IT
+        - ccp
+        - ccp-IN
+        - ce
+        - ceb
+        - cgg
+        - ch
+        - chr
+        - ckb
+        - ckb-IR
+        - co
+        - cr
+        - cs
+        - cu
+        - cv
+        - cy
+        - da
+        - da-GL
+        - dav
+        - de
+        - de-AT
+        - de-BE
+        - de-CH
+        - de-IT
+        - de-LI
+        - de-LU
+        - dje
+        - doi
+        - dsb
+        - dua
+        - dv
+        - dyo
+        - dz
+        - ebu
+        - ee
+        - ee-TG
+        - el
+        - el-CY
+        - en
+        - en-001
+        - en-150
+        - en-AE
+        - en-AG
+        - en-AI
+        - en-AS
+        - en-AT
+        - en-AU
+        - en-BB
+        - en-BE
+        - en-BI
+        - en-BM
+        - en-BS
+        - en-BW
+        - en-BZ
+        - en-CA
+        - en-CC
+        - en-CH
+        - en-CK
+        - en-CM
+        - en-CX
+        - en-CY
+        - en-DE
+        - en-DG
+        - en-DK
+        - en-DM
+        - en-ER
+        - en-FI
+        - en-FJ
+        - en-FK
+        - en-FM
+        - en-GB
+        - en-GD
+        - en-GG
+        - en-GH
+        - en-GI
+        - en-GM
+        - en-GU
+        - en-GY
+        - en-HK
+        - en-IE
+        - en-IL
+        - en-IM
+        - en-IN
+        - en-IO
+        - en-JE
+        - en-JM
+        - en-KE
+        - en-KI
+        - en-KN
+        - en-KY
+        - en-LC
+        - en-LR
+        - en-LS
+        - en-MG
+        - en-MH
+        - en-MO
+        - en-MP
+        - en-MS
+        - en-MT
+        - en-MU
+        - en-MW
+        - en-MY
+        - en-NA
+        - en-NF
+        - en-NG
+        - en-NL
+        - en-NR
+        - en-NU
+        - en-NZ
+        - en-PG
+        - en-PH
+        - en-PK
+        - en-PN
+        - en-PR
+        - en-PW
+        - en-RW
+        - en-SB
+        - en-SC
+        - en-SD
+        - en-SE
+        - en-SG
+        - en-SH
+        - en-SI
+        - en-SL
+        - en-SS
+        - en-SX
+        - en-SZ
+        - en-TC
+        - en-TK
+        - en-TO
+        - en-TT
+        - en-TV
+        - en-TZ
+        - en-UG
+        - en-UM
+        - en-VC
+        - en-VG
+        - en-VI
+        - en-VU
+        - en-WS
+        - en-ZA
+        - en-ZM
+        - en-ZW
+        - eo
+        - es
+        - es-419
+        - es-AR
+        - es-BO
+        - es-BR
+        - es-BZ
+        - es-CL
+        - es-CO
+        - es-CR
+        - es-CU
+        - es-DO
+        - es-EA
+        - es-EC
+        - es-GQ
+        - es-GT
+        - es-HN
+        - es-IC
+        - es-MX
+        - es-NI
+        - es-PA
+        - es-PE
+        - es-PH
+        - es-PR
+        - es-PY
+        - es-SV
+        - es-US
+        - es-UY
+        - es-VE
+        - et
+        - eu
+        - ewo
+        - fa
+        - fa-AF
+        - ff
+        - ff-Adlm
+        - ff-Adlm-BF
+        - ff-Adlm-CM
+        - ff-Adlm-GH
+        - ff-Adlm-GM
+        - ff-Adlm-GW
+        - ff-Adlm-LR
+        - ff-Adlm-MR
+        - ff-Adlm-NE
+        - ff-Adlm-NG
+        - ff-Adlm-SL
+        - ff-Adlm-SN
+        - ff-Latn
+        - ff-Latn-BF
+        - ff-Latn-CM
+        - ff-Latn-GH
+        - ff-Latn-GM
+        - ff-Latn-GN
+        - ff-Latn-GW
+        - ff-Latn-LR
+        - ff-Latn-MR
+        - ff-Latn-NE
+        - ff-Latn-NG
+        - ff-Latn-SL
+        - fi
+        - fil
+        - fj
+        - fo
+        - fo-DK
+        - fr
+        - fr-BE
+        - fr-BF
+        - fr-BI
+        - fr-BJ
+        - fr-BL
+        - fr-CA
+        - fr-CD
+        - fr-CF
+        - fr-CG
+        - fr-CH
+        - fr-CI
+        - fr-CM
+        - fr-DJ
+        - fr-DZ
+        - fr-GA
+        - fr-GF
+        - fr-GN
+        - fr-GP
+        - fr-GQ
+        - fr-HT
+        - fr-KM
+        - fr-LU
+        - fr-MA
+        - fr-MC
+        - fr-MF
+        - fr-MG
+        - fr-ML
+        - fr-MQ
+        - fr-MR
+        - fr-MU
+        - fr-NC
+        - fr-NE
+        - fr-PF
+        - fr-PM
+        - fr-RE
+        - fr-RW
+        - fr-SC
+        - fr-SN
+        - fy
+        - ga
+        - gd
+        - gl
+        - gn
+        - gu
+        - gv
+        - ha
+        - he
+        - hi
+        - ho
+        - hr
+        - ht
+        - hu
+        - hy
+        - hz
+        - ia
+        - id
+        - ig
+        - ii
+        - ik
+        - io
+        - is
+        - it
+        - iu
+        - jv
+        - ka
+        - kg
+        - ki
+        - kj
+        - kk
+        - kl
+        - km
+        - kn
+        - kr
+        - ks
+        - ku
+        - kv
+        - kw
+        - ky
+        - la
+        - lb
+        - lg
+        - li
+        - ln
+        - lo
+        - lt
+        - lv
+        - mg
+        - mh
+        - mi
+        - mk
+        - ml
+        - mn
+        - mr
+        - ms
+        - mt
+        - my
+        - na
+        - nb
+        - nd
+        - ne
+        - ng
+        - nl
+        - nn
+        - no
+        - nr
+        - nv
+        - ny
+        - oc
+        - oj
+        - om
+        - or
+        - os
+        - pi
+        - pl
+        - ps
+        - pt
+        - qu
+        - rm
+        - rn
+        - ro
+        - ru
+        - rw
+        - sa
+        - sc
+        - sd
+        - se
+        - sg
+        - sh
+        - si
+        - sk
+        - sl
+        - sm
+        - sn
+        - so
+        - sq
+        - sr
+        - ss
+        - st
+        - su
+        - sv
+        - sw
+        - ta
+        - te
+        - tg
+        - th
+        - ti
+        - tk
+        - tl
+        - tn
+        - to
+        - tr
+        - ts
+        - tw
+        - ty
+        - ug
+        - uk
+        - ur
+        - ve
+        - vi
+        - vo
+        - wa
+        - wo
+        - xh
+        - yi
+        - yo
+        - za
+        - zu
+
+    CurrencyCode:
+      type: string
+      description: "Currencies (ISO 4217). Status: Oct. 2021 (https://www.iso.org/iso-4217-currency-codes.html)"
+      enum:
+        - AED
+        - AFN
+        - ALL
+        - AMD
+        - ANG
+        - AOA
+        - ARS
+        - AUD
+        - AWG
+        - AZN
+        - BAM
+        - BBD
+        - BDT
+        - BGN
+        - BHD
+        - BIF
+        - BMD
+        - BND
+        - BOB
+        - BOV
+        - BRL
+        - BSD
+        - BTN
+        - BWP
+        - BYN
+        - BZD
+        - CAD
+        - CDF
+        - CHE
+        - CHF
+        - CHW
+        - CLF
+        - CLP
+        - CNY
+        - COP
+        - COU
+        - CRC
+        - CUC
+        - CUP
+        - CVE
+        - CZK
+        - DJF
+        - DKK
+        - DOP
+        - DZD
+        - EGP
+        - ERN
+        - ETB
+        - EUR
+        - FJD
+        - FKP
+        - GBP
+        - GEL
+        - GHS
+        - GIP
+        - GMD
+        - GNF
+        - GTQ
+        - GYD
+        - HKD
+        - HNL
+        - HRK
+        - HTG
+        - HUF
+        - IDR
+        - ILS
+        - INR
+        - IQD
+        - IRR
+        - ISK
+        - JMD
+        - JOD
+        - JPY
+        - KES
+        - KGS
+        - KHR
+        - KMF
+        - KPW
+        - KRW
+        - KWD
+        - KYD
+        - KZT
+        - LAK
+        - LBP
+        - LKR
+        - LRD
+        - LSL
+        - LYD
+        - MAD
+        - MDL
+        - MGA
+        - MKD
+        - MMK
+        - MNT
+        - MOP
+        - MRU
+        - MUR
+        - MVR
+        - MWK
+        - MXN
+        - MXV
+        - MYR
+        - MZN
+        - NAD
+        - NGN
+        - NIO
+        - NOK
+        - NPR
+        - NZD
+        - OMR
+        - PAB
+        - PEN
+        - PGK
+        - PHP
+        - PKR
+        - PLN
+        - PYG
+        - QAR
+        - RON
+        - RSD
+        - RUB
+        - RWF
+        - SAR
+        - SBD
+        - SCR
+        - SDG
+        - SEK
+        - SGD
+        - SHP
+        - SLL
+        - SOS
+        - SRD
+        - SSP
+        - STN
+        - SVC
+        - SYP
+        - SZL
+        - THB
+        - TJS
+        - TMT
+        - TND
+        - TOP
+        - TRY
+        - TTD
+        - TWD
+        - TZS
+        - UAH
+        - UGX
+        - USD
+        - USN
+        - UYI
+        - UYU
+        - UYW
+        - UZS
+        - VED
+        - VES
+        - VND
+        - VUV
+        - WST
+        - XAF
+        - XAG
+        - XAU
+        - XBA
+        - XBB
+        - XBC
+        - XBD
+        - XCD
+        - XDR
+        - XOF
+        - XPD
+        - XPF
+        - XPT
+        - XSU
+        - XTS
+        - XUA
+        - XXX
+        - YER
+        - ZAR
+        - ZMW
+        - ZWL
+      example: EUR
