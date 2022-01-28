@@ -95,6 +95,57 @@ paths:
                   $ref: '#/components/examples/Transaction-Response-Example-01'
                 Response-With-Request:
                   $ref: '#/components/examples/Transaction-Response-Example-02'
+        '400':
+          description: |
+            Bad Request. Size of Transactions is invalid.
+          headers:
+            X-RateLimit-Limit:
+              $ref: '#/components/headers/X-RateLimit-Limit'
+            X-RateLimit-Remaining:
+              $ref: '#/components/headers/X-RateLimit-Remaining'
+            X-RateLimit-Reset:
+              $ref: '#/components/headers/X-RateLimit-Reset'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              examples:
+                BadRequest-Example:
+                  $ref: '#/components/examples/BadRequest-Example'
+        '401':
+          description: |
+            Unauthorized. Access Token is invalid or expired.
+          headers:
+            X-RateLimit-Limit:
+              $ref: '#/components/headers/X-RateLimit-Limit'
+            X-RateLimit-Remaining:
+              $ref: '#/components/headers/X-RateLimit-Remaining'
+            X-RateLimit-Reset:
+              $ref: '#/components/headers/X-RateLimit-Reset'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              examples:
+                BadRequest-Example:
+                  $ref: '#/components/examples/Unauthorized-Example'
+        '429':
+          description: |
+            Rate Limit exeeded.
+          headers:
+            X-RateLimit-Limit:
+              $ref: '#/components/headers/X-RateLimit-Limit'
+            X-RateLimit-Remaining:
+              $ref: '#/components/headers/X-RateLimit-Remaining'
+            X-RateLimit-Reset:
+              $ref: '#/components/headers/X-RateLimit-Reset'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              examples:
+                BadRequest-Example:
+                  $ref: '#/components/examples/RateLimit-Example'
 
     get:
       summary: Get Transactions by IDs
@@ -380,6 +431,22 @@ components:
       bearerFormat: JWT
 
   examples:
+    BadRequest-Example:
+      value:
+        request_id: 456ab35a19cc35
+        error_code: "invalid.request"
+        error_description: "Size of transaction list must be between 1 and 100. But is null."
+    Unauthorized-Example:
+      value:
+        request_id: 456ab35a19cc35
+        error_code: "unauthorized"
+        error_description: "Access Token is invalid or expired."
+    RateLimit-Example:
+      value:
+        request_id: 456ab35a19cc35
+        error_code: "rate.limit.exceeded"
+        error_description: "Rate limit exeeded. Try again later."
+
     Transaction-Request-Example-01:
       value:
         transactions:
@@ -604,18 +671,20 @@ components:
         - PROFILE
         - TRANSACTION
 
-    Error:
+    ApiError:
       description: |
         Error messages for API clients.
       type: object
       required:
-        - code
-        - message
+        - request_id
+        - error_code
+        - error_description
       properties:
-        code:
-          type: integer
-          format: int32
-        message:
+        request_id:
+          $ref: '#/components/schemas/RequestId'
+        error_code:
+          type: string
+        error_description:
           type: string
 
     CurrencyExchangeInfo:
@@ -1282,449 +1351,10 @@ components:
     LanguageCode:
       type: string
       enum:
-        - aa
-        - ab
-        - ae
-        - af
-        - af-NA
-        - agq
-        - ak
-        - am
-        - an
-        - ar
-        - ar-AE
-        - ar-BH
-        - ar-DJ
-        - ar-DZ
-        - ar-EG
-        - ar-EH
-        - ar-ER
-        - ar-IL
-        - ar-IQ
-        - ar-JO
-        - ar-KM
-        - ar-KW
-        - ar-LB
-        - ar-LY
-        - ar-MA
-        - ar-MR
-        - ar-OM
-        - ar-PS
-        - ar-QA
-        - ar-SA
-        - ar-SD
-        - ar-SO
-        - ar-SS
-        - ar-SY
-        - ar-TD
-        - ar-TN
-        - ar-YE
-        - as
-        - asa
-        - ast
-        - av
-        - ay
-        - az
-        - az-Cyrl
-        - az-Latn
-        - ba
-        - bas
-        - be
-        - be-tarask
-        - bem
-        - bez
-        - bg
-        - bh
-        - bi
-        - bm
-        - bn
-        - bn-IN
-        - bo
-        - bo-IN
-        - br
-        - brx
-        - bs
-        - bs-Cyrl
-        - bs-Latn
-        - ca
-        - ca-AD
-        - ca-ES-valencia
-        - ca-FR
-        - ca-IT
-        - ccp
-        - ccp-IN
-        - ce
-        - ceb
-        - cgg
-        - ch
-        - chr
-        - ckb
-        - ckb-IR
-        - co
-        - cr
-        - cs
-        - cu
-        - cv
-        - cy
-        - da
-        - da-GL
-        - dav
         - de
-        - de-AT
-        - de-BE
-        - de-CH
-        - de-IT
-        - de-LI
-        - de-LU
-        - dje
-        - doi
-        - dsb
-        - dua
-        - dv
-        - dyo
-        - dz
-        - ebu
-        - ee
-        - ee-TG
-        - el
-        - el-CY
         - en
-        - en-001
-        - en-150
-        - en-AE
-        - en-AG
-        - en-AI
-        - en-AS
-        - en-AT
-        - en-AU
-        - en-BB
-        - en-BE
-        - en-BI
-        - en-BM
-        - en-BS
-        - en-BW
-        - en-BZ
-        - en-CA
-        - en-CC
-        - en-CH
-        - en-CK
-        - en-CM
-        - en-CX
-        - en-CY
-        - en-DE
-        - en-DG
-        - en-DK
-        - en-DM
-        - en-ER
-        - en-FI
-        - en-FJ
-        - en-FK
-        - en-FM
-        - en-GB
-        - en-GD
-        - en-GG
-        - en-GH
-        - en-GI
-        - en-GM
-        - en-GU
-        - en-GY
-        - en-HK
-        - en-IE
-        - en-IL
-        - en-IM
-        - en-IN
-        - en-IO
-        - en-JE
-        - en-JM
-        - en-KE
-        - en-KI
-        - en-KN
-        - en-KY
-        - en-LC
-        - en-LR
-        - en-LS
-        - en-MG
-        - en-MH
-        - en-MO
-        - en-MP
-        - en-MS
-        - en-MT
-        - en-MU
-        - en-MW
-        - en-MY
-        - en-NA
-        - en-NF
-        - en-NG
-        - en-NL
-        - en-NR
-        - en-NU
-        - en-NZ
-        - en-PG
-        - en-PH
-        - en-PK
-        - en-PN
-        - en-PR
-        - en-PW
-        - en-RW
-        - en-SB
-        - en-SC
-        - en-SD
-        - en-SE
-        - en-SG
-        - en-SH
-        - en-SI
-        - en-SL
-        - en-SS
-        - en-SX
-        - en-SZ
-        - en-TC
-        - en-TK
-        - en-TO
-        - en-TT
-        - en-TV
-        - en-TZ
-        - en-UG
-        - en-UM
-        - en-VC
-        - en-VG
-        - en-VI
-        - en-VU
-        - en-WS
-        - en-ZA
-        - en-ZM
-        - en-ZW
-        - eo
-        - es
-        - es-419
-        - es-AR
-        - es-BO
-        - es-BR
-        - es-BZ
-        - es-CL
-        - es-CO
-        - es-CR
-        - es-CU
-        - es-DO
-        - es-EA
-        - es-EC
-        - es-GQ
-        - es-GT
-        - es-HN
-        - es-IC
-        - es-MX
-        - es-NI
-        - es-PA
-        - es-PE
-        - es-PH
-        - es-PR
-        - es-PY
-        - es-SV
-        - es-US
-        - es-UY
-        - es-VE
-        - et
-        - eu
-        - ewo
-        - fa
-        - fa-AF
-        - ff
-        - ff-Adlm
-        - ff-Adlm-BF
-        - ff-Adlm-CM
-        - ff-Adlm-GH
-        - ff-Adlm-GM
-        - ff-Adlm-GW
-        - ff-Adlm-LR
-        - ff-Adlm-MR
-        - ff-Adlm-NE
-        - ff-Adlm-NG
-        - ff-Adlm-SL
-        - ff-Adlm-SN
-        - ff-Latn
-        - ff-Latn-BF
-        - ff-Latn-CM
-        - ff-Latn-GH
-        - ff-Latn-GM
-        - ff-Latn-GN
-        - ff-Latn-GW
-        - ff-Latn-LR
-        - ff-Latn-MR
-        - ff-Latn-NE
-        - ff-Latn-NG
-        - ff-Latn-SL
-        - fi
-        - fil
-        - fj
-        - fo
-        - fo-DK
+        - en-US
         - fr
-        - fr-BE
-        - fr-BF
-        - fr-BI
-        - fr-BJ
-        - fr-BL
-        - fr-CA
-        - fr-CD
-        - fr-CF
-        - fr-CG
-        - fr-CH
-        - fr-CI
-        - fr-CM
-        - fr-DJ
-        - fr-DZ
-        - fr-GA
-        - fr-GF
-        - fr-GN
-        - fr-GP
-        - fr-GQ
-        - fr-HT
-        - fr-KM
-        - fr-LU
-        - fr-MA
-        - fr-MC
-        - fr-MF
-        - fr-MG
-        - fr-ML
-        - fr-MQ
-        - fr-MR
-        - fr-MU
-        - fr-NC
-        - fr-NE
-        - fr-PF
-        - fr-PM
-        - fr-RE
-        - fr-RW
-        - fr-SC
-        - fr-SN
-        - fy
-        - ga
-        - gd
-        - gl
-        - gn
-        - gu
-        - gv
-        - ha
-        - he
-        - hi
-        - ho
-        - hr
-        - ht
-        - hu
-        - hy
-        - hz
-        - ia
-        - id
-        - ig
-        - ii
-        - ik
-        - io
-        - is
-        - it
-        - iu
-        - jv
-        - ka
-        - kg
-        - ki
-        - kj
-        - kk
-        - kl
-        - km
-        - kn
-        - kr
-        - ks
-        - ku
-        - kv
-        - kw
-        - ky
-        - la
-        - lb
-        - lg
-        - li
-        - ln
-        - lo
-        - lt
-        - lv
-        - mg
-        - mh
-        - mi
-        - mk
-        - ml
-        - mn
-        - mr
-        - ms
-        - mt
-        - my
-        - na
-        - nb
-        - nd
-        - ne
-        - ng
-        - nl
-        - nn
-        - no
-        - nr
-        - nv
-        - ny
-        - oc
-        - oj
-        - om
-        - or
-        - os
-        - pi
-        - pl
-        - ps
-        - pt
-        - qu
-        - rm
-        - rn
-        - ro
-        - ru
-        - rw
-        - sa
-        - sc
-        - sd
-        - se
-        - sg
-        - sh
-        - si
-        - sk
-        - sl
-        - sm
-        - sn
-        - so
-        - sq
-        - sr
-        - ss
-        - st
-        - su
-        - sv
-        - sw
-        - ta
-        - te
-        - tg
-        - th
-        - ti
-        - tk
-        - tl
-        - tn
-        - to
-        - tr
-        - ts
-        - tw
-        - ty
-        - ug
-        - uk
-        - ur
-        - ve
-        - vi
-        - vo
-        - wa
-        - wo
-        - xh
-        - yi
-        - yo
-        - za
-        - zu
 
     CurrencyCode:
       type: string
