@@ -24,20 +24,33 @@ servers:
 tags:
   - name: Errors
     description: |
-      ## 1 Http Status Code Summary
-      |                        Status Code | Description                                                                                      |
+      ## HTTP Status Code Summary
+      | Status Code                        | Description                                                                                      |
       |------------------------------------|--------------------------------------------------------------------------------------------------|
-      |                           200 - OK | Everything worked as expected.                                                                   |
-      |                      201 - Created | Everything worked as expected. Resource created.                                                 |
-      |                   204 - No Content | Everything worked as expected.                                                                   |
-      |                  400 - Bad Request | The request was unacceptable, often due to missing a required parameter.                         |
-      |                 401 - Unauthorized | No valid Access Token provided.                                                                  |
-      |                    403 - Forbidden | The API key doesn't have permissions to perform the request.                                     |
-      |                    404 - Not Found | The requested resource doesn't exist.                                                            |
-      |                      409 - Conflict | The request conflicts with another request (perhaps due to using the same idempotent key).        |
-      |         422 - Unprocessable Entity | Unprocessable Entity                                                                             |
-      |            429 - Too Many Requests | Too many requests hit the API too quickly. We recommend an exponential backoff of your requests. |
+      | 200 - OK                           | Everything worked as expected.                                                                   |
+      | 201 - Created                      | Everything worked as expected. Resource created.                                                 |
+      | 204 - No Content                   | Everything worked as expected.                                                                   |
+      | 400 - Bad Request                  | The request was unacceptable, often due to missing a required parameter.                         |
+      | 401 - Unauthorized                 | No valid Access Token provided.                                                                  |
+      | 403 - Forbidden                    | The API key doesn't have permissions to perform the request.                                     |
+      | 404 - Not Found                    | The requested resource doesn't exist.                                                            |
+      | 409 - Conflict                     | The request conflicts with another request (perhaps due to using the same idempotent key).       |
+      | 422 - Unprocessable Entity         | Unprocessable Entity                                                                             |
+      | 429 - Too Many Requests            | Too many requests hit the API too quickly. We recommend an exponential backoff of your requests. |
       | 500, 502, 503, 504 - Server Errors | Something went wrong on ecolytiq's end.                                                          |
+  - name: Rate Limit
+    description: |
+      In each response you find Rate Limit Information fields like `X-RateLimit-Limit`, `X-RateLimit-Remaining` and `X-RateLimit-Reset`.
+      
+      ## Rate Limit Headers
+      | Header                | Description                                                         |
+      |-----------------------|---------------------------------------------------------------------|
+      | X-RateLimit-Limit     | Number of requests for the specific endpoint                        |
+      | X-RateLimit-Remaining | Number of ramining requests for the specific endpoint               |
+      | X-RateLimit-Reset     | Date-Time, when X-RateLimit-Remaining is reset to X-RateLimit-Limit |
+
+      At the moment we do not use rate limits. However, we reserve the right to use them. This will be announced.
+    
   - name: Transaction API
   - name: Content API
   - name: Profiling API
@@ -48,7 +61,7 @@ security:
 paths:
   /transactions/v1/transactions:
     post:
-      description: Save Transactions.
+      description: Use this endpoint to process and store bank transactions. Successful processed transactions are in the results list, identifiable by their `transaction_id`. In case of an error (e.g. unknown categor, you can find  the transction in the errors list, identifiable by their `transaction_id` as well.   
       summary: Process transactions
       tags:
         - Transaction API
