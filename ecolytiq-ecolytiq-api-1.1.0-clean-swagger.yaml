@@ -43,6 +43,7 @@ paths:
               - DE
               - UK
               - FR
+              - US
           required: false
           example: "DE"
           description: |
@@ -112,6 +113,7 @@ paths:
             - DE
             - UK
             - FR
+            - US
           required: false
           example: "DE"
           description: |
