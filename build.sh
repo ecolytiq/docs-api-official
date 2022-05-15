@@ -1,8 +1,12 @@
 #!/bin/sh
 
-redoc-cli bundle ecolytiq-ecolytiq-api-1.1.0-clean-swagger.yaml --options=theme.json
-mv redoc-static.html index.html
+redoc-cli bundle 2.4.0/openapi-2.4.0.yaml --options=theme.json
+cp redoc-static.html 2.4.0/index.html
 
-redoc-cli bundle ecolytiq-ecolytiq-api-3.0.0-draft-swagger.yaml --options=theme.json
-mv redoc-static.html draft/index.html
+redoc-cli bundle 3.2.0-preview/openapi-3.2.0-preview.yaml --options=theme.json
+cp redoc-static.html 3.2.0-preview/index.html
+
+redoc-cli bundle 3.0.0/openapi-3.0.0.yaml --options=theme.json
+cp redoc-static.html 3.0.0/index.html
+mv redoc-static.html index.html
  
