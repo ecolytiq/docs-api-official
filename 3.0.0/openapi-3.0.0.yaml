@@ -56,37 +56,26 @@ tags:
 
       2. In the opened window click on "Choose Files" under "Import File".
 
-      3. Select the file "collection.json" and press "open".
+      3. Select the file "Sandbox.postman_collection.json" and press "open".
 
       4. The collection is now imported and can be found in the list on the left side of the window.
-
-      5. Click on the three points at the collection and then on "Edit".
-
-      6. Go to "Authorization" in the opened window.
-
-      7. Enter your Client-ID under "clientId" and save.
-
-      8. Enter your Client-Secret under "clientSecret" and save
 
 
       ### Environment
 
-      1. Click top right in Postman on the small gear symbol.
+      1. In Postman, click on the "Import" button in the upper left corner.
 
       2. Click on "Import" in the lower right corner of the currently opened window.
 
-      3. Click on "Select File", choose then "environment.json" and press "open".
+      3. Click on "Select File", choose then "*.postman_environment.json" (you get the file during the onboarding phase) and press "open".
 
       4. Close the "Management Environment" window.
 
-      5. Select "Sandbox" from the dropdown in the upper right corner next to the small gear.
+      5. Select "Sandbox" from the dropdown in the upper right corner.
 
       ## Download
 
       <a href ="https://ecolytiq-team.github.io/docs-api-official/postman/Sandbox.postman_collection.json" download>Sandbox.postman_collection.json</a>
-
-
-      <a href ="https://ecolytiq-team.github.io/docs-api-official/postman/Sandbox.postman_environment.json" download>Sandbox.postman_environment.json</a>
   - name: Info API
   - name: Transaction API
   - name: Content API
@@ -2051,7 +2040,7 @@ components:
           type: string
           example: "vcc80kePB0Uc8Yb0"
         name:
-          description: Name of onboarding scene
+          description: Name of onboarding scenario
           type: string
           example: "Conditional Food Questions"
 

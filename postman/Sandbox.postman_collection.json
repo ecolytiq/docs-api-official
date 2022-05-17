@@ -1034,7 +1034,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"transactions\": [\n        {\n            \"transaction_id\": \"287298b6-d7ab-4461-9a2e-def85d4d4f20\",\n            \"account_id\": \"aefaef4a-f5d7-45ac-8afd-a1a15e90f64e\",\n            \"amount\": {\n                \"value\": \"-0.01\",\n                \"currency_code\": \"EUR\"\n            },\n            \"co2_model\": \"SK\",\n            \"category\": {\n                \"system\": \"ECOLYTIQ\",\n                \"value\": \"ex:food.cafe\"\n            },\n            \"datetime\": \"2022-03-30T13:01:15.806+00:00\"\n        },\n        {\n            \"transaction_id\": \"{{$randomUUID}}\",\n            \"account_id\": \"aefaef4a-f5d7-45ac-8afd-a1a15e90f64e\",\n            \"amount\": {\n                \"value\": \"-0.01\",\n                \"currency_code\": \"EUR\"\n            },\n            \"co2_model\": \"SK\",\n            \"category\": {\n                \"system\": \"ECOLYTIQ\",\n                \"value\": \"ex:food.catering\"\n            },\n            \"datetime\": \"2022-03-30T13:01:15.806+00:00\"\n        },\n        {\n            \"transaction_id\": \"{{$randomUUID}}\",\n            \"account_id\": \"aefaef4a-f5d7-45ac-8afd-a1a15e90f64e\",\n            \"amount\": {\n                \"value\": \"-0.01\",\n                \"currency_code\": \"EUR\"\n            },\n            \"co2_model\": \"SK\",\n            \"category\": {\n                \"system\": \"ECOLYTIQ\",\n                \"value\": \"ex:food.corner\"\n            },\n            \"datetime\": \"2022-03-30T13:01:15.806+00:00\"\n        },\n        {\n            \"transaction_id\": \"{{$randomUUID}}\",\n            \"account_id\": \"aefaef4a-f5d7-45ac-8afd-a1a15e90f64e\",\n            \"amount\": {\n                \"value\": \"-0.01\",\n                \"currency_code\": \"EUR\"\n            },\n            \"co2_model\": \"SK\",\n            \"category\": {\n                \"system\": \"ECOLYTIQ\",\n                \"value\": \"ex:food.groceries\"\n            },\n            \"datetime\": \"2022-03-30T13:01:15.806+00:00\"\n        },\n        {\n            \"transaction_id\": \"{{$randomUUID}}\",\n            \"account_id\": \"aefaef4a-f5d7-45ac-8afd-a1a15e90f64e\",\n            \"amount\": {\n                \"value\": \"-0.01\",\n                \"currency_code\": \"EUR\"\n            },\n            \"co2_model\": \"SK\",\n            \"category\": {\n                \"system\": \"ECOLYTIQ\",\n                \"value\": \"ex:living.energy\"\n            },\n            \"datetime\": \"2022-03-30T13:01:15.806+00:00\"\n        },\n        {\n            \"transaction_id\": \"{{$randomUUID}}\",\n            \"account_id\": \"aefaef4a-f5d7-45ac-8afd-a1a15e90f64e\",\n            \"amount\": {\n                \"value\": \"-0.01\",\n                \"currency_code\": \"EUR\"\n            },\n            \"co2_model\": \"SK\",\n            \"category\": {\n                \"system\": \"ECOLYTIQ\",\n                \"value\": \"ex:misc\"\n            },\n            \"datetime\": \"2022-03-30T13:01:15.806+00:00\"\n        },\n        {\n            \"transaction_id\": \"{{$randomUUID}}\",\n            \"account_id\": \"aefaef4a-f5d7-45ac-8afd-a1a15e90f64e\",\n            \"amount\": {\n                \"value\": \"-0.01\",\n                \"currency_code\": \"EUR\"\n            },\n            \"co2_model\": \"SK\",\n            \"category\": {\n                \"system\": \"ECOLYTIQ\",\n                \"value\": \"ex:misc.drug-stores\"\n            },\n            \"datetime\": \"2022-03-30T13:01:15.806+00:00\"\n        },\n        {\n            \"transaction_id\": \"{{$randomUUID}}\",\n            \"account_id\": \"aefaef4a-f5d7-45ac-8afd-a1a15e90f64e\",\n            \"amount\": {\n                \"value\": \"-0.01\",\n                \"currency_code\": \"EUR\"\n            },\n            \"co2_model\": \"SK\",\n            \"category\": {\n                \"system\": \"ECOLYTIQ\",\n                \"value\": \"ex:misc.lodging\"\n            },\n            \"datetime\": \"2022-03-30T13:01:15.806+00:00\"\n        },\n        {\n            \"transaction_id\": \"{{$randomUUID}}\",\n            \"account_id\": \"aefaef4a-f5d7-45ac-8afd-a1a15e90f64e\",\n            \"amount\": {\n                \"value\": \"-0.01\",\n                \"currency_code\": \"EUR\"\n            },\n            \"co2_model\": \"SK\",\n            \"category\": {\n                \"system\": \"ECOLYTIQ\",\n                \"value\": \"ex:misc.streaming.audio\"\n            },\n            \"datetime\": \"2022-03-30T13:01:15.806+00:00\"\n        },\n        {\n            \"transaction_id\": \"{{$randomUUID}}\",\n            \"account_id\": \"aefaef4a-f5d7-45ac-8afd-a1a15e90f64e\",\n            \"amount\": {\n                \"value\": \"-0.01\",\n                \"currency_code\": \"EUR\"\n            },\n            \"co2_model\": \"SK\",\n            \"category\": {\n                \"system\": \"ECOLYTIQ\",\n                \"value\": \"ex:misc.streaming.video\"\n            },\n            \"datetime\": \"2022-03-30T13:01:15.806+00:00\"\n        },\n        {\n            \"transaction_id\": \"{{$randomUUID}}\",\n            \"account_id\": \"aefaef4a-f5d7-45ac-8afd-a1a15e90f64e\",\n            \"amount\": {\n                \"value\": \"-0.01\",\n                \"currency_code\": \"EUR\"\n            },\n            \"co2_model\": \"SK\",\n            \"category\": {\n                \"system\": \"ECOLYTIQ\",\n                \"value\": \"ex:misc.travel\"\n            },\n            \"datetime\": \"2022-03-30T13:01:15.806+00:00\"\n        },\n        {\n            \"transaction_id\": \"{{$randomUUID}}\",\n            \"account_id\": \"aefaef4a-f5d7-45ac-8afd-a1a15e90f64e\",\n            \"amount\": {\n                \"value\": \"-0.01\",\n                \"currency_code\": \"EUR\"\n            },\n            \"co2_model\": \"SK\",\n            \"category\": {\n                \"system\": \"ECOLYTIQ\",\n                \"value\": \"ex:misc.zero\"\n            },\n            \"datetime\": \"2022-03-30T13:01:15.806+00:00\"\n        },\n        {\n            \"transaction_id\": \"{{$randomUUID}}\",\n            \"account_id\": \"aefaef4a-f5d7-45ac-8afd-a1a15e90f64e\",\n            \"amount\": {\n                \"value\": \"-0.01\",\n                \"currency_code\": \"EUR\"\n            },\n            \"co2_model\": \"SK\",\n            \"category\": {\n                \"system\": \"ECOLYTIQ\",\n                \"value\": \"ex:shopping.clothes\"\n            },\n            \"datetime\": \"2022-03-30T13:01:15.806+00:00\"\n        },\n        {\n            \"transaction_id\": \"{{$randomUUID}}\",\n            \"account_id\": \"aefaef4a-f5d7-45ac-8afd-a1a15e90f64e\",\n            \"amount\": {\n                \"value\": \"-0.01\",\n                \"currency_code\": \"EUR\"\n            },\n            \"co2_model\": \"SK\",\n            \"category\": {\n                \"system\": \"ECOLYTIQ\",\n                \"value\": \"ex:shopping.furniture\"\n            },\n            \"datetime\": \"2022-03-30T13:01:15.806+00:00\"\n        },\n        {\n            \"transaction_id\": \"{{$randomUUID}}\",\n            \"account_id\": \"aefaef4a-f5d7-45ac-8afd-a1a15e90f64e\",\n            \"amount\": {\n                \"value\": \"-0.01\",\n                \"currency_code\": \"EUR\"\n            },\n            \"co2_model\": \"SK\",\n            \"category\": {\n                \"system\": \"ECOLYTIQ\",\n                \"value\": \"ex:shopping.online\"\n            },\n            \"datetime\": \"2022-03-30T13:01:15.806+00:00\"\n        },\n        {\n            \"transaction_id\": \"{{$randomUUID}}\",\n            \"account_id\": \"aefaef4a-f5d7-45ac-8afd-a1a15e90f64e\",\n            \"amount\": {\n                \"value\": \"-0.01\",\n                \"currency_code\": \"EUR\"\n            },\n            \"co2_model\": \"SK\",\n            \"category\": {\n                \"system\": \"ECOLYTIQ\",\n                \"value\": \"ex:transport.car-rental\"\n            },\n            \"datetime\": \"2022-03-30T13:01:15.806+00:00\"\n        },\n        {\n            \"transaction_id\": \"{{$randomUUID}}\",\n            \"account_id\": \"aefaef4a-f5d7-45ac-8afd-a1a15e90f64e\",\n            \"amount\": {\n                \"value\": \"-0.01\",\n                \"currency_code\": \"EUR\"\n            },\n            \"co2_model\": \"SK\",\n            \"category\": {\n                \"system\": \"ECOLYTIQ\",\n                \"value\": \"ex:transport.emobility\"\n            },\n            \"datetime\": \"2022-03-30T13:01:15.806+00:00\"\n        },\n        {\n            \"transaction_id\": \"{{$randomUUID}}\",\n            \"account_id\": \"aefaef4a-f5d7-45ac-8afd-a1a15e90f64e\",\n            \"amount\": {\n                \"value\": \"-0.01\",\n                \"currency_code\": \"EUR\"\n            },\n            \"co2_model\": \"SK\",\n            \"category\": {\n                \"system\": \"ECOLYTIQ\",\n                \"value\": \"ex:transport.flight\"\n            },\n            \"datetime\": \"2022-03-30T13:01:15.806+00:00\"\n        },\n        {\n            \"transaction_id\": \"{{$randomUUID}}\",\n            \"account_id\": \"aefaef4a-f5d7-45ac-8afd-a1a15e90f64e\",\n            \"amount\": {\n                \"value\": \"-0.01\",\n                \"currency_code\": \"EUR\"\n            },\n            \"co2_model\": \"SK\",\n            \"category\": {\n                \"system\": \"ECOLYTIQ\",\n                \"value\": \"ex:transport.localtransport\"\n            },\n            \"datetime\": \"2022-03-30T13:01:15.806+00:00\"\n        },\n        {\n            \"transaction_id\": \"{{$randomUUID}}\",\n            \"account_id\": \"aefaef4a-f5d7-45ac-8afd-a1a15e90f64e\",\n            \"amount\": {\n                \"value\": \"-0.01\",\n                \"currency_code\": \"EUR\"\n            },\n            \"co2_model\": \"SK\",\n            \"category\": {\n                \"system\": \"ECOLYTIQ\",\n                \"value\": \"ex:transport.servicestations\"\n            },\n            \"datetime\": \"2022-03-30T13:01:15.806+00:00\"\n        },\n        {\n            \"transaction_id\": \"{{$randomUUID}}\",\n            \"account_id\": \"aefaef4a-f5d7-45ac-8afd-a1a15e90f64e\",\n            \"amount\": {\n                \"value\": \"-0.01\",\n                \"currency_code\": \"EUR\"\n            },\n            \"co2_model\": \"SK\",\n            \"category\": {\n                \"system\": \"ECOLYTIQ\",\n                \"value\": \"ex:transport.taxi\"\n            },\n            \"datetime\": \"2022-03-30T13:01:15.806+00:00\"\n        },\n        {\n            \"transaction_id\": \"{{$randomUUID}}\",\n            \"account_id\": \"aefaef4a-f5d7-45ac-8afd-a1a15e90f64e\",\n            \"amount\": {\n                \"value\": \"-0.01\",\n                \"currency_code\": \"EUR\"\n            },\n            \"co2_model\": \"SK\",\n            \"category\": {\n                \"system\": \"ECOLYTIQ\",\n                \"value\": \"ex:transport.train\"\n            },\n            \"datetime\": \"2022-03-30T13:01:15.806+00:00\"\n        },\n         {\n            \"transaction_id\": \"{{$randomUUID}}\",\n            \"account_id\": \"aefaef4a-f5d7-45ac-8afd-a1a15e90f64e\",\n            \"amount\": {\n                \"value\": \"-100.00\",\n                \"currency_code\": \"EUR\"\n            },\n            \"co2_model\": \"SK\",\n            \"category\": {\n                \"system\": \"ECOLYTIQ\",\n                \"value\": \"ex:food.cafe\"\n            },\n            \"datetime\": \"2022-03-30T13:01:15.806+00:00\"\n        },\n        {\n            \"transaction_id\": \"{{$randomUUID}}\",\n            \"account_id\": \"aefaef4a-f5d7-45ac-8afd-a1a15e90f64e\",\n            \"amount\": {\n                \"value\": \"-100.00\",\n                \"currency_code\": \"EUR\"\n            },\n            \"co2_model\": \"SK\",\n            \"category\": {\n                \"system\": \"ECOLYTIQ\",\n                \"value\": \"ex:food.catering\"\n            },\n            \"datetime\": \"2022-03-30T13:01:15.806+00:00\"\n        },\n        {\n            \"transaction_id\": \"{{$randomUUID}}\",\n            \"account_id\": \"aefaef4a-f5d7-45ac-8afd-a1a15e90f64e\",\n            \"amount\": {\n                \"value\": \"-100.00\",\n                \"currency_code\": \"EUR\"\n            },\n            \"co2_model\": \"SK\",\n            \"category\": {\n                \"system\": \"ECOLYTIQ\",\n                \"value\": \"ex:food.corner\"\n            },\n            \"datetime\": \"2022-03-30T13:01:15.806+00:00\"\n        },\n        {\n            \"transaction_id\": \"{{$randomUUID}}\",\n            \"account_id\": \"aefaef4a-f5d7-45ac-8afd-a1a15e90f64e\",\n            \"amount\": {\n                \"value\": \"-100.00\",\n                \"currency_code\": \"EUR\"\n            },\n            \"co2_model\": \"SK\",\n            \"category\": {\n                \"system\": \"ECOLYTIQ\",\n                \"value\": \"ex:food.groceries\"\n            },\n            \"datetime\": \"2022-03-30T13:01:15.806+00:00\"\n        },\n        {\n            \"transaction_id\": \"{{$randomUUID}}\",\n            \"account_id\": \"aefaef4a-f5d7-45ac-8afd-a1a15e90f64e\",\n            \"amount\": {\n                \"value\": \"-100.00\",\n                \"currency_code\": \"EUR\"\n            },\n            \"co2_model\": \"NL\",\n            \"category\": {\n                \"system\": \"ECOLYTIQ\",\n                \"value\": \"ex:living.energy\"\n            },\n            \"datetime\": \"2022-03-30T13:01:15.806+00:00\"\n        },\n        {\n            \"transaction_id\": \"{{$randomUUID}}\",\n            \"account_id\": \"aefaef4a-f5d7-45ac-8afd-a1a15e90f64e\",\n            \"amount\": {\n                \"value\": \"-100.00\",\n                \"currency_code\": \"EUR\"\n            },\n            \"co2_model\": \"SK\",\n            \"category\": {\n                \"system\": \"ECOLYTIQ\",\n                \"value\": \"ex:misc\"\n            },\n            \"datetime\": \"2022-03-30T13:01:15.806+00:00\"\n        },\n        {\n            \"transaction_id\": \"{{$randomUUID}}\",\n            \"account_id\": \"aefaef4a-f5d7-45ac-8afd-a1a15e90f64e\",\n            \"amount\": {\n                \"value\": \"-100.00\",\n                \"currency_code\": \"EUR\"\n            },\n            \"co2_model\": \"SK\",\n            \"category\": {\n                \"system\": \"ECOLYTIQ\",\n                \"value\": \"ex:misc.drug-stores\"\n            },\n            \"datetime\": \"2022-03-30T13:01:15.806+00:00\"\n        },\n        {\n            \"transaction_id\": \"{{$randomUUID}}\",\n            \"account_id\": \"aefaef4a-f5d7-45ac-8afd-a1a15e90f64e\",\n            \"amount\": {\n                \"value\": \"-100.00\",\n                \"currency_code\": \"EUR\"\n            },\n            \"co2_model\": \"SK\",\n            \"category\": {\n                \"system\": \"ECOLYTIQ\",\n                \"value\": \"ex:misc.lodging\"\n            },\n            \"datetime\": \"2022-03-30T13:01:15.806+00:00\"\n        },\n        {\n            \"transaction_id\": \"{{$randomUUID}}\",\n            \"account_id\": \"aefaef4a-f5d7-45ac-8afd-a1a15e90f64e\",\n            \"amount\": {\n                \"value\": \"-100.00\",\n                \"currency_code\": \"EUR\"\n            },\n            \"co2_model\": \"SK\",\n            \"category\": {\n                \"system\": \"ECOLYTIQ\",\n                \"value\": \"ex:misc.streaming.audio\"\n            },\n            \"datetime\": \"2022-03-30T13:01:15.806+00:00\"\n        },\n        {\n            \"transaction_id\": \"{{$randomUUID}}\",\n            \"account_id\": \"aefaef4a-f5d7-45ac-8afd-a1a15e90f64e\",\n            \"amount\": {\n                \"value\": \"-100.00\",\n                \"currency_code\": \"EUR\"\n            },\n            \"co2_model\": \"SK\",\n            \"category\": {\n                \"system\": \"ECOLYTIQ\",\n                \"value\": \"ex:misc.streaming.video\"\n            },\n            \"datetime\": \"2022-03-30T13:01:15.806+00:00\"\n        },\n        {\n            \"transaction_id\": \"{{$randomUUID}}\",\n            \"account_id\": \"aefaef4a-f5d7-45ac-8afd-a1a15e90f64e\",\n            \"amount\": {\n                \"value\": \"-100.00\",\n                \"currency_code\": \"EUR\"\n            },\n            \"co2_model\": \"SK\",\n            \"category\": {\n                \"system\": \"ECOLYTIQ\",\n                \"value\": \"ex:misc.travel\"\n            },\n            \"datetime\": \"2022-03-30T13:01:15.806+00:00\"\n        },\n        {\n            \"transaction_id\": \"{{$randomUUID}}\",\n            \"account_id\": \"aefaef4a-f5d7-45ac-8afd-a1a15e90f64e\",\n            \"amount\": {\n                \"value\": \"-100.00\",\n                \"currency_code\": \"EUR\"\n            },\n            \"co2_model\": \"SK\",\n            \"category\": {\n                \"system\": \"ECOLYTIQ\",\n                \"value\": \"ex:misc.zero\"\n            },\n            \"datetime\": \"2022-03-30T13:01:15.806+00:00\"\n        },\n        {\n            \"transaction_id\": \"{{$randomUUID}}\",\n            \"account_id\": \"aefaef4a-f5d7-45ac-8afd-a1a15e90f64e\",\n            \"amount\": {\n                \"value\": \"-100.00\",\n                \"currency_code\": \"EUR\"\n            },\n            \"co2_model\": \"SK\",\n            \"category\": {\n                \"system\": \"ECOLYTIQ\",\n                \"value\": \"ex:shopping.clothes\"\n            },\n            \"datetime\": \"2022-03-30T13:01:15.806+00:00\"\n        },\n        {\n            \"transaction_id\": \"{{$randomUUID}}\",\n            \"account_id\": \"aefaef4a-f5d7-45ac-8afd-a1a15e90f64e\",\n            \"amount\": {\n                \"value\": \"-100.00\",\n                \"currency_code\": \"EUR\"\n            },\n            \"co2_model\": \"SK\",\n            \"category\": {\n                \"system\": \"ECOLYTIQ\",\n                \"value\": \"ex:shopping.furniture\"\n            },\n            \"datetime\": \"2022-03-30T13:01:15.806+00:00\"\n        },\n        {\n            \"transaction_id\": \"{{$randomUUID}}\",\n            \"account_id\": \"aefaef4a-f5d7-45ac-8afd-a1a15e90f64e\",\n            \"amount\": {\n                \"value\": \"-100.00\",\n                \"currency_code\": \"EUR\"\n            },\n            \"co2_model\": \"SK\",\n            \"category\": {\n                \"system\": \"ECOLYTIQ\",\n                \"value\": \"ex:shopping.online\"\n            },\n            \"datetime\": \"2022-03-30T13:01:15.806+00:00\"\n        },\n        {\n            \"transaction_id\": \"{{$randomUUID}}\",\n            \"account_id\": \"aefaef4a-f5d7-45ac-8afd-a1a15e90f64e\",\n            \"amount\": {\n                \"value\": \"-100.00\",\n                \"currency_code\": \"EUR\"\n            },\n            \"co2_model\": \"SK\",\n            \"category\": {\n                \"system\": \"ECOLYTIQ\",\n                \"value\": \"ex:transport.car-rental\"\n            },\n            \"datetime\": \"2022-03-30T13:01:15.806+00:00\"\n        },\n        {\n            \"transaction_id\": \"{{$randomUUID}}\",\n            \"account_id\": \"aefaef4a-f5d7-45ac-8afd-a1a15e90f64e\",\n            \"amount\": {\n                \"value\": \"-100.00\",\n                \"currency_code\": \"EUR\"\n            },\n            \"co2_model\": \"SK\",\n            \"category\": {\n                \"system\": \"ECOLYTIQ\",\n                \"value\": \"ex:transport.emobility\"\n            },\n            \"datetime\": \"2022-03-30T13:01:15.806+00:00\"\n        },\n        {\n            \"transaction_id\": \"{{$randomUUID}}\",\n            \"account_id\": \"aefaef4a-f5d7-45ac-8afd-a1a15e90f64e\",\n            \"amount\": {\n                \"value\": \"-100.00\",\n                \"currency_code\": \"EUR\"\n            },\n            \"co2_model\": \"SK\",\n            \"category\": {\n                \"system\": \"ECOLYTIQ\",\n                \"value\": \"ex:transport.flight\"\n            },\n            \"datetime\": \"2022-03-30T13:01:15.806+00:00\"\n        },\n        {\n            \"transaction_id\": \"{{$randomUUID}}\",\n            \"account_id\": \"aefaef4a-f5d7-45ac-8afd-a1a15e90f64e\",\n            \"amount\": {\n                \"value\": \"-100.00\",\n                \"currency_code\": \"EUR\"\n            },\n            \"co2_model\": \"SK\",\n            \"category\": {\n                \"system\": \"ECOLYTIQ\",\n                \"value\": \"ex:transport.localtransport\"\n            },\n            \"datetime\": \"2022-03-30T13:01:15.806+00:00\"\n        },\n        {\n            \"transaction_id\": \"{{$randomUUID}}\",\n            \"account_id\": \"aefaef4a-f5d7-45ac-8afd-a1a15e90f64e\",\n            \"amount\": {\n                \"value\": \"-100.00\",\n                \"currency_code\": \"EUR\"\n            },\n            \"co2_model\": \"SK\",\n            \"category\": {\n                \"system\": \"ECOLYTIQ\",\n                \"value\": \"ex:transport.servicestations\"\n            },\n            \"datetime\": \"2022-03-30T13:01:15.806+00:00\"\n        },\n        {\n            \"transaction_id\": \"{{$randomUUID}}\",\n            \"account_id\": \"aefaef4a-f5d7-45ac-8afd-a1a15e90f64e\",\n            \"amount\": {\n                \"value\": \"-100.00\",\n                \"currency_code\": \"EUR\"\n            },\n            \"co2_model\": \"SK\",\n            \"category\": {\n                \"system\": \"ECOLYTIQ\",\n                \"value\": \"ex:transport.taxi\"\n            },\n            \"datetime\": \"2022-03-30T13:01:15.806+00:00\"\n        },\n        {\n            \"transaction_id\": \"{{$randomUUID}}\",\n            \"account_id\": \"aefaef4a-f5d7-45ac-8afd-a1a15e90f64e\",\n            \"amount\": {\n                \"value\": \"-100.00\",\n                \"currency_code\": \"EUR\"\n            },\n            \"co2_model\": \"SK\",\n            \"category\": {\n                \"system\": \"ECOLYTIQ\",\n                \"value\": \"ex:transport.train\"\n            },\n            \"datetime\": \"2022-03-30T13:01:15.806+00:00\"\n        },\n        {\n            \"transaction_id\": \"{{$randomUUID}}\",\n            \"account_id\": \"aefaef4a-f5d7-45ac-8afd-a1a15e90f64e\",\n            \"amount\": {\n                \"value\": \"-100000.00\",\n                \"currency_code\": \"EUR\"\n            },\n            \"co2_model\": \"SK\",\n            \"category\": {\n                \"system\": \"ECOLYTIQ\",\n                \"value\": \"ex:food.cafe\"\n            },\n            \"datetime\": \"2022-03-30T13:01:15.806+00:00\"\n        },\n        {\n            \"transaction_id\": \"{{$randomUUID}}\",\n            \"account_id\": \"aefaef4a-f5d7-45ac-8afd-a1a15e90f64e\",\n            \"amount\": {\n                \"value\": \"-100000.00\",\n                \"currency_code\": \"EUR\"\n            },\n            \"co2_model\": \"SK\",\n            \"category\": {\n                \"system\": \"ECOLYTIQ\",\n                \"value\": \"ex:food.catering\"\n            },\n            \"datetime\": \"2022-03-30T13:01:15.806+00:00\"\n        },\n        {\n            \"transaction_id\": \"{{$randomUUID}}\",\n            \"account_id\": \"aefaef4a-f5d7-45ac-8afd-a1a15e90f64e\",\n            \"amount\": {\n                \"value\": \"-100000.00\",\n                \"currency_code\": \"EUR\"\n            },\n            \"co2_model\": \"SK\",\n            \"category\": {\n                \"system\": \"ECOLYTIQ\",\n                \"value\": \"ex:food.corner\"\n            },\n            \"datetime\": \"2022-03-30T13:01:15.806+00:00\"\n        },\n        {\n            \"transaction_id\": \"{{$randomUUID}}\",\n            \"account_id\": \"aefaef4a-f5d7-45ac-8afd-a1a15e90f64e\",\n            \"amount\": {\n                \"value\": \"-100000.00\",\n                \"currency_code\": \"EUR\"\n            },\n            \"co2_model\": \"SK\",\n            \"category\": {\n                \"system\": \"ECOLYTIQ\",\n                \"value\": \"ex:food.groceries\"\n            },\n            \"datetime\": \"2022-03-30T13:01:15.806+00:00\"\n        },\n        {\n            \"transaction_id\": \"{{$randomUUID}}\",\n            \"account_id\": \"aefaef4a-f5d7-45ac-8afd-a1a15e90f64e\",\n            \"amount\": {\n                \"value\": \"-100000.00\",\n                \"currency_code\": \"EUR\"\n            },\n            \"co2_model\": \"SK\",\n            \"category\": {\n                \"system\": \"ECOLYTIQ\",\n                \"value\": \"ex:living.energy\"\n            },\n            \"datetime\": \"2022-03-30T13:01:15.806+00:00\"\n        },\n        {\n            \"transaction_id\": \"{{$randomUUID}}\",\n            \"account_id\": \"aefaef4a-f5d7-45ac-8afd-a1a15e90f64e\",\n            \"amount\": {\n                \"value\": \"-100000.00\",\n                \"currency_code\": \"EUR\"\n            },\n            \"co2_model\": \"SK\",\n            \"category\": {\n                \"system\": \"ECOLYTIQ\",\n                \"value\": \"ex:misc\"\n            },\n            \"datetime\": \"2022-03-30T13:01:15.806+00:00\"\n        },\n        {\n            \"transaction_id\": \"{{$randomUUID}}\",\n            \"account_id\": \"aefaef4a-f5d7-45ac-8afd-a1a15e90f64e\",\n            \"amount\": {\n                \"value\": \"-100000.00\",\n                \"currency_code\": \"EUR\"\n            },\n            \"co2_model\": \"SK\",\n            \"category\": {\n                \"system\": \"ECOLYTIQ\",\n                \"value\": \"ex:misc.drug-stores\"\n            },\n            \"datetime\": \"2022-03-30T13:01:15.806+00:00\"\n        },\n        {\n            \"transaction_id\": \"{{$randomUUID}}\",\n            \"account_id\": \"aefaef4a-f5d7-45ac-8afd-a1a15e90f64e\",\n            \"amount\": {\n                \"value\": \"-100000.00\",\n                \"currency_code\": \"EUR\"\n            },\n            \"co2_model\": \"SK\",\n            \"category\": {\n                \"system\": \"ECOLYTIQ\",\n                \"value\": \"ex:misc.lodging\"\n            },\n            \"datetime\": \"2022-03-30T13:01:15.806+00:00\"\n        },\n        {\n            \"transaction_id\": \"{{$randomUUID}}\",\n            \"account_id\": \"aefaef4a-f5d7-45ac-8afd-a1a15e90f64e\",\n            \"amount\": {\n                \"value\": \"-100000.00\",\n                \"currency_code\": \"EUR\"\n            },\n            \"co2_model\": \"SK\",\n            \"category\": {\n                \"system\": \"ECOLYTIQ\",\n                \"value\": \"ex:misc.streaming.audio\"\n            },\n            \"datetime\": \"2022-03-30T13:01:15.806+00:00\"\n        },\n        {\n            \"transaction_id\": \"{{$randomUUID}}\",\n            \"account_id\": \"aefaef4a-f5d7-45ac-8afd-a1a15e90f64e\",\n            \"amount\": {\n                \"value\": \"-100000.00\",\n                \"currency_code\": \"EUR\"\n            },\n            \"co2_model\": \"SK\",\n            \"category\": {\n                \"system\": \"ECOLYTIQ\",\n                \"value\": \"ex:misc.streaming.video\"\n            },\n            \"datetime\": \"2022-03-30T13:01:15.806+00:00\"\n        },\n        {\n            \"transaction_id\": \"{{$randomUUID}}\",\n            \"account_id\": \"aefaef4a-f5d7-45ac-8afd-a1a15e90f64e\",\n            \"amount\": {\n                \"value\": \"-100000.00\",\n                \"currency_code\": \"EUR\"\n            },\n            \"co2_model\": \"SK\",\n            \"category\": {\n                \"system\": \"ECOLYTIQ\",\n                \"value\": \"ex:misc.travel\"\n            },\n            \"datetime\": \"2022-03-30T13:01:15.806+00:00\"\n        },\n        {\n            \"transaction_id\": \"{{$randomUUID}}\",\n            \"account_id\": \"aefaef4a-f5d7-45ac-8afd-a1a15e90f64e\",\n            \"amount\": {\n                \"value\": \"-100000.00\",\n                \"currency_code\": \"EUR\"\n            },\n            \"co2_model\": \"SK\",\n            \"category\": {\n                \"system\": \"ECOLYTIQ\",\n                \"value\": \"ex:misc.zero\"\n            },\n            \"datetime\": \"2022-03-30T13:01:15.806+00:00\"\n        },\n        {\n            \"transaction_id\": \"{{$randomUUID}}\",\n            \"account_id\": \"aefaef4a-f5d7-45ac-8afd-a1a15e90f64e\",\n            \"amount\": {\n                \"value\": \"-100000.00\",\n                \"currency_code\": \"EUR\"\n            },\n            \"co2_model\": \"SK\",\n            \"category\": {\n                \"system\": \"ECOLYTIQ\",\n                \"value\": \"ex:shopping.clothes\"\n            },\n            \"datetime\": \"2022-03-30T13:01:15.806+00:00\"\n        },\n        {\n            \"transaction_id\": \"{{$randomUUID}}\",\n            \"account_id\": \"aefaef4a-f5d7-45ac-8afd-a1a15e90f64e\",\n            \"amount\": {\n                \"value\": \"-100000.00\",\n                \"currency_code\": \"EUR\"\n            },\n            \"co2_model\": \"SK\",\n            \"category\": {\n                \"system\": \"ECOLYTIQ\",\n                \"value\": \"ex:shopping.furniture\"\n            },\n            \"datetime\": \"2022-03-30T13:01:15.806+00:00\"\n        },\n        {\n            \"transaction_id\": \"{{$randomUUID}}\",\n            \"account_id\": \"aefaef4a-f5d7-45ac-8afd-a1a15e90f64e\",\n            \"amount\": {\n                \"value\": \"-100000.00\",\n                \"currency_code\": \"EUR\"\n            },\n            \"co2_model\": \"SK\",\n            \"category\": {\n                \"system\": \"ECOLYTIQ\",\n                \"value\": \"ex:shopping.online\"\n            },\n            \"datetime\": \"2022-03-30T13:01:15.806+00:00\"\n        },\n        {\n            \"transaction_id\": \"{{$randomUUID}}\",\n            \"account_id\": \"aefaef4a-f5d7-45ac-8afd-a1a15e90f64e\",\n            \"amount\": {\n                \"value\": \"-100000.00\",\n                \"currency_code\": \"EUR\"\n            },\n            \"co2_model\": \"SK\",\n            \"category\": {\n                \"system\": \"ECOLYTIQ\",\n                \"value\": \"ex:transport.car-rental\"\n            },\n            \"datetime\": \"2022-03-30T13:01:15.806+00:00\"\n        },\n        {\n            \"transaction_id\": \"{{$randomUUID}}\",\n            \"account_id\": \"aefaef4a-f5d7-45ac-8afd-a1a15e90f64e\",\n            \"amount\": {\n                \"value\": \"-100000.00\",\n                \"currency_code\": \"EUR\"\n            },\n            \"co2_model\": \"SK\",\n            \"category\": {\n                \"system\": \"ECOLYTIQ\",\n                \"value\": \"ex:transport.emobility\"\n            },\n            \"datetime\": \"2022-03-30T13:01:15.806+00:00\"\n        },\n        {\n            \"transaction_id\": \"{{$randomUUID}}\",\n            \"account_id\": \"aefaef4a-f5d7-45ac-8afd-a1a15e90f64e\",\n            \"amount\": {\n                \"value\": \"-100000.00\",\n                \"currency_code\": \"EUR\"\n            },\n            \"co2_model\": \"SK\",\n            \"category\": {\n                \"system\": \"ECOLYTIQ\",\n                \"value\": \"ex:transport.flight\"\n            },\n            \"datetime\": \"2022-03-30T13:01:15.806+00:00\"\n        },\n        {\n            \"transaction_id\": \"{{$randomUUID}}\",\n            \"account_id\": \"aefaef4a-f5d7-45ac-8afd-a1a15e90f64e\",\n            \"amount\": {\n                \"value\": \"-100000.00\",\n                \"currency_code\": \"EUR\"\n            },\n            \"co2_model\": \"SK\",\n            \"category\": {\n                \"system\": \"ECOLYTIQ\",\n                \"value\": \"ex:transport.localtransport\"\n            },\n            \"datetime\": \"2022-03-30T13:01:15.806+00:00\"\n        },\n        {\n            \"transaction_id\": \"{{$randomUUID}}\",\n            \"account_id\": \"aefaef4a-f5d7-45ac-8afd-a1a15e90f64e\",\n            \"amount\": {\n                \"value\": \"-100000.00\",\n                \"currency_code\": \"EUR\"\n            },\n            \"co2_model\": \"SK\",\n            \"category\": {\n                \"system\": \"ECOLYTIQ\",\n                \"value\": \"ex:transport.servicestations\"\n            },\n            \"datetime\": \"2022-03-30T13:01:15.806+00:00\"\n        },\n        {\n            \"transaction_id\": \"{{$randomUUID}}\",\n            \"account_id\": \"aefaef4a-f5d7-45ac-8afd-a1a15e90f64e\",\n            \"amount\": {\n                \"value\": \"-100000.00\",\n                \"currency_code\": \"EUR\"\n            },\n            \"co2_model\": \"SK\",\n            \"category\": {\n                \"system\": \"ECOLYTIQ\",\n                \"value\": \"ex:transport.taxi\"\n            },\n            \"datetime\": \"2022-03-30T13:01:15.806+00:00\"\n        },\n        {\n            \"transaction_id\": \"{{$randomUUID}}\",\n            \"account_id\": \"aefaef4a-f5d7-45ac-8afd-a1a15e90f64e\",\n            \"amount\": {\n                \"value\": \"-100000.00\",\n                \"currency_code\": \"EUR\"\n            },\n            \"co2_model\": \"SK\",\n            \"category\": {\n                \"system\": \"ECOLYTIQ\",\n                \"value\": \"ex:transport.train\"\n            },\n            \"datetime\": \"2022-03-30T13:01:15.806+00:00\"\n        }\n    ]\n}",
+							"raw": "{\n    \"transactions\": [\n        {\n            \"transaction_id\": \"{{$randomUUID}}\",\n            \"account_id\": \"{{$randomUUID}}\",\n            \"amount\": {\n                \"value\": \"-24.95\",\n                \"currency_code\": \"EUR\"\n            },\n            \"co2_model\": \"DE\",\n            \"category\": {\n                \"system\": \"ECOLYTIQ\",\n                \"value\": \"ex:food.corner\"\n            },\n            \"datetime\": \"2022-03-30T13:01:15.806+00:00\"\n        },\n                {\n            \"transaction_id\": \"{{$randomUUID}}\",\n            \"account_id\": \"{{$randomUUID}}\",\n            \"amount\": {\n                \"value\": \"-0.01\",\n                \"currency_code\": \"EUR\"\n            },\n            \"co2_model\": \"DE\",\n            \"category\": {\n                \"system\": \"ECOLYTIQ\",\n                \"value\": \"ex:food.cafe\"\n            },\n            \"datetime\": \"2022-03-30T13:01:15.806+00:00\"\n        }\n    ]\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1355,6 +1355,16 @@
 				{
 					"name": "Get Transactions by IDs",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearerToken}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [
 							{
@@ -1363,7 +1373,7 @@
 							}
 						],
 						"url": {
-							"raw": "{{baseUrl}}/transactions/v1/transactions?ids=74263e87-93cb-46be-a132-9cd260716f07",
+							"raw": "{{baseUrl}}/transactions/v1/transactions?ids=",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -1375,7 +1385,7 @@
 							"query": [
 								{
 									"key": "ids",
-									"value": "74263e87-93cb-46be-a132-9cd260716f07",
+									"value": "",
 									"description": "(Required) "
 								}
 							]
@@ -1617,6 +1627,16 @@
 				{
 					"name": "/content/v1/comparables",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearerToken}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [
 							{
@@ -1625,7 +1645,7 @@
 							}
 						],
 						"url": {
-							"raw": "{{baseUrl}}/content/v1/comparables?co2_footprint=47078278&language_codes=en,nl",
+							"raw": "{{baseUrl}}/content/v1/comparables?co2_footprint=1&language_codes=en",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -1637,7 +1657,7 @@
 							"query": [
 								{
 									"key": "co2_footprint",
-									"value": "47078278",
+									"value": "1",
 									"description": "(Required) CO2 footprint in grams"
 								},
 								{
@@ -1648,8 +1668,7 @@
 								},
 								{
 									"key": "language_codes",
-									"value": "en,nl",
-									"description": "language code. See Info API to get a list of supported and enabled languages."
+									"value": "en"
 								}
 							]
 						},
@@ -1917,6 +1936,16 @@
 				{
 					"name": "/content/v1/comparables/random",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearerToken}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [
 							{
@@ -1925,7 +1954,7 @@
 							}
 						],
 						"url": {
-							"raw": "{{baseUrl}}/content/v1/comparables/random?co2_footprint=47078278&size=3&language_codes=en,nl",
+							"raw": "{{baseUrl}}/content/v1/comparables/random?size=10&language_codes=en&co2_footprint=10000",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -1937,11 +1966,6 @@
 							],
 							"query": [
 								{
-									"key": "co2_footprint",
-									"value": "47078278",
-									"description": "(Required) CO2 footprint in grams"
-								},
-								{
 									"key": "categories",
 									"value": "ex:misc,ex:food.groceries",
 									"description": "used as filter for categories. If it is unset or empty all categories are used.",
@@ -1949,12 +1973,15 @@
 								},
 								{
 									"key": "size",
-									"value": "3"
+									"value": "10"
 								},
 								{
 									"key": "language_codes",
-									"value": "en,nl",
-									"description": "language"
+									"value": "en"
+								},
+								{
+									"key": "co2_footprint",
+									"value": "10000"
 								}
 							]
 						},
@@ -2242,6 +2269,16 @@
 				{
 					"name": "/content/v1/insights",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearerToken}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [
 							{
@@ -2250,7 +2287,7 @@
 							}
 						],
 						"url": {
-							"raw": "{{baseUrl}}/content/v1/insights",
+							"raw": "{{baseUrl}}/content/v1/insights?language_codes=en",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -2265,6 +2302,10 @@
 									"value": "",
 									"description": "a list of ids. If list of ids are not present, all insights returned.",
 									"disabled": true
+								},
+								{
+									"key": "language_codes",
+									"value": "en"
 								}
 							]
 						},
@@ -2782,6 +2823,16 @@
 				{
 					"name": "/content/v1/explanations",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearerToken}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [
 							{
@@ -2790,7 +2841,7 @@
 							}
 						],
 						"url": {
-							"raw": "{{baseUrl}}/content/v1/explanations?ids=aute adipisicing tempor,aliquip Ut adipisicing laborum",
+							"raw": "{{baseUrl}}/content/v1/explanations?language_codes=en",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -2802,8 +2853,13 @@
 							"query": [
 								{
 									"key": "ids",
-									"value": "aute adipisicing tempor,aliquip Ut adipisicing laborum",
-									"description": "a list of ids. If list of ids are not present, all explanations returned."
+									"value": "",
+									"description": "a list of ids. If list of ids are not present, all explanations returned.",
+									"disabled": true
+								},
+								{
+									"key": "language_codes",
+									"value": "en"
 								}
 							]
 						},
@@ -3039,6 +3095,16 @@
 				{
 					"name": "/content/v1/explanations/random",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearerToken}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [
 							{
@@ -3047,7 +3113,7 @@
 							}
 						],
 						"url": {
-							"raw": "{{baseUrl}}/content/v1/explanations/random?categories=ex:food.cafes&size=3&language_codes=en,nl",
+							"raw": "{{baseUrl}}/content/v1/explanations/random?categories=ex:food.cafes&size=3&language_codes=en",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -3069,7 +3135,7 @@
 								},
 								{
 									"key": "language_codes",
-									"value": "en,nl",
+									"value": "en",
 									"description": "language"
 								}
 							]
