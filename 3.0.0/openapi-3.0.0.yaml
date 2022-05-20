@@ -18,6 +18,7 @@ servers:
   - description: ecolytiq API (Sandbox)
     url: https://api.sandbox.arm.ecolytiq.network
 tags:
+  - name: Authentication
   - name: Errors
     description: |
       ## HTTP Status Code Summary
@@ -82,12 +83,46 @@ tags:
   - name: Profiling API
   - name: Account API
 
-security:
-  - bearerAuth: [ ]
 
 paths:
+
+  /oauth/token:
+    post:
+      security:
+        - BasicAuth: []
+      description: Request OAuth 2.0 Access Token with client credentials grant. This endpoint is proteced with Basic Auth. Use the client_id as username and the client_secret as password.
+      summary: Request Access Token
+      tags:
+        - Authentication
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AuthRequest'
+      responses:
+        '200':
+          description: |
+            AccessToken and Lifetime
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '401':
+          description: |
+            Unauthorized. Invalid or expired Client Credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              examples:
+                Unauthorized:
+                  $ref: '#/components/examples/Unauthorized-Example'
+
   /info/v1/co2models:
     get:
+      security:
+        - BearerAuth: []
       description: Lists supported and permitted co2 models
       summary: List of CO2 models
       tags:
@@ -147,6 +182,8 @@ paths:
 
   /info/v1/category-systems:
     get:
+      security:
+        - BearerAuth: []
       description: List of supported and enabled category systems
       summary: List of category systems
       tags:
@@ -206,6 +243,8 @@ paths:
 
   /info/v1/categories:
     get:
+      security:
+        - BearerAuth: []
       description: List of categories
       summary: List of categories
       tags:
@@ -265,6 +304,8 @@ paths:
 
   /info/v1/language-codes:
     get:
+      security:
+        - BearerAuth: []
       description: List of supported and enabled language codes
       summary: List of enabled language codes
       tags:
@@ -324,6 +365,8 @@ paths:
 
   /info/v1/currency-codes:
     get:
+      security:
+        - BearerAuth: []
       description: Lists supported and enabled currency codes
       summary: List of enabled currency codes
       tags:
@@ -383,6 +426,8 @@ paths:
 
   /transactions/v1/transactions:
     post:
+      security:
+        - BearerAuth: []
       description: Use this endpoint to process and store bank transactions. Successful processed transactions are in the results list, identifiable by their `transaction_id`. In case of an error (e.g. unknown categor, you can find  the transction in the errors list, identifiable by their `transaction_id` as well.   
       summary: Process transactions
       tags:
@@ -490,6 +535,8 @@ paths:
                   $ref: '#/components/examples/RateLimit-Example'
 
     get:
+      security:
+        - BearerAuth: []
       summary: Get Transactions by IDs
       description: Get Transactions by IDs
       tags:
@@ -574,6 +621,8 @@ paths:
   
   /content/v1/comparables:
     get:
+      security:
+        - BearerAuth: []
       tags:
         - Content API
       description: Get a list of Comparables for a given co2 footprint.
@@ -677,6 +726,8 @@ paths:
 
   /content/v1/comparables/random:
     get:
+      security:
+        - BearerAuth: []
       tags:
         - Content API
       description: Get Comparables for a given co2 footprint
@@ -787,6 +838,8 @@ paths:
 
   /content/v1/insights:
     get:
+      security:
+        - BearerAuth: []
       tags:
         - Content API
       description: Get Insights by IDs.
@@ -881,6 +934,8 @@ paths:
 
   /content/v1/insights/random:
     get:
+      security:
+        - BearerAuth: []
       tags:
         - Content API
       description: Get Insights (for a given category)
@@ -980,93 +1035,10 @@ paths:
                 Example:
                   $ref: '#/components/examples/RateLimit-Example'
 
-  /content/v1/insights/for-accounts:
-    get:
-      tags:
-        - Content API
-      description: Get Insights (for accounts)
-      parameters:
-        - in: query
-          name: account_ids
-          description: list of account ids
-          required: true
-          style: form
-          explode: false
-          schema:
-            type: array
-            items:
-              type: string
-      responses:
-        '200':
-          headers:
-            X-RateLimit-Limit:
-              $ref: '#/components/headers/X-RateLimit-Limit'
-            X-RateLimit-Remaining:
-              $ref: '#/components/headers/X-RateLimit-Remaining'
-            X-RateLimit-Reset:
-              $ref: '#/components/headers/X-RateLimit-Reset'
-          description: Returns a list of content ids for the given accounts
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/InsightsProfilingResponse'
-              examples:
-                Example:
-                  $ref: '#/components/examples/InsightsProfilingResponseExample'
-        '400':
-          description: |
-            Bad Request.
-          headers:
-            X-RateLimit-Limit:
-              $ref: '#/components/headers/X-RateLimit-Limit'
-            X-RateLimit-Remaining:
-              $ref: '#/components/headers/X-RateLimit-Remaining'
-            X-RateLimit-Reset:
-              $ref: '#/components/headers/X-RateLimit-Reset'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-              examples:
-                Example:
-                  $ref: '#/components/examples/BadRequest-Example'
-        '401':
-          description: |
-            Unauthorized. Access Token is invalid or expired.
-          headers:
-            X-RateLimit-Limit:
-              $ref: '#/components/headers/X-RateLimit-Limit'
-            X-RateLimit-Remaining:
-              $ref: '#/components/headers/X-RateLimit-Remaining'
-            X-RateLimit-Reset:
-              $ref: '#/components/headers/X-RateLimit-Reset'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-              examples:
-                Example:
-                  $ref: '#/components/examples/Unauthorized-Example'
-        '429':
-          description: |
-            Rate Limit exceeded.
-          headers:
-            X-RateLimit-Limit:
-              $ref: '#/components/headers/X-RateLimit-Limit'
-            X-RateLimit-Remaining:
-              $ref: '#/components/headers/X-RateLimit-Remaining'
-            X-RateLimit-Reset:
-              $ref: '#/components/headers/X-RateLimit-Reset'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-              examples:
-                Example:
-                  $ref: '#/components/examples/RateLimit-Example'
-
   /content/v1/explanations:
     get:
+      security:
+        - BearerAuth: []
       tags:
         - Content API
       description: Get Explanations (for a given categories)
@@ -1163,6 +1135,8 @@ paths:
 
   /content/v1/explanations/random:
     get:
+      security:
+        - BearerAuth: []
       tags:
         - Content API
       description: Get Explanations (for a given categories)
@@ -1265,6 +1239,8 @@ paths:
 
   /profiling/v1/onboardings:
     get:
+      security:
+        - BearerAuth: []
       summary: Get a List of Onboardings
       description: |
         Get a List of Onboardings. An Onboarding is a Set of Questions and Answers to build a profile for end-users.
@@ -1287,6 +1263,8 @@ paths:
 
   /profiling/v1/onboardings/{onboarding_id}/start:
     get:
+      security:
+        - BearerAuth: []
       summary: Start or continue Onboarding
       description: |
         Start or continue Onboarding
@@ -1339,6 +1317,8 @@ paths:
 
   /profiling/v1/onboardings/{onboarding_id}/next:
     post:
+      security:
+        - BearerAuth: []
       summary: Save Onboarding Question and get next one
       description: |
         Get a List of Onboardings. An Onboarding is a Set of Questions and Answers to build a profile for end-users.
@@ -1391,6 +1371,8 @@ paths:
 
   /profiling/v1/questions:
     get:
+      security:
+        - BearerAuth: []
       summary: Get Questions by IDs
       description: Get Questions and Answers by IDs
       tags:
@@ -1433,6 +1415,8 @@ paths:
 
   /profiling/v1/answer:
     post:
+      security:
+        - BearerAuth: []
       description: Save Answer for a given Question
       tags:
         - Profiling API
@@ -1459,6 +1443,8 @@ paths:
 
   /account/v1/delete-accounts:
     post:
+      security:
+        - BearerAuth: []
       description: Delete all data of the given accounts.
       tags:
         - Account API
@@ -1513,7 +1499,10 @@ components:
       description: The UTC date/time at which the current rate limit window resets.
 
   securitySchemes:
-    bearerAuth: # arbitrary name for the security scheme
+    BasicAuth:
+      type: http
+      scheme: basic
+    BearerAuth:
       type: http
       scheme: bearer
       bearerFormat: JWT
@@ -1637,16 +1626,6 @@ components:
                 text: "Want to save up some energy and money while you drive? Here are some tips: pay attention to the correct tire pressure, don't carry unnecessary weight in the car, shift gears early, and don't drive too fast."
         errors: []
 
-    InsightsProfilingResponseExample:
-      value:
-        request_id: 6bf3202ade4a7411
-        results:
-          - account_id: 06462ed4-32e7-46b0-8920-31e982ba22c0
-            insight_id: 2e81b3cb-f32c-410e-8ebf-a33c6351505c
-          - account_id: 2dba21bf-649b-400d-b949-99bd6fb7e5a2
-            insight_id: 2e81b3cb-f32c-410e-8ebf-a33c6351505c
-        errors: []
-
     ExplanationResponseExample:
       value:
         request_id: 6bf3202ade4a7411
@@ -1710,7 +1689,7 @@ components:
             account_id: 10547323-5594-45a7-a58f-3b8618770b7c
             category:
               system: MCC
-              value: "768"
+              value: "763"
             co2_model: DE
             amount:
               value: -20.59
@@ -1720,7 +1699,7 @@ components:
             account_id: 10547323-5594-45a7-a58f-3b8618770b7c
             category:
               system: MCC
-              value: "768"
+              value: "1711"
             co2_model: DE
             amount:
               value: -20.59
@@ -1733,7 +1712,7 @@ components:
             account_id: 10547323-5594-45a7-a58f-3b8618770b7c
             category:
               system: MCC
-              value: "768"
+              value: "763"
             co2_model: DE
             amount:
               value: -20.59
@@ -1748,14 +1727,14 @@ components:
             account_id: 10547323-5594-45a7-a58f-3b8618770b7c
             category:
               system: MCC
-              value: "768"
+              value: "1711"
             co2_model: DE
             amount:
               value: -20.59
               currency_code: EUR
             datetime: "2021-01-17T12:45:00Z"
             merchant:
-              name: Fancy Airline
+              name: Fancy Supermarket
               address:
                 city: London
                 country_code: GB
@@ -1767,7 +1746,7 @@ components:
             account_id: 10547323-5594-45a7-a58f-3b8618770b7c
             category:
               system: MCC
-              value: "768"
+              value: "763"
             co2_model: DE
             amount:
               value: -20.59
@@ -1782,14 +1761,14 @@ components:
             account_id: 10547323-5594-45a7-a58f-3b8618770b7c
             category:
               system: MCC
-              value: "768"
+              value: "1711"
             co2_model: DE
             amount:
               value: -20.59
               currency_code: EUR
             datetime: "2021-01-17T12:45:00Z"
             merchant:
-              name: Fancy Airline
+              name: Fancy Supermarket
               address:
                 city: London
                 country_code: GB
@@ -2080,24 +2059,6 @@ components:
           items:
             $ref: '#/components/schemas/ResourceError'
 
-    InsightsProfilingResponse:
-      type: object
-      required:
-        - request_id
-        - results
-        - errors
-      properties:
-        request_id:
-          $ref: '#/components/schemas/RequestId'
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/AccountInsightMapping'
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/ResourceError'
-
     Insight:
       type: object
       required:
@@ -2114,18 +2075,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/TranslatedInsight'
-
-    AccountInsightMapping:
-      type: object
-      required:
-        - id
-        - categories
-        - content
-      properties:
-        account_id:
-          type: string
-        insight_id:
-          type: string
 
     ExplanationsResponse:
       type: object
@@ -2742,3 +2691,49 @@ components:
       properties:
         request_id:
           $ref: '#/components/schemas/RequestId'
+
+    AuthRequest:
+      type: object
+      required:
+        - grant_type
+        - scope
+      properties:
+        grant_type:
+          type: string
+          enum: 
+            - client_credentials
+          description: describes the used grant type. 
+        scope:
+          type: string
+          enum:
+            - all
+
+    AuthResponse:
+      type: object
+      required:
+        - access_token
+        - token_type
+        - expires_in
+        - scope
+        - jti
+      properties:
+        access_token:
+          type: string
+          example: eyJhbGciOiJSUzI1NiIsInR5cCI6IkpX ...
+          description: OAuth 2.0 Access Token
+        scope:
+          type: string
+          example: all
+          description: Scope of the Access Token
+        expires_in:
+          type: integer
+          example: 3599
+          description: Lifetime of the Access Token in sec.
+        token_type:
+          type: string
+          example: bearer
+          description: Token Type - always bearer
+        jti:
+          type: string
+          example: bc415e82-b262-475a-8f03-6c9028bb5991
+          description: JWT ID. Can be used to invalidate the Access Token
