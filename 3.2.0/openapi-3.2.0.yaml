@@ -83,7 +83,6 @@ tags:
   - name: Content API
   - name: Profiling API
   - name: Account API
-  - name: onPrem API
 
 security:
   - bearerAuth: [ ]
