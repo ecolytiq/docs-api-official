@@ -2,8 +2,8 @@ openapi: 3.0.3
 
 info:
   description: |
-    Draft of the APIs of the ecolytiq SaaS
-  version: 3.0.0
+    APIs of the ecolytiq SaaS
+  version: 3.2.0
   title: ecolytiq SaaS
   contact:
     email: support@ecolytiq.com
@@ -76,16 +76,19 @@ tags:
 
       ## Download
 
-      <a href ="https://ecolytiq-team.github.io/docs-api-official/3.0.0/postman/Sandbox.postman_collection.json" download>Sandbox.postman_collection.json</a>
+      <a href ="https://ecolytiq-team.github.io/docs-api-official/3.2.0/postman/Sandbox.postman_collection.json" download>Sandbox.postman_collection.json</a>
+
   - name: Info API
   - name: Transaction API
   - name: Content API
   - name: Profiling API
   - name: Account API
+  - name: onPrem API
 
+security:
+  - bearerAuth: [ ]
 
 paths:
-
   /oauth/token:
     post:
       security:
@@ -267,128 +270,6 @@ paths:
               examples:
                 Example:
                   $ref: '#/components/examples/CategoryListExample'
-        '401':
-          description: |
-            Unauthorized. Access Token is invalid or expired.
-          headers:
-            X-RateLimit-Limit:
-              $ref: '#/components/headers/X-RateLimit-Limit'
-            X-RateLimit-Remaining:
-              $ref: '#/components/headers/X-RateLimit-Remaining'
-            X-RateLimit-Reset:
-              $ref: '#/components/headers/X-RateLimit-Reset'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-              examples:
-                Unauthorized:
-                  $ref: '#/components/examples/Unauthorized-Example'
-        '429':
-          description: |
-            Rate Limit exceeded.
-          headers:
-            X-RateLimit-Limit:
-              $ref: '#/components/headers/X-RateLimit-Limit'
-            X-RateLimit-Remaining:
-              $ref: '#/components/headers/X-RateLimit-Remaining'
-            X-RateLimit-Reset:
-              $ref: '#/components/headers/X-RateLimit-Reset'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-              examples:
-                Ratelimit:
-                  $ref: '#/components/examples/RateLimit-Example'
-
-  /info/v1/language-codes:
-    get:
-      security:
-        - BearerAuth: []
-      description: List of supported and enabled language codes
-      summary: List of enabled language codes
-      tags:
-        - Info API
-      responses:
-        '200':
-          description: |
-            List of supported and enabled language codes.
-          headers:
-            X-RateLimit-Limit:
-              $ref: '#/components/headers/X-RateLimit-Limit'
-            X-RateLimit-Remaining:
-              $ref: '#/components/headers/X-RateLimit-Remaining'
-            X-RateLimit-Reset:
-              $ref: '#/components/headers/X-RateLimit-Reset'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/LanguageCodeListResponse'
-              examples:
-                Example:
-                  $ref: '#/components/examples/LanguageCodeListExample'
-        '401':
-          description: |
-            Unauthorized. Access Token is invalid or expired.
-          headers:
-            X-RateLimit-Limit:
-              $ref: '#/components/headers/X-RateLimit-Limit'
-            X-RateLimit-Remaining:
-              $ref: '#/components/headers/X-RateLimit-Remaining'
-            X-RateLimit-Reset:
-              $ref: '#/components/headers/X-RateLimit-Reset'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-              examples:
-                Unauthorized:
-                  $ref: '#/components/examples/Unauthorized-Example'
-        '429':
-          description: |
-            Rate Limit exceeded.
-          headers:
-            X-RateLimit-Limit:
-              $ref: '#/components/headers/X-RateLimit-Limit'
-            X-RateLimit-Remaining:
-              $ref: '#/components/headers/X-RateLimit-Remaining'
-            X-RateLimit-Reset:
-              $ref: '#/components/headers/X-RateLimit-Reset'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-              examples:
-                Ratelimit:
-                  $ref: '#/components/examples/RateLimit-Example'
-
-  /info/v1/currency-codes:
-    get:
-      security:
-        - BearerAuth: []
-      description: Lists supported and enabled currency codes
-      summary: List of enabled currency codes
-      tags:
-        - Info API
-      responses:
-        '200':
-          description: |
-            List of supported and enabled currency codes.
-          headers:
-            X-RateLimit-Limit:
-              $ref: '#/components/headers/X-RateLimit-Limit'
-            X-RateLimit-Remaining:
-              $ref: '#/components/headers/X-RateLimit-Remaining'
-            X-RateLimit-Reset:
-              $ref: '#/components/headers/X-RateLimit-Reset'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CurrencyListResponse'
-              examples:
-                Example:
-                  $ref: '#/components/examples/CurrencyCodeListExample'
         '401':
           description: |
             Unauthorized. Access Token is invalid or expired.
@@ -619,6 +500,263 @@ paths:
                 BadRequest-Example:
                   $ref: '#/components/examples/RateLimit-Example'
   
+  /transactions/v1/refinements:
+    get:
+      security:
+        - BearerAuth: []
+      summary: Get refinement questions for specific transactions
+      description: Get refinement questions for specific transactions.
+      tags:
+        - Transaction API
+      parameters:
+        - in: query
+          name: transaction_ids
+          description: a list of transaction ids
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: array
+            items:
+              type: string
+      responses:
+        '200':
+          description: A list of transaction ids and their corresponding question ids. If the question is already answered the field `answer_id` is set. Otherwise it is `null`.
+          headers:
+            X-RateLimit-Limit:
+              $ref: '#/components/headers/X-RateLimit-Limit'
+            X-RateLimit-Remaining:
+              $ref: '#/components/headers/X-RateLimit-Remaining'
+            X-RateLimit-Reset:
+              $ref: '#/components/headers/X-RateLimit-Reset'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransactionQuestionsResponse'
+        '400':
+          description: |
+            Bad Request. Size of Transactions is invalid.
+          headers:
+            X-RateLimit-Limit:
+              $ref: '#/components/headers/X-RateLimit-Limit'
+            X-RateLimit-Remaining:
+              $ref: '#/components/headers/X-RateLimit-Remaining'
+            X-RateLimit-Reset:
+              $ref: '#/components/headers/X-RateLimit-Reset'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              examples:
+                BadRequest-Example:
+                  $ref: '#/components/examples/BadRequest-Example'
+        '401':
+          description: |
+            Unauthorized. Access Token is invalid or expired.
+          headers:
+            X-RateLimit-Limit:
+              $ref: '#/components/headers/X-RateLimit-Limit'
+            X-RateLimit-Remaining:
+              $ref: '#/components/headers/X-RateLimit-Remaining'
+            X-RateLimit-Reset:
+              $ref: '#/components/headers/X-RateLimit-Reset'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              examples:
+                BadRequest-Example:
+                  $ref: '#/components/examples/Unauthorized-Example'
+        '429':
+          description: |
+            Rate Limit exceeded.
+          headers:
+            X-RateLimit-Limit:
+              $ref: '#/components/headers/X-RateLimit-Limit'
+            X-RateLimit-Remaining:
+              $ref: '#/components/headers/X-RateLimit-Remaining'
+            X-RateLimit-Reset:
+              $ref: '#/components/headers/X-RateLimit-Reset'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              examples:
+                BadRequest-Example:
+                  $ref: '#/components/examples/RateLimit-Example'
+    post:
+      security:
+        - BearerAuth: []
+      description: Refine Transactions by answering feedback questions
+      tags:
+        - Transaction API
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransactionBulkAnswersRequest'
+      responses:
+        '200':
+          description: Confirmation that answer is saved
+          headers:
+            X-RateLimit-Limit:
+              $ref: '#/components/headers/X-RateLimit-Limit'
+            X-RateLimit-Remaining:
+              $ref: '#/components/headers/X-RateLimit-Remaining'
+            X-RateLimit-Reset:
+              $ref: '#/components/headers/X-RateLimit-Reset'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransactionRefinementResponse'
+        '400':
+          description: |
+            Bad Request. Size of Transactions is invalid.
+          headers:
+            X-RateLimit-Limit:
+              $ref: '#/components/headers/X-RateLimit-Limit'
+            X-RateLimit-Remaining:
+              $ref: '#/components/headers/X-RateLimit-Remaining'
+            X-RateLimit-Reset:
+              $ref: '#/components/headers/X-RateLimit-Reset'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              examples:
+                BadRequest-Example:
+                  $ref: '#/components/examples/BadRequest-Example'
+        '401':
+          description: |
+            Unauthorized. Access Token is invalid or expired.
+          headers:
+            X-RateLimit-Limit:
+              $ref: '#/components/headers/X-RateLimit-Limit'
+            X-RateLimit-Remaining:
+              $ref: '#/components/headers/X-RateLimit-Remaining'
+            X-RateLimit-Reset:
+              $ref: '#/components/headers/X-RateLimit-Reset'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              examples:
+                BadRequest-Example:
+                  $ref: '#/components/examples/Unauthorized-Example'
+        '429':
+          description: |
+            Rate Limit exceeded.
+          headers:
+            X-RateLimit-Limit:
+              $ref: '#/components/headers/X-RateLimit-Limit'
+            X-RateLimit-Remaining:
+              $ref: '#/components/headers/X-RateLimit-Remaining'
+            X-RateLimit-Reset:
+              $ref: '#/components/headers/X-RateLimit-Reset'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              examples:
+                BadRequest-Example:
+                  $ref: '#/components/examples/RateLimit-Example'
+
+  /transactions/v1/questions:
+    get:
+      security:
+        - BearerAuth: []
+      summary: Get Questions by IDs
+      description: Returns all questions and answers, which can use to refine a transaction. To get a list of relevant questions for a specific transaction, please use the "Get refinements for transactions" endpoint.
+      tags:
+        - Transaction API
+      parameters:
+        - in: query
+          name: quetion_ids
+          description: a list of question ids. If list of ids are not present, all questions (+answers) returned.
+          required: false
+          style: form
+          explode: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: language_codes
+          description: language code. See Info API to get a list of supported and enabled languages.
+          required: false
+          style: form
+          explode: false
+          schema:
+            type: array
+            items:
+              type: string
+      responses:
+        '200':
+          headers:
+            X-RateLimit-Limit:
+              $ref: '#/components/headers/X-RateLimit-Limit'
+            X-RateLimit-Remaining:
+              $ref: '#/components/headers/X-RateLimit-Remaining'
+            X-RateLimit-Reset:
+              $ref: '#/components/headers/X-RateLimit-Reset'
+          description: A list of Questions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QuestionResponse'
+        '400':
+          description: |
+            Bad Request. Size of Transactions is invalid.
+          headers:
+            X-RateLimit-Limit:
+              $ref: '#/components/headers/X-RateLimit-Limit'
+            X-RateLimit-Remaining:
+              $ref: '#/components/headers/X-RateLimit-Remaining'
+            X-RateLimit-Reset:
+              $ref: '#/components/headers/X-RateLimit-Reset'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              examples:
+                BadRequest-Example:
+                  $ref: '#/components/examples/BadRequest-Example'
+        '401':
+          description: |
+            Unauthorized. Access Token is invalid or expired.
+          headers:
+            X-RateLimit-Limit:
+              $ref: '#/components/headers/X-RateLimit-Limit'
+            X-RateLimit-Remaining:
+              $ref: '#/components/headers/X-RateLimit-Remaining'
+            X-RateLimit-Reset:
+              $ref: '#/components/headers/X-RateLimit-Reset'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              examples:
+                BadRequest-Example:
+                  $ref: '#/components/examples/Unauthorized-Example'
+        '429':
+          description: |
+            Rate Limit exceeded.
+          headers:
+            X-RateLimit-Limit:
+              $ref: '#/components/headers/X-RateLimit-Limit'
+            X-RateLimit-Remaining:
+              $ref: '#/components/headers/X-RateLimit-Remaining'
+            X-RateLimit-Reset:
+              $ref: '#/components/headers/X-RateLimit-Reset'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              examples:
+                BadRequest-Example:
+                  $ref: '#/components/examples/RateLimit-Example'
+
   /content/v1/comparables:
     get:
       security:
@@ -932,6 +1070,105 @@ paths:
                 Example:
                   $ref: '#/components/examples/RateLimit-Example'
 
+  /content/v1/contextual-insights:
+    get:
+      operationId: getContextualInsights
+      security:
+        - BearerAuth: []
+      tags:
+        - Content API
+      description: Get Contextual Insights by IDs.
+      summary: Get Contextual Insights by IDs.
+      parameters:
+        - in: query
+          name: ids
+          description: a list of ids. If list of ids is not present, all contextual insights returned.
+          required: false
+          style: form
+          explode: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: language_codes
+          description: language
+          required: false
+          style: form
+          explode: true
+          schema:
+            items:
+              type: string
+      responses:
+        '200':
+          headers:
+            X-RateLimit-Limit:
+              $ref: '#/components/headers/X-RateLimit-Limit'
+            X-RateLimit-Remaining:
+              $ref: '#/components/headers/X-RateLimit-Remaining'
+            X-RateLimit-Reset:
+              $ref: '#/components/headers/X-RateLimit-Reset'
+          description: A list of insights
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContextualInsightsResponse'
+              examples:
+                Example:
+                  $ref: '#/components/examples/ContextualInsightsResponseExample'
+        '400':
+          description: |
+            Bad Request.
+          headers:
+            X-RateLimit-Limit:
+              $ref: '#/components/headers/X-RateLimit-Limit'
+            X-RateLimit-Remaining:
+              $ref: '#/components/headers/X-RateLimit-Remaining'
+            X-RateLimit-Reset:
+              $ref: '#/components/headers/X-RateLimit-Reset'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              examples:
+                Example:
+                  $ref: '#/components/examples/BadRequest-Example'
+        '401':
+          description: |
+            Unauthorized. Access Token is invalid or expired.
+          headers:
+            X-RateLimit-Limit:
+              $ref: '#/components/headers/X-RateLimit-Limit'
+            X-RateLimit-Remaining:
+              $ref: '#/components/headers/X-RateLimit-Remaining'
+            X-RateLimit-Reset:
+              $ref: '#/components/headers/X-RateLimit-Reset'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              examples:
+                Example:
+                  $ref: '#/components/examples/Unauthorized-Example'
+        '429':
+          description: |
+            Rate Limit exceeded.
+          headers:
+            X-RateLimit-Limit:
+              $ref: '#/components/headers/X-RateLimit-Limit'
+            X-RateLimit-Remaining:
+              $ref: '#/components/headers/X-RateLimit-Remaining'
+            X-RateLimit-Reset:
+              $ref: '#/components/headers/X-RateLimit-Reset'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              examples:
+                Example:
+                  $ref: '#/components/examples/RateLimit-Example'
+
+
   /content/v1/insights/random:
     get:
       security:
@@ -1035,6 +1272,192 @@ paths:
                 Example:
                   $ref: '#/components/examples/RateLimit-Example'
 
+  /profiling/v1/insights:
+    get:
+      security:
+        - BearerAuth: []
+      tags:
+        - Profiling API
+      description: Returns all matching references to Insights for accounts. 
+      summary: Get Insights (for accounts)
+      parameters:
+        - in: query
+          name: account_ids
+          description: list of account ids
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: categories
+          description: used as filter for categories. If it is unset or empty all categories are used.
+          required: false
+          style: form
+          explode: false
+          schema:
+            type: array
+            items:
+              type: string
+      responses:
+        '200':
+          headers:
+            X-RateLimit-Limit:
+              $ref: '#/components/headers/X-RateLimit-Limit'
+            X-RateLimit-Remaining:
+              $ref: '#/components/headers/X-RateLimit-Remaining'
+            X-RateLimit-Reset:
+              $ref: '#/components/headers/X-RateLimit-Reset'
+          description: Returns a list of content ids for the given accounts
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InsightsProfilingResponse'
+              examples:
+                Example:
+                  $ref: '#/components/examples/InsightsProfilingResponseExample'
+        '400':
+          description: |
+            Bad Request.
+          headers:
+            X-RateLimit-Limit:
+              $ref: '#/components/headers/X-RateLimit-Limit'
+            X-RateLimit-Remaining:
+              $ref: '#/components/headers/X-RateLimit-Remaining'
+            X-RateLimit-Reset:
+              $ref: '#/components/headers/X-RateLimit-Reset'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              examples:
+                Example:
+                  $ref: '#/components/examples/BadRequest-Example'
+        '401':
+          description: |
+            Unauthorized. Access Token is invalid or expired.
+          headers:
+            X-RateLimit-Limit:
+              $ref: '#/components/headers/X-RateLimit-Limit'
+            X-RateLimit-Remaining:
+              $ref: '#/components/headers/X-RateLimit-Remaining'
+            X-RateLimit-Reset:
+              $ref: '#/components/headers/X-RateLimit-Reset'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              examples:
+                Example:
+                  $ref: '#/components/examples/Unauthorized-Example'
+        '429':
+          description: |
+            Rate Limit exceeded.
+          headers:
+            X-RateLimit-Limit:
+              $ref: '#/components/headers/X-RateLimit-Limit'
+            X-RateLimit-Remaining:
+              $ref: '#/components/headers/X-RateLimit-Remaining'
+            X-RateLimit-Reset:
+              $ref: '#/components/headers/X-RateLimit-Reset'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              examples:
+                Example:
+                  $ref: '#/components/examples/RateLimit-Example'
+
+  /profiling/v1/contextual-insights:
+    get:
+      operationId: getContextualInsightsForAccounts
+      security:
+        - BearerAuth: [ ]
+      tags:
+        - Profiling API
+      description: Get Contextual Insights (for accounts)
+      summary: Get Contextual Insights (for accounts)
+      parameters:
+        - in: query
+          name: account_ids
+          description: list of account ids
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: array
+            items:
+              type: string
+      responses:
+        '200':
+          headers:
+            X-RateLimit-Limit:
+              $ref: '#/components/headers/X-RateLimit-Limit'
+            X-RateLimit-Remaining:
+              $ref: '#/components/headers/X-RateLimit-Remaining'
+            X-RateLimit-Reset:
+              $ref: '#/components/headers/X-RateLimit-Reset'
+          description: Returns a list of content ids for the given accounts
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InsightsProfilingResponse'
+              examples:
+                Example:
+                  $ref: '#/components/examples/InsightsProfilingResponseExample'
+        '400':
+          description: |
+            Bad Request.
+          headers:
+            X-RateLimit-Limit:
+              $ref: '#/components/headers/X-RateLimit-Limit'
+            X-RateLimit-Remaining:
+              $ref: '#/components/headers/X-RateLimit-Remaining'
+            X-RateLimit-Reset:
+              $ref: '#/components/headers/X-RateLimit-Reset'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              examples:
+                Example:
+                  $ref: '#/components/examples/BadRequest-Example'
+        '401':
+          description: |
+            Unauthorized. Access Token is invalid or expired.
+          headers:
+            X-RateLimit-Limit:
+              $ref: '#/components/headers/X-RateLimit-Limit'
+            X-RateLimit-Remaining:
+              $ref: '#/components/headers/X-RateLimit-Remaining'
+            X-RateLimit-Reset:
+              $ref: '#/components/headers/X-RateLimit-Reset'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              examples:
+                Example:
+                  $ref: '#/components/examples/Unauthorized-Example'
+        '429':
+          description: |
+            Rate Limit exceeded.
+          headers:
+            X-RateLimit-Limit:
+              $ref: '#/components/headers/X-RateLimit-Limit'
+            X-RateLimit-Remaining:
+              $ref: '#/components/headers/X-RateLimit-Remaining'
+            X-RateLimit-Reset:
+              $ref: '#/components/headers/X-RateLimit-Reset'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              examples:
+                Example:
+                  $ref: '#/components/examples/RateLimit-Example'
   /content/v1/explanations:
     get:
       security:
@@ -1237,144 +1660,12 @@ paths:
                 Example:
                   $ref: '#/components/examples/RateLimit-Example'
 
-  /profiling/v1/onboardings:
-    get:
-      security:
-        - BearerAuth: []
-      summary: Get a List of Onboardings (Experimental)
-      description: |
-        Get a List of Onboardings. An Onboarding is a Set of Questions and Answers to build a profile for end-users.
-      tags:
-        - Profiling API
-      responses:
-        '200':
-          description: List of Onboardings
-          headers:
-            X-RateLimit-Limit:
-              $ref: '#/components/headers/X-RateLimit-Limit'
-            X-RateLimit-Remaining:
-              $ref: '#/components/headers/X-RateLimit-Remaining'
-            X-RateLimit-Reset:
-              $ref: '#/components/headers/X-RateLimit-Reset'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/OnboardingResponse'
-
-  /profiling/v1/onboardings/{onboarding_id}/start:
-    get:
-      security:
-        - BearerAuth: []
-      summary: Start or continue Onboarding (Experimental)
-      description: |
-        Start or continue Onboarding
-      tags:
-        - Profiling API
-      parameters:
-        - in: path
-          required: true
-          name: onboarding_id
-          description: Onboarding ID
-          schema:
-            type: string
-        - in: query
-          name: account_id
-          required: true
-          description: Account ID
-          schema:
-            $ref: '#/components/schemas/AccountId'
-      responses:
-        '200':
-          description: List of onboardings
-          headers:
-            X-RateLimit-Limit:
-              $ref: '#/components/headers/X-RateLimit-Limit'
-            X-RateLimit-Remaining:
-              $ref: '#/components/headers/X-RateLimit-Remaining'
-            X-RateLimit-Reset:
-              $ref: '#/components/headers/X-RateLimit-Reset'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/NextQuestionResponse'
-        '404':
-          description: |
-            Not found. Onboarding not found.
-          headers:
-            X-RateLimit-Limit:
-              $ref: '#/components/headers/X-RateLimit-Limit'
-            X-RateLimit-Remaining:
-              $ref: '#/components/headers/X-RateLimit-Remaining'
-            X-RateLimit-Reset:
-              $ref: '#/components/headers/X-RateLimit-Reset'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-              examples:
-                NotFound:
-                  $ref: '#/components/examples/NotFound-Example'
-
-  /profiling/v1/onboardings/{onboarding_id}/next:
-    post:
-      security:
-        - BearerAuth: []
-      summary: Save Onboarding Question and get next one (Experimental)
-      description: |
-        Get a List of Onboardings. An Onboarding is a Set of Questions and Answers to build a profile for end-users.
-      tags:
-        - Profiling API
-      parameters:
-        - in: path
-          required: true
-          name: onboarding_id
-          description: Onboarding ID
-          schema:
-            type: string
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/AnswerRequest'
-      responses:
-        '200':
-          description: List of onboardings
-          headers:
-            X-RateLimit-Limit:
-              $ref: '#/components/headers/X-RateLimit-Limit'
-            X-RateLimit-Remaining:
-              $ref: '#/components/headers/X-RateLimit-Remaining'
-            X-RateLimit-Reset:
-              $ref: '#/components/headers/X-RateLimit-Reset'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/NextQuestionResponse'
-        '404':
-          description: |
-            Not found. Onboarding not found.
-          headers:
-            X-RateLimit-Limit:
-              $ref: '#/components/headers/X-RateLimit-Limit'
-            X-RateLimit-Remaining:
-              $ref: '#/components/headers/X-RateLimit-Remaining'
-            X-RateLimit-Reset:
-              $ref: '#/components/headers/X-RateLimit-Reset'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-              examples:
-                NotFound:
-                  $ref: '#/components/examples/NotFound-Example'
-
   /profiling/v1/questions:
     get:
       security:
         - BearerAuth: []
-      summary: Get Questions by IDs
-      description: Get Questions and Answers by IDs
+      summary: Get Questions for Profiling by IDs
+      description: Get questions, answers and translations used for Profiling
       tags:
         - Profiling API
       parameters:
@@ -1626,6 +1917,47 @@ components:
                 text: "Want to save up some energy and money while you drive? Here are some tips: pay attention to the correct tire pressure, don't carry unnecessary weight in the car, shift gears early, and don't drive too fast."
         errors: []
 
+    ContextualInsightsResponseExample:
+      value:
+        request_id: 6bf3202ade4a7411
+        results:
+          - id: 4573f579-6173-439d-9489-72dd3d69f7d7
+            parameters:
+              - parameter: percent
+                value: "94.15"
+            raw_content:
+              - language_code: en
+                text: Because you use green energy, you save {percent} percent on energy.
+            content:
+              - language_code: en
+                text: Because you use green energy, you save 94.15 percent on energy.
+          - id: e46f0eb1-efab-4407-a408-68c05f380bd8
+            parameters:
+              - parameter: percent
+                value: "95"
+            raw_content:
+              - language_code: en
+                text: "Because you use solar energy, you save {percent} percent on energy."
+            content:
+              - language_code: en
+                text: "Because you use solar energy, you save 95 percent on energy."
+        errors: []
+
+    InsightsProfilingResponseExample:
+      value:
+        request_id: 6bf3202ade4a7411
+        results:
+          - account_id: 06462ed4-32e7-46b0-8920-31e982ba22c0
+            content_ids: 
+              - 035657e8-63d1-435a-a202-ef7ce6280093
+              - 59501d85-a610-d41f-7bce-46944a0f90fe
+              - 06462ed4-32e7-46b0-8920-31e982ba22c0
+          - account_id: 2dba21bf-649b-400d-b949-99bd6fb7e5a2
+            content_ids: 
+              - 035657e8-63d1-435a-a202-ef7ce6280093
+              - 59501d85-a610-d41f-7bce-46944a0f90fe
+        errors: []
+
     ExplanationResponseExample:
       value:
         request_id: 6bf3202ade4a7411
@@ -1819,9 +2151,11 @@ components:
               unit: gram
               value: 1260
         errors: []
+    
     Transaction-Response-Example-03:
       value:
         request_id: "6bf3202ade4a7411"
+
   schemas:
 
     CO2ModelResponse:
@@ -1996,33 +2330,6 @@ components:
       type: string
       example: "6bf3202ade4a7411"
 
-    OnboardingResponse:
-      type: object
-      required:
-        - request_id
-        - results
-      properties:
-        request_id:
-          $ref: '#/components/schemas/RequestId'
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/Onboarding'
-
-    Onboarding:
-      type: object
-      required:
-        - id
-      properties:
-        id:
-          description: ID of onboarding scenario
-          type: string
-          example: "vcc80kePB0Uc8Yb0"
-        name:
-          description: Name of onboarding scenario
-          type: string
-          example: "Conditional Food Questions"
-
     QuestionResponse:
       type: object
       required:
@@ -2036,6 +2343,24 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Question'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResourceError'
+
+    ContextualInsightsResponse:
+      type: object
+      required:
+        - request_id
+        - results
+        - errors
+      properties:
+        request_id:
+          $ref: '#/components/schemas/RequestId'
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ContextualInsight'
         errors:
           type: array
           items:
@@ -2059,6 +2384,24 @@ components:
           items:
             $ref: '#/components/schemas/ResourceError'
 
+    InsightsProfilingResponse:
+      type: object
+      required:
+        - request_id
+        - results
+        - errors
+      properties:
+        request_id:
+          $ref: '#/components/schemas/RequestId'
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccountInsightMapping'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResourceError'
+
     Insight:
       type: object
       required:
@@ -2075,6 +2418,55 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/TranslatedInsight'
+
+    ContextualInsight:
+      type: object
+      required:
+        - id
+        - content
+        - parameters
+        - raw_content
+      properties:
+        id:
+          type: string
+        parameters:
+          type: array
+          items:
+            $ref: '#/components/schemas/ContextualInsightParameter'
+        raw_content:
+          type: array
+          items:
+            $ref: '#/components/schemas/TranslatedContextualInsight'
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/TranslatedContextualInsight'
+
+    ContextualInsightParameter:
+      type: object
+      required:
+        - parameter
+        - value
+      properties:
+        parameter:
+          type: string
+        value:
+          type: string
+
+    AccountInsightMapping:
+      type: object
+      required:
+        - account_id
+        - content_ids
+      properties:
+        account_id:
+          type: string
+          description: ID of the account.
+        content_ids:
+          type: array
+          description: List of content IDs. Use the "Get Insights by IDs" endpoint to fetch the insight(s).
+          items:
+            type: string
 
     ExplanationsResponse:
       type: object
@@ -2163,23 +2555,6 @@ components:
           items:
             $ref: '#/components/schemas/TranslatedComparable'
 
-    NextQuestionResponse:
-      type: object
-      required:
-        - account_id
-        - questions
-        - has_next
-      properties:
-        account_id:
-          $ref: '#/components/schemas/AccountId'
-        questions:
-          type: array
-          items:
-            $ref: '#/components/schemas/Question'
-        has_next:
-          description: true, iff an unanswered question is available
-          type: boolean
-
     ListOfFeedbackLoopsResponse:
       type: object
       properties:
@@ -2261,7 +2636,27 @@ components:
           example: g
 
     TransactionResponse:
-      description: "holds information about invalid transactions"
+      description: "holds information about transactions"
+      type: object
+      required:
+        - request_id
+        - results
+        - errors
+      properties:
+        request_id:
+          $ref: '#/components/schemas/RequestId'
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/TransactionResult'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/TransactionError'
+
+    
+    TransactionRefinementResponse:
+      description: "holds information about transactions"
       type: object
       required:
         - request_id
@@ -2496,7 +2891,7 @@ components:
 
     ExpectedAnswerInput:
       type: object
-      description: Describes a valid
+      description: Describes a valid input that can be used as answer.
       required:
         - id
         - datatype
@@ -2598,6 +2993,101 @@ components:
           type: string
         description:
           type: string
+  
+    TransactionQuestionsResponse:
+      type: object
+      required:
+        - request_id
+        - results
+        - errors
+      properties:
+        request_id:
+          type: string
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/TransactionQuestionAnswerResult'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/TransactionQuestionAnswerError'
+    
+    TransactionQuestionAnswerResult:
+      type: object
+      required:
+        - transaction_id
+        - question_id
+      properties:
+        transaction_id:
+          type: string
+        question_id:
+          type: string
+        answer_id:
+          description: null, iff question is not answered
+          type: string
+
+    TransactionQuestionAnswerError:
+      type: object
+      required:
+        - transaction_id
+        - code
+        - description
+      properties:
+        transaction_id:
+          type: string
+        code:
+          type: string
+        description:
+          type: string
+
+    TransactionBulkAnswerResponse:
+      type: object
+      required:
+        - request_id
+        - results
+        - errors
+      properties:
+        request_id:
+          type: string
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/TransactionBulkAnswerResult'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/TransactionBulkAnswerError'
+
+    TransactionBulkAnswerResult:
+      type: object
+      required:
+        - transaction_id
+        - question_id
+        - answer_id
+      properties:
+        transaction_id:
+          type: string
+        question_id:
+          type: string
+        answer_id:
+          type: string
+
+    TransactionBulkAnswerError:
+      type: object
+      required:
+        - transaction_id
+        - answer_id
+        - code
+        - description
+      properties:
+        transaction_id:
+          type: string
+        answer_id:
+          type: string
+        code:
+          type: string
+        description:
+          type: string
 
     BulkAnswersRequest:
       type: object
@@ -2619,6 +3109,30 @@ components:
           type: string
         account_id:
           $ref: '#/components/schemas/AccountId'
+        input:
+          type: string
+          description: user input
+
+    TransactionBulkAnswersRequest:
+      type: object
+      required:
+        - answers
+      properties:
+        transactions:
+          type: array
+          items:
+            $ref: '#/components/schemas/TransactionAnswerRequest'
+
+    TransactionAnswerRequest:
+      type: object
+      required:
+        - transaction_id
+        - answer_id
+      properties:
+        answer_id:
+          type: string
+        transaction_id:
+          $ref: '#/components/schemas/TransactionId'
         input:
           type: string
           description: user input
@@ -2646,6 +3160,17 @@ components:
           type: string
 
     TranslatedComparable:
+      type: object
+      required:
+        - language_code
+        - text
+      properties:
+        language_code:
+          type: string
+        text:
+          type: string
+
+    TranslatedContextualInsight:
       type: object
       required:
         - language_code
