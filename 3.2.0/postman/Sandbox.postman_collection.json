@@ -3,7 +3,8 @@
 		"_postman_id": "bf6708b0-eab1-402a-a479-6e55771e4ca2",
 		"name": "ecolytiq SaaS",
 		"description": "Draft of the APIs of the ecolytiq SaaS\n\n\nContact Support:\n Name: ecolytiq GmbH\n Email: support@ecolytiq.com",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "20101070"
 	},
 	"item": [
 		{
@@ -633,378 +634,6 @@
 							"body": "{\n  \"request_id\": \"6bf3202ade4a7411\",\n  \"error_code\": \"rate.limit.exceeded\",\n  \"error_description\": \"Rate limit exceeded. Try again later.\"\n}"
 						}
 					]
-				},
-				{
-					"name": "List of enabled language codes",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{bearerToken}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [
-							{
-								"key": "Accept",
-								"value": "application/json"
-							}
-						],
-						"url": {
-							"raw": "{{baseUrl}}/info/v1/language-codes",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"info",
-								"v1",
-								"language-codes"
-							]
-						},
-						"description": "List of supported and enabled language codes"
-					},
-					"response": [
-						{
-							"name": "List of supported and enabled language codes.\n",
-							"originalRequest": {
-								"method": "GET",
-								"header": [
-									{
-										"description": "Added as a part of security scheme: bearer",
-										"key": "Authorization",
-										"value": "Bearer <token>"
-									}
-								],
-								"url": {
-									"raw": "{{baseUrl}}/info/v1/language-codes",
-									"host": [
-										"{{baseUrl}}"
-									],
-									"path": [
-										"info",
-										"v1",
-										"language-codes"
-									]
-								}
-							},
-							"status": "OK",
-							"code": 200,
-							"_postman_previewlanguage": "json",
-							"header": [
-								{
-									"key": "X-RateLimit-Limit",
-									"value": "33127526",
-									"description": "Request limit per hour."
-								},
-								{
-									"key": "X-RateLimit-Remaining",
-									"value": "33127526",
-									"description": "The number of requests left for the time window."
-								},
-								{
-									"key": "X-RateLimit-Reset",
-									"value": "2002-11-22T23:49:09.881Z",
-									"description": "The UTC date/time at which the current rate limit window resets."
-								},
-								{
-									"key": "Content-Type",
-									"value": "application/json"
-								}
-							],
-							"cookie": [],
-							"body": "{\n  \"request_id\": \"6bf3202ade4a7411\",\n  \"results\": [\n    {\n      \"code\": \"de\",\n      \"description\": \"German\",\n      \"insights\": true,\n      \"explanations\": true,\n      \"comparables\": true,\n      \"questions\": false\n    },\n    {\n      \"code\": \"en\",\n      \"description\": \"English\",\n      \"insights\": true,\n      \"explanations\": true,\n      \"comparables\": true,\n      \"questions\": false\n    },\n    {\n      \"code\": \"en-US\",\n      \"description\": \"English as used in the United States\",\n      \"insights\": true,\n      \"explanations\": true,\n      \"comparables\": false,\n      \"questions\": false\n    }\n  ]\n}"
-						},
-						{
-							"name": "Unauthorized. Access Token is invalid or expired.\n",
-							"originalRequest": {
-								"method": "GET",
-								"header": [
-									{
-										"description": "Added as a part of security scheme: bearer",
-										"key": "Authorization",
-										"value": "Bearer <token>"
-									}
-								],
-								"url": {
-									"raw": "{{baseUrl}}/info/v1/language-codes",
-									"host": [
-										"{{baseUrl}}"
-									],
-									"path": [
-										"info",
-										"v1",
-										"language-codes"
-									]
-								}
-							},
-							"status": "Unauthorized",
-							"code": 401,
-							"_postman_previewlanguage": "json",
-							"header": [
-								{
-									"key": "X-RateLimit-Limit",
-									"value": "33127526",
-									"description": "Request limit per hour."
-								},
-								{
-									"key": "X-RateLimit-Remaining",
-									"value": "33127526",
-									"description": "The number of requests left for the time window."
-								},
-								{
-									"key": "X-RateLimit-Reset",
-									"value": "2002-11-22T23:49:09.881Z",
-									"description": "The UTC date/time at which the current rate limit window resets."
-								},
-								{
-									"key": "Content-Type",
-									"value": "application/json"
-								}
-							],
-							"cookie": [],
-							"body": "{\n  \"request_id\": \"6bf3202ade4a7411\",\n  \"error_code\": \"unauthorized\",\n  \"error_description\": \"Access Token is invalid or expired.\"\n}"
-						},
-						{
-							"name": "Rate Limit exeeded.\n",
-							"originalRequest": {
-								"method": "GET",
-								"header": [
-									{
-										"description": "Added as a part of security scheme: bearer",
-										"key": "Authorization",
-										"value": "Bearer <token>"
-									}
-								],
-								"url": {
-									"raw": "{{baseUrl}}/info/v1/language-codes",
-									"host": [
-										"{{baseUrl}}"
-									],
-									"path": [
-										"info",
-										"v1",
-										"language-codes"
-									]
-								}
-							},
-							"status": "Too Many Requests",
-							"code": 429,
-							"_postman_previewlanguage": "json",
-							"header": [
-								{
-									"key": "X-RateLimit-Limit",
-									"value": "33127526",
-									"description": "Request limit per hour."
-								},
-								{
-									"key": "X-RateLimit-Remaining",
-									"value": "33127526",
-									"description": "The number of requests left for the time window."
-								},
-								{
-									"key": "X-RateLimit-Reset",
-									"value": "2002-11-22T23:49:09.881Z",
-									"description": "The UTC date/time at which the current rate limit window resets."
-								},
-								{
-									"key": "Content-Type",
-									"value": "application/json"
-								}
-							],
-							"cookie": [],
-							"body": "{\n  \"request_id\": \"6bf3202ade4a7411\",\n  \"error_code\": \"rate.limit.exceeded\",\n  \"error_description\": \"Rate limit exceeded. Try again later.\"\n}"
-						}
-					]
-				},
-				{
-					"name": "List of enabled currency codes",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{bearerToken}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [
-							{
-								"key": "Accept",
-								"value": "application/json"
-							}
-						],
-						"url": {
-							"raw": "{{baseUrl}}/info/v1/currency-codes",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"info",
-								"v1",
-								"currency-codes"
-							]
-						},
-						"description": "Lists supported and enabled currency codes"
-					},
-					"response": [
-						{
-							"name": "List of supported and enabled currency codes.\n",
-							"originalRequest": {
-								"method": "GET",
-								"header": [
-									{
-										"description": "Added as a part of security scheme: bearer",
-										"key": "Authorization",
-										"value": "Bearer <token>"
-									}
-								],
-								"url": {
-									"raw": "{{baseUrl}}/info/v1/currency-codes",
-									"host": [
-										"{{baseUrl}}"
-									],
-									"path": [
-										"info",
-										"v1",
-										"currency-codes"
-									]
-								}
-							},
-							"status": "OK",
-							"code": 200,
-							"_postman_previewlanguage": "json",
-							"header": [
-								{
-									"key": "X-RateLimit-Limit",
-									"value": "33127526",
-									"description": "Request limit per hour."
-								},
-								{
-									"key": "X-RateLimit-Remaining",
-									"value": "33127526",
-									"description": "The number of requests left for the time window."
-								},
-								{
-									"key": "X-RateLimit-Reset",
-									"value": "2002-11-22T23:49:09.881Z",
-									"description": "The UTC date/time at which the current rate limit window resets."
-								},
-								{
-									"key": "Content-Type",
-									"value": "application/json"
-								}
-							],
-							"cookie": [],
-							"body": "{\n  \"request_id\": \"6bf3202ade4a7411\",\n  \"results\": [\n    {\n      \"code\": \"EUR\",\n      \"description\": \"Euro\",\n      \"decimal_places\": 2,\n      \"enabled\": true\n    },\n    {\n      \"code\": \"GBP\",\n      \"description\": \"Pound sterling\",\n      \"decimal_places\": 2,\n      \"enabled\": false\n    },\n    {\n      \"code\": \"JPY\",\n      \"description\": \"Japanese yen\",\n      \"decimal_places\": 0,\n      \"enabled\": false\n    },\n    {\n      \"code\": \"USD\",\n      \"description\": \"United States dollar\",\n      \"decimal_places\": 2,\n      \"enabled\": true\n    }\n  ]\n}"
-						},
-						{
-							"name": "Unauthorized. Access Token is invalid or expired.\n",
-							"originalRequest": {
-								"method": "GET",
-								"header": [
-									{
-										"description": "Added as a part of security scheme: bearer",
-										"key": "Authorization",
-										"value": "Bearer <token>"
-									}
-								],
-								"url": {
-									"raw": "{{baseUrl}}/info/v1/currency-codes",
-									"host": [
-										"{{baseUrl}}"
-									],
-									"path": [
-										"info",
-										"v1",
-										"currency-codes"
-									]
-								}
-							},
-							"status": "Unauthorized",
-							"code": 401,
-							"_postman_previewlanguage": "json",
-							"header": [
-								{
-									"key": "X-RateLimit-Limit",
-									"value": "33127526",
-									"description": "Request limit per hour."
-								},
-								{
-									"key": "X-RateLimit-Remaining",
-									"value": "33127526",
-									"description": "The number of requests left for the time window."
-								},
-								{
-									"key": "X-RateLimit-Reset",
-									"value": "2002-11-22T23:49:09.881Z",
-									"description": "The UTC date/time at which the current rate limit window resets."
-								},
-								{
-									"key": "Content-Type",
-									"value": "application/json"
-								}
-							],
-							"cookie": [],
-							"body": "{\n  \"request_id\": \"6bf3202ade4a7411\",\n  \"error_code\": \"unauthorized\",\n  \"error_description\": \"Access Token is invalid or expired.\"\n}"
-						},
-						{
-							"name": "Rate Limit exeeded.\n",
-							"originalRequest": {
-								"method": "GET",
-								"header": [
-									{
-										"description": "Added as a part of security scheme: bearer",
-										"key": "Authorization",
-										"value": "Bearer <token>"
-									}
-								],
-								"url": {
-									"raw": "{{baseUrl}}/info/v1/currency-codes",
-									"host": [
-										"{{baseUrl}}"
-									],
-									"path": [
-										"info",
-										"v1",
-										"currency-codes"
-									]
-								}
-							},
-							"status": "Too Many Requests",
-							"code": 429,
-							"_postman_previewlanguage": "json",
-							"header": [
-								{
-									"key": "X-RateLimit-Limit",
-									"value": "33127526",
-									"description": "Request limit per hour."
-								},
-								{
-									"key": "X-RateLimit-Remaining",
-									"value": "33127526",
-									"description": "The number of requests left for the time window."
-								},
-								{
-									"key": "X-RateLimit-Reset",
-									"value": "2002-11-22T23:49:09.881Z",
-									"description": "The UTC date/time at which the current rate limit window resets."
-								},
-								{
-									"key": "Content-Type",
-									"value": "application/json"
-								}
-							],
-							"cookie": [],
-							"body": "{\n  \"request_id\": \"6bf3202ade4a7411\",\n  \"error_code\": \"rate.limit.exceeded\",\n  \"error_description\": \"Rate limit exceeded. Try again later.\"\n}"
-						}
-					]
 				}
 			]
 		},
@@ -1034,7 +663,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"transactions\": [\n        {\n            \"transaction_id\": \"{{$randomUUID}}\",\n            \"account_id\": \"{{$randomUUID}}\",\n            \"amount\": {\n                \"value\": \"-24.95\",\n                \"currency_code\": \"EUR\"\n            },\n            \"co2_model\": \"DE\",\n            \"category\": {\n                \"system\": \"ECOLYTIQ\",\n                \"value\": \"ex:food.corner\"\n            },\n            \"datetime\": \"2022-03-30T13:01:15.806+00:00\"\n        },\n                {\n            \"transaction_id\": \"{{$randomUUID}}\",\n            \"account_id\": \"{{$randomUUID}}\",\n            \"amount\": {\n                \"value\": \"-0.01\",\n                \"currency_code\": \"EUR\"\n            },\n            \"co2_model\": \"DE\",\n            \"category\": {\n                \"system\": \"ECOLYTIQ\",\n                \"value\": \"ex:food.cafe\"\n            },\n            \"datetime\": \"2022-03-30T13:01:15.806+00:00\"\n        }\n    ]\n}",
+							"raw": "{\n    \"async\": false,\n    \"transactions\": [\n        {\n            \"transaction_id\": \"{{$randomUUID}}\",\n            \"account_id\": \"589416af-f2d7-427b-91c2-722c5a3f0f5a\",\n            \"amount\": {\n                \"value\": \"-{{$randomPrice}}\",\n                \"currency_code\": \"EUR\"\n            },\n            \"co2_model\": \"DE\",\n            \"category\": {\n                \"system\": \"ECOLYTIQ\",\n                \"value\": \"ex:food.cafe\"\n            },\n            \"datetime\": \"{{d}}\"\n        },\n        {\n            \"transaction_id\": \"{{$randomUUID}}\",\n            \"account_id\": \"589416af-f2d7-427b-91c2-722c5a3f0f5a\",\n            \"amount\": {\n                \"value\": \"-{{$randomPrice}}\",\n                \"currency_code\": \"EUR\"\n            },\n            \"co2_model\": \"DE\",\n            \"category\": {\n                \"system\": \"ECOLYTIQ\",\n                \"value\": \"ex:food.groceries\"\n            },\n            \"datetime\": \"{{d}}\"\n        },\n        {\n            \"transaction_id\": \"{{$randomUUID}}\",\n            \"account_id\": \"589416af-f2d7-427b-91c2-722c5a3f0f5a\",\n            \"amount\": {\n                \"value\": \"-{{$randomPrice}}\",\n                \"currency_code\": \"EUR\"\n            },\n            \"co2_model\": \"DE\",\n            \"category\": {\n                \"system\": \"ECOLYTIQ\",\n                \"value\": \"ex:shopping.online\"\n            },\n            \"datetime\": \"{{d}}\"\n        },\n        {\n            \"transaction_id\": \"{{$randomUUID}}\",\n            \"account_id\": \"589416af-f2d7-427b-91c2-722c5a3f0f5a\",\n            \"amount\": {\n                \"value\": \"-{{$randomPrice}}\",\n                \"currency_code\": \"EUR\"\n            },\n            \"co2_model\": \"DE\",\n            \"category\": {\n                \"system\": \"ECOLYTIQ\",\n                \"value\": \"ex:misc\"\n            },\n            \"datetime\": \"{{d}}\"\n        },\n        {\n            \"transaction_id\": \"{{$randomUUID}}\",\n            \"account_id\": \"589416af-f2d7-427b-91c2-722c5a3f0f5a\",\n            \"amount\": {\n                \"value\": \"-{{$randomPrice}}\",\n                \"currency_code\": \"EUR\"\n            },\n            \"co2_model\": \"DE\",\n            \"category\": {\n                \"system\": \"ECOLYTIQ\",\n                \"value\": \"ex:misc.zero\"\n            },\n            \"datetime\": \"{{d}}\"\n        },\n        {\n            \"transaction_id\": \"{{$randomUUID}}\",\n            \"account_id\": \"589416af-f2d7-427b-91c2-722c5a3f0f5a\",\n            \"amount\": {\n                \"value\": \"-{{$randomPrice}}\",\n                \"currency_code\": \"EUR\"\n            },\n            \"co2_model\": \"DE\",\n            \"category\": {\n                \"system\": \"ECOLYTIQ\",\n                \"value\": \"ex:transport.flight\"\n            },\n            \"datetime\": \"{{d}}\"\n        },\n        {\n            \"transaction_id\": \"{{$randomUUID}}\",\n            \"account_id\": \"589416af-f2d7-427b-91c2-722c5a3f0f5a\",\n            \"amount\": {\n                \"value\": \"-{{$randomPrice}}\",\n                \"currency_code\": \"EUR\"\n            },\n            \"co2_model\": \"DE\",\n            \"category\": {\n                \"system\": \"ECOLYTIQ\",\n                \"value\": \"ex:transport.servicestations\"\n            },\n            \"datetime\": \"{{d}}\"\n        },\n        {\n            \"transaction_id\": \"{{$randomUUID}}\",\n            \"account_id\": \"589416af-f2d7-427b-91c2-722c5a3f0f5a\",\n            \"amount\": {\n                \"value\": \"-{{$randomPrice}}\",\n                \"currency_code\": \"EUR\"\n            },\n            \"co2_model\": \"DE\",\n            \"category\": {\n                \"system\": \"ECOLYTIQ\",\n                \"value\": \"ex:misc\"\n            },\n            \"datetime\": \"{{d}}\"\n        },\n        {\n            \"transaction_id\": \"{{$randomUUID}}\",\n            \"account_id\": \"589416af-f2d7-427b-91c2-722c5a3f0f5a\",\n            \"amount\": {\n                \"value\": \"-{{$randomPrice}}\",\n                \"currency_code\": \"EUR\"\n            },\n            \"co2_model\": \"DE\",\n            \"category\": {\n                \"system\": \"ECOLYTIQ\",\n                \"value\": \"ex:shopping.online\"\n            },\n            \"datetime\": \"{{d}}\"\n        },\n        {\n            \"transaction_id\": \"{{$randomUUID}}\",\n            \"account_id\": \"589416af-f2d7-427b-91c2-722c5a3f0f5a\",\n            \"amount\": {\n                \"value\": \"-{{$randomPrice}}\",\n                \"currency_code\": \"EUR\"\n            },\n            \"co2_model\": \"DE\",\n            \"category\": {\n                \"system\": \"ECOLYTIQ\",\n                \"value\": \"ex:food.cafe\"\n            },\n            \"datetime\": \"{{d}}\"\n        },\n        {\n            \"transaction_id\": \"{{$randomUUID}}\",\n            \"account_id\": \"589416af-f2d7-427b-91c2-722c5a3f0f5a\",\n            \"amount\": {\n                \"value\": \"-{{$randomPrice}}\",\n                \"currency_code\": \"EUR\"\n            },\n            \"co2_model\": \"DE\",\n            \"category\": {\n                \"system\": \"ECOLYTIQ\",\n                \"value\": \"ex:food.cafe\"\n            },\n            \"datetime\": \"{{d}}\"\n        },\n        {\n            \"transaction_id\": \"{{$randomUUID}}\",\n            \"account_id\": \"589416af-f2d7-427b-91c2-722c5a3f0f5a\",\n            \"amount\": {\n                \"value\": \"-{{$randomPrice}}\",\n                \"currency_code\": \"EUR\"\n            },\n            \"co2_model\": \"DE\",\n            \"category\": {\n                \"system\": \"ECOLYTIQ\",\n                \"value\": \"ex:food.groceries\"\n            },\n            \"datetime\": \"{{d}}\"\n        },\n        {\n            \"transaction_id\": \"{{$randomUUID}}\",\n            \"account_id\": \"589416af-f2d7-427b-91c2-722c5a3f0f5a\",\n            \"amount\": {\n                \"value\": \"-{{$randomPrice}}\",\n                \"currency_code\": \"EUR\"\n            },\n            \"co2_model\": \"DE\",\n            \"category\": {\n                \"system\": \"ECOLYTIQ\",\n                \"value\": \"ex:food.corner\"\n            },\n            \"datetime\": \"{{d}}\"\n        },\n        {\n            \"transaction_id\": \"{{$randomUUID}}\",\n            \"account_id\": \"589416af-f2d7-427b-91c2-722c5a3f0f5a\",\n            \"amount\": {\n                \"value\": \"-{{$randomPrice}}\",\n                \"currency_code\": \"EUR\"\n            },\n            \"co2_model\": \"DE\",\n            \"category\": {\n                \"system\": \"ECOLYTIQ\",\n                \"value\": \"ex:food.corner\"\n            },\n            \"datetime\": \"{{d}}\"\n        }\n    ]\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1354,6 +983,273 @@
 				},
 				{
 					"name": "Get Transactions by IDs",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearerToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/transactions/v1/transactions?ids=",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"transactions",
+								"v1",
+								"transactions"
+							],
+							"query": [
+								{
+									"key": "ids",
+									"value": "",
+									"description": "(Required) "
+								}
+							]
+						},
+						"description": "Get Transactions by IDs"
+					},
+					"response": [
+						{
+							"name": "List of requested Transactions",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"description": "Added as a part of security scheme: bearer",
+										"key": "Authorization",
+										"value": "Bearer <token>"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/transactions/v1/transactions?ids=74263e87-93cb-46be-a132-9cd260716f07",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"transactions",
+										"v1",
+										"transactions"
+									],
+									"query": [
+										{
+											"key": "ids",
+											"value": "74263e87-93cb-46be-a132-9cd260716f07"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-RateLimit-Limit",
+									"value": "33127526",
+									"description": "Request limit per hour."
+								},
+								{
+									"key": "X-RateLimit-Remaining",
+									"value": "33127526",
+									"description": "The number of requests left for the time window."
+								},
+								{
+									"key": "X-RateLimit-Reset",
+									"value": "2002-11-22T23:49:09.881Z",
+									"description": "The UTC date/time at which the current rate limit window resets."
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"request_id\": \"6bf3202ade4a7411\",\n  \"results\": [\n    {\n      \"transaction_id\": \"74263e87-93cb-46be-a132-9cd260716f07\",\n      \"category\": {\n        \"value\": \"esse eiusmod pariatur voluptate\",\n        \"system\": \"pariatur ut\"\n      },\n      \"co2_footprint\": {\n        \"value\": 10,\n        \"unit\": \"g\"\n      }\n    },\n    {\n      \"transaction_id\": \"74263e87-93cb-46be-a132-9cd260716f07\",\n      \"category\": {\n        \"value\": \"cillum sunt consecte\",\n        \"system\": \"in sed elit proident\"\n      },\n      \"co2_footprint\": {\n        \"value\": 10,\n        \"unit\": \"g\"\n      }\n    }\n  ],\n  \"errors\": [\n    {\n      \"transaction_id\": \"74263e87-93cb-46be-a132-9cd260716f07\",\n      \"error_code\": \"ex\",\n      \"error_description\": \"aute dolor et ex\"\n    },\n    {\n      \"transaction_id\": \"74263e87-93cb-46be-a132-9cd260716f07\",\n      \"error_code\": \"est\",\n      \"error_description\": \"nostrud enim exercitation dolore\"\n    }\n  ]\n}"
+						},
+						{
+							"name": "Bad Request. Size of Transactions is invalid.\n",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"description": "Added as a part of security scheme: bearer",
+										"key": "Authorization",
+										"value": "Bearer <token>"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/transactions/v1/transactions?ids=74263e87-93cb-46be-a132-9cd260716f07",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"transactions",
+										"v1",
+										"transactions"
+									],
+									"query": [
+										{
+											"key": "ids",
+											"value": "74263e87-93cb-46be-a132-9cd260716f07"
+										}
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-RateLimit-Limit",
+									"value": "33127526",
+									"description": "Request limit per hour."
+								},
+								{
+									"key": "X-RateLimit-Remaining",
+									"value": "33127526",
+									"description": "The number of requests left for the time window."
+								},
+								{
+									"key": "X-RateLimit-Reset",
+									"value": "2002-11-22T23:49:09.881Z",
+									"description": "The UTC date/time at which the current rate limit window resets."
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"request_id\": \"6bf3202ade4a7411\",\n  \"error_code\": \"invalid.request\",\n  \"error_description\": \"Size of transaction list must be between 1 and 100. But is null.\"\n}"
+						},
+						{
+							"name": "Unauthorized. Access Token is invalid or expired.\n",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"description": "Added as a part of security scheme: bearer",
+										"key": "Authorization",
+										"value": "Bearer <token>"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/transactions/v1/transactions?ids=74263e87-93cb-46be-a132-9cd260716f07",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"transactions",
+										"v1",
+										"transactions"
+									],
+									"query": [
+										{
+											"key": "ids",
+											"value": "74263e87-93cb-46be-a132-9cd260716f07"
+										}
+									]
+								}
+							},
+							"status": "Unauthorized",
+							"code": 401,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-RateLimit-Limit",
+									"value": "33127526",
+									"description": "Request limit per hour."
+								},
+								{
+									"key": "X-RateLimit-Remaining",
+									"value": "33127526",
+									"description": "The number of requests left for the time window."
+								},
+								{
+									"key": "X-RateLimit-Reset",
+									"value": "2002-11-22T23:49:09.881Z",
+									"description": "The UTC date/time at which the current rate limit window resets."
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"request_id\": \"6bf3202ade4a7411\",\n  \"error_code\": \"unauthorized\",\n  \"error_description\": \"Access Token is invalid or expired.\"\n}"
+						},
+						{
+							"name": "Rate Limit exeeded.\n",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"description": "Added as a part of security scheme: bearer",
+										"key": "Authorization",
+										"value": "Bearer <token>"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/transactions/v1/transactions?ids=74263e87-93cb-46be-a132-9cd260716f07",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"transactions",
+										"v1",
+										"transactions"
+									],
+									"query": [
+										{
+											"key": "ids",
+											"value": "74263e87-93cb-46be-a132-9cd260716f07"
+										}
+									]
+								}
+							},
+							"status": "Too Many Requests",
+							"code": 429,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-RateLimit-Limit",
+									"value": "33127526",
+									"description": "Request limit per hour."
+								},
+								{
+									"key": "X-RateLimit-Remaining",
+									"value": "33127526",
+									"description": "The number of requests left for the time window."
+								},
+								{
+									"key": "X-RateLimit-Reset",
+									"value": "2002-11-22T23:49:09.881Z",
+									"description": "The UTC date/time at which the current rate limit window resets."
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"request_id\": \"6bf3202ade4a7411\",\n  \"error_code\": \"rate.limit.exceeded\",\n  \"error_description\": \"Rate limit exceeded. Try again later.\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Get Questions for Refinement",
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -2539,6 +2435,278 @@
 					]
 				},
 				{
+					"name": "/content/v1/contextual-insights",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearerToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/content/v1/insights?language_codes=en",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"content",
+								"v1",
+								"insights"
+							],
+							"query": [
+								{
+									"key": "ids",
+									"value": "",
+									"description": "a list of ids. If list of ids are not present, all insights returned.",
+									"disabled": true
+								},
+								{
+									"key": "language_codes",
+									"value": "en"
+								}
+							]
+						},
+						"description": "Get Insights by IDs."
+					},
+					"response": [
+						{
+							"name": "A list of insights",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"description": "Added as a part of security scheme: bearer",
+										"key": "Authorization",
+										"value": "Bearer <token>"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/content/v1/insights?ids=adipisicing ut sed,Ut irure",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"content",
+										"v1",
+										"insights"
+									],
+									"query": [
+										{
+											"key": "ids",
+											"value": "adipisicing ut sed,Ut irure"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-RateLimit-Limit",
+									"value": "33127526",
+									"description": "Request limit per hour."
+								},
+								{
+									"key": "X-RateLimit-Remaining",
+									"value": "33127526",
+									"description": "The number of requests left for the time window."
+								},
+								{
+									"key": "X-RateLimit-Reset",
+									"value": "2002-11-22T23:49:09.881Z",
+									"description": "The UTC date/time at which the current rate limit window resets."
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"request_id\": \"6bf3202ade4a7411\",\n  \"results\": [\n    {\n      \"id\": \"06462ed4-32e7-46b0-8920-31e982ba22c0\",\n      \"categories\": [\n        {\n          \"system\": \"ECOLYTIQ\",\n          \"value\": \"ex:transport.flight\"\n        }\n      ],\n      \"content\": [\n        {\n          \"language_code\": \"de\",\n          \"title\": \"Ein einfacher Tipp für mehr Nachhaltigkeit!\",\n          \"text\": \"Die Wahl näher gelegener Urlaubsziele und Videokonferenzen statt Geschäftsreisen kann Flugreisen unnötig und nachhaltiger machen!\"\n        },\n        {\n          \"language_code\": \"en\",\n          \"title\": \"An easy tip to become more sustainable!\",\n          \"text\": \"Choosing closer holiday destinations and video conferences over business trips can make air travel unnecessary and more sustainable!\"\n        }\n      ]\n    },\n    {\n      \"id\": \"1b265b3b-d3b6-4e37-9f55-8c1632dc379e\",\n      \"categories\": [\n        {\n          \"system\": \"ECOLYTIQ\",\n          \"value\": \"ex:misc.travel\"\n        }\n      ],\n      \"content\": [\n        {\n          \"language_code\": \"de\",\n          \"title\": \"Ein toller Tipp, um beim Autofahren Geld zu sparen!\",\n          \"text\": \"Willst du etwas Energie und Geld sparen, während du fährst? Hier sind ein paar Tipps: achte auf den richtigen Reifendruck, vermeide unnötiges Gewicht im Auto, schalte früh und fahre nicht zu schnell.\"\n        },\n        {\n          \"language_code\": \"en\",\n          \"title\": \"A great tip to save money while driving!\",\n          \"text\": \"Want to save up some energy and money while you drive? Here are some tips: pay attention to the correct tire pressure, don't carry unnecessary weight in the car, shift gears early, and don't drive too fast.\"\n        }\n      ]\n    }\n  ],\n  \"errors\": []\n}"
+						},
+						{
+							"name": "Bad Request.\n",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"description": "Added as a part of security scheme: bearer",
+										"key": "Authorization",
+										"value": "Bearer <token>"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/content/v1/insights?ids=adipisicing ut sed,Ut irure",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"content",
+										"v1",
+										"insights"
+									],
+									"query": [
+										{
+											"key": "ids",
+											"value": "adipisicing ut sed,Ut irure"
+										}
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-RateLimit-Limit",
+									"value": "33127526",
+									"description": "Request limit per hour."
+								},
+								{
+									"key": "X-RateLimit-Remaining",
+									"value": "33127526",
+									"description": "The number of requests left for the time window."
+								},
+								{
+									"key": "X-RateLimit-Reset",
+									"value": "2002-11-22T23:49:09.881Z",
+									"description": "The UTC date/time at which the current rate limit window resets."
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"request_id\": \"6bf3202ade4a7411\",\n  \"error_code\": \"invalid.request\",\n  \"error_description\": \"Size of transaction list must be between 1 and 100. But is null.\"\n}"
+						},
+						{
+							"name": "Unauthorized. Access Token is invalid or expired.\n",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"description": "Added as a part of security scheme: bearer",
+										"key": "Authorization",
+										"value": "Bearer <token>"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/content/v1/insights?ids=adipisicing ut sed,Ut irure",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"content",
+										"v1",
+										"insights"
+									],
+									"query": [
+										{
+											"key": "ids",
+											"value": "adipisicing ut sed,Ut irure"
+										}
+									]
+								}
+							},
+							"status": "Unauthorized",
+							"code": 401,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-RateLimit-Limit",
+									"value": "33127526",
+									"description": "Request limit per hour."
+								},
+								{
+									"key": "X-RateLimit-Remaining",
+									"value": "33127526",
+									"description": "The number of requests left for the time window."
+								},
+								{
+									"key": "X-RateLimit-Reset",
+									"value": "2002-11-22T23:49:09.881Z",
+									"description": "The UTC date/time at which the current rate limit window resets."
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"request_id\": \"6bf3202ade4a7411\",\n  \"error_code\": \"unauthorized\",\n  \"error_description\": \"Access Token is invalid or expired.\"\n}"
+						},
+						{
+							"name": "Rate Limit exeeded.\n",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"description": "Added as a part of security scheme: bearer",
+										"key": "Authorization",
+										"value": "Bearer <token>"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/content/v1/insights?ids=adipisicing ut sed,Ut irure",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"content",
+										"v1",
+										"insights"
+									],
+									"query": [
+										{
+											"key": "ids",
+											"value": "adipisicing ut sed,Ut irure"
+										}
+									]
+								}
+							},
+							"status": "Too Many Requests",
+							"code": 429,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-RateLimit-Limit",
+									"value": "33127526",
+									"description": "Request limit per hour."
+								},
+								{
+									"key": "X-RateLimit-Remaining",
+									"value": "33127526",
+									"description": "The number of requests left for the time window."
+								},
+								{
+									"key": "X-RateLimit-Reset",
+									"value": "2002-11-22T23:49:09.881Z",
+									"description": "The UTC date/time at which the current rate limit window resets."
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"request_id\": \"6bf3202ade4a7411\",\n  \"error_code\": \"rate.limit.exceeded\",\n  \"error_description\": \"Rate limit exceeded. Try again later.\"\n}"
+						}
+					]
+				},
+				{
 					"name": "/content/v1/insights/random",
 					"request": {
 						"method": "GET",
@@ -3427,438 +3595,6 @@
 			"name": "Profiling API",
 			"item": [
 				{
-					"name": "Get a List of Onboardings",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Accept",
-								"value": "application/json"
-							}
-						],
-						"url": {
-							"raw": "{{baseUrl}}/profiling/v1/onboardings",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"profiling",
-								"v1",
-								"onboardings"
-							]
-						},
-						"description": "Get a List of Onboardings. An Onboarding is a Set of Questions and Answers to build a profile for end-users.\n"
-					},
-					"response": [
-						{
-							"name": "List of Onboardings",
-							"originalRequest": {
-								"method": "GET",
-								"header": [
-									{
-										"description": "Added as a part of security scheme: bearer",
-										"key": "Authorization",
-										"value": "Bearer <token>"
-									}
-								],
-								"url": {
-									"raw": "{{baseUrl}}/profiling/v1/onboardings",
-									"host": [
-										"{{baseUrl}}"
-									],
-									"path": [
-										"profiling",
-										"v1",
-										"onboardings"
-									]
-								}
-							},
-							"status": "OK",
-							"code": 200,
-							"_postman_previewlanguage": "json",
-							"header": [
-								{
-									"key": "X-RateLimit-Limit",
-									"value": "33127526",
-									"description": "Request limit per hour."
-								},
-								{
-									"key": "X-RateLimit-Remaining",
-									"value": "33127526",
-									"description": "The number of requests left for the time window."
-								},
-								{
-									"key": "X-RateLimit-Reset",
-									"value": "2002-11-22T23:49:09.881Z",
-									"description": "The UTC date/time at which the current rate limit window resets."
-								},
-								{
-									"key": "Content-Type",
-									"value": "application/json"
-								}
-							],
-							"cookie": [],
-							"body": "{\n  \"request_id\": \"6bf3202ade4a7411\",\n  \"results\": [\n    {\n      \"id\": \"vcc80kePB0Uc8Yb0\",\n      \"name\": \"Conditional Food Questions\"\n    },\n    {\n      \"id\": \"vcc80kePB0Uc8Yb0\",\n      \"name\": \"Conditional Food Questions\"\n    }\n  ]\n}"
-						}
-					]
-				},
-				{
-					"name": "Start or continue Onboarding",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Accept",
-								"value": "application/json"
-							}
-						],
-						"url": {
-							"raw": "{{baseUrl}}/profiling/v1/onboardings/:onboarding_id/start?account_id=1c974398-4d2b-44fa-b292-64a46c0e6577",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"profiling",
-								"v1",
-								"onboardings",
-								":onboarding_id",
-								"start"
-							],
-							"query": [
-								{
-									"key": "account_id",
-									"value": "1c974398-4d2b-44fa-b292-64a46c0e6577",
-									"description": "(Required) Account ID"
-								}
-							],
-							"variable": [
-								{
-									"key": "onboarding_id",
-									"value": "",
-									"description": "(Required) Onboarding ID"
-								}
-							]
-						},
-						"description": "Start or continue Onboarding\n"
-					},
-					"response": [
-						{
-							"name": "List of onboardings",
-							"originalRequest": {
-								"method": "GET",
-								"header": [
-									{
-										"description": "Added as a part of security scheme: bearer",
-										"key": "Authorization",
-										"value": "Bearer <token>"
-									}
-								],
-								"url": {
-									"raw": "{{baseUrl}}/profiling/v1/onboardings/:onboarding_id/start?account_id=1c974398-4d2b-44fa-b292-64a46c0e6577",
-									"host": [
-										"{{baseUrl}}"
-									],
-									"path": [
-										"profiling",
-										"v1",
-										"onboardings",
-										":onboarding_id",
-										"start"
-									],
-									"query": [
-										{
-											"key": "account_id",
-											"value": "1c974398-4d2b-44fa-b292-64a46c0e6577"
-										}
-									],
-									"variable": [
-										{
-											"key": "onboarding_id",
-											"value": "dolor reprehenderit ea culpa Ut",
-											"description": "(Required) Onboarding ID"
-										}
-									]
-								}
-							},
-							"status": "OK",
-							"code": 200,
-							"_postman_previewlanguage": "json",
-							"header": [
-								{
-									"key": "X-RateLimit-Limit",
-									"value": "33127526",
-									"description": "Request limit per hour."
-								},
-								{
-									"key": "X-RateLimit-Remaining",
-									"value": "33127526",
-									"description": "The number of requests left for the time window."
-								},
-								{
-									"key": "X-RateLimit-Reset",
-									"value": "2002-11-22T23:49:09.881Z",
-									"description": "The UTC date/time at which the current rate limit window resets."
-								},
-								{
-									"key": "Content-Type",
-									"value": "application/json"
-								}
-							],
-							"cookie": [],
-							"body": "{\n  \"account_id\": \"1c974398-4d2b-44fa-b292-64a46c0e6577\",\n  \"questions\": [\n    {\n      \"id\": \"veniam\",\n      \"type\": \"INPUT\",\n      \"text\": [\n        {\n          \"language\": \"laboris\",\n          \"text\": \"veniam quis deserunt occaecat\"\n        },\n        {\n          \"language\": \"consequat Excepteur mollit sed\",\n          \"text\": \"dolor dolore est\"\n        }\n      ],\n      \"selectable\": [\n        {\n          \"id\": \"Ut exercitation ea\",\n          \"text\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        {\n          \"id\": \"qui esse\",\n          \"text\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        }\n      ],\n      \"input\": {\n        \"id\": \"ex esse do aliquip\",\n        \"datatype\": \"INTEGER\",\n        \"validation\": [\n          {\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"condition\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"condition\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ]\n      }\n    },\n    {\n      \"id\": \"veniam ea n\",\n      \"type\": \"SELECTABLE\",\n      \"text\": [\n        {\n          \"language\": \"dolore eiusmod voluptate irure\",\n          \"text\": \"id\"\n        },\n        {\n          \"language\": \"esse\",\n          \"text\": \"nost\"\n        }\n      ],\n      \"selectable\": [\n        {\n          \"id\": \"esse proident mollit\",\n          \"text\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        {\n          \"id\": \"et\",\n          \"text\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        }\n      ],\n      \"input\": {\n        \"id\": \"deserunt elit\",\n        \"datatype\": \"NUMBER\",\n        \"validation\": [\n          {\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"condition\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"condition\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ]\n      }\n    }\n  ],\n  \"has_next\": false\n}"
-						},
-						{
-							"name": "Not found. Onboarding not found.\n",
-							"originalRequest": {
-								"method": "GET",
-								"header": [
-									{
-										"description": "Added as a part of security scheme: bearer",
-										"key": "Authorization",
-										"value": "Bearer <token>"
-									}
-								],
-								"url": {
-									"raw": "{{baseUrl}}/profiling/v1/onboardings/:onboarding_id/start?account_id=1c974398-4d2b-44fa-b292-64a46c0e6577",
-									"host": [
-										"{{baseUrl}}"
-									],
-									"path": [
-										"profiling",
-										"v1",
-										"onboardings",
-										":onboarding_id",
-										"start"
-									],
-									"query": [
-										{
-											"key": "account_id",
-											"value": "1c974398-4d2b-44fa-b292-64a46c0e6577"
-										}
-									],
-									"variable": [
-										{
-											"key": "onboarding_id",
-											"value": "dolor reprehenderit ea culpa Ut",
-											"description": "(Required) Onboarding ID"
-										}
-									]
-								}
-							},
-							"status": "Not Found",
-							"code": 404,
-							"_postman_previewlanguage": "json",
-							"header": [
-								{
-									"key": "X-RateLimit-Limit",
-									"value": "33127526",
-									"description": "Request limit per hour."
-								},
-								{
-									"key": "X-RateLimit-Remaining",
-									"value": "33127526",
-									"description": "The number of requests left for the time window."
-								},
-								{
-									"key": "X-RateLimit-Reset",
-									"value": "2002-11-22T23:49:09.881Z",
-									"description": "The UTC date/time at which the current rate limit window resets."
-								},
-								{
-									"key": "Content-Type",
-									"value": "application/json"
-								}
-							],
-							"cookie": [],
-							"body": "{\n  \"request_id\": \"6bf3202ade4a7411\",\n  \"error_code\": \"not.found\",\n  \"error_description\": \"Resource not found.\"\n}"
-						}
-					]
-				},
-				{
-					"name": "Save Onboarding Question and get next one",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json"
-							},
-							{
-								"key": "Accept",
-								"value": "application/json"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n  \"account_id\": \"1c974398-4d2b-44fa-b292-64a46c0e6577\",\n  \"answer_id\": \"in anim sed deserunt\",\n  \"input\": \"sed consectetur\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{baseUrl}}/profiling/v1/onboardings/:onboarding_id/next",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"profiling",
-								"v1",
-								"onboardings",
-								":onboarding_id",
-								"next"
-							],
-							"variable": [
-								{
-									"key": "onboarding_id",
-									"value": "",
-									"description": "(Required) Onboarding ID"
-								}
-							]
-						},
-						"description": "Get a List of Onboardings. An Onboarding is a Set of Questions and Answers to build a profile for end-users.\n"
-					},
-					"response": [
-						{
-							"name": "List of onboardings",
-							"originalRequest": {
-								"method": "POST",
-								"header": [
-									{
-										"description": "Added as a part of security scheme: bearer",
-										"key": "Authorization",
-										"value": "Bearer <token>"
-									}
-								],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n  \"account_id\": \"1c974398-4d2b-44fa-b292-64a46c0e6577\",\n  \"answer_id\": \"in anim sed deserunt\",\n  \"input\": \"sed consectetur\"\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseUrl}}/profiling/v1/onboardings/:onboarding_id/next",
-									"host": [
-										"{{baseUrl}}"
-									],
-									"path": [
-										"profiling",
-										"v1",
-										"onboardings",
-										":onboarding_id",
-										"next"
-									],
-									"variable": [
-										{
-											"key": "onboarding_id",
-											"value": "dolor reprehenderit ea culpa Ut",
-											"description": "(Required) Onboarding ID"
-										}
-									]
-								}
-							},
-							"status": "OK",
-							"code": 200,
-							"_postman_previewlanguage": "json",
-							"header": [
-								{
-									"key": "X-RateLimit-Limit",
-									"value": "33127526",
-									"description": "Request limit per hour."
-								},
-								{
-									"key": "X-RateLimit-Remaining",
-									"value": "33127526",
-									"description": "The number of requests left for the time window."
-								},
-								{
-									"key": "X-RateLimit-Reset",
-									"value": "2002-11-22T23:49:09.881Z",
-									"description": "The UTC date/time at which the current rate limit window resets."
-								},
-								{
-									"key": "Content-Type",
-									"value": "application/json"
-								}
-							],
-							"cookie": [],
-							"body": "{\n  \"account_id\": \"1c974398-4d2b-44fa-b292-64a46c0e6577\",\n  \"questions\": [\n    {\n      \"id\": \"in voluptate\",\n      \"type\": \"SELECTABLE\",\n      \"text\": [\n        {\n          \"language\": \"laborum nisi quis\",\n          \"text\": \"in quis magna labore adipisicing\"\n        },\n        {\n          \"language\": \"adipisicing nulla\",\n          \"text\": \"sit est officia\"\n        }\n      ],\n      \"selectable\": [\n        {\n          \"id\": \"nostrud pariatur est\",\n          \"text\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        {\n          \"id\": \"sint\",\n          \"text\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        }\n      ],\n      \"input\": {\n        \"id\": \"dolor ullamco incididunt\",\n        \"datatype\": \"STRING\",\n        \"validation\": [\n          {\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"condition\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"condition\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ]\n      }\n    },\n    {\n      \"id\": \"id occaecat\",\n      \"type\": \"INPUT\",\n      \"text\": [\n        {\n          \"language\": \"culpa commodo\",\n          \"text\": \"minim ut\"\n        },\n        {\n          \"language\": \"Excepteur aute\",\n          \"text\": \"sed d\"\n        }\n      ],\n      \"selectable\": [\n        {\n          \"id\": \"deserunt non nisi aute tempor\",\n          \"text\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        {\n          \"id\": \"laborum incididunt mollit elit\",\n          \"text\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        }\n      ],\n      \"input\": {\n        \"id\": \"ex sunt id\",\n        \"datatype\": \"INTEGER\",\n        \"validation\": [\n          {\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"condition\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"condition\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ]\n      }\n    }\n  ],\n  \"has_next\": true\n}"
-						},
-						{
-							"name": "Not found. Onboarding not found.\n",
-							"originalRequest": {
-								"method": "POST",
-								"header": [
-									{
-										"description": "Added as a part of security scheme: bearer",
-										"key": "Authorization",
-										"value": "Bearer <token>"
-									}
-								],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n  \"account_id\": \"1c974398-4d2b-44fa-b292-64a46c0e6577\",\n  \"answer_id\": \"in anim sed deserunt\",\n  \"input\": \"sed consectetur\"\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseUrl}}/profiling/v1/onboardings/:onboarding_id/next",
-									"host": [
-										"{{baseUrl}}"
-									],
-									"path": [
-										"profiling",
-										"v1",
-										"onboardings",
-										":onboarding_id",
-										"next"
-									],
-									"variable": [
-										{
-											"key": "onboarding_id",
-											"value": "dolor reprehenderit ea culpa Ut",
-											"description": "(Required) Onboarding ID"
-										}
-									]
-								}
-							},
-							"status": "Not Found",
-							"code": 404,
-							"_postman_previewlanguage": "json",
-							"header": [
-								{
-									"key": "X-RateLimit-Limit",
-									"value": "33127526",
-									"description": "Request limit per hour."
-								},
-								{
-									"key": "X-RateLimit-Remaining",
-									"value": "33127526",
-									"description": "The number of requests left for the time window."
-								},
-								{
-									"key": "X-RateLimit-Reset",
-									"value": "2002-11-22T23:49:09.881Z",
-									"description": "The UTC date/time at which the current rate limit window resets."
-								},
-								{
-									"key": "Content-Type",
-									"value": "application/json"
-								}
-							],
-							"cookie": [],
-							"body": "{\n  \"request_id\": \"6bf3202ade4a7411\",\n  \"error_code\": \"not.found\",\n  \"error_description\": \"Resource not found.\"\n}"
-						}
-					]
-				},
-				{
 					"name": "Get Questions by IDs",
 					"request": {
 						"method": "GET",
@@ -3960,6 +3696,16 @@
 				{
 					"name": "/profiling/v1/answer",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearerToken}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [
 							{
@@ -3973,7 +3719,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"answers\": [\n    {\n      \"account_id\": \"1c974398-4d2b-44fa-b292-64a46c0e6577\",\n      \"answer_id\": \"exercitation consequat ut\"\n    },\n    {\n      \"account_id\": \"1c974398-4d2b-44fa-b292-64a46c0e6577\",\n      \"answer_id\": \"dolore\"\n    }\n  ]\n}",
+							"raw": "{\n  \"answers\": [\n    {\n      \"account_id\": \"6fff621b-0714-4e83-a84e-fd58a780a960\",\n      \"answer_id\": \"476caf88-1714-4b8e-a945-1ceeb8cefe34\"\n    },\n    {\n      \"account_id\": \"6fff621b-0714-4e83-a84e-fd58a780a960\",\n      \"answer_id\": \"c6916ca2-6551-478f-ace2-2666e356393e\"\n    },\n    {\n      \"account_id\": \"6fff621b-0714-4e83-a84e-fd58a780a960\",\n      \"answer_id\": \"08713530-31c2-48d1-8eb9-507339d4c221\"\n    },\n    {\n      \"account_id\": \"6fff621b-0714-4e83-a84e-fd58a780a960\",\n      \"answer_id\": \"6f4bc2b8-3bf9-4ac8-8e77-332330db66a8\"\n    },\n    {\n      \"account_id\": \"6fff621b-0714-4e83-a84e-fd58a780a960\",\n      \"answer_id\": \"240c0d8f-3597-475b-8d2d-f13e6415d9c9\"\n    },\n    {\n      \"account_id\": \"6fff621b-0714-4e83-a84e-fd58a780a960\",\n      \"answer_id\": \"6250648d-d317-4594-89ae-7ffe05981410\"\n    },\n    {\n      \"account_id\": \"6fff621b-0714-4e83-a84e-fd58a780a960\",\n      \"answer_id\": \"8948045b-d163-4d03-b9ec-3d5237a4550a\",\n      \"input\": \"2\"\n    }\n  ]\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -4054,6 +3800,544 @@
 							"body": "{\n  \"request_id\": \"ad\",\n  \"results\": [\n    {\n      \"account_id\": \"sunt commodo\",\n      \"question_id\": \"ipsum pariatu\",\n      \"answer_id\": \"deserunt Lorem incididunt\"\n    },\n    {\n      \"account_id\": \"do sit\",\n      \"question_id\": \"incididunt\",\n      \"answer_id\": \"ut aliquip et cupidatat\"\n    }\n  ],\n  \"errors\": [\n    {\n      \"account_id\": \"veniam reprehenderit dolore ea elit\",\n      \"answer_id\": \"velit in exercitation adipisicing\",\n      \"code\": \"cupidatat et\",\n      \"description\": \"esse et non\"\n    },\n    {\n      \"account_id\": \"minim \",\n      \"answer_id\": \"in labore incididunt\",\n      \"code\": \"officia ea\",\n      \"description\": \"veniam occaecat\"\n    }\n  ]\n}"
 						}
 					]
+				},
+				{
+					"name": "/content/v1/insights",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearerToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/profiling/v1/insights?account_ids=6fff621b-0714-4e83-a84e-fd58a780a960&categories=ex:misc,ex:food.groceries",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"profiling",
+								"v1",
+								"insights"
+							],
+							"query": [
+								{
+									"key": "account_ids",
+									"value": "6fff621b-0714-4e83-a84e-fd58a780a960",
+									"description": "a list of account ids."
+								},
+								{
+									"key": "categories",
+									"value": "ex:misc,ex:food.groceries"
+								}
+							]
+						},
+						"description": "Get Insights by IDs."
+					},
+					"response": [
+						{
+							"name": "A list of insights",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"description": "Added as a part of security scheme: bearer",
+										"key": "Authorization",
+										"value": "Bearer <token>"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/content/v1/insights?ids=adipisicing ut sed,Ut irure",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"content",
+										"v1",
+										"insights"
+									],
+									"query": [
+										{
+											"key": "ids",
+											"value": "adipisicing ut sed,Ut irure"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-RateLimit-Limit",
+									"value": "33127526",
+									"description": "Request limit per hour."
+								},
+								{
+									"key": "X-RateLimit-Remaining",
+									"value": "33127526",
+									"description": "The number of requests left for the time window."
+								},
+								{
+									"key": "X-RateLimit-Reset",
+									"value": "2002-11-22T23:49:09.881Z",
+									"description": "The UTC date/time at which the current rate limit window resets."
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"request_id\": \"6bf3202ade4a7411\",\n  \"results\": [\n    {\n      \"id\": \"06462ed4-32e7-46b0-8920-31e982ba22c0\",\n      \"categories\": [\n        {\n          \"system\": \"ECOLYTIQ\",\n          \"value\": \"ex:transport.flight\"\n        }\n      ],\n      \"content\": [\n        {\n          \"language_code\": \"de\",\n          \"title\": \"Ein einfacher Tipp für mehr Nachhaltigkeit!\",\n          \"text\": \"Die Wahl näher gelegener Urlaubsziele und Videokonferenzen statt Geschäftsreisen kann Flugreisen unnötig und nachhaltiger machen!\"\n        },\n        {\n          \"language_code\": \"en\",\n          \"title\": \"An easy tip to become more sustainable!\",\n          \"text\": \"Choosing closer holiday destinations and video conferences over business trips can make air travel unnecessary and more sustainable!\"\n        }\n      ]\n    },\n    {\n      \"id\": \"1b265b3b-d3b6-4e37-9f55-8c1632dc379e\",\n      \"categories\": [\n        {\n          \"system\": \"ECOLYTIQ\",\n          \"value\": \"ex:misc.travel\"\n        }\n      ],\n      \"content\": [\n        {\n          \"language_code\": \"de\",\n          \"title\": \"Ein toller Tipp, um beim Autofahren Geld zu sparen!\",\n          \"text\": \"Willst du etwas Energie und Geld sparen, während du fährst? Hier sind ein paar Tipps: achte auf den richtigen Reifendruck, vermeide unnötiges Gewicht im Auto, schalte früh und fahre nicht zu schnell.\"\n        },\n        {\n          \"language_code\": \"en\",\n          \"title\": \"A great tip to save money while driving!\",\n          \"text\": \"Want to save up some energy and money while you drive? Here are some tips: pay attention to the correct tire pressure, don't carry unnecessary weight in the car, shift gears early, and don't drive too fast.\"\n        }\n      ]\n    }\n  ],\n  \"errors\": []\n}"
+						},
+						{
+							"name": "Bad Request.\n",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"description": "Added as a part of security scheme: bearer",
+										"key": "Authorization",
+										"value": "Bearer <token>"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/content/v1/insights?ids=adipisicing ut sed,Ut irure",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"content",
+										"v1",
+										"insights"
+									],
+									"query": [
+										{
+											"key": "ids",
+											"value": "adipisicing ut sed,Ut irure"
+										}
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-RateLimit-Limit",
+									"value": "33127526",
+									"description": "Request limit per hour."
+								},
+								{
+									"key": "X-RateLimit-Remaining",
+									"value": "33127526",
+									"description": "The number of requests left for the time window."
+								},
+								{
+									"key": "X-RateLimit-Reset",
+									"value": "2002-11-22T23:49:09.881Z",
+									"description": "The UTC date/time at which the current rate limit window resets."
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"request_id\": \"6bf3202ade4a7411\",\n  \"error_code\": \"invalid.request\",\n  \"error_description\": \"Size of transaction list must be between 1 and 100. But is null.\"\n}"
+						},
+						{
+							"name": "Unauthorized. Access Token is invalid or expired.\n",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"description": "Added as a part of security scheme: bearer",
+										"key": "Authorization",
+										"value": "Bearer <token>"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/content/v1/insights?ids=adipisicing ut sed,Ut irure",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"content",
+										"v1",
+										"insights"
+									],
+									"query": [
+										{
+											"key": "ids",
+											"value": "adipisicing ut sed,Ut irure"
+										}
+									]
+								}
+							},
+							"status": "Unauthorized",
+							"code": 401,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-RateLimit-Limit",
+									"value": "33127526",
+									"description": "Request limit per hour."
+								},
+								{
+									"key": "X-RateLimit-Remaining",
+									"value": "33127526",
+									"description": "The number of requests left for the time window."
+								},
+								{
+									"key": "X-RateLimit-Reset",
+									"value": "2002-11-22T23:49:09.881Z",
+									"description": "The UTC date/time at which the current rate limit window resets."
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"request_id\": \"6bf3202ade4a7411\",\n  \"error_code\": \"unauthorized\",\n  \"error_description\": \"Access Token is invalid or expired.\"\n}"
+						},
+						{
+							"name": "Rate Limit exeeded.\n",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"description": "Added as a part of security scheme: bearer",
+										"key": "Authorization",
+										"value": "Bearer <token>"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/content/v1/insights?ids=adipisicing ut sed,Ut irure",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"content",
+										"v1",
+										"insights"
+									],
+									"query": [
+										{
+											"key": "ids",
+											"value": "adipisicing ut sed,Ut irure"
+										}
+									]
+								}
+							},
+							"status": "Too Many Requests",
+							"code": 429,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-RateLimit-Limit",
+									"value": "33127526",
+									"description": "Request limit per hour."
+								},
+								{
+									"key": "X-RateLimit-Remaining",
+									"value": "33127526",
+									"description": "The number of requests left for the time window."
+								},
+								{
+									"key": "X-RateLimit-Reset",
+									"value": "2002-11-22T23:49:09.881Z",
+									"description": "The UTC date/time at which the current rate limit window resets."
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"request_id\": \"6bf3202ade4a7411\",\n  \"error_code\": \"rate.limit.exceeded\",\n  \"error_description\": \"Rate limit exceeded. Try again later.\"\n}"
+						}
+					]
+				},
+				{
+					"name": "/content/v1/contextual-insights/for-accounts",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearerToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/profiling/v1/contextual-insights?account_ids=6fff621b-0714-4e83-a84e-fd58a780a960",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"profiling",
+								"v1",
+								"contextual-insights"
+							],
+							"query": [
+								{
+									"key": "account_ids",
+									"value": "6fff621b-0714-4e83-a84e-fd58a780a960",
+									"description": "a list of account ids."
+								}
+							]
+						},
+						"description": "Get Insights by IDs."
+					},
+					"response": [
+						{
+							"name": "A list of insights",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"description": "Added as a part of security scheme: bearer",
+										"key": "Authorization",
+										"value": "Bearer <token>"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/content/v1/insights?ids=adipisicing ut sed,Ut irure",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"content",
+										"v1",
+										"insights"
+									],
+									"query": [
+										{
+											"key": "ids",
+											"value": "adipisicing ut sed,Ut irure"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-RateLimit-Limit",
+									"value": "33127526",
+									"description": "Request limit per hour."
+								},
+								{
+									"key": "X-RateLimit-Remaining",
+									"value": "33127526",
+									"description": "The number of requests left for the time window."
+								},
+								{
+									"key": "X-RateLimit-Reset",
+									"value": "2002-11-22T23:49:09.881Z",
+									"description": "The UTC date/time at which the current rate limit window resets."
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"request_id\": \"6bf3202ade4a7411\",\n  \"results\": [\n    {\n      \"id\": \"06462ed4-32e7-46b0-8920-31e982ba22c0\",\n      \"categories\": [\n        {\n          \"system\": \"ECOLYTIQ\",\n          \"value\": \"ex:transport.flight\"\n        }\n      ],\n      \"content\": [\n        {\n          \"language_code\": \"de\",\n          \"title\": \"Ein einfacher Tipp für mehr Nachhaltigkeit!\",\n          \"text\": \"Die Wahl näher gelegener Urlaubsziele und Videokonferenzen statt Geschäftsreisen kann Flugreisen unnötig und nachhaltiger machen!\"\n        },\n        {\n          \"language_code\": \"en\",\n          \"title\": \"An easy tip to become more sustainable!\",\n          \"text\": \"Choosing closer holiday destinations and video conferences over business trips can make air travel unnecessary and more sustainable!\"\n        }\n      ]\n    },\n    {\n      \"id\": \"1b265b3b-d3b6-4e37-9f55-8c1632dc379e\",\n      \"categories\": [\n        {\n          \"system\": \"ECOLYTIQ\",\n          \"value\": \"ex:misc.travel\"\n        }\n      ],\n      \"content\": [\n        {\n          \"language_code\": \"de\",\n          \"title\": \"Ein toller Tipp, um beim Autofahren Geld zu sparen!\",\n          \"text\": \"Willst du etwas Energie und Geld sparen, während du fährst? Hier sind ein paar Tipps: achte auf den richtigen Reifendruck, vermeide unnötiges Gewicht im Auto, schalte früh und fahre nicht zu schnell.\"\n        },\n        {\n          \"language_code\": \"en\",\n          \"title\": \"A great tip to save money while driving!\",\n          \"text\": \"Want to save up some energy and money while you drive? Here are some tips: pay attention to the correct tire pressure, don't carry unnecessary weight in the car, shift gears early, and don't drive too fast.\"\n        }\n      ]\n    }\n  ],\n  \"errors\": []\n}"
+						},
+						{
+							"name": "Bad Request.\n",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"description": "Added as a part of security scheme: bearer",
+										"key": "Authorization",
+										"value": "Bearer <token>"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/content/v1/insights?ids=adipisicing ut sed,Ut irure",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"content",
+										"v1",
+										"insights"
+									],
+									"query": [
+										{
+											"key": "ids",
+											"value": "adipisicing ut sed,Ut irure"
+										}
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-RateLimit-Limit",
+									"value": "33127526",
+									"description": "Request limit per hour."
+								},
+								{
+									"key": "X-RateLimit-Remaining",
+									"value": "33127526",
+									"description": "The number of requests left for the time window."
+								},
+								{
+									"key": "X-RateLimit-Reset",
+									"value": "2002-11-22T23:49:09.881Z",
+									"description": "The UTC date/time at which the current rate limit window resets."
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"request_id\": \"6bf3202ade4a7411\",\n  \"error_code\": \"invalid.request\",\n  \"error_description\": \"Size of transaction list must be between 1 and 100. But is null.\"\n}"
+						},
+						{
+							"name": "Unauthorized. Access Token is invalid or expired.\n",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"description": "Added as a part of security scheme: bearer",
+										"key": "Authorization",
+										"value": "Bearer <token>"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/content/v1/insights?ids=adipisicing ut sed,Ut irure",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"content",
+										"v1",
+										"insights"
+									],
+									"query": [
+										{
+											"key": "ids",
+											"value": "adipisicing ut sed,Ut irure"
+										}
+									]
+								}
+							},
+							"status": "Unauthorized",
+							"code": 401,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-RateLimit-Limit",
+									"value": "33127526",
+									"description": "Request limit per hour."
+								},
+								{
+									"key": "X-RateLimit-Remaining",
+									"value": "33127526",
+									"description": "The number of requests left for the time window."
+								},
+								{
+									"key": "X-RateLimit-Reset",
+									"value": "2002-11-22T23:49:09.881Z",
+									"description": "The UTC date/time at which the current rate limit window resets."
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"request_id\": \"6bf3202ade4a7411\",\n  \"error_code\": \"unauthorized\",\n  \"error_description\": \"Access Token is invalid or expired.\"\n}"
+						},
+						{
+							"name": "Rate Limit exeeded.\n",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"description": "Added as a part of security scheme: bearer",
+										"key": "Authorization",
+										"value": "Bearer <token>"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/content/v1/insights?ids=adipisicing ut sed,Ut irure",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"content",
+										"v1",
+										"insights"
+									],
+									"query": [
+										{
+											"key": "ids",
+											"value": "adipisicing ut sed,Ut irure"
+										}
+									]
+								}
+							},
+							"status": "Too Many Requests",
+							"code": 429,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-RateLimit-Limit",
+									"value": "33127526",
+									"description": "Request limit per hour."
+								},
+								{
+									"key": "X-RateLimit-Remaining",
+									"value": "33127526",
+									"description": "The number of requests left for the time window."
+								},
+								{
+									"key": "X-RateLimit-Reset",
+									"value": "2002-11-22T23:49:09.881Z",
+									"description": "The UTC date/time at which the current rate limit window resets."
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"request_id\": \"6bf3202ade4a7411\",\n  \"error_code\": \"rate.limit.exceeded\",\n  \"error_description\": \"Rate limit exceeded. Try again later.\"\n}"
+						}
+					]
 				}
 			]
 		},
@@ -4076,7 +4360,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"account_ids\": [\n    \"Ut ea ex\",\n    \"consectetur occaecat fugiat sint dolor\"\n  ],\n  \"async\": true\n}",
+							"raw": "{\n  \"account_ids\": [\n    \"6fff621b-0714-4e83-a84e-fd58a780a960\"\n  ],\n  \"async\": true\n}",
 							"options": {
 								"raw": {
 									"language": "json"
