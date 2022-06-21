@@ -79,11 +79,42 @@ tags:
       <a href ="https://ecolytiq-team.github.io/docs-api-official/3.2.0/postman/Sandbox.postman_collection.json" download>Sandbox.postman_collection.json</a>
 
   - name: Info API
+    description: >-
+      The info API can be used to obtain information about the ecolytiq platform configuration and available features. 
+      It offers a simple and reliable method to verify, 
+
+      * Which [country models for CO<sub>2</sub>](#operation/getInfoCo2models) footprint calculation are available and accessible to the requestor,
+      
+      * Which [categorization systems](#operation/getInfoCategorySystems) for transactions are available and accessible for transaction enrichment,
+      
+      * For some categorization systems, which [categories](#operation/getInfoCategories) are available 
   - name: Transaction API
+    description: >-
+      The transaction API is used to process financial transactions by the ecolytiq Sustainability-as-a-Service&reg; platform.
+
+
+      It is possible to send transactions for enrichment and receive the calculated CO<sub>2</sub> footprint based on a combination of transaction amount and transaction category. 
+      
+
+      For some types of transactions this may, however, be insufficient as the amount of money spent does not directly correlate to the CO<sub>2</sub> (equivalent) emissions of the purchased goods and services.
+      For example, airline ticket prices are becoming increasingly expensive the closer the date of travel is. But the amount of CO<sub>2</sub> emissions is independent on whether the ticket was bought last minute or a year in advance. 
+      In such cases the transaction data can be refined by answering specific transaction-related questions, like the duration of the flight, which will in turn allow for a much more accurate calculation of the CO<sub>2</sub> emissions.
   - name: Content API
   - name: Profiling API
   - name: Account API
   - name: onPrem API
+    description: >-
+      In some cases the ecolytiq Sustainability-as-a-Service&reg; platform is not used as Software as a Service (SaaS) solution but hosted on a customers own premises or inside their own cloud instance.
+      If the customers whish they can use a rating system for content delivered by the ecolytiq platform.
+      We recommend to regularly submit the content ratings back to ecolytiq so that we can improve the content quality.
+
+
+      > **Please Note:** 
+      
+      > This endpoint must be called on the ecolytiq SaaS platform which is accessible over the public internet. 
+      Is may be necessary to obtain a special pair of `client_id` and `client_secret` credentials for the SaaS platform to use this endpoint.
+      No PII is transmitted via this endpoint.
+
 
 security:
   - bearerAuth: [ ]
@@ -91,6 +122,7 @@ security:
 paths:
   /oauth/token:
     post:
+      operationId: postOAuthToken
       security:
         - BasicAuth: []
       description: Request OAuth 2.0 Access Token with client credentials grant. This endpoint is proteced with Basic Auth. Use the client_id as username and the client_secret as password.
@@ -124,6 +156,7 @@ paths:
 
   /info/v1/co2models:
     get:
+      operationId: getInfoCo2models
       security:
         - BearerAuth: []
       description: Lists supported and permitted co2 models
@@ -185,6 +218,7 @@ paths:
 
   /info/v1/category-systems:
     get:
+      operationId: getInfoCategorySystems
       security:
         - BearerAuth: []
       description: List of supported and enabled category systems
@@ -246,6 +280,7 @@ paths:
 
   /info/v1/categories:
     get:
+      operationId: getInfoCategories
       security:
         - BearerAuth: []
       description: List of categories
@@ -307,6 +342,7 @@ paths:
 
   /transactions/v1/transactions:
     post:
+      operationId: postTransactionsTransactions
       security:
         - BearerAuth: []
       description: Use this endpoint to process and store bank transactions. Successful processed transactions are in the results list, identifiable by their `transaction_id`. In case of an error (e.g. unknown categor, you can find  the transction in the errors list, identifiable by their `transaction_id` as well.   
@@ -416,6 +452,7 @@ paths:
                   $ref: '#/components/examples/RateLimit-Example'
 
     get:
+      operationId: getTransactionsTransactions
       security:
         - BearerAuth: []
       summary: Get Transactions by IDs
@@ -502,6 +539,7 @@ paths:
   
   /transactions/v1/refinements:
     get:
+      operationId: getTransactionsRefinements
       security:
         - BearerAuth: []
       summary: Get refinement questions for specific transactions
@@ -585,9 +623,11 @@ paths:
                 BadRequest-Example:
                   $ref: '#/components/examples/RateLimit-Example'
     post:
+      operationId: postTransactionsRefinements
       security:
         - BearerAuth: []
       description: Refine Transactions by answering feedback questions
+      summary: Refine Transactions by Answering Feedback Questions
       tags:
         - Transaction API
       requestBody:
@@ -664,6 +704,7 @@ paths:
 
   /transactions/v1/questions:
     get:
+      operationId: getTransactionsQuestions
       security:
         - BearerAuth: []
       summary: Get Questions by IDs
@@ -759,11 +800,13 @@ paths:
 
   /content/v1/comparables:
     get:
+      operationId: getContentComparables
       security:
         - BearerAuth: []
       tags:
         - Content API
       description: Get a list of Comparables for a given co2 footprint.
+      summary: Get Comparables for a Given CO2 Footprint
       parameters:
         - in: query
           name: co2_footprint
@@ -864,11 +907,13 @@ paths:
 
   /content/v1/comparables/random:
     get:
+      operationId: getContentComparablesRandom
       security:
         - BearerAuth: []
       tags:
         - Content API
       description: Get Comparables for a given co2 footprint
+      summary: Get Random Comparables for a Given CO2 Footprint
       parameters:
         - in: query
           name: co2_footprint
@@ -976,11 +1021,13 @@ paths:
 
   /content/v1/insights:
     get:
+      operationId: getContentInsights
       security:
         - BearerAuth: []
       tags:
         - Content API
       description: Get Insights by IDs.
+      summary: Get Insights by IDs
       parameters:
         - in: query
           name: ids
@@ -1171,11 +1218,13 @@ paths:
 
   /content/v1/insights/random:
     get:
+      operationId: getContentInsightsRandom
       security:
         - BearerAuth: []
       tags:
         - Content API
       description: Get Insights (for a given category)
+      summary: Get Insights (for a Given Category)
       parameters:
         - in: query
           name: categories
@@ -1274,6 +1323,7 @@ paths:
 
   /profiling/v1/insights:
     get:
+      operationId: getProfilingInsights
       security:
         - BearerAuth: []
       tags:
@@ -1460,11 +1510,13 @@ paths:
                   $ref: '#/components/examples/RateLimit-Example'
   /content/v1/explanations:
     get:
+      operationId: getContentExplanations
       security:
         - BearerAuth: []
       tags:
         - Content API
-      description: Get Explanations (for a given categories)
+      description: Get Explanations (for given categories)
+      summary: Get Explanations (for given categories)
       parameters:
         - in: query
           name: ids
@@ -1558,11 +1610,13 @@ paths:
 
   /content/v1/explanations/random:
     get:
+      operationId: getContentExplanationsRandom
       security:
         - BearerAuth: []
       tags:
         - Content API
-      description: Get Explanations (for a given categories)
+      description: Get Explanations (for given categories)
+      summary: Get Explanations (for given categories)
       parameters:
         - in: query
           name: categories
@@ -1662,6 +1716,7 @@ paths:
 
   /profiling/v1/questions:
     get:
+      operationId: getProfilingQuestions
       security:
         - BearerAuth: []
       summary: Get Questions for Profiling by IDs
@@ -1706,9 +1761,11 @@ paths:
 
   /profiling/v1/answer:
     post:
+      operationId: postProfilingAnswer
       security:
         - BearerAuth: []
       description: Save Answer for a given Question
+      summary: Save Answer for a given Question
       tags:
         - Profiling API
       requestBody:
@@ -1733,10 +1790,12 @@ paths:
                 $ref: '#/components/schemas/BulkAnswerResponse'
 
   /account/v1/delete-accounts:
-    post:
+    post: 
+      operationId: postAccountDeleteAccounts
       security:
         - BearerAuth: []
       description: Delete all data of the given accounts.
+      summary: Delete all data of the given accounts
       tags:
         - Account API
       requestBody:
@@ -1775,9 +1834,16 @@ paths:
 
   /on-prem/v1/content-ratings:
     post:
+      operationId: postOnPremContentRatings
       security:
         - BearerAuth: []
-      description: Use this endpoint to send us feedback about content.   
+      description: >-
+        Use this endpoint to send us feedback about content.         
+        
+        
+        Currently, only the "five star" rating system is supported.
+        To send feedback about a content piece please send the accumulated number of *all* ratings for each rating category also when updating. 
+
       summary: Send us Feedback about Content rating
       tags:
         - onPrem API
