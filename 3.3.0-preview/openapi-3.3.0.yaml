@@ -100,8 +100,28 @@ tags:
       For example, airline ticket prices are becoming increasingly expensive the closer the date of travel is. But the amount of CO<sub>2</sub> emissions is independent on whether the ticket was bought last minute or a year in advance. 
       In such cases the transaction data can be refined by answering specific transaction-related questions, like the duration of the flight, which will in turn allow for a much more accurate calculation of the CO<sub>2</sub> emissions.
   - name: Content API
+    description: >-
+      The ecolytiq Sustainability-as-a-Service&reg; platform offers a variety of product features that go beyond pure calculation of the CO<sub>2</sub> footprint related to a financial transaction.
+      There are 
+
+      * Comparables: Small information pieces that put a given CO<sub>2</sub> footprint into perspective by comparing it to something easily comprehensible, like a distance driven by car.
+      
+      * Insights: Information pieces with tips and tricks how an and customer can reduce their personal CO<sub>2</sub> emissions
+
+      * Explanations: Information pieces detailing how the ecolytiq calculation method works.
+
+      Those content pieces can be retrieved via the content API in various languages.
   - name: Profiling API
+    description: >-
+      In the most basic way the ecolytiq Sustainability-as-a-Service&reg; platform is used to calculate the CO<sub>2</sub> footprint related to a "spending transaction" by taking into account the amount of money spent and the category of the transaction.
+      This gives an estimate of the footprint based on average consumer behavior. 
+      For example, in the average grocery basket is still plenty of meat.
+      However, a specific end customer may have chosen to live by a meat-reduced, meat-free, vegetarian, or vegan diet.
+      Hence the average shopping basket will give an inaccurate CO<sub>2</sub> footprint for them.
+      To improve the footprint calculation it is possible to store additional information about an end customer and improving the calculation accuracy in turn.
   - name: Account API
+    description: >-
+      Should the necessity arise to remove all data of a specific end customer from the ecolytiq platform this can be done using the account API. 
   - name: onPrem API
     description: >-
       In some cases the ecolytiq Sustainability-as-a-Service&reg; platform is not used as Software as a Service (SaaS) solution but hosted on a customers own premises or inside their own cloud instance.
@@ -159,7 +179,9 @@ paths:
       operationId: getInfoCo2models
       security:
         - BearerAuth: []
-      description: Lists supported and permitted co2 models
+      description: >-
+        Retrieve a list of supported calculation models for CO<sub>2</sub> footprint calculation.
+        The `enabled` flag informs wether a specific model is available for use by the requesting set of client credentials since access to the models may vary from customer to customer.
       summary: List of CO2 models
       tags:
         - Info API
@@ -221,7 +243,9 @@ paths:
       operationId: getInfoCategorySystems
       security:
         - BearerAuth: []
-      description: List of supported and enabled category systems
+      description: >-
+        Retrieve a list of category systems that are supported by the platform.
+        The `enabled` flag informs wether a customer / set of client credentials is permitted to use a specific category system, since not all supported category systems may be accessible by every customer.
       summary: List of category systems
       tags:
         - Info API
@@ -283,7 +307,7 @@ paths:
       operationId: getInfoCategories
       security:
         - BearerAuth: []
-      description: List of categories
+      description: Retrieve a list of available transaction categories.
       summary: List of categories
       tags:
         - Info API
@@ -345,7 +369,37 @@ paths:
       operationId: postTransactionsTransactions
       security:
         - BearerAuth: []
-      description: Use this endpoint to process and store bank transactions. Successful processed transactions are in the results list, identifiable by their `transaction_id`. In case of an error (e.g. unknown categor, you can find  the transction in the errors list, identifiable by their `transaction_id` as well.   
+      description: >-
+        Use this endpoint to process and store bank transactions. 
+
+        ### Identification of transactions and accounts
+
+        To be able to request information about a transaction at a later time each transaction must be uniquely identifiable by its `transaction_id`. 
+        We recommend using [Universally Unique Identifiers](https://en.wikipedia.org/wiki/Universally_unique_identifier) for the `transaction_id`.
+        
+        The transactions must also be assigned to individual accounts.
+        This allows using the account's [profile data](#tag/Profiling-API) for more accurate calculations.
+        
+        > **IMPORTANT** Although ecolytiq GmbH follows data protection and data security best practices and is compliant with ISO27001 and PCI-DSS, actual bank account numbers, personal account numbers (PAN, i.e., credit card numbers), or other personally identifiable information (PII) **must not be used as `account_id`**.
+        
+        > Pseudonymization of account information and maintaining the list relating the end customer's PII to the `account_id`s used on the ecolytiq platform **must be handled on the customer side**.
+
+        > ecolytiq GmbH cannot be held liable for any loss, leak, unauthorized publication of PII which are a direct result of violating
+        
+        We recommend using [Universally Unique Identifier](https://en.wikipedia.org/wiki/Universally_unique_identifier) for the `account_id`s.
+
+        ### Immediate Response
+
+        The request is by default synchronous, i.e. the processing result is returned immediately in the response body to the request.
+        Successfully processed transactions are in the results list, identifiable by their `transaction_id`. 
+        In case of an error (e.g. unknown category), you can find  the transaction in the errors list, identifiable by their `transaction_id` as well. 
+        
+        ### Asynchronous Request
+
+        It is also possible to only send the data for processing and not wait for an immediate server response with the calculation results.
+        In that case the `async` flag in the request has to be set to `true`.
+        The server will only respond with a `202` status, i.e., accept the request, but will que the transactions for later processing.
+        The calculation result can later be requested by calling the [`GET /transactions/v1/transactions`](#operation/getTransactionsTransactions) endpoint with the corresponding `transaction_id`s.
       summary: Process transactions
       tags:
         - Transaction API
@@ -456,7 +510,7 @@ paths:
       security:
         - BearerAuth: []
       summary: Get Transactions by IDs
-      description: Get Transactions by IDs
+      description: Retrieve information about previously processed transactions identified by their IDs.
       tags:
         - Transaction API
       parameters:
@@ -543,7 +597,17 @@ paths:
       security:
         - BearerAuth: []
       summary: Get refinement questions for specific transactions
-      description: Get refinement questions for specific transactions.
+      description: >-
+        For certain types of goods or services the amount spent may not actually be an accurate representation of the CO<sub>2</sub> (equivalent) emission caused by that good or service. 
+
+        A few examples for such types of transactions are:
+          * Service stations: Fuel prices are highly volatile and vary from station to station. Therefore, the volume and type of fuel could be used for better calculation of the CO<sub>2</sub> emission related with a service station transaction.
+          * Air travel: Prices for airline tickets are dependent on the day of flight as well and even more so on the date of purchase. Therefore, the hours of the flight give the better basis for calculating CO<sub>2</sub> emissions for air travel.
+
+        Calling this endpoint with valid transaction IDs will return a list of suitable refinement question IDs for the transactions in request. 
+        If the question has already been answered the reference to the corresponding answer (or the value if it is not a predefined answer) will be also returned.
+
+        The mapping of question IDs / answer IDs and their text representation can be obtained from the [`GET /transactions/v1/questions`](#operation/getTransactionsQuestions) endpoint
       tags:
         - Transaction API
       parameters:
@@ -626,7 +690,15 @@ paths:
       operationId: postTransactionsRefinements
       security:
         - BearerAuth: []
-      description: Refine Transactions by answering feedback questions
+      description: >-
+        Refine transactions by answering feedback questions. 
+
+        The request must include the `transaction_id` and the `answer_id`. 
+        For questions with answers of the `selectable` type this is already sufficient.
+        For questions with answers of the `input` type the `input` value must also be included.
+        
+        References to questions relevant for certain transaction can be retrieved by calling the [`GET /transactions/v1/refinements`](#operation/getTransactionsRefinements) endpoint with the corresponding transaction ID.
+        The text version of the questions and possible answers can be obtained by calling the [`GET /transactions/v1/questions`](#operation/getTransactionsQuestions) endpoint (with the question IDs).
       summary: Refine Transactions by Answering Feedback Questions
       tags:
         - Transaction API
@@ -707,13 +779,22 @@ paths:
       operationId: getTransactionsQuestions
       security:
         - BearerAuth: []
-      summary: Get Questions by IDs
-      description: Returns all questions and answers, which can use to refine a transaction. To get a list of relevant questions for a specific transaction, please use the "Get refinements for transactions" endpoint.
+      summary: Get Questions and Answers for Transaction Refinement (by IDs)
+      description: >- 
+        Retrieve questions and answers that can be used to refine a transaction. 
+
+        Calling this endpoint without the `question_ids` parameter will return the text of all questions that can be used for transaction refinement. 
+        A client application could fetch the question and answer texts once and cache them for a certain amount of time.
+
+        Including the `question_ids` parameter returns only the content for the referenced questions.
+
+        To get a list of references to questions relevant for a specific transaction, please use the 
+        ["Get refinements for transactions"](#operation/getTransactionsRefinements) endpoint.
       tags:
         - Transaction API
       parameters:
         - in: query
-          name: quetion_ids
+          name: question_ids
           description: a list of question ids. If list of ids are not present, all questions (+answers) returned.
           required: false
           style: form
@@ -1790,11 +1871,20 @@ paths:
                 $ref: '#/components/schemas/BulkAnswerResponse'
 
   /account/v1/delete-accounts:
-    post: 
+    post: # Should this not be DELETE?
       operationId: postAccountDeleteAccounts
       security:
         - BearerAuth: []
-      description: Delete all data of the given accounts.
+      description: >-
+        By calling this endpoint all data for the given accounts is deleted from the ecolytiq platform.
+        This includes
+
+        * Transaction data
+
+        * Profile data
+
+        > **WARNING** There is no double confirmation!
+        Once the endpoint is called with valid `account_ids` the data related to those `account_ids` is **gone for good**.
       summary: Delete all data of the given accounts
       tags:
         - Account API
@@ -1840,11 +1930,11 @@ paths:
       description: >-
         Use this endpoint to send us feedback about content.         
         
-        
+
         Currently, only the "five star" rating system is supported.
         To send feedback about a content piece please send the accumulated number of *all* ratings for each rating category also when updating. 
 
-      summary: Send us Feedback about Content rating
+      summary: Send us Feedback about Content Rating
       tags:
         - onPrem API
       requestBody:
