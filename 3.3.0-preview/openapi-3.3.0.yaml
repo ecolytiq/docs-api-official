@@ -76,7 +76,7 @@ tags:
 
       ## Download
 
-      <a href ="https://ecolytiq-team.github.io/docs-api-official/3.2.0/postman/Sandbox.postman_collection.json" download>Sandbox.postman_collection.json</a>
+      <a href ="http://developer.ecolytiq.com/3.2.0/postman/Sandbox.postman_collection.json" download>Sandbox.postman_collection.json</a>
 
   - name: Info API
   - name: Transaction API
