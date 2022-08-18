@@ -18,6 +18,134 @@ servers:
   - description: ecolytiq API (Sandbox)
     url: https://api.sandbox.arm.ecolytiq.network
 tags:
+  - name: General Information
+    description: >-
+      This document describes the API of the ecolytiq Sustainability-as-a-Service&reg; platform.
+
+      ecolytiq has developed a method of assigning financial (bank) transactions with a CO<sub>2</sub> footprint therefore allowing financial institutions to inform their end customers about the ecological impact of their transactions. 
+      The calculation is based on the amount of the (outgoing) transaction and a category of the transaction which are both components of various region-specific calculation models.
+
+      ## Basic Requirements
+
+      To use the ecolytiq platform a customer is required to have a working pair of client credentials consisting of a `client_id` and a `client_secret`.
+      Those credentials are provided by ecolytiq after a contract is signed.
+
+      The customer is responsible for providing the client application that manages the integration of the ecolytiq services into their systems.
+
+      Certain features may not be available to or necessary for all customers. 
+      Hence, the set of enabled features is bound to a set of client credentials.
+
+      ## Information on Available and Enabled Features
+      
+      As not all features may be relevant to all customers the feature set can vary for different client credentials.
+      The ecolytiq platform provides an [info API](#tag/Info-API) to get information about the features that are available (in general) and accessible/enabled (for the customer).
+
+      ## Processing of Financial Transactions
+
+      ### Transaction Enrichment
+
+      The core functionality is enriching the transactions with the ecological footprint (at present: CO<sub>2</sub>) related to the purchase. 
+      This can be achieved by sending transactions to the [transaction API](#tags/Transaction-API). 
+
+      The ecolytiq platform has the ability to immediately return the calculation result ("synchronous processing") or to only accept the transactions and schedule the calculations until a later point in time ("asynchronous processing").
+      In any case the [result of the calculation](#operation/getTransactionsTransactions) can also be retrieved at a later point in time.
+
+      ### Refinement of Transactions
+
+      In some cases the amount of the transaction is not a good indicator on the ecological footprint related to the transaction.
+      In such instances the transactions can be refined by [answering transaction-specific questions](#operation/postTransactionsQuestions) (e.g., "How many liters was your refill at the gas station?").
+
+      ### Transaction Processing and Refinement Workflow
+      
+      A suggested workflow for processing an end customer's transaction looks as follows:
+      
+      1. Send the transaction to the ecolytiq service for processing:          
+         [`POST /transactions/v1/transactions`](#operation/postTransactionTransaction)
+
+      2. Request a list of references to refinement questions that are available for this transaction:  
+         [`GET /transactions/v1/refinements?transaction_ids=<transaction_ids>`](#operation/getTransactionsRefinements)
+      3. Retrieve the content (questions and answers) associated with the refinement question and answer IDs:          
+         [`GET /transactions/v1/questions?question_ids=<question_ids>`](#operation/getTransactionsQuestions)
+         > #### Note
+         > This step can also be executed in the very beginning omitting the `question_ids` parameter.
+         In that case, **all available** questions are returned. 
+         The result can then be cached at the client side.
+      
+      4. Have the end customer answer the refinement question(s):  
+         This must be handled in the client application
+
+      5. Send the answers to the refinement questions to the ecolytiq platform:  
+         [`POST /transactions/v1/refinements`](#operation/postTransactionsRefinements)
+      
+      6. Retrieve the calculation result for the refined transaction:  
+         [`GET /transactions/v1/transactions?transaction_ids=<transaction_ids>`](#operation/getTransactionsTransactions) 
+      
+      ### Account Profiling
+
+      For some types of purchases it can be helpful to have additional knowledge about the end customer. 
+      For example, the supermarket shopping basket of a person regularly having meat on their plated differs from that of a vegan person. 
+      It is possible to request such information for each individual transaction.
+      However, it can be easier to attribute such information to an end customer once.
+      For this, the [profiling API](#tag/Profiling-API) is available.
+
+      ## Educational and Informational Content
+
+      Another important feature of the ecolytiq Sustainability-as-a-Service&reg; platform is the educational content that allows end customers to gain more knowledge and and awareness of the ecological footprint created by their purchase decisions.
+      In the long term informing and educating end customers about their individual impact will help making them more literate choices when consuming goods and services. 
+
+      At present, ecolytiq offers the following types of content: 
+
+        * **Comparables** are small examples that for a given CO<sub>2</sub> footprint show in a concrete and easily graspable way how much of an impact that is.
+        
+        * **Insights** are short and simple tips and tricks that help end customers to reduce their impact.
+          In combination with the [profiling API](#tag/Profiling-API) the Insights shown are even more relevant to the end customer.
+        
+        * **Explanations** are content pieces that give information about the ecolytiq calculation method.
+
+      The [profiling API](#tag/Profiling-API) delivers references to the content pieces.
+      Using the [content API](#tag/Content-API) the texts of the educational and informational content pieces can be fetched various different languages.
+
+      ## Operations Options
+
+      ### SaaS Solution
+
+      The ecolytiq platform is available as Software-as-a-Service solution and accessible via public internet. 
+      The customer is required to build and maintain the client application. Operations of the ecolytiq platform is handled by ecolytiq GmbH.
+
+      There are several options available for our customers:
+
+        * The general SaaS platform:  
+          This is a high-availability SaaS platform managed and operated by ecolytiq.
+          It is not specific to individual customers, i.e., multiple clients may be operated on the same platform. 
+          However, there is a strict separation between each clients data. 
+          Data visibility between different clients is excluded on a technical level.
+
+        * Dedicated SaaS platform:  
+          This is a high-availability SaaS platform managed and operated by ecolytiq that is restricted to a specific customer.
+          No other customers are onboarded or hosted on a dedicated SaaS platform. 
+          Depending on customer requirements the dedicated SaaS platform can be hosted using a specific cloud service provider.
+      
+      ### On-Premises Solution
+
+      Should it be necessary due to customer regulations the ecolytiq platform can also be hosted on customer's premises or by the customer with their preferred cloud service provider. 
+      This has the advantage that the data never leaves the customer's realm of operations.
+      However, management and operation of the ecolytiq platform is then in the responsibility of the customer. 
+
+      The highly qualified ecolytiq staff can support the customer in setting up the ecolytiq platform as on-prem solution.
+      
+      ## Security and Data Protection
+      
+      We as ecolytiq GmbH adhere to and are compliant with all relevant data protection standards, such as GDPR, ISO27001, or PCI-DSS. 
+      Our platforms are regularly checked for security vulnerabilities.
+
+      However, financial data contains highly sensitive information about individuals. Therefore, our customers **are not allowed** to send actual personally identifiable information to the ecolytiq SaaS platform.
+      This is especially important for account identifiers -- **Do not use actual bank account numbers or PANs** (personal account numbers, i.e., credit card numbers) as account identifiers!
+
+      Account data must be pseudonymized. We recommend using [UUIDs](https://en.wikipedia.org/wiki/Universally_unique_identifier) as account identifiers. 
+      Mapping the account identifier to the end customer account **must be handled on the customer client application side**.
+
+
+
   - name: Authentication
   - name: Errors
     description: |
@@ -79,11 +207,64 @@ tags:
       <a href ="http://developer.ecolytiq.com/3.2.0/postman/Sandbox.postman_collection.json" download>Sandbox.postman_collection.json</a>
 
   - name: Info API
+    description: >-
+      The info API can be used to obtain information about the ecolytiq platform configuration and available features. 
+      It offers a simple and reliable method to verify, 
+
+      * Which [country models for CO<sub>2</sub>](#operation/getInfoCo2models) footprint calculation are available and accessible to the requestor,
+      
+      * Which [categorization systems](#operation/getInfoCategorySystems) for transactions are available and accessible for transaction enrichment,
+      
+      * For some categorization systems, which [categories](#operation/getInfoCategories) are available 
   - name: Transaction API
+    description: >-
+      The transaction API is used to process financial transactions by the ecolytiq Sustainability-as-a-Service&reg; platform.
+
+
+      It is possible to send transactions for enrichment and receive the calculated CO<sub>2</sub> footprint based on a combination of transaction amount and transaction category. 
+      
+
+      For some types of transactions this may, however, be insufficient as the amount of money spent does not directly correlate to the CO<sub>2</sub> (equivalent) emissions of the purchased goods and services.
+      For example, airline ticket prices are becoming increasingly expensive the closer the date of travel is. But the amount of CO<sub>2</sub> emissions is independent on whether the ticket was bought last minute or a year in advance. 
+      In such cases the transaction data can be refined by answering specific transaction-related questions, like the duration of the flight, which will in turn allow for a much more accurate calculation of the CO<sub>2</sub> emissions.
   - name: Content API
+    description: >-
+      The ecolytiq Sustainability-as-a-Service&reg; platform offers a variety of product features that go beyond pure calculation of the CO<sub>2</sub> footprint related to a financial transaction.
+      There are 
+
+      * Comparables: Small information pieces that put a given CO<sub>2</sub> footprint into perspective by comparing it to something easily comprehensible, like a distance driven by car.
+        As the name suggests a Comparable is a concrete example of what a certain CO<sub>2</sub> footprint means.  
+        It can be used to create awareness on the end customers side on how much of an impact a certain financial transaction has.
+      
+      * Insights: Information pieces with tips and tricks how an and customer can reduce their personal CO<sub>2</sub> emissions
+
+      * Explanations: Information pieces detailing how the ecolytiq calculation method works.
+
+      Those content pieces can be retrieved via the content API in various languages.
   - name: Profiling API
+    description: >-
+      In the most basic way the ecolytiq Sustainability-as-a-Service&reg; platform is used to calculate the CO<sub>2</sub> footprint related to a "spending transaction" by taking into account the amount of money spent and the category of the transaction.
+      This gives an estimate of the footprint based on average consumer behavior. 
+      For example, in the average grocery basket is still plenty of meat.
+      However, a specific end customer may have chosen to live by a meat-reduced, meat-free, vegetarian, or vegan diet.
+      Hence the average shopping basket will give an inaccurate CO<sub>2</sub> footprint for them.
+      To improve the footprint calculation it is possible to store additional information about an end customer and improving the calculation accuracy in turn.
   - name: Account API
+    description: >-
+      Should the necessity arise to remove all data of a specific end customer from the ecolytiq platform this can be done using the account API. 
   - name: onPrem API
+    description: >-
+      In some cases the ecolytiq Sustainability-as-a-Service&reg; platform is not used as Software as a Service (SaaS) solution but hosted on a customers own premises or inside their own cloud instance.
+      If the customers whish they can use a rating system for content delivered by the ecolytiq platform.
+      We recommend to regularly submit the content ratings back to ecolytiq so that we can improve the content quality.
+
+
+      > #### Please Note 
+      
+      > This endpoint must be called on the ecolytiq SaaS platform which is accessible over the public internet. 
+      Is may be necessary to obtain a special pair of `client_id` and `client_secret` credentials for the SaaS platform to use this endpoint.
+      No PII is transmitted via this endpoint.
+
 
 security:
   - bearerAuth: [ ]
@@ -91,6 +272,7 @@ security:
 paths:
   /oauth/token:
     post:
+      operationId: postOAuthToken
       security:
         - BasicAuth: []
       description: Request OAuth 2.0 Access Token with client credentials grant. This endpoint is proteced with Basic Auth. Use the client_id as username and the client_secret as password.
@@ -124,9 +306,12 @@ paths:
 
   /info/v1/co2models:
     get:
+      operationId: getInfoCo2models
       security:
         - BearerAuth: []
-      description: Lists supported and permitted co2 models
+      description: >-
+        Retrieve a list of supported calculation models for CO<sub>2</sub> footprint calculation.
+        The `enabled` flag informs wether a specific model is available for use by the requesting set of client credentials since access to the models may vary from customer to customer.
       summary: List of CO2 models
       tags:
         - Info API
@@ -185,9 +370,12 @@ paths:
 
   /info/v1/category-systems:
     get:
+      operationId: getInfoCategorySystems
       security:
         - BearerAuth: []
-      description: List of supported and enabled category systems
+      description: >-
+        Retrieve a list of category systems that are supported by the platform.
+        The `enabled` flag informs wether a customer / set of client credentials is permitted to use a specific category system, since not all supported category systems may be accessible by every customer.
       summary: List of category systems
       tags:
         - Info API
@@ -246,9 +434,10 @@ paths:
 
   /info/v1/categories:
     get:
+      operationId: getInfoCategories
       security:
         - BearerAuth: []
-      description: List of categories
+      description: Retrieve a list of available transaction categories.
       summary: List of categories
       tags:
         - Info API
@@ -307,9 +496,42 @@ paths:
 
   /transactions/v1/transactions:
     post:
+      operationId: postTransactionsTransactions
       security:
         - BearerAuth: []
-      description: Use this endpoint to process and store bank transactions. Successful processed transactions are in the results list, identifiable by their `transaction_id`. In case of an error (e.g. unknown categor, you can find  the transction in the errors list, identifiable by their `transaction_id` as well.   
+      description: >-
+        Use this endpoint to process and store bank transactions. 
+
+        ### Identification of transactions and accounts
+
+        To be able to request information about a transaction at a later time each transaction must be uniquely identifiable by its `transaction_id`. 
+        We recommend using [Universally Unique Identifiers](https://en.wikipedia.org/wiki/Universally_unique_identifier) for the `transaction_id`.
+        
+        The transactions must also be assigned to individual accounts.
+        This allows using the account's [profile data](#tag/Profiling-API) for more accurate calculations.
+        
+        > #### IMPORTANT
+        
+        > Although ecolytiq GmbH follows data protection and data security best practices and is compliant with ISO27001 and PCI-DSS, actual bank account numbers, personal account numbers (PAN, i.e., credit card numbers), or other personally identifiable information (PII) **must not be used as `account_id`**.
+        
+        > Pseudonymization of account information and maintaining the list relating the end customer's PII to the `account_id`s used on the ecolytiq platform **must be handled on the customer side**.
+
+        > ecolytiq GmbH cannot be held liable for any loss, leak, unauthorized publication of PII which are a direct result of violating
+        
+        We recommend using [Universally Unique Identifier](https://en.wikipedia.org/wiki/Universally_unique_identifier) for the `account_id`s.
+
+        ### Immediate Response
+
+        The request is by default synchronous, i.e. the processing result is returned immediately in the response body to the request.
+        Successfully processed transactions are in the results list, identifiable by their `transaction_id`. 
+        In case of an error (e.g. unknown category), you can find  the transaction in the errors list, identifiable by their `transaction_id` as well. 
+        
+        ### Asynchronous Request
+
+        It is also possible to only send the data for processing and not wait for an immediate server response with the calculation results.
+        In that case the `async` flag in the request has to be set to `true`.
+        The server will only respond with a `202` status, i.e., accept the request, but will que the transactions for later processing.
+        The calculation result can later be requested by calling the [`GET /transactions/v1/transactions`](#operation/getTransactionsTransactions) endpoint with the corresponding `transaction_id`s.
       summary: Process transactions
       tags:
         - Transaction API
@@ -416,10 +638,11 @@ paths:
                   $ref: '#/components/examples/RateLimit-Example'
 
     get:
+      operationId: getTransactionsTransactions
       security:
         - BearerAuth: []
       summary: Get Transactions by IDs
-      description: Get Transactions by IDs
+      description: Retrieve information about previously processed transactions identified by their IDs.
       tags:
         - Transaction API
       parameters:
@@ -502,10 +725,25 @@ paths:
   
   /transactions/v1/refinements:
     get:
+      operationId: getTransactionsRefinements
       security:
         - BearerAuth: []
       summary: Get refinement questions for specific transactions
-      description: Get refinement questions for specific transactions.
+      description: >-
+        For certain types of goods or services the amount spent may not actually be an accurate representation of the CO<sub>2</sub> (equivalent) emission caused by that good or service. 
+
+        A few examples for such types of transactions are:
+          * Service stations: Fuel prices are highly volatile and vary from station to station. Therefore, the volume and type of fuel could be used for better calculation of the CO<sub>2</sub> emission related with a service station transaction.
+          * Air travel: Prices for airline tickets are dependent on the day of flight as well and even more so on the date of purchase. Therefore, the hours of the flight give the better basis for calculating CO<sub>2</sub> emissions for air travel.
+
+        Calling this endpoint with valid transaction IDs will return a list of suitable refinement question IDs for the transactions in request. 
+        If the question has already been answered the reference to the corresponding answer (or the value if it is not a predefined answer) will be also returned.
+
+        > #### Note
+
+        > Calling this endpoint returns only references to content pieces (i.e., content IDs for questions and/or answers).
+
+        > The mapping of question IDs / answer IDs and their text representation can be obtained from the [`GET /transactions/v1/questions`](#operation/getTransactionsQuestions) endpoint
       tags:
         - Transaction API
       parameters:
@@ -585,9 +823,19 @@ paths:
                 BadRequest-Example:
                   $ref: '#/components/examples/RateLimit-Example'
     post:
+      operationId: postTransactionsRefinements
       security:
         - BearerAuth: []
-      description: Refine Transactions by answering feedback questions
+      description: >-
+        Refine transactions by answering feedback questions. 
+
+        The request must include the `transaction_id` and the `answer_id`. 
+        For questions with answers of the `selectable` type this is already sufficient.
+        For questions with answers of the `input` type the `input` value must also be included.
+        
+        References to questions relevant for certain transaction can be retrieved by calling the [`GET /transactions/v1/refinements`](#operation/getTransactionsRefinements) endpoint with the corresponding transaction ID.
+        The text version of the questions and possible answers can be obtained by calling the [`GET /transactions/v1/questions`](#operation/getTransactionsQuestions) endpoint (with the question IDs).
+      summary: Refine Transactions by Answering Feedback Questions
       tags:
         - Transaction API
       requestBody:
@@ -664,15 +912,29 @@ paths:
 
   /transactions/v1/questions:
     get:
+      operationId: getTransactionsQuestions
       security:
         - BearerAuth: []
-      summary: Get Questions by IDs
-      description: Returns all questions and answers, which can use to refine a transaction. To get a list of relevant questions for a specific transaction, please use the "Get refinements for transactions" endpoint.
+      summary: Get Questions and Answers for Transaction Refinement (by IDs)
+      description: >- 
+        Retrieve questions and answers that can be used to refine a transaction. 
+
+        Calling this endpoint without the `question_ids` parameter will return the text of all questions that can be used for transaction refinement. 
+        A client application could fetch the question and answer texts once and cache them for a certain amount of time.
+
+        Including the `question_ids` parameter returns only the content for the referenced questions.
+
+        To get a list of references to questions relevant for a specific transaction, please use the 
+        ["Get refinements for transactions"](#operation/getTransactionsRefinements) endpoint.
+
+        > #### Note
+
+        > This endpoint returns actual content pieces.
       tags:
         - Transaction API
       parameters:
         - in: query
-          name: quetion_ids
+          name: question_ids
           description: a list of question ids. If list of ids are not present, all questions (+answers) returned.
           required: false
           style: form
@@ -683,7 +945,8 @@ paths:
               type: string
         - in: query
           name: language_codes
-          description: language code. See Info API to get a list of supported and enabled languages.
+          description: 
+            $ref: '#/components/parameters/languageCodeParam/description'
           required: false
           style: form
           explode: false
@@ -759,11 +1022,19 @@ paths:
 
   /content/v1/comparables:
     get:
+      operationId: getContentComparables
       security:
         - BearerAuth: []
       tags:
         - Content API
-      description: Get a list of Comparables for a given co2 footprint.
+      description: >-
+        Get a specific Comparable or a list of Comparables or all Comparables for a given CO<sub>2</sub> footprint.
+
+        The amount of CO<sub>2</sub> (`co2_footprint`) in grams to compare is required for calling this endpoint. 
+        In addition it can be called with a list of content IDs (`ids` parameter) to select which Comparables shall be displayed.
+        
+        It is possible to retrieve the Comparables in different languages via the `language_codes` parameter.
+      summary: Get Comparables for a Given CO2 Footprint
       parameters:
         - in: query
           name: co2_footprint
@@ -775,7 +1046,7 @@ paths:
             minimum: 1
         - in: query
           name: ids
-          description: a list of ids. If list of ids are not present, all comparables returned.
+          description: a list of ids. If list of ids are not present, all Comparables returned.
           required: false
           style: form
           explode: false
@@ -785,7 +1056,8 @@ paths:
               type: string
         - in: query
           name: language_codes
-          description: language code. See Info API to get a list of supported and enabled languages.
+          description: 
+            $ref: '#/components/parameters/languageCodeParam/description'
           required: false
           style: form
           explode: false
@@ -864,11 +1136,23 @@ paths:
 
   /content/v1/comparables/random:
     get:
+      operationId: getContentComparablesRandom
       security:
         - BearerAuth: []
       tags:
         - Content API
-      description: Get Comparables for a given co2 footprint
+      description: >-
+        Get an individual Comparable or a list of Comparables for a given CO<sub>2</sub> footprint.
+        The content pieces returned by calling this endpoint are chosen at random.
+
+        The amount of CO<sub>2</sub> (`co2_footprint`) in grams to compare is required for calling this endpoint. 
+        The number of Comparables returned in the response can be specified using the `size` parameter.
+
+        The Comparables returned can be limited to specific categories using the `categories` parameter.
+
+        It is possible to retrieve the Comparables in different languages via the `language_codes` parameter.
+
+      summary: Get Random Comparables for a Given CO2 Footprint
       parameters:
         - in: query
           name: co2_footprint
@@ -880,7 +1164,10 @@ paths:
             minimum: 1
         - in: query
           name: categories
-          description: used as filter for categories. If it is unset or empty all categories are used.
+          description: >-
+            used as filter for categories. 
+            If it is unset or empty all categories are used.
+            A  [list of categories](#operation/getInfoCategories) can be retrieved using the [Info API](#tag/Info-API).
           required: false
           style: form
           explode: false
@@ -890,6 +1177,7 @@ paths:
               type: string
         - in: query
           name: size
+          description: Number of content pieces returned.
           required: false
           schema:
             type: integer
@@ -897,7 +1185,8 @@ paths:
             maximum: 10
         - in: query
           name: language_codes
-          description: language
+          description:
+            $ref: '#/components/parameters/languageCodeParam/description'
           required: false
           style: form
           explode: false
@@ -976,11 +1265,14 @@ paths:
 
   /content/v1/insights:
     get:
+      operationId: getContentInsights
       security:
         - BearerAuth: []
       tags:
         - Content API
-      description: Get Insights by IDs.
+      description: >-
+        Get all or specific Insights on how to improve individual CO<sub>2</sub> impact.
+      summary: Get Insights by IDs
       parameters:
         - in: query
           name: ids
@@ -994,7 +1286,8 @@ paths:
               type: string
         - in: query
           name: language_codes
-          description: language
+          description: 
+            $ref: '#/components/parameters/languageCodeParam/description'
           required: false
           style: form
           explode: true
@@ -1092,7 +1385,8 @@ paths:
               type: string
         - in: query
           name: language_codes
-          description: language
+          description: 
+            $ref: '#/components/parameters/languageCodeParam/description'
           required: false
           style: form
           explode: true
@@ -1171,11 +1465,17 @@ paths:
 
   /content/v1/insights/random:
     get:
+      operationId: getContentInsightsRandom
       security:
         - BearerAuth: []
       tags:
         - Content API
-      description: Get Insights (for a given category)
+      description: >-
+        Get a number of random Insights on how to improve the individual CO<sub>2</sub> footprint.
+
+        The Insights returned can be limited to specific categories. 
+        [Available categories](#operation/getInfoCategories) can be retrieved using the [Info API](#tag/Info-API).
+      summary: Get Insights (for a Given Category)
       parameters:
         - in: query
           name: categories
@@ -1189,6 +1489,7 @@ paths:
               type: string
         - in: query
           name: size
+          description: Number of content pieces returned.
           required: false
           schema:
             type: integer
@@ -1196,7 +1497,8 @@ paths:
             maximum: 10
         - in: query
           name: language_codes
-          description: language
+          description: 
+            $ref: '#/components/parameters/languageCodeParam/description'
           required: false
           style: form
           explode: true
@@ -1274,11 +1576,20 @@ paths:
 
   /profiling/v1/insights:
     get:
+      operationId: getProfilingInsights
       security:
         - BearerAuth: []
       tags:
         - Profiling API
-      description: Returns all matching references to Insights for accounts. 
+      description: >-
+        Returns all matching references to Insights for specified accounts. 
+
+        The Insights can also be restricted to specific [categories](#operation/getInfoCategories) (see [Info API](#tag/Info-API)).
+
+        > #### Note
+
+        > This endpoint only returns references (i.e., content IDs) to the content.
+        The actual content can be retrieved via the [content API](#tag/Content-API).
       summary: Get Insights (for accounts)
       parameters:
         - in: query
@@ -1377,7 +1688,13 @@ paths:
         - BearerAuth: [ ]
       tags:
         - Profiling API
-      description: Get Contextual Insights (for accounts)
+      description: >-
+        Get Contextual Insights (for accounts)
+
+        > #### Note
+
+        > This endpoint only returns references (i.e., content IDs) to the content.
+        The actual content can be retrieved via the [content API](#tag/Content-API).
       summary: Get Contextual Insights (for accounts)
       parameters:
         - in: query
@@ -1460,11 +1777,14 @@ paths:
                   $ref: '#/components/examples/RateLimit-Example'
   /content/v1/explanations:
     get:
+      operationId: getContentExplanations
       security:
         - BearerAuth: []
       tags:
         - Content API
-      description: Get Explanations (for a given categories)
+      description: >-
+        Retrieve all or individual Explanations on the ecolytiq calculation.
+      summary: Get Explanations by ID
       parameters:
         - in: query
           name: ids
@@ -1480,7 +1800,8 @@ paths:
               maximum: 10
         - in: query
           name: language_codes
-          description: language
+          description: 
+            $ref: '#/components/parameters/languageCodeParam/description'
           required: false
           style: form
           explode: true
@@ -1558,11 +1879,17 @@ paths:
 
   /content/v1/explanations/random:
     get:
+      operationId: getContentExplanationsRandom
       security:
         - BearerAuth: []
       tags:
         - Content API
-      description: Get Explanations (for a given categories)
+      description: >-
+        Get randomly chosen Explanations on the ecolytiq calculation method. 
+        The results returned can be limited to certain categories. 
+
+        Use the [info API](#tag/Info-API) to fetch a (list of available categories)[#operation/getInfoCategories].
+      summary: Get Explanations (for given categories)
       parameters:
         - in: query
           name: categories
@@ -1576,6 +1903,7 @@ paths:
               type: string
         - in: query
           name: size
+          description: Number of results returned.
           required: false
           schema:
             type: integer
@@ -1583,7 +1911,8 @@ paths:
             maximum: 10
         - in: query
           name: language_codes
-          description: language
+          description: 
+            $ref: '#/components/parameters/languageCodeParam/description'
           required: false
           style: form
           explode: true
@@ -1662,10 +1991,23 @@ paths:
 
   /profiling/v1/questions:
     get:
+      operationId: getProfilingQuestions
       security:
         - BearerAuth: []
       summary: Get Questions for Profiling by IDs
-      description: Get questions, answers and translations used for Profiling
+      description: >-
+        Get questions, answers and translations used for Profiling. 
+        
+        The answers to the questions are used to store additional information for specific end customers. 
+        This is useful for improving the calculation results (e.g., if the end customer is known to be vegan, the vegan "base basket" is used for calculation of the footprint after shopping in the supermarket) as well as reducing unsuitable Insights (i.e., someone known to be vegan will not be shown information on how much CO<sub>2</sub> they can save by reducing meat in their diet).
+
+        By calling this endpoint all or specific profile-related questions and their answers can be retrieved.
+
+        The questions can be retrieved in multiple languages using the `language_codes` parameter.
+
+        > #### Note:
+
+        > This endpoint returns the actual content.
       tags:
         - Profiling API
       parameters:
@@ -1681,7 +2023,8 @@ paths:
               type: string
         - in: query
           name: language_codes
-          description: language code. See Info API to get a list of supported and enabled languages.
+          description: 
+            $ref: '#/components/parameters/languageCodeParam/description'
           required: false
           style: form
           explode: false
@@ -1706,9 +2049,15 @@ paths:
 
   /profiling/v1/answer:
     post:
+      operationId: postProfilingAnswer
       security:
         - BearerAuth: []
-      description: Save Answer for a given Question
+      description: >-
+        Save Answer for a given Question. 
+
+        In case of pre-defined answers only the `answer_id` and the `account_id` are necessary.
+        If the answer is "free text" the `input` must be submitted as well.
+      summary: Save Answer for a given Question
       tags:
         - Profiling API
       requestBody:
@@ -1733,10 +2082,23 @@ paths:
                 $ref: '#/components/schemas/BulkAnswerResponse'
 
   /account/v1/delete-accounts:
-    post:
+    post: # Should this not be DELETE?
+      operationId: postAccountDeleteAccounts
       security:
         - BearerAuth: []
-      description: Delete all data of the given accounts.
+      description: >-
+        By calling this endpoint all data for the given accounts is deleted from the ecolytiq platform.
+        This includes
+
+        * Transaction data
+
+        * Profile data
+
+        > #### WARNING
+        
+        > There is no double confirmation!
+        Once the endpoint is called with valid `account_ids` the data related to those `account_ids` is **gone for good**.
+      summary: Delete all data of the given accounts
       tags:
         - Account API
       requestBody:
@@ -1775,10 +2137,17 @@ paths:
 
   /on-prem/v1/content-ratings:
     post:
+      operationId: postOnPremContentRatings
       security:
         - BearerAuth: []
-      description: Use this endpoint to send us feedback about content.   
-      summary: Send us Feedback about Content rating
+      description: >-
+        Use this endpoint to send us feedback about content.         
+        
+
+        Currently, only the "five star" rating system is supported.
+        To send feedback about a content piece please send the accumulated number of *all* ratings for each rating category also when updating. 
+
+      summary: Send us Feedback about Content Rating
       tags:
         - onPrem API
       requestBody:
@@ -3487,3 +3856,16 @@ components:
           type: string
           example: bc415e82-b262-475a-8f03-6c9028bb5991
           description: JWT ID. Can be used to invalidate the Access Token
+  
+  parameters: 
+    languageCodeParam:
+      name: language_codes
+      description:  >-
+        ISO639-1 language code(s) to select output language(s) of the content piece(s). 
+      required: false
+      style: form
+      explode: false
+      schema:
+        type: array
+        items:
+          type: string
