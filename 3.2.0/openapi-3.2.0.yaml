@@ -671,7 +671,7 @@ paths:
         - Transaction API
       parameters:
         - in: query
-          name: quetion_ids
+          name: question_ids
           description: a list of question ids. If list of ids are not present, all questions (+answers) returned.
           required: false
           style: form
