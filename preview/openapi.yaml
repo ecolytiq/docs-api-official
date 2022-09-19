@@ -2845,6 +2845,83 @@ paths:
                 Example:
                   $ref: '#/components/examples/RateLimit-Example'
 
+  /offsetting/v1/update-status:
+    post:
+      operationId: updateStatus
+      security:
+        - BearerAuth: []
+      description: >-
+        Use this endpoint to update the donation status.        
+      summary: Update Donation Status
+      tags:
+        - Offsetting API
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateDonationStatusRequest'
+      responses:
+        '204':
+          description: Acknowledgement
+          headers:
+            X-RateLimit-Limit:
+              $ref: '#/components/headers/X-RateLimit-Limit'
+            X-RateLimit-Remaining:
+              $ref: '#/components/headers/X-RateLimit-Remaining'
+            X-RateLimit-Reset:
+              $ref: '#/components/headers/X-RateLimit-Reset'
+        '400':
+          description: |
+            Bad Request.
+          headers:
+            X-RateLimit-Limit:
+              $ref: '#/components/headers/X-RateLimit-Limit'
+            X-RateLimit-Remaining:
+              $ref: '#/components/headers/X-RateLimit-Remaining'
+            X-RateLimit-Reset:
+              $ref: '#/components/headers/X-RateLimit-Reset'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              examples:
+                Example:
+                  $ref: '#/components/examples/BadRequest-Example'
+        '401':
+          description: |
+            Unauthorized. Access Token is invalid or expired.
+          headers:
+            X-RateLimit-Limit:
+              $ref: '#/components/headers/X-RateLimit-Limit'
+            X-RateLimit-Remaining:
+              $ref: '#/components/headers/X-RateLimit-Remaining'
+            X-RateLimit-Reset:
+              $ref: '#/components/headers/X-RateLimit-Reset'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              examples:
+                Example:
+                  $ref: '#/components/examples/Unauthorized-Example'
+        '429':
+          description: |
+            Rate Limit exceeded.
+          headers:
+            X-RateLimit-Limit:
+              $ref: '#/components/headers/X-RateLimit-Limit'
+            X-RateLimit-Remaining:
+              $ref: '#/components/headers/X-RateLimit-Remaining'
+            X-RateLimit-Reset:
+              $ref: '#/components/headers/X-RateLimit-Reset'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              examples:
+                Example:
+                  $ref: '#/components/examples/RateLimit-Example'
 
 components:
   headers:
@@ -3338,6 +3415,30 @@ components:
         download_url:
           type: string
           format: url
+
+    UpdateDonationStatusRequest:
+      type: object
+      required:
+        - donations
+      properties:
+        donations:
+          type: array
+          items:
+            $ref: '#/components/schemas/UpdateDonationStatus'
+
+    UpdateDonationStatus:
+      type: object
+      required:
+        - donation_id
+        - new_status
+      properties:
+        donation_id:
+          type: string
+        new_status:
+          type: string
+          enum:
+            - completed
+            - cancelled
 
     AskForDonationReceiptRequest:
       type: object
