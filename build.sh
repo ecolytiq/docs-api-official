@@ -12,8 +12,8 @@ cp redoc-static.html 3.2.0/index.html
 redoc-cli bundle preview/openapi.yaml --options=theme.json
 cp redoc-static.html preview/index.html
 
-redoc-cli bundle v3-2022-09-01/openapi.yaml --options=theme.json
-cp redoc-static.html v3-2022-09-01/index.html
+redoc-cli bundle v3-2022-10-04/openapi.yaml --options=theme.json
+cp redoc-static.html v3-2022-10-04/index.html
 mv redoc-static.html index.html
 
  
