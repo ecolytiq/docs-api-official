@@ -1,0 +1,184 @@
+openapi: 3.0.3
+
+info:
+  description: |
+    API of the ecolytiq private-modelfactors service
+  version: 1.0.0
+  title: private-modelfactors
+  contact:
+    email: support@ecolytiq.com
+    name: ecolytiq GmbH
+    url: https://ecolytiq.com
+  termsOfService: https://ecolytiq.com/imprint
+  x-logo:
+    url: "https://developer.ecolytiq.com/assets/logo.png"
+    backgroundColor: "#F9F9F9"
+    altText: "ecolytiq GmbH"
+tags:
+    - name: Errors
+      description: |
+        ## HTTP Status Code Summary
+        | Status Code                        | Description                                                                                      |
+        |------------------------------------|--------------------------------------------------------------------------------------------------|
+        | 200 - OK                           | Everything worked as expected.                                                                   |
+        | 201 - Created                      | Everything worked as expected. Resource created.                                                 |
+        | 204 - No Content                   | Everything worked as expected.                                                                   |
+        | 400 - Bad Request                  | The request was unacceptable, often due to missing a required parameter.                         |
+        | 401 - Unauthorized                 | No valid Access Token provided.                                                                  |
+        | 403 - Forbidden                    | The API key doesn't have permissions to perform the request.                                     |
+        | 404 - Not Found                    | The requested resource doesn't exist.                                                            |
+        | 409 - Conflict                     | The request conflicts with another request (perhaps due to using the same idempotent key).       |
+        | 422 - Unprocessable Entity         | Unprocessable Entity                                                                             |
+        | 429 - Too Many Requests            | Too many requests hit the API too quickly. We recommend an exponential backoff of your requests. |
+        | 500, 502, 503, 504 - Server Errors | Something went wrong on ecolytiq's end.                                                          |
+    
+    - name: Rate Limit
+      description: |
+        In each response you find Rate Limit Information fields like `X-RateLimit-Limit`, `X-RateLimit-Remaining` and `X-RateLimit-Reset`.
+        
+        ## Rate Limit Headers
+        | Header                | Description                                                         |
+        |-----------------------|---------------------------------------------------------------------|
+        | X-RateLimit-Limit     | Number of requests for the specific endpoint                        |
+        | X-RateLimit-Remaining | Number of ramining requests for the specific endpoint               |
+        | X-RateLimit-Reset     | Date-Time, when X-RateLimit-Remaining is reset to X-RateLimit-Limit |
+
+        At the moment we do not use rate limits. However, we reserve the right to use them. This will be announced.
+
+components:
+  headers:
+    X-RateLimit-Limit:
+      schema:
+        type: integer
+      description: Request limit per hour.
+    X-RateLimit-Remaining:
+      schema:
+        type: integer
+      description: The number of requests left for the time window.
+    X-RateLimit-Reset:
+      schema:
+        type: string
+        format: date-time
+      description: The UTC date/time at which the current rate limit window resets.
+
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    Co2FactorsResponse:
+      description: "The response to a modelfactors request"
+      type: object
+      required:
+        - category_system
+        - co2_model
+        - model_factors
+      properties:
+        category_system:
+          type: string
+        co2_model:
+          type: string
+        model_factors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Co2Factor'
+
+    Co2Factor:
+      description: "A pair (category, model factor)"
+      type: object
+      required:
+        - category
+        - factor
+      properties:
+        category:
+          type: string
+        factor:
+          type: integer
+    
+    RequestId:
+      type: string
+      example: "6bf3202ade4a7411"
+
+    ApiError:
+      description: |
+        Error messages for API clients.
+      type: object
+      required:
+        - request_id
+        - error_code
+        - error_description
+      properties:
+        request_id:
+          $ref: '#/components/schemas/RequestId'
+        error_code:
+          type: string
+        error_description:
+          type: string
+
+security:
+  - BearerAuth: [ ]
+
+paths:
+  /private/v1/modelfactors:
+    get:
+      description: >-
+        Retrieve a list of CO2 model factors (by model ID and category system).
+      summary: List of CO2 model factors
+      parameters:
+        - in: query
+          schema:
+            type: string
+          required: true
+          name: category_system
+          description: the category system. See also Info API to list all available category systems.
+        - in: query
+          schema:
+            type: string
+          required: true
+          name: co2_model
+          description: the CO2 model. See also Info API to list all available CO2 models.
+      responses:
+        '200':
+          description: |
+            List of CO2 model factors.
+          headers:
+            X-RateLimit-Limit:
+              $ref: '#/components/headers/X-RateLimit-Limit'
+            X-RateLimit-Remaining:
+              $ref: '#/components/headers/X-RateLimit-Remaining'
+            X-RateLimit-Reset:
+              $ref: '#/components/headers/X-RateLimit-Reset'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Co2FactorsResponse'
+        '400':
+          description: |
+            category_system or co2_model is unset.
+          headers:
+            X-RateLimit-Limit:
+              $ref: '#/components/headers/X-RateLimit-Limit'
+            X-RateLimit-Remaining:
+              $ref: '#/components/headers/X-RateLimit-Remaining'
+            X-RateLimit-Reset:
+              $ref: '#/components/headers/X-RateLimit-Reset'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '404':
+          description: |
+            category_system or co2_model is set, but unknown.
+          headers:
+            X-RateLimit-Limit:
+              $ref: '#/components/headers/X-RateLimit-Limit'
+            X-RateLimit-Remaining:
+              $ref: '#/components/headers/X-RateLimit-Remaining'
+            X-RateLimit-Reset:
+              $ref: '#/components/headers/X-RateLimit-Reset'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
