@@ -89,16 +89,20 @@ components:
             $ref: '#/components/schemas/Co2Factor'
 
     Co2Factor:
-      description: "A pair (category, model factor)"
+      description: "A triple (category, model factor, last update time)"
       type: object
       required:
         - category
         - factor
+        - updated_at
       properties:
         category:
           type: string
         factor:
           type: integer
+        updated_at:
+          type: string
+          format: date-time
     
     RequestId:
       type: string
@@ -129,12 +133,16 @@ components:
         model_factors:
         - category: "1520"
           factor: 338
+          updated_at: "2022-11-11T12:00:24Z"
         - category: "1711"
           factor: 979
+          updated_at: "2022-11-11T12:00:24Z"
         - category: "1731"
           factor: 338
+          updated_at: "2022-11-11T12:00:24Z"
         - category: "3007"
           factor: 1438
+          updated_at: "2020-11-01T12:00:24Z"
     ModelFactor-ECO-Example:
       value:
         request_id: 6bf3202ade4a7411
@@ -143,8 +151,10 @@ components:
         model_factors:
         - category: "ex:food.groceries"
           factor: 979
+          updated_at: "2022-11-11T12:00:24Z"
         - category: "ex:misc"
           factor: 338
+          updated_at: "2020-11-01T12:00:24Z"
     BadRequest-Example:
       value:
         request_id: 6bf3202ade4a7411
