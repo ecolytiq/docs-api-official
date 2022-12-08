@@ -3,7 +3,7 @@ openapi: 3.0.3
 info:
   description: |
     APIs of the ecolytiq SaaS
-  version: v3 (2022-10-04)
+  version: v3 (2022-12-08)
   title: ecolytiq SaaS
   contact:
     email: support@ecolytiq.com
@@ -185,7 +185,7 @@ tags:
 
       2. In the opened window click on "Choose Files" under "Import File".
 
-      3. Select the file "Sandbox.postman_collection.json" and press "open".
+      3. Select the file "<date>_ecolytiq_Sandbox.postman_collection.json" and press "open".
 
       4. The collection is now imported and can be found in the list on the left side of the window.
 
@@ -204,7 +204,7 @@ tags:
 
       ## Download
 
-      <a href ="http://developer.ecolytiq.com/3.2.0/postman/Sandbox.postman_collection.json" download>Sandbox.postman_collection.json</a>
+      <a href ="http://developer.ecolytiq.com/postman/2022-12-08_ecolytiq_Sandbox.postman_collection.json" download>Sandbox.postman_collection.json</a>
 
   - name: Info API
     description: |
@@ -1039,7 +1039,7 @@ paths:
       security:
         - BearerAuth: []
       summary: Get Questions and Answers for Transaction Refinement (by IDs)
-      description: >- 
+      description: | 
         Retrieve questions and answers that can be used to refine a transaction. 
 
         Calling this endpoint without the `question_ids` parameter will return the text of all questions that can be used for transaction refinement. 
@@ -1051,7 +1051,7 @@ paths:
         ["Get refinements for transactions"](#operation/getTransactionsRefinements) endpoint.
 
         > #### Note
-
+        >
         > This endpoint returns actual content pieces.
       tags:
         - Transaction API
@@ -1141,7 +1141,7 @@ paths:
         - BearerAuth: []
       tags:
         - Content API
-      description: >-
+      description: |
         Get a specific Comparable or a list of Comparables or all Comparables for a given CO<sub>2</sub> footprint.
 
         The amount of CO<sub>2</sub> (`co2_footprint`) in grams to compare is required for calling this endpoint. 
