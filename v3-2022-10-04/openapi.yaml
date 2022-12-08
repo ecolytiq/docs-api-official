@@ -3,7 +3,7 @@ openapi: 3.0.3
 info:
   description: |
     APIs of the ecolytiq SaaS
-  version: v3 (2022-10-04)
+  version: v3 (2022-12-08)
   title: ecolytiq SaaS
   contact:
     email: support@ecolytiq.com
@@ -19,7 +19,7 @@ servers:
     url: https://api.sandbox.arm.ecolytiq.network
 tags:
   - name: General Information
-    description: >-
+    description: |
       This document describes the API of the ecolytiq Sustainability-as-a-Service&reg; platform.
 
       ecolytiq has developed a method of assigning financial (bank) transactions with a CO<sub>2</sub> footprint therefore allowing financial institutions to inform their end customers about the ecological impact of their transactions. 
@@ -176,7 +176,7 @@ tags:
 
       At the moment we do not use rate limits. However, we reserve the right to use them. This will be announced.
   - name: Postman
-    description: >-
+    description: |
       ## Import Request Collection and Environment
 
       ### Request Collection
@@ -185,7 +185,7 @@ tags:
 
       2. In the opened window click on "Choose Files" under "Import File".
 
-      3. Select the file "Sandbox.postman_collection.json" and press "open".
+      3. Select the file "<date>_ecolytiq_Sandbox.postman_collection.json" and press "open".
 
       4. The collection is now imported and can be found in the list on the left side of the window.
 
@@ -204,10 +204,10 @@ tags:
 
       ## Download
 
-      <a href ="http://developer.ecolytiq.com/3.2.0/postman/Sandbox.postman_collection.json" download>Sandbox.postman_collection.json</a>
+      <a href ="http://developer.ecolytiq.com/postman/2022-12-08_ecolytiq_Sandbox.postman_collection.json" download>Sandbox.postman_collection.json</a>
 
   - name: Info API
-    description: >-
+    description: |
       The info API can be used to obtain information about the ecolytiq platform configuration and available features. 
       It offers a simple and reliable method to verify, 
 
@@ -217,18 +217,16 @@ tags:
       
       * For some categorization systems, which [categories](#operation/getInfoCategories) are available 
   - name: Transaction API
-    description: >-
+    description: |
       The transaction API is used to process financial transactions by the ecolytiq Sustainability-as-a-Service&reg; platform.
-
 
       It is possible to send transactions for enrichment and receive the calculated CO<sub>2</sub> footprint based on a combination of transaction amount and transaction category. 
       
-
       For some types of transactions this may, however, be insufficient as the amount of money spent does not directly correlate to the CO<sub>2</sub> (equivalent) emissions of the purchased goods and services.
       For example, airline ticket prices are becoming increasingly expensive the closer the date of travel is. But the amount of CO<sub>2</sub> emissions is independent on whether the ticket was bought last minute or a year in advance. 
       In such cases the transaction data can be refined by answering specific transaction-related questions, like the duration of the flight, which will in turn allow for a much more accurate calculation of the CO<sub>2</sub> emissions.
   - name: Content API
-    description: >-
+    description: |
       The ecolytiq Sustainability-as-a-Service&reg; platform offers a variety of product features that go beyond pure calculation of the CO<sub>2</sub> footprint related to a financial transaction.
       There are 
 
@@ -242,7 +240,7 @@ tags:
 
       Those content pieces can be retrieved via the content API in various languages.
   - name: Profiling API
-    description: >-
+    description: |
       In the most basic way the ecolytiq Sustainability-as-a-Service&reg; platform is used to calculate the CO<sub>2</sub> footprint related to a "spending transaction" by taking into account the amount of money spent and the category of the transaction.
       This gives an estimate of the footprint based on average consumer behavior. 
       For example, in the average grocery basket is still plenty of meat.
@@ -250,20 +248,20 @@ tags:
       Hence the average shopping basket will give an inaccurate CO<sub>2</sub> footprint for them.
       To improve the footprint calculation it is possible to store additional information about an end customer and improving the calculation accuracy in turn.
   - name: Account API
-    description: >-
+    description: |
       Should the necessity arise to remove all data of a specific end customer from the ecolytiq platform this can be done using the account API. 
   - name: onPrem API
-    description: >-
+    description: |
       In some cases the ecolytiq Sustainability-as-a-Service&reg; platform is not used as Software as a Service (SaaS) solution but hosted on a customers own premises or inside their own cloud instance.
       If the customers whish they can use a rating system for content delivered by the ecolytiq platform.
       We recommend to regularly submit the content ratings back to ecolytiq so that we can improve the content quality.
 
 
       > #### Please Note 
-      
+      >
       > This endpoint must be called on the ecolytiq SaaS platform which is accessible over the public internet. 
-      Is may be necessary to obtain a special pair of `client_id` and `client_secret` credentials for the SaaS platform to use this endpoint.
-      No PII is transmitted via this endpoint.
+      > Is may be necessary to obtain a special pair of `client_id` and `client_secret` credentials for the SaaS platform to use this endpoint.
+      > No PII is transmitted via this endpoint.
 
 
 security:
@@ -309,16 +307,16 @@ paths:
       operationId: getInfoCo2models
       security:
         - BearerAuth: []
-      description: >-
+      description: |
         Retrieve a list of supported calculation models for CO<sub>2</sub> footprint calculation.
         The `enabled` flag informs wether a specific model is available for use by the requesting set of client credentials since access to the models may vary from customer to customer.
-      summary: List of CO2 models
+      summary: List of CO₂ models
       tags:
         - Info API
       responses:
         '200':
           description: |
-            List of supported and enabled co2 models.
+            List of supported and enabled CO<sub>2</sub> models.
           headers:
             X-RateLimit-Limit:
               $ref: '#/components/headers/X-RateLimit-Limit'
@@ -499,7 +497,7 @@ paths:
       operationId: postTransactionsTransactions
       security:
         - BearerAuth: []
-      description: >-
+      description: |
         Use this endpoint to process and store bank transactions. 
 
         ### Identification of transactions and accounts
@@ -509,13 +507,13 @@ paths:
         
         The transactions must also be assigned to individual accounts.
         This allows using the account's [profile data](#tag/Profiling-API) for more accurate calculations.
-        
-        > #### IMPORTANT
-        
-        > Although ecolytiq GmbH follows data protection and data security best practices and is compliant with ISO27001 and PCI-DSS, actual bank account numbers, personal account numbers (PAN, i.e., credit card numbers), or other personally identifiable information (PII) **must not be used as `account_id`**.
-        
-        > Pseudonymization of account information and maintaining the list relating the end customer's PII to the `account_id`s used on the ecolytiq platform **must be handled on the customer side**.
 
+        > #### IMPORTANT
+        >
+        > Although ecolytiq GmbH follows data protection and data security best practices and is compliant with ISO27001 and PCI-DSS, actual bank account numbers, personal account numbers (PAN, i.e., credit card numbers), or other personally identifiable information (PII) **must not be used as `account_id`**.
+        >
+        > Pseudonymization of account information and maintaining the list relating the end customer's PII to the `account_id`s used on the ecolytiq platform **must be handled on the customer side**.
+        >
         > ecolytiq GmbH cannot be held liable for any loss, leak, unauthorized publication of PII which are a direct result of violating
         
         We recommend using [Universally Unique Identifier](https://en.wikipedia.org/wiki/Universally_unique_identifier) for the `account_id`s.
@@ -542,11 +540,11 @@ paths:
             schema:
               $ref: '#/components/schemas/TransactionRequest'
             examples:
-              Minimal-Request:
+              Minimal Request:
                 $ref: '#/components/examples/Transaction-Request-Example-01'
-              Request-With-Merchant:
+              Request With Merchant:
                 $ref: '#/components/examples/Transaction-Request-Example-02'
-              Async-Request-With-Merchant:
+              Asynchronous Request With Merchant:
                 $ref: '#/components/examples/Transaction-Request-Example-03'
       responses:
         '200':
@@ -837,7 +835,7 @@ paths:
       operationId: getTransactionsRefinements
       security:
         - BearerAuth: []
-      summary: Get refinement questions for specific transactions
+      summary: Get Available Questions for Refinement of Specific Transactions
       description: >-
         For certain types of goods or services the amount spent may not actually be an accurate representation of the CO<sub>2</sub> (equivalent) emission caused by that good or service. 
 
@@ -858,7 +856,7 @@ paths:
       parameters:
         - in: query
           name: transaction_ids
-          description: a list of transaction ids
+          description: a list of transaction IDs
           required: true
           style: form
           explode: false
@@ -866,6 +864,9 @@ paths:
             type: array
             items:
               type: string
+          example:
+            - 62c12ecc-17d7-469f-9ecc-b08e00eb8c90
+            - 75353c62-6757-4740-979d-dfa52cdb9fba
       responses:
         '200':
           description: A list of transaction ids and their corresponding question ids. If the question is already answered the field `answer_id` is set. Otherwise it is `null`.
@@ -880,9 +881,16 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/TransactionQuestionsResponse'
+              examples:
+                Refinement questions without answer:
+                  $ref: "#/components/examples/RefinementsUnansweredResponseExample"
+                Refinement questions answered:
+                  $ref: "#/components/examples/RefinementsAnsweredResponseExample"
+                No refinement questions available:
+                  $ref: "#/components/examples/RefinementsUnavailableResponseExample"
         '400':
           description: |
-            Bad Request. Size of Transactions is invalid.
+            Bad Request
           headers:
             X-RateLimit-Limit:
               $ref: '#/components/headers/X-RateLimit-Limit'
@@ -896,7 +904,7 @@ paths:
                 $ref: '#/components/schemas/ApiError'
               examples:
                 BadRequest-Example:
-                  $ref: '#/components/examples/BadRequest-Example'
+                  $ref: '#/components/examples/BadRequestRefinements-Example'
         '401':
           description: |
             Unauthorized. Access Token is invalid or expired.
@@ -935,16 +943,16 @@ paths:
       operationId: postTransactionsRefinements
       security:
         - BearerAuth: []
-      description: >-
-        Refine transactions by answering feedback questions. 
+      description: |
+        Recalculate the carbon footprint associated with a transaction by providing answers to specific questions. 
 
         The request must include the `transaction_id` and the `answer_id`. 
-        For questions with answers of the `selectable` type this is already sufficient.
-        For questions with answers of the `input` type the `input` value must also be included.
+        For questions with answers of the `SELECTABLE` type this is already sufficient.
+        For questions with answers of the `INPUT` type the `input` value must also be included.
         
         References to questions relevant for certain transaction can be retrieved by calling the [`GET /transactions/v1/refinements`](#operation/getTransactionsRefinements) endpoint with the corresponding transaction ID.
         The text version of the questions and possible answers can be obtained by calling the [`GET /transactions/v1/questions`](#operation/getTransactionsQuestions) endpoint (with the question IDs).
-      summary: Refine Transactions by Answering Feedback Questions
+      summary: Provide Answers for Transaction Refinement
       tags:
         - Transaction API
       requestBody:
@@ -953,6 +961,9 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/TransactionBulkAnswersRequest'
+            examples:
+              Synchronous Request for Answering Refinement Questions:
+                $ref: "#/components/examples/RefinementsAnswerFlightsRequestExample"
       responses:
         '200':
           description: Confirmation that answer is saved
@@ -967,6 +978,9 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/TransactionRefinementResponse'
+              examples:
+                Updated Calculation Result:
+                  $ref: '#/components/examples/RefinementsAnswerFlightsResponseExample'
         '400':
           description: |
             Bad Request. Size of Transactions is invalid.
@@ -1025,7 +1039,7 @@ paths:
       security:
         - BearerAuth: []
       summary: Get Questions and Answers for Transaction Refinement (by IDs)
-      description: >- 
+      description: | 
         Retrieve questions and answers that can be used to refine a transaction. 
 
         Calling this endpoint without the `question_ids` parameter will return the text of all questions that can be used for transaction refinement. 
@@ -1037,7 +1051,7 @@ paths:
         ["Get refinements for transactions"](#operation/getTransactionsRefinements) endpoint.
 
         > #### Note
-
+        >
         > This endpoint returns actual content pieces.
       tags:
         - Transaction API
@@ -1053,15 +1067,7 @@ paths:
             items:
               type: string
         - in: query
-          name: language_codes
-          description: ISO639-1 language code(s) to select output language(s) of the content piece(s).
-          required: false
-          style: form
-          explode: false
-          schema:
-            type: array
-            items:
-              type: string
+          $ref: '#/components/parameters/languageCodes'
       responses:
         '200':
           headers:
@@ -1135,7 +1141,7 @@ paths:
         - BearerAuth: []
       tags:
         - Content API
-      description: >-
+      description: |
         Get a specific Comparable or a list of Comparables or all Comparables for a given CO<sub>2</sub> footprint.
 
         The amount of CO<sub>2</sub> (`co2_footprint`) in grams to compare is required for calling this endpoint. 
@@ -1162,16 +1168,7 @@ paths:
             type: array
             items:
               type: string
-        - in: query
-          name: language_codes
-          description: ISO639-1 language code(s) to select output language(s) of the content piece(s).
-          required: false
-          style: form
-          explode: false
-          schema:
-            type: array
-            items:
-              type: string
+        - $ref: "#/components/parameters/languageCodes"
       responses:
         '200':
           headers:
@@ -1290,16 +1287,7 @@ paths:
             type: integer
             minimum: 1
             maximum: 10
-        - in: query
-          name: language_codes
-          description: ISO639-1 language code(s) to select output language(s) of the content piece(s).
-          required: false
-          style: form
-          explode: false
-          schema:
-            type: array
-            items:
-              type: string
+        - $ref: "#/components/parameters/languageCodes"
       responses:
         '200':
           headers:
@@ -1390,15 +1378,7 @@ paths:
             type: array
             items:
               type: string
-        - in: query
-          name: language_codes
-          description: ISO639-1 language code(s) to select output language(s) of the content piece(s).
-          required: false
-          style: form
-          explode: true
-          schema:
-            items:
-              type: string
+        - $ref: "#/components/parameters/languageCodes"
       responses:
         '200':
           headers:
@@ -1488,15 +1468,7 @@ paths:
             type: array
             items:
               type: string
-        - in: query
-          name: language_codes
-          description: ISO639-1 language code(s) to select output language(s) of the content piece(s).
-          required: false
-          style: form
-          explode: true
-          schema:
-            items:
-              type: string
+        - $ref: "#/components/parameters/languageCodes"
       responses:
         '200':
           headers:
@@ -1599,15 +1571,7 @@ paths:
             type: integer
             minimum: 1
             maximum: 10
-        - in: query
-          name: language_codes
-          description: ISO639-1 language code(s) to select output language(s) of the content piece(s).
-          required: false
-          style: form
-          explode: true
-          schema:
-            items:
-              type: string
+        - $ref: "#/components/parameters/languageCodes"
       responses:
         '200':
           headers:
@@ -1901,15 +1865,7 @@ paths:
               type: string
               minimum: 1
               maximum: 10
-        - in: query
-          name: language_codes
-          description: ISO639-1 language code(s) to select output language(s) of the content piece(s).
-          required: false
-          style: form
-          explode: true
-          schema:
-            items:
-              type: string
+        - $ref: "#/components/parameters/languageCodes"
       responses:
         '200':
           headers:
@@ -2011,16 +1967,7 @@ paths:
             type: integer
             minimum: 1
             maximum: 10
-        - in: query
-          name: language_codes
-          description: ISO639-1 language code(s) to select output language(s) of the content piece(s).
-          required: false
-          style: form
-          explode: true
-          schema:
-            type: array
-            items:
-              type: string
+        - $ref: "#/components/parameters/languageCodes"
       responses:
         '200':
           headers:
@@ -2122,16 +2069,7 @@ paths:
             type: array
             items:
               type: string
-        - in: query
-          name: language_codes
-          description: ISO639-1 language code(s) to select output language(s) of the content piece(s).
-          required: false
-          style: form
-          explode: false
-          schema:
-            type: array
-            items:
-              type: string
+        - $ref: "#/components/parameters/languageCodes"
       responses:
         '200':
           headers:
@@ -2186,18 +2124,18 @@ paths:
       operationId: postAccountDeleteAccounts
       security:
         - BearerAuth: []
-      description: >-
+      description: |
         By calling this endpoint all data for the given accounts is deleted from the ecolytiq platform.
         This includes
+          * Transaction data
+          * Profile data
 
-        * Transaction data
+        > #### Warning 
+        >
+        > There is no double confirmation! 
+        > Once the endpoint is called with valid `account_ids` the data related to those `account_ids` is **gone for good**.
 
-        * Profile data
-
-        > #### WARNING
         
-        > There is no double confirmation!
-        Once the endpoint is called with valid `account_ids` the data related to those `account_ids` is **gone for good**.
       summary: Delete all data of the given accounts
       tags:
         - Account API
@@ -2343,6 +2281,20 @@ components:
         type: string
         format: date-time
       description: The UTC date/time at which the current rate limit window resets.
+  
+  parameters:
+    languageCodes:
+        name: "language_codes"
+        in: "query"
+        description: ISO639-1 two-letter language code(s) to select output language(s) of the content piece(s).
+        required: false
+        style: form
+        explode: false
+        schema:
+          type: array
+          items:
+            type: string
+
 
   securitySchemes:
     BasicAuth:
@@ -2356,24 +2308,21 @@ components:
   examples:
     CO2ModelListExample:
       value:
-        request_id: 6bf3202ade4a7411
+        request_id: 6069c6b4a7ee26ae
         results:
           - code: DE
-            description: CO2 model of Germany.
+            description: DE Model
             currency: EUR
-            enabled: true
-          - code: FR
-            description: CO2 model of France.
-            currency: EUR
-            enabled: false
-          - code: UK
-            description: CO2 model of the United Kingdom.
-            currency: GBP
             enabled: true
           - code: US
-            description: CO2 model of the United States of America.
+            description: US Model
             currency: USD
+            enabled: true
+          - code: UK
+            description: UK Model
+            currency: GBP
             enabled: false
+
     CategorySystemListExample:
       value:
         request_id: 6bf3202ade4a7411
@@ -2444,6 +2393,72 @@ components:
               - language_code: en
                 text: Equal to a short-distance flight of 2 kilometres.
         errors: []
+
+    RefinementsUnavailableResponseExample:
+      value:
+        request_id: afb21a0fa3446220
+        results: []
+        errors: []
+    RefinementsUnansweredResponseExample:
+      value:
+        request_id: ce359f490283d703
+        results:
+          - transaction_id: 62c12ecc-17d7-469f-9ecc-b08e00eb8c90
+            question_id: 9ce39d4f-cb36-4e93-b896-822156c9c159
+            answer_id: null
+            input: null
+          - transaction_id: 62c12ecc-17d7-469f-9ecc-b08e00eb8c90
+            question_id: cf4bd26e-c1e6-40d5-8825-e12c0246a5d5
+            answer_id: null
+            input: null
+          - transaction_id: 62c12ecc-17d7-469f-9ecc-b08e00eb8c90
+            question_id: a94bc4b7-2664-43d3-97ee-1556bc6674ab
+            answer_id: null
+            input: null
+        errors: []
+    RefinementsAnsweredResponseExample:
+      value:
+        request_id: ce9904cad20e303d
+        results:
+          - transaction_id: 62c12ecc-17d7-469f-9ecc-b08e00eb8c90
+            question_id: 9ce39d4f-cb36-4e93-b896-822156c9c159
+            answer_id: 2f085fa7-aceb-4e35-9da5-cb39f8a46fca
+            input: null
+          - transaction_id: 62c12ecc-17d7-469f-9ecc-b08e00eb8c90
+            question_id: cf4bd26e-c1e6-40d5-8825-e12c0246a5d5
+            answer_id: 152a69f0-c6ff-4f7b-bfac-fe6e92773188
+            input: null
+          - transaction_id: 62c12ecc-17d7-469f-9ecc-b08e00eb8c90
+            question_id: a94bc4b7-2664-43d3-97ee-1556bc6674ab
+            answer_id: a8c60936-c821-48c6-8975-9f209423d9d9
+            input: null
+        errors: []
+
+
+    RefinementsAnswerFlightsRequestExample:
+      value:
+       transactions:
+        - transaction_id: 62c12ecc-17d7-469f-9ecc-b08e00eb8c90
+          answer_id: 2f085fa7-aceb-4e35-9da5-cb39f8a46fca
+        - transaction_id: 62c12ecc-17d7-469f-9ecc-b08e00eb8c90
+          answer_id: 152a69f0-c6ff-4f7b-bfac-fe6e92773188
+        - transaction_id: 62c12ecc-17d7-469f-9ecc-b08e00eb8c90
+          answer_id: a8c60936-c821-48c6-8975-9f209423d9d9
+    
+    RefinementsAnswerFlightsResponseExample:
+      value:
+        request_id: 71fb58b24f4180cf
+        results:
+          - transaction_id: 62c12ecc-17d7-469f-9ecc-b08e00eb8c90
+            category:
+              value: ex:transport.flight
+              system: ECOLYTIQ
+            co2_footprint:
+              value: 2120016
+              unit: g
+        errors: []
+        
+
     InsightsResponseExample:
       value:
         request_id: 6bf3202ade4a7411
@@ -2527,11 +2542,17 @@ components:
               - language_code: en
                 text: "The footprint of online shopping in our calculation is based on two aspects.\r\n\r\n1. Value for general consumption / \u20AC\r\n2. Value for delivery / \u20AC (Amazon)\r\n\r\n1. In purchasing an item online we need to regard the amount of CO\u00B2 that was necessary for the production, as referred to in our category 'general consumption'.\r\n\r\n2. On top of this general consumption value we have the process of delivering the package to your doorstep. We use Amazon data for this, as they are the major representative for deliveries.\r\n\r\nGenerally speaking, an online delivery can be more sustainable than a purchase in person. In our calculation for online shopping the value is higher than in general consumption. However, if you take your car to drive to the store and buy the same product, you are likely to have a larger footprint for the added fuel and car use."
         errors: []
+    BadRequestRefinements-Example:
+      value:
+        timestamp: "2022-12-02T15:40:48.413+00:00"
+        status: 400
+        error: "Bad Request"
+        path: "/transactions/v1/refinements"
     BadRequest-Example:
       value:
         request_id: 6bf3202ade4a7411
         error_code: "invalid.request"
-        error_description: "Size of transaction list must be between 1 and 100. But is null."
+        error_description: "Size of transaction list must be between 1 and 500. But is null."
     Unauthorized-Example:
       value:
         request_id: 6bf3202ade4a7411
@@ -2572,26 +2593,46 @@ components:
     Transaction-Request-Example-01:
       value:
         transactions:
-          - transaction_id: 71b24bdd-8aa4-4b8d-893b-4e74b05a1c98
-            account_id: 10547323-5594-45a7-a58f-3b8618770b7c
+          - transaction_id: "62c12ecc-17d7-469f-9ecc-b08e00eb8c90"
+            account_id: "a083e879-b37c-4307-9407-a9825d82800b"
             category:
-              system: MCC
-              value: "763"
-            co2_model: DE
-            amount:
-              value: -20.59
-              currency_code: EUR
-            datetime: "2021-01-17T12:45:00Z"
-          - transaction_id: fbc78d6b-122b-4ae3-8b5b-50f45230a39f
-            account_id: 10547323-5594-45a7-a58f-3b8618770b7c
+              system: "ECOLYTIQ"
+              value: "ex:transport.flight"
+            co2_model: "DE"
+            amount: 
+              value: -2854.00
+              currency_code: "EUR"
+            datetime: "2022-05-15T14:18:34Z"
+          - transaction_id: "fa2e6d26-fb0f-49f5-bc8d-ccedbc1ca084"
+            account_id: "a083e879-b37c-4307-9407-a9825d82800b"
             category:
-              system: MCC
-              value: "1711"
-            co2_model: DE
+              system: "ECOLYTIQ"
+              value: "ex:transport.servicestations"
             amount:
-              value: -20.59
-              currency_code: EUR
-            datetime: "2021-01-17T12:45:00Z"
+              value: -192.60
+              currency_code: "EUR"
+            co2_model: "DE"
+            datetime: "2022-09-05T11:18:34Z"
+    Transaction-Response-Example-01:
+      value:
+        request_id: "1d2dd5f3b23d3870"
+        results: 
+          - transaction_id: "62c12ecc-17d7-469f-9ecc-b08e00eb8c90"
+            category: 
+              value: "ex:transport.flight"
+              system: "ECOLYTIQ"
+            co2_footprint: 
+              value: 4486488
+              unit: "g"
+          - transaction_id: "fa2e6d26-fb0f-49f5-bc8d-ccedbc1ca084"
+            category: 
+              value: "ex:transport.servicestations"
+              system: "ECOLYTIQ"
+            co2_footprint: 
+              value: 348606
+              unit: "g"          
+        errors: []
+        
     Transaction-Request-Example-02:
       value:
         transactions:
@@ -2625,11 +2666,31 @@ components:
               address:
                 city: London
                 country_code: GB
+    Transaction-Response-Example-02: 
+      value:
+        request_id: 2bbf33459525a4e2
+        results:
+          - transaction_id: 71b24bdd-8aa4-4b8d-893b-4e74b05a1c98
+            category:
+              value: ex:misc
+              system: ECOLYTIQ
+            co2_footprint:
+              value: 16472
+              unit: g
+          - transaction_id: fbc78d6b-122b-4ae3-8b5b-50f45230a39f
+            category:
+              value: ex:food.groceries
+              system: ECOLYTIQ
+            co2_footprint:
+              value: 17666
+              unit: g
+        errors: []
+
     Transaction-Request-Example-03:
       value:
         async: true
         transactions:
-          - transaction_id: 71b24bdd-8aa4-4b8d-893b-4e74b05a1c98
+          - transaction_id: 46cd8390-ccda-4773-b59d-03b2e6d3d11d
             account_id: 10547323-5594-45a7-a58f-3b8618770b7c
             category:
               system: MCC
@@ -2644,7 +2705,7 @@ components:
               address:
                 city: Berlin
                 country_code: DE
-          - transaction_id: fbc78d6b-122b-4ae3-8b5b-50f45230a39f
+          - transaction_id: 21e41260-7107-4a65-804c-d9b4f5f25e3a
             account_id: 10547323-5594-45a7-a58f-3b8618770b7c
             category:
               system: MCC
@@ -2659,57 +2720,10 @@ components:
               address:
                 city: London
                 country_code: GB
-    Transaction-Response-Example-01:
-      value:
-        request_id: "6bf3202ade4a7411"
-        results:
-          - transaction_id: 71b24bdd-8aa4-4b8d-893b-4e74b05a1c98
-            account_id: 10547323-5594-45a7-a58f-3b8618770b7c
-            category:
-              system: ECOLYTIQ
-              value: "ex:misc"
-            co2_footprint:
-              unit: gram
-              value: 748
-          - transaction_id: fbc78d6b-122b-4ae3-8b5b-50f45230a39f
-            account_id: 10547323-5594-45a7-a58f-3b8618770b7c
-            category:
-              system: ECOLYTIQ
-              value: "ex:food.groceries"
-            co2_footprint:
-              unit: gram
-              value: 1260
-    Transaction-Response-Example-02:
-      value:
-        request_id: "6bf3202ade4a7411"
-        results:
-          - transaction_id: 71b24bdd-8aa4-4b8d-893b-4e74b05a1c98
-            account_id: 10547323-5594-45a7-a58f-3b8618770b7c
-            category:
-              system: ECOLYTIQ
-              value: "ex:misc"
-            co2_footprint:
-              unit: gram
-              value: 748
-            request:
-              transaction_id: 71b24bdd-8aa4-4b8d-893b-4e74b05a1c98
-              account_id: 10547323-5594-45a7-a58f-3b8618770b7c
-              amount:
-                value: -3.22
-                currency_code: EUR
-          - transaction_id: fbc78d6b-122b-4ae3-8b5b-50f45230a39f
-            account_id: 10547323-5594-45a7-a58f-3b8618770b7c
-            category:
-              system: ECOLYTIQ
-              value: "ex:food.groceries"
-            co2_footprint:
-              unit: gram
-              value: 1260
-        errors: []
-    
+
     Transaction-Response-Example-03:
       value:
-        request_id: "6bf3202ade4a7411"
+        request_id: "f90b728d538cf847"
     
     Transaction-Category-Update-Request-Example-01:
       value:
@@ -2927,17 +2941,18 @@ components:
       properties:
         code:
           type: string
-          description: Unique code of the co2 model.
+          description: Unique code of the CO<sub>2</sub> model.
         description:
           type: string
-          description: Description of the model
+          description: Description of the model, e.g., country or region for which is applicable.
         currency:
           type: string
           description: |
-            Currency of the model. The model can be applied only if the amount of the transaction is in the same currency. If another currency is used, the amount is internally converted to the model's currency.
+            ISO4217 three-letter currency code of the model. The model can be applied only if the amount of the transaction is in the same currency. 
+          x-add-descripion: If another currency is used, the amount is internally converted to the model's currency.
         enabled:
           type: boolean
-          description: True, iff the CO2 model is enabled.
+          description: True, iff the CO<sub>2</sub> model is enabled (e.g., with the active set of client credentials).
 
     CategorySystemListResponse:
       type: object
