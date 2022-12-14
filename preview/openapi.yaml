@@ -2810,9 +2810,12 @@ paths:
       operationId: updateStatus
       security:
         - BearerAuth: []
-      description: >-
-        Use this endpoint to update the donation status.        
-      summary: Update Donation Status
+      description: |
+        Use this endpoint to update the donation status.   
+        
+        > #### Note:
+        > This endpoint is available for the donation processor only.
+      summary: "[PREVIEW] Update Donation Status"
       tags:
         - "[PREVIEW] Offsetting API"
       requestBody:
