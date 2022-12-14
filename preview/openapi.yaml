@@ -2640,7 +2640,7 @@ paths:
       description: |
         Use this endpoint to request a donation receipt for accounts. 
         
-        This endpoint is used to send the necessary data to create the donation receipt to the donation processor.
+        This endpoint is used to send the necessary data to create the donation receipt to the carbon Offsetting provider.
         Once available, the donation receipts can be retrieved via the [retrieve donation receipts](#operation/getDonationReceipts) endpoint.
       summary: "[PREVIEW] Request Donation Receipts"
       tags:
@@ -2814,7 +2814,7 @@ paths:
         Use this endpoint to update the donation status.   
         
         > #### Note:
-        > This endpoint is available for the donation processor only.
+        > This endpoint is available for the carbon Offsetting provider only.
       summary: "[PREVIEW] Update Donation Status"
       tags:
         - "[PREVIEW] Offsetting API"
