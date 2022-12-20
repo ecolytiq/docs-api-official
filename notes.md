@@ -7,8 +7,15 @@ Use [openapi2postmanv2](https://www.npmjs.com/package/openapi-to-postmanv2) to c
 See [List of Options](https://github.com/postmanlabs/openapi-to-postman/blob/HEAD/OPTIONS.md) as for why
 
 ```console
-$ openapi2postmanv2 -s <openapi-file> - o postman/<timestamp>_ecolytiq_Sandbox.postman_collection.json -O optimizeConversion=false,stackLimit=20 
+$ openapi2postmanv2 -s <openapi-file> -o postman/<timestamp>_ecolytiq_Sandbox.postman_collection.json -O optimizeConversion=false,stackLimit=20 
 ```
+
+# Include "Test" to automatically store the bearer token
+
+```javascript
+pm.collectionVariables.set("bearerToken", pm.response.json().access_token);
+```
+
 
 # Some example data
 
