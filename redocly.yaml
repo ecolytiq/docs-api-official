@@ -1,0 +1,31 @@
+features.openapi: 
+  theme: 
+    colors: 
+      accent: 
+        contrastText: "#ffffff"
+        dark: "#2d424d"
+        light: "#f6e41e"
+        main: "#80b49e"
+      border: 
+        dark: "#2d424d"
+        light: "#80b49e"
+      error: 
+        dark: "#311716"
+        light: "#fde3e2"
+        contrastText: "#2d424d"
+        main: "#f5736c"
+      http: 
+        basic: "#333333"
+        get: "#80b49e"
+        post: "#2d424d"
+      primary: 
+        contrastText: "#333333"
+        dark: "#2d424d"
+        light: "#f6e41e"
+        main: "#80b49e"
+    rightPanel: 
+      backgroundColor: "#2d424d"
+      panelBackgroundColor: "#2d424d"
+      textColor: "#cccccc"
+
+        
