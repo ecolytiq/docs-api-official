@@ -66,10 +66,14 @@ tags:
          [`GET /transactions/v1/refinements?transaction_ids=<transaction_ids>`](#operation/getTransactionsRefinements)
       3. Retrieve the content (questions and answers) associated with the refinement question and answer IDs:          
          [`GET /transactions/v1/questions?question_ids=<question_ids>`](#operation/getTransactionsQuestions)
-         > #### Note
-         > This step can also be executed in the very beginning omitting the `question_ids` parameter.
-         In that case, **all available** questions are returned. 
-         The result can then be cached at the client side.
+         
+         <div class="admonition tip">
+         
+           This step can also be executed in the very beginning omitting the `question_ids` parameter.
+           In that case, **all available** questions are returned. 
+           The result can then be cached at the client side.
+        
+        </div>
       
       4. Have the end customer answer the refinement question(s):  
          This must be handled in the client application
@@ -257,24 +261,30 @@ tags:
       We recommend to regularly submit the content ratings back to ecolytiq so that we can improve the content quality.
 
 
-      > #### Please Note 
-      >
-      > This endpoint must be called on the ecolytiq SaaS platform which is accessible over the public internet. 
-      > Is may be necessary to obtain a special pair of `client_id` and `client_secret` credentials for the SaaS platform to use this endpoint.
-      > No PII is transmitted via this endpoint.
+      <div class="admonition important">
+
+        This endpoint must be called on the ecolytiq SaaS platform which is accessible over the public internet. 
+        Is may be necessary to obtain a special pair of `client_id` and `client_secret` credentials for the SaaS platform to use this endpoint.
+        No PII is transmitted via this endpoint.
+
+      </div>
   - name: "[PREVIEW] Offsetting API"
     description: |
-      > #### Note:
-      > 
-      > This preview for the carbon footprint offsetting functionality of the ecoAction package is **work in progress**.
-      > **Some things might change!**
+      <div class="admonition caution">
+
+        This preview for the carbon footprint offsetting functionality of the ecoAction package is **work in progress**.
+        **Some things might change!**
+
+       </div>
 
       Use these endpoints for handling carbon footprint offsets.
 
-      > #### Note:
-      > 
-      > These endpoints are only meant for handling the data about carbon footprint offsets between a Customer (e.g., bank) and a carbon Offsetting provider.
-      > They are not meant to initiate actual flow of offsetting payments between the Customer and the Offsetting provider!
+      <div class="admonition note">
+
+        These endpoints are only meant for handling the data about carbon footprint offsets between a Customer (e.g., bank) and a carbon Offsetting provider.
+        They are not meant to initiate actual flow of offsetting payments between the Customer and the Offsetting provider!
+      
+      </div>
     
 
 
@@ -522,14 +532,16 @@ paths:
         The transactions must also be assigned to individual accounts.
         This allows using the account's [profile data](#tag/Profiling-API) for more accurate calculations.
         
-        > #### IMPORTANT
-        >
-        > Although ecolytiq GmbH follows data protection and data security best practices and is compliant with ISO27001 and PCI-DSS, actual bank account numbers, personal account numbers (PAN, i.e., credit card numbers), or other personally identifiable information (PII) **must not be used as `account_id`**.
-        >
-        > Pseudonymization of account information and maintaining the list relating the end customer's PII to the `account_id`s used on the ecolytiq platform **must be handled on the customer side**.
-        >
-        > ecolytiq GmbH cannot be held liable for any loss, leak, unauthorized publication of PII which are a direct result of violating
+        <div class="admonition important">
+
+          Although ecolytiq GmbH follows data protection and data security best practices and is compliant with ISO27001 and PCI-DSS, actual bank account numbers, personal account numbers (PAN, i.e., credit card numbers), or other personally identifiable information (PII) **must not be used as `account_id`**.
         
+          Pseudonymization of account information and maintaining the list relating the end customer's PII to the `account_id`s used on the ecolytiq platform **must be handled on the customer side**.
+        
+          ecolytiq GmbH cannot be held liable for any loss, leak, unauthorized publication of PII which are a direct result of violating
+        
+        </div>
+
         We recommend using [Universally Unique Identifier](https://en.wikipedia.org/wiki/Universally_unique_identifier) for the `account_id`s.
 
         ### Immediate Response
@@ -544,6 +556,12 @@ paths:
         In that case the `async` flag in the request has to be set to `true`.
         The server will only respond with a `202` status, i.e., accept the request, but will que the transactions for later processing.
         The calculation result can later be requested by calling the [`GET /transactions/v1/transactions`](#operation/getTransactionsTransactions) endpoint with the corresponding `transaction_id`s.
+
+        <div class="admonition tip">
+
+          Asynchronous requests are useful for bulk transmission of transactions if the result is not immediately required.
+        
+        </div>
       summary: Process transactions
       tags:
         - Transaction API
@@ -860,11 +878,13 @@ paths:
         Calling this endpoint with valid transaction IDs will return a list of suitable refinement question IDs for the transactions in request. 
         If the question has already been answered the reference to the corresponding answer (or the value if it is not a predefined answer) will be also returned.
 
-        > #### Note
+        <div class="admonition important">
 
-        > Calling this endpoint returns only references to content pieces (i.e., content IDs for questions and/or answers).
+          Calling this endpoint returns only references to content pieces (i.e., content IDs for questions and/or answers).
 
-        > The mapping of question IDs / answer IDs and their text representation can be obtained from the [`GET /transactions/v1/questions`](#operation/getTransactionsQuestions) endpoint
+          The mapping of question IDs / answer IDs and their text representation can be obtained from the [`GET /transactions/v1/questions`](#operation/getTransactionsQuestions) endpoint
+        
+        </div>
       tags:
         - Transaction API
       parameters:
@@ -1064,9 +1084,11 @@ paths:
         To get a list of references to questions relevant for a specific transaction, please use the 
         ["Get refinements for transactions"](#operation/getTransactionsRefinements) endpoint.
 
-        > #### Note
-        >
-        > This endpoint returns actual content pieces.
+        <div class="admonition note">
+
+          This endpoint returns actual content pieces.
+
+        </div>
       tags:
         - Transaction API
       parameters:
@@ -1667,10 +1689,12 @@ paths:
 
         The Insights can also be restricted to specific [categories](#operation/getInfoCategories) (see [Info API](#tag/Info-API)).
 
-        > #### Note
+        <div class="admonition important">
 
-        > This endpoint only returns references (i.e., content IDs) to the content.
-        The actual content can be retrieved via the [content API](#tag/Content-API).
+          This endpoint only returns references (i.e., content IDs) to the content.
+          The actual content can be retrieved via the [content API](#tag/Content-API).
+        
+        </div>
       summary: Get Insights (for accounts)
       parameters:
         - in: query
@@ -1772,10 +1796,12 @@ paths:
       description: >-
         Get Contextual Insights (for accounts)
 
-        > #### Note
+        <div class="admonition important">
 
-        > This endpoint only returns references (i.e., content IDs) to the content.
-        The actual content can be retrieved via the [content API](#tag/Content-API).
+          This endpoint only returns references (i.e., content IDs) to the content.
+          The actual content can be retrieved via the [content API](#tag/Content-API).
+        
+        </div>
       summary: Get Contextual Insights (for accounts)
       parameters:
         - in: query
@@ -2067,9 +2093,11 @@ paths:
 
         The questions can be retrieved in multiple languages using the `language_codes` parameter.
 
-        > #### Note:
-
-        > This endpoint returns the actual content.
+        <div class="admonition note">
+        
+          This endpoint returns the actual content.
+        
+        </div>
       tags:
         - Profiling API
       parameters:
@@ -2144,10 +2172,12 @@ paths:
         * Transaction data
         * Profile data
 
-        > #### Warning 
-        >
-        > There is no double confirmation!
-        > Once the endpoint is called with valid `account_ids` the data related to those `account_ids` is **gone for good**.
+        <div class="admonition warning"> 
+
+          There is no double confirmation!
+          Once the endpoint is called with valid `account_ids` the data related to those `account_ids` is **gone for good**.
+        
+        </div>
 
         
       summary: Delete all data of the given accounts
@@ -2811,10 +2841,14 @@ paths:
       security:
         - BearerAuth: []
       description: |
-        Use this endpoint to update the donation status.   
+        Use this endpoint to update the donation status.
         
-        > #### Note:
-        > This endpoint is available for the carbon Offsetting provider only.
+        <div class="admonition note">
+
+          This endpoint is available for the carbon Offsetting provider only.
+        
+        </div>
+        
       summary: "[PREVIEW] Update Donation Status"
       tags:
         - "[PREVIEW] Offsetting API"
@@ -2899,6 +2933,9 @@ components:
           type: array
           items:
             type: string
+        example: 
+          - de
+          - en
             
   headers:
     X-RateLimit-Limit:

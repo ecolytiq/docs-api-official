@@ -1,0 +1,121 @@
+:root {
+    --note-color: #80b49e;
+    --warning-color: #f5736c;
+    --caution-color: #f99040;
+    --tip-color: #f1de7c;
+    --important-color: #add6d9;
+}
+
+.admonition {
+    padding: 0.5em;
+    /* padding-left:4em; */
+    margin-bottom: 1.2em;
+    margin-top: 1.2em;
+    margin-left: 3.5em;
+    /* border: 0.1em solid transparent; */
+    border-left: 0.25em solid transparent;
+    position: relative;
+    min-height: 3em;
+    
+}
+
+.admonition::before {
+    /* margin: 1em 0.25em;
+    /* text-transform: uppercase; */
+    padding-left: 0.1em;
+    /* border-right: 0.05em solid;
+    border-style: hidden hidden solid; */ 
+    display: inline;
+    float: left middle;
+    position: absolute;
+    left: -1.45em;
+    /* top: 0em; */
+    font-size: 300%;
+    /* width: 6em; */
+    text-align: right;
+    vertical-align: top;
+    width: 1.1em;
+    /* height: inherit; */
+    /* font-size: 5em; */
+}
+
+.admonition > p {
+    margin-top: 0em;
+}
+
+/* .admonition::content {
+    display: block;
+    float: right;
+} */
+
+.note {
+    border-color: var(--note-color);
+    /* background-color: #f6fffe; */
+}
+
+.note::before {
+    content: "\f05a" / "Note: ";
+    font-family: "Font Awesome 5 Free";
+    color: var(--note-color);
+    border-color: var(--note-color);
+
+}
+
+.note .title {
+    color: var(--note-color);
+    border-color: var(--note-color);
+}
+
+
+.warning {
+    border-color: var(--warning-color);
+    /* background-color: #f6fffe; */
+}
+
+.warning::before {
+    content: "\f071" / "Warning: ";
+    font-family: "Font Awesome 5 Free";
+    color: var(--warning-color);
+    border-color: var(--warning-color);
+}
+
+.warning .title {
+    color: var(--warning-color);
+    border-color: var(--warning-color);
+}
+
+.caution {
+    border-color: var(--caution-color);
+    /* background-color: #f6fffe; */
+}
+
+.caution::before {
+    content: "\f06d" / "Caution: ";
+    font-family: "Font Awesome 5 Free";
+    color: var(--caution-color);
+    border-color: var(--caution-color);
+}
+
+.tip {
+    border-color: var(--tip-color);
+    /* background-color: #f6fffe; */
+}
+
+.tip::before {
+    content: "\f0eb" / "Tip: ";
+    font-family: "Font Awesome 5 Free";
+    color: var(--tip-color);
+    border-color: var(--tip-color);
+}
+
+.important {
+    border-color: var(--important-color);
+    /* background-color: #f6fffe; */
+}
+
+.important::before {
+    content: "\f06a" / "Important: ";
+    font-family: "Font Awesome 5 Free";
+    color: var(--important-color);
+    border-color: var(--important-color);
+}

@@ -1,2 +1,3 @@
 stylesheets:
+  - './static/styles.css'
   - 'https://developer.ecolytiq.com/static/fonts.css'
