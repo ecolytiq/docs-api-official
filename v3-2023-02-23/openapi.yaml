@@ -204,7 +204,7 @@ tags:
 
       ## Download
 
-      <a href ="http://developer.ecolytiq.com/v3-2022-12-15/postman/ecolytiq_Sandbox.postman_collection.json" download>Sandbox.postman_collection.json</a>
+      <a href ="http://developer.ecolytiq.com/v3-2023-02-23/postman/ecolytiq_Sandbox.postman_collection.json" download>Sandbox.postman_collection.json</a>
 
   - name: Info API
     description: |

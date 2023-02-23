@@ -1,7 +1,7 @@
 {
   "item": [
     {
-      "id": "4cb8817c-2891-4cdb-8f9d-11c46222e950",
+      "id": "cc643acd-c87f-405e-bf4b-48a3ca71007d",
       "name": "General Information",
       "description": {
         "content": "This document describes the API of the ecolytiq Sustainability-as-a-Service&reg; platform.\n\necolytiq has developed a method of assigning financial (bank) transactions with a CO<sub>2</sub> footprint therefore allowing financial institutions to inform their end customers about the ecological impact of their transactions. \nThe calculation is based on the amount of the (outgoing) transaction and a category of the transaction which are both components of various region-specific calculation models.\n\n## Basic Requirements\n\nTo use the ecolytiq platform a customer is required to have a working pair of client credentials consisting of a `client_id` and a `client_secret`.\nThose credentials are provided by ecolytiq after a contract is signed.\n\nThe customer is responsible for providing the client application that manages the integration of the ecolytiq services into their systems.\n\nCertain features may not be available to or necessary for all customers. \nHence, the set of enabled features is bound to a set of client credentials.\n\n## Information on Available and Enabled Features\n\nAs not all features may be relevant to all customers the feature set can vary for different client credentials.\nThe ecolytiq platform provides an [info API](#tag/Info-API) to get information about the features that are available (in general) and accessible/enabled (for the customer).\n\n## Processing of Financial Transactions\n\n### Transaction Enrichment\n\nThe core functionality is enriching the transactions with the ecological footprint (at present: CO<sub>2</sub>) related to the purchase. \nThis can be achieved by sending transactions to the [transaction API](#tags/Transaction-API). \n\nThe ecolytiq platform has the ability to immediately return the calculation result (\"synchronous processing\") or to only accept the transactions and schedule the calculations until a later point in time (\"asynchronous processing\").\nIn any case the [result of the calculation](#operation/getTransactionsTransactions) can also be retrieved at a later point in time.\n\n### Refinement of Transactions\n\nIn some cases the amount of the transaction is not a good indicator on the ecological footprint related to the transaction.\nIn such instances the transactions can be refined by [answering transaction-specific questions](#operation/postTransactionsQuestions) (e.g., \"How many liters was your refill at the gas station?\").\n\n### Transaction Processing and Refinement Workflow\n\nA suggested workflow for processing an end customer's transaction looks as follows:\n\n1. Send the transaction to the ecolytiq service for processing:          \n   [`POST /transactions/v1/transactions`](#operation/postTransactionTransaction)\n\n2. Request a list of references to refinement questions that are available for this transaction:  \n   [`GET /transactions/v1/refinements?transaction_ids=<transaction_ids>`](#operation/getTransactionsRefinements)\n3. Retrieve the content (questions and answers) associated with the refinement question and answer IDs:          \n   [`GET /transactions/v1/questions?question_ids=<question_ids>`](#operation/getTransactionsQuestions)\n   > #### Note\n   > This step can also be executed in the very beginning omitting the `question_ids` parameter.\n   In that case, **all available** questions are returned. \n   The result can then be cached at the client side.\n\n4. Have the end customer answer the refinement question(s):  \n   This must be handled in the client application\n\n5. Send the answers to the refinement questions to the ecolytiq platform:  \n   [`POST /transactions/v1/refinements`](#operation/postTransactionsRefinements)\n\n6. Retrieve the calculation result for the refined transaction:  \n   [`GET /transactions/v1/transactions?transaction_ids=<transaction_ids>`](#operation/getTransactionsTransactions) \n\n### Account Profiling\n\nFor some types of purchases it can be helpful to have additional knowledge about the end customer. \nFor example, the supermarket shopping basket of a person regularly having meat on their plated differs from that of a vegan person. \nIt is possible to request such information for each individual transaction.\nHowever, it can be easier to attribute such information to an end customer once.\nFor this, the [profiling API](#tag/Profiling-API) is available.\n\n## Educational and Informational Content\n\nAnother important feature of the ecolytiq Sustainability-as-a-Service&reg; platform is the educational content that allows end customers to gain more knowledge and and awareness of the ecological footprint created by their purchase decisions.\nIn the long term informing and educating end customers about their individual impact will help making them more literate choices when consuming goods and services. \n\nAt present, ecolytiq offers the following types of content: \n\n  * **Comparables** are small examples that for a given CO<sub>2</sub> footprint show in a concrete and easily graspable way how much of an impact that is.\n\n  * **Insights** are short and simple tips and tricks that help end customers to reduce their impact.\n    In combination with the [profiling API](#tag/Profiling-API) the Insights shown are even more relevant to the end customer.\n\n  * **Explanations** are content pieces that give information about the ecolytiq calculation method.\n\nThe [profiling API](#tag/Profiling-API) delivers references to the content pieces.\nUsing the [content API](#tag/Content-API) the texts of the educational and informational content pieces can be fetched various different languages.\n\n## Operations Options\n\n### SaaS Solution\n\nThe ecolytiq platform is available as Software-as-a-Service solution and accessible via public internet. \nThe customer is required to build and maintain the client application. Operations of the ecolytiq platform is handled by ecolytiq GmbH.\n\nThere are several options available for our customers:\n\n  * The general SaaS platform:  \n    This is a high-availability SaaS platform managed and operated by ecolytiq.\n    It is not specific to individual customers, i.e., multiple clients may be operated on the same platform. \n    However, there is a strict separation between each clients data. \n    Data visibility between different clients is excluded on a technical level.\n\n  * Dedicated SaaS platform:  \n    This is a high-availability SaaS platform managed and operated by ecolytiq that is restricted to a specific customer.\n    No other customers are onboarded or hosted on a dedicated SaaS platform. \n    Depending on customer requirements the dedicated SaaS platform can be hosted using a specific cloud service provider.\n\n### On-Premises Solution\n\nShould it be necessary due to customer regulations the ecolytiq platform can also be hosted on customer's premises or by the customer with their preferred cloud service provider. \nThis has the advantage that the data never leaves the customer's realm of operations.\nHowever, management and operation of the ecolytiq platform is then in the responsibility of the customer. \n\nThe highly qualified ecolytiq staff can support the customer in setting up the ecolytiq platform as on-prem solution.\n\n## Security and Data Protection\n\nWe as ecolytiq GmbH adhere to and are compliant with all relevant data protection standards, such as GDPR, ISO27001, or PCI-DSS. \nOur platforms are regularly checked for security vulnerabilities.\n\nHowever, financial data contains highly sensitive information about individuals. Therefore, our customers **are not allowed** to send actual personally identifiable information to the ecolytiq SaaS platform.\nThis is especially important for account identifiers -- **Do not use actual bank account numbers or PANs** (personal account numbers, i.e., credit card numbers) as account identifiers!\n\nAccount data must be pseudonymized. We recommend using [UUIDs](https://en.wikipedia.org/wiki/Universally_unique_identifier) as account identifiers. \nMapping the account identifier to the end customer account **must be handled on the customer client application side**.\n",
@@ -11,7 +11,7 @@
       "event": []
     },
     {
-      "id": "d23593ea-ef2e-465b-a6f3-b568e1554996",
+      "id": "c93c20d2-cd11-4a0c-a71e-2c02001e8ac8",
       "name": "Authentication",
       "description": {
         "content": "",
@@ -19,7 +19,7 @@
       },
       "item": [
         {
-          "id": "3847efd8-1fd8-4251-a868-9fa247c885c6",
+          "id": "386c54a7-b789-495e-9132-4f513202e150",
           "name": "Request Access Token",
           "request": {
             "name": "Request Access Token",
@@ -84,7 +84,7 @@
           },
           "response": [
             {
-              "id": "1f4f95d2-10ee-4794-96e3-8dbe17575d37",
+              "id": "12e61490-83db-4a4f-8f6d-1ba31de927c2",
               "name": "AccessToken and Lifetime\n",
               "originalRequest": {
                 "url": {
@@ -146,7 +146,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "4a71fe94-9333-4790-ae99-d9e42e820c52",
+              "id": "fa44ec75-bb4a-4256-b506-f9d4ac1ffd73",
               "name": "Unauthorized. Invalid or expired Client Credentials\n",
               "originalRequest": {
                 "url": {
@@ -233,7 +233,7 @@
       "event": []
     },
     {
-      "id": "fa39ec66-d5ab-49dd-a902-73eadaf54d9e",
+      "id": "ffbadfa7-e6b1-4133-94d2-82218997e60f",
       "name": "Errors",
       "description": {
         "content": "## HTTP Status Code Summary\n| Status Code                        | Description                                                                                      |\n|------------------------------------|--------------------------------------------------------------------------------------------------|\n| 200 - OK                           | Everything worked as expected.                                                                   |\n| 201 - Created                      | Everything worked as expected. Resource created.                                                 |\n| 204 - No Content                   | Everything worked as expected.                                                                   |\n| 400 - Bad Request                  | The request was unacceptable, often due to missing a required parameter.                         |\n| 401 - Unauthorized                 | No valid Access Token provided.                                                                  |\n| 403 - Forbidden                    | The API key doesn't have permissions to perform the request.                                     |\n| 404 - Not Found                    | The requested resource doesn't exist.                                                            |\n| 409 - Conflict                     | The request conflicts with another request (perhaps due to using the same idempotent key).       |\n| 422 - Unprocessable Entity         | Unprocessable Entity                                                                             |\n| 429 - Too Many Requests            | Too many requests hit the API too quickly. We recommend an exponential backoff of your requests. |\n| 500, 502, 503, 504 - Server Errors | Something went wrong on ecolytiq's end.                                                          |\n",
@@ -243,7 +243,7 @@
       "event": []
     },
     {
-      "id": "2ffd47ec-9787-4b39-afef-09c51639f38a",
+      "id": "f2b76e2c-88cc-40dc-98ad-bcb309bf628b",
       "name": "Rate Limit",
       "description": {
         "content": "In each response you find Rate Limit Information fields like `X-RateLimit-Limit`, `X-RateLimit-Remaining` and `X-RateLimit-Reset`.\n\n## Rate Limit Headers\n| Header                | Description                                                         |\n|-----------------------|---------------------------------------------------------------------|\n| X-RateLimit-Limit     | Number of requests for the specific endpoint                        |\n| X-RateLimit-Remaining | Number of ramining requests for the specific endpoint               |\n| X-RateLimit-Reset     | Date-Time, when X-RateLimit-Remaining is reset to X-RateLimit-Limit |\n\nAt the moment we do not use rate limits. However, we reserve the right to use them. This will be announced.\n",
@@ -253,7 +253,7 @@
       "event": []
     },
     {
-      "id": "c71495ac-ff45-4bcd-b126-99defe26cee0",
+      "id": "ba208019-ddb9-4245-9ff7-1b3d5e4232ca",
       "name": "Info API",
       "description": {
         "content": "The info API can be used to obtain information about the ecolytiq platform configuration and available features. \nIt offers a simple and reliable method to verify, \n\n* Which [country models for CO<sub>2</sub>](#operation/getInfoCo2models) footprint calculation are available and accessible to the requestor,\n\n* Which [categorization systems](#operation/getInfoCategorySystems) for transactions are available and accessible for transaction enrichment,\n\n* For some categorization systems, which [categories](#operation/getInfoCategories) are available\n",
@@ -261,7 +261,7 @@
       },
       "item": [
         {
-          "id": "41d7715e-d1e3-4e5e-b07e-1d93068a2551",
+          "id": "3fd869a6-d213-49f0-9219-ead9231b42b5",
           "name": "List of CO2 models",
           "request": {
             "name": "List of CO2 models",
@@ -300,7 +300,7 @@
           },
           "response": [
             {
-              "id": "8472440f-c40e-481d-9e19-d304ef55b42b",
+              "id": "fafa66c7-dc3b-4af4-8133-54340b6fa89b",
               "name": "List of supported and enabled CO<sub>2</sub> models.\n",
               "originalRequest": {
                 "url": {
@@ -335,19 +335,19 @@
                   "disabled": false,
                   "description": "Request limit per hour.",
                   "key": "X-RateLimit-Limit",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The number of requests left for the time window.",
                   "key": "X-RateLimit-Remaining",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The UTC date/time at which the current rate limit window resets.",
                   "key": "X-RateLimit-Reset",
-                  "value": "2014-02-23T12:35:21.404Z"
+                  "value": "1964-10-26T17:52:49.318Z"
                 },
                 {
                   "key": "Content-Type",
@@ -359,7 +359,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "93e9ee55-1fee-4b9c-92ea-42e039f7548c",
+              "id": "1d2880fa-0910-4940-9cbd-dacd6acaabc1",
               "name": "Unauthorized. Access Token is invalid or expired.\n",
               "originalRequest": {
                 "url": {
@@ -394,19 +394,19 @@
                   "disabled": false,
                   "description": "Request limit per hour.",
                   "key": "X-RateLimit-Limit",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The number of requests left for the time window.",
                   "key": "X-RateLimit-Remaining",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The UTC date/time at which the current rate limit window resets.",
                   "key": "X-RateLimit-Reset",
-                  "value": "2014-02-23T12:35:21.404Z"
+                  "value": "1964-10-26T17:52:49.318Z"
                 },
                 {
                   "key": "Content-Type",
@@ -418,7 +418,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "31839339-6bca-432f-b450-732837d5e9d8",
+              "id": "8911af9c-f87b-41cb-bada-c6ae8de50c1c",
               "name": "Rate Limit exceeded.\n",
               "originalRequest": {
                 "url": {
@@ -453,19 +453,19 @@
                   "disabled": false,
                   "description": "Request limit per hour.",
                   "key": "X-RateLimit-Limit",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The number of requests left for the time window.",
                   "key": "X-RateLimit-Remaining",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The UTC date/time at which the current rate limit window resets.",
                   "key": "X-RateLimit-Reset",
-                  "value": "2014-02-23T12:35:21.404Z"
+                  "value": "1964-10-26T17:52:49.318Z"
                 },
                 {
                   "key": "Content-Type",
@@ -483,7 +483,7 @@
           }
         },
         {
-          "id": "dbfa9bb9-e76f-450f-9172-e9bfa28f9c7c",
+          "id": "c023a4a1-c55b-430b-8db2-629fd4ca0c59",
           "name": "List of category systems",
           "request": {
             "name": "List of category systems",
@@ -522,7 +522,7 @@
           },
           "response": [
             {
-              "id": "80f8ee69-de6b-4494-bb89-ff963c7338ef",
+              "id": "3f66c288-0583-4ff9-8e74-f147965147ba",
               "name": "List of supported and enabled category systems.\n",
               "originalRequest": {
                 "url": {
@@ -557,19 +557,19 @@
                   "disabled": false,
                   "description": "Request limit per hour.",
                   "key": "X-RateLimit-Limit",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The number of requests left for the time window.",
                   "key": "X-RateLimit-Remaining",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The UTC date/time at which the current rate limit window resets.",
                   "key": "X-RateLimit-Reset",
-                  "value": "2014-02-23T12:35:21.404Z"
+                  "value": "1964-10-26T17:52:49.318Z"
                 },
                 {
                   "key": "Content-Type",
@@ -581,7 +581,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "a261c2cb-69e4-4b9f-bd7c-50b00554cee0",
+              "id": "87b83cfb-1038-4628-8115-edd4321b7724",
               "name": "Unauthorized. Access Token is invalid or expired.\n",
               "originalRequest": {
                 "url": {
@@ -616,19 +616,19 @@
                   "disabled": false,
                   "description": "Request limit per hour.",
                   "key": "X-RateLimit-Limit",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The number of requests left for the time window.",
                   "key": "X-RateLimit-Remaining",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The UTC date/time at which the current rate limit window resets.",
                   "key": "X-RateLimit-Reset",
-                  "value": "2014-02-23T12:35:21.404Z"
+                  "value": "1964-10-26T17:52:49.318Z"
                 },
                 {
                   "key": "Content-Type",
@@ -640,7 +640,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "bef1e38b-b0d9-4c91-97f1-500c1e67fe05",
+              "id": "f6dd0dfe-f1ee-4270-b8f3-05de8b86f63c",
               "name": "Rate Limit exceeded.\n",
               "originalRequest": {
                 "url": {
@@ -675,19 +675,19 @@
                   "disabled": false,
                   "description": "Request limit per hour.",
                   "key": "X-RateLimit-Limit",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The number of requests left for the time window.",
                   "key": "X-RateLimit-Remaining",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The UTC date/time at which the current rate limit window resets.",
                   "key": "X-RateLimit-Reset",
-                  "value": "2014-02-23T12:35:21.404Z"
+                  "value": "1964-10-26T17:52:49.318Z"
                 },
                 {
                   "key": "Content-Type",
@@ -705,7 +705,7 @@
           }
         },
         {
-          "id": "ead60be1-e1c4-4ffb-a73c-5f2611705572",
+          "id": "fbe573ff-c1a5-4867-a265-0036eba2e6be",
           "name": "List of categories",
           "request": {
             "name": "List of categories",
@@ -744,7 +744,7 @@
           },
           "response": [
             {
-              "id": "c2d63d22-aaa0-45cd-8d86-e618b3f8164c",
+              "id": "43b793e4-a89e-4162-b16b-6912d1948ec3",
               "name": "List of categories\n",
               "originalRequest": {
                 "url": {
@@ -779,19 +779,19 @@
                   "disabled": false,
                   "description": "Request limit per hour.",
                   "key": "X-RateLimit-Limit",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The number of requests left for the time window.",
                   "key": "X-RateLimit-Remaining",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The UTC date/time at which the current rate limit window resets.",
                   "key": "X-RateLimit-Reset",
-                  "value": "2014-02-23T12:35:21.404Z"
+                  "value": "1964-10-26T17:52:49.318Z"
                 },
                 {
                   "key": "Content-Type",
@@ -803,7 +803,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "52c0405d-e723-4f6d-9f15-302de1cf8fa5",
+              "id": "d16e6dff-aa69-4e38-95c2-25b1f4b8a96a",
               "name": "Unauthorized. Access Token is invalid or expired.\n",
               "originalRequest": {
                 "url": {
@@ -838,19 +838,19 @@
                   "disabled": false,
                   "description": "Request limit per hour.",
                   "key": "X-RateLimit-Limit",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The number of requests left for the time window.",
                   "key": "X-RateLimit-Remaining",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The UTC date/time at which the current rate limit window resets.",
                   "key": "X-RateLimit-Reset",
-                  "value": "2014-02-23T12:35:21.404Z"
+                  "value": "1964-10-26T17:52:49.318Z"
                 },
                 {
                   "key": "Content-Type",
@@ -862,7 +862,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "e5efdf02-9b8c-44c3-9026-ee3bbb796dc0",
+              "id": "87ebc6fd-d5f5-4268-86a0-500fd36f69f0",
               "name": "Rate Limit exceeded.\n",
               "originalRequest": {
                 "url": {
@@ -897,19 +897,19 @@
                   "disabled": false,
                   "description": "Request limit per hour.",
                   "key": "X-RateLimit-Limit",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The number of requests left for the time window.",
                   "key": "X-RateLimit-Remaining",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The UTC date/time at which the current rate limit window resets.",
                   "key": "X-RateLimit-Reset",
-                  "value": "2014-02-23T12:35:21.404Z"
+                  "value": "1964-10-26T17:52:49.318Z"
                 },
                 {
                   "key": "Content-Type",
@@ -930,7 +930,7 @@
       "event": []
     },
     {
-      "id": "149af0f4-8495-4fce-9b53-845ac607de7d",
+      "id": "665eb2cb-2fa2-41d0-9a58-2641ad4930f0",
       "name": "Transaction API",
       "description": {
         "content": "The transaction API is used to process financial transactions by the ecolytiq Sustainability-as-a-Service&reg; platform.\n\nIt is possible to send transactions for enrichment and receive the calculated CO<sub>2</sub> footprint based on a combination of transaction amount and transaction category. \n\nFor some types of transactions this may, however, be insufficient as the amount of money spent does not directly correlate to the CO<sub>2</sub> (equivalent) emissions of the purchased goods and services.\nFor example, airline ticket prices are becoming increasingly expensive the closer the date of travel is. But the amount of CO<sub>2</sub> emissions is independent on whether the ticket was bought last minute or a year in advance. \nIn such cases the transaction data can be refined by answering specific transaction-related questions, like the duration of the flight, which will in turn allow for a much more accurate calculation of the CO<sub>2</sub> emissions.\n",
@@ -938,7 +938,7 @@
       },
       "item": [
         {
-          "id": "751c230b-c11d-4b9a-bd7b-6a1fb5fa4d90",
+          "id": "50d16587-195c-4775-a0b8-16ec2999d733",
           "name": "Process transactions",
           "request": {
             "name": "Process transactions",
@@ -990,7 +990,7 @@
           },
           "response": [
             {
-              "id": "96977cf2-0378-4e80-b91b-a9fec34d9cd8",
+              "id": "e6059c1d-f514-4b94-a4f4-43675cbf5da6",
               "name": "Result of Transaction processing.\n",
               "originalRequest": {
                 "url": {
@@ -1033,19 +1033,19 @@
                   "disabled": false,
                   "description": "Request limit per hour.",
                   "key": "X-RateLimit-Limit",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The number of requests left for the time window.",
                   "key": "X-RateLimit-Remaining",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The UTC date/time at which the current rate limit window resets.",
                   "key": "X-RateLimit-Reset",
-                  "value": "2014-02-23T12:35:21.404Z"
+                  "value": "1964-10-26T17:52:49.318Z"
                 },
                 {
                   "key": "Content-Type",
@@ -1057,7 +1057,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "63a239eb-5e16-42bd-b00c-4a7b3c5e6365",
+              "id": "0583b98b-a081-447e-9b21-53678dd84f7d",
               "name": "Result of Transaction processing.\n",
               "originalRequest": {
                 "url": {
@@ -1100,19 +1100,19 @@
                   "disabled": false,
                   "description": "Request limit per hour.",
                   "key": "X-RateLimit-Limit",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The number of requests left for the time window.",
                   "key": "X-RateLimit-Remaining",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The UTC date/time at which the current rate limit window resets.",
                   "key": "X-RateLimit-Reset",
-                  "value": "2014-02-23T12:35:21.404Z"
+                  "value": "1964-10-26T17:52:49.318Z"
                 },
                 {
                   "key": "Content-Type",
@@ -1124,7 +1124,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "84b9d063-f4f6-4060-b3a9-2d98874b2b1c",
+              "id": "74dc1cb6-28c2-44c4-8484-3ffe13f902ac",
               "name": "Bad Request. Size of Transactions is invalid.\n",
               "originalRequest": {
                 "url": {
@@ -1167,19 +1167,19 @@
                   "disabled": false,
                   "description": "Request limit per hour.",
                   "key": "X-RateLimit-Limit",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The number of requests left for the time window.",
                   "key": "X-RateLimit-Remaining",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The UTC date/time at which the current rate limit window resets.",
                   "key": "X-RateLimit-Reset",
-                  "value": "2014-02-23T12:35:21.404Z"
+                  "value": "1964-10-26T17:52:49.318Z"
                 },
                 {
                   "key": "Content-Type",
@@ -1191,7 +1191,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "c164c852-0b15-4a72-bb35-26b962e49ffc",
+              "id": "db27c8a7-c9b3-4956-9f50-22dec0e14aa1",
               "name": "Unauthorized. Access Token is invalid or expired.\n",
               "originalRequest": {
                 "url": {
@@ -1234,19 +1234,19 @@
                   "disabled": false,
                   "description": "Request limit per hour.",
                   "key": "X-RateLimit-Limit",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The number of requests left for the time window.",
                   "key": "X-RateLimit-Remaining",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The UTC date/time at which the current rate limit window resets.",
                   "key": "X-RateLimit-Reset",
-                  "value": "2014-02-23T12:35:21.404Z"
+                  "value": "1964-10-26T17:52:49.318Z"
                 },
                 {
                   "key": "Content-Type",
@@ -1258,7 +1258,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "0f12bdc1-75a4-46c5-aa10-ac8d25e3e51e",
+              "id": "31e53dc5-e9dc-44a3-95bd-215ccd795bd6",
               "name": "Rate Limit exceeded.\n",
               "originalRequest": {
                 "url": {
@@ -1301,19 +1301,19 @@
                   "disabled": false,
                   "description": "Request limit per hour.",
                   "key": "X-RateLimit-Limit",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The number of requests left for the time window.",
                   "key": "X-RateLimit-Remaining",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The UTC date/time at which the current rate limit window resets.",
                   "key": "X-RateLimit-Reset",
-                  "value": "2014-02-23T12:35:21.404Z"
+                  "value": "1964-10-26T17:52:49.318Z"
                 },
                 {
                   "key": "Content-Type",
@@ -1331,7 +1331,7 @@
           }
         },
         {
-          "id": "120b6c0d-a8a5-465c-b319-551b73411e2b",
+          "id": "6bfa2180-20fa-4c3c-bd0b-ac2bc94ea5db",
           "name": "Get Transactions by IDs",
           "request": {
             "name": "Get Transactions by IDs",
@@ -1377,7 +1377,7 @@
           },
           "response": [
             {
-              "id": "c4f06c8d-8aae-4cd1-ba21-e66b32737783",
+              "id": "c27088d6-3998-42f3-92c0-23cbf0562084",
               "name": "List of requested Transactions",
               "originalRequest": {
                 "url": {
@@ -1417,31 +1417,31 @@
                   "disabled": false,
                   "description": "Request limit per hour.",
                   "key": "X-RateLimit-Limit",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The number of requests left for the time window.",
                   "key": "X-RateLimit-Remaining",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The UTC date/time at which the current rate limit window resets.",
                   "key": "X-RateLimit-Reset",
-                  "value": "2014-02-23T12:35:21.404Z"
+                  "value": "1964-10-26T17:52:49.318Z"
                 },
                 {
                   "key": "Content-Type",
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"request_id\": \"6bf3202ade4a7411\",\n  \"results\": [\n    {\n      \"transaction_id\": \"74263e87-93cb-46be-a132-9cd260716f07\",\n      \"category\": {\n        \"value\": \"<string>\",\n        \"system\": \"<string>\"\n      },\n      \"co2_footprint\": {\n        \"value\": 10,\n        \"unit\": \"g\"\n      }\n    },\n    {\n      \"transaction_id\": \"74263e87-93cb-46be-a132-9cd260716f07\",\n      \"category\": {\n        \"value\": \"<string>\",\n        \"system\": \"<string>\"\n      },\n      \"co2_footprint\": {\n        \"value\": 10,\n        \"unit\": \"g\"\n      }\n    }\n  ],\n  \"errors\": [\n    {\n      \"transaction_id\": \"74263e87-93cb-46be-a132-9cd260716f07\",\n      \"error_code\": \"Duis ex veniam\",\n      \"error_description\": \"deserunt esse sint nulla ut\"\n    },\n    {\n      \"transaction_id\": \"74263e87-93cb-46be-a132-9cd260716f07\",\n      \"error_code\": \"ex anim in\",\n      \"error_description\": \"elit\"\n    }\n  ]\n}",
+              "body": "{\n  \"request_id\": \"6bf3202ade4a7411\",\n  \"results\": [\n    {\n      \"transaction_id\": \"74263e87-93cb-46be-a132-9cd260716f07\",\n      \"category\": {\n        \"value\": \"<string>\",\n        \"system\": \"<string>\"\n      },\n      \"co2_footprint\": {\n        \"value\": 10,\n        \"unit\": \"g\"\n      }\n    },\n    {\n      \"transaction_id\": \"74263e87-93cb-46be-a132-9cd260716f07\",\n      \"category\": {\n        \"value\": \"<string>\",\n        \"system\": \"<string>\"\n      },\n      \"co2_footprint\": {\n        \"value\": 10,\n        \"unit\": \"g\"\n      }\n    }\n  ],\n  \"errors\": [\n    {\n      \"transaction_id\": \"74263e87-93cb-46be-a132-9cd260716f07\",\n      \"error_code\": \"consequat sit eu\",\n      \"error_description\": \"nisi sint in proident\"\n    },\n    {\n      \"transaction_id\": \"74263e87-93cb-46be-a132-9cd260716f07\",\n      \"error_code\": \"nisi sed tempor Duis\",\n      \"error_description\": \"est sed eli\"\n    }\n  ]\n}",
               "cookie": [],
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "f7fe2c1b-f71e-441e-87c0-9fd18e5a44c2",
+              "id": "7c8dd566-4dc3-4db7-8c3c-2a8672543906",
               "name": "Bad Request. Size of Transactions is invalid.\n",
               "originalRequest": {
                 "url": {
@@ -1481,19 +1481,19 @@
                   "disabled": false,
                   "description": "Request limit per hour.",
                   "key": "X-RateLimit-Limit",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The number of requests left for the time window.",
                   "key": "X-RateLimit-Remaining",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The UTC date/time at which the current rate limit window resets.",
                   "key": "X-RateLimit-Reset",
-                  "value": "2014-02-23T12:35:21.404Z"
+                  "value": "1964-10-26T17:52:49.318Z"
                 },
                 {
                   "key": "Content-Type",
@@ -1505,7 +1505,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "e107f475-0040-4539-8f49-00552b52cd2a",
+              "id": "fd4b9484-6164-49f7-9b3c-51520c8ccf57",
               "name": "Unauthorized. Access Token is invalid or expired.\n",
               "originalRequest": {
                 "url": {
@@ -1545,19 +1545,19 @@
                   "disabled": false,
                   "description": "Request limit per hour.",
                   "key": "X-RateLimit-Limit",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The number of requests left for the time window.",
                   "key": "X-RateLimit-Remaining",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The UTC date/time at which the current rate limit window resets.",
                   "key": "X-RateLimit-Reset",
-                  "value": "2014-02-23T12:35:21.404Z"
+                  "value": "1964-10-26T17:52:49.318Z"
                 },
                 {
                   "key": "Content-Type",
@@ -1569,7 +1569,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "eca3ff3b-ff43-4279-b9af-7fbcd9223e2e",
+              "id": "92e1de6d-c3b8-42bc-8b70-887afde4f275",
               "name": "Rate Limit exceeded.\n",
               "originalRequest": {
                 "url": {
@@ -1609,19 +1609,19 @@
                   "disabled": false,
                   "description": "Request limit per hour.",
                   "key": "X-RateLimit-Limit",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The number of requests left for the time window.",
                   "key": "X-RateLimit-Remaining",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The UTC date/time at which the current rate limit window resets.",
                   "key": "X-RateLimit-Reset",
-                  "value": "2014-02-23T12:35:21.404Z"
+                  "value": "1964-10-26T17:52:49.318Z"
                 },
                 {
                   "key": "Content-Type",
@@ -1639,7 +1639,7 @@
           }
         },
         {
-          "id": "2f1fc58f-a5f6-4e36-95cf-f52968a65c80",
+          "id": "edfb9151-bdb2-4cfd-8224-b65491824260",
           "name": "Update Category",
           "request": {
             "name": "Update Category",
@@ -1691,7 +1691,7 @@
           },
           "response": [
             {
-              "id": "5152cdd3-0ae9-439e-9df5-45e64a1b37af",
+              "id": "ef72fd44-f04f-4e8b-bc80-3e1e45fcd23a",
               "name": "Result of Transaction Category Update.\n",
               "originalRequest": {
                 "url": {
@@ -1734,19 +1734,19 @@
                   "disabled": false,
                   "description": "Request limit per hour.",
                   "key": "X-RateLimit-Limit",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The number of requests left for the time window.",
                   "key": "X-RateLimit-Remaining",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The UTC date/time at which the current rate limit window resets.",
                   "key": "X-RateLimit-Reset",
-                  "value": "2014-02-23T12:35:21.404Z"
+                  "value": "1964-10-26T17:52:49.318Z"
                 },
                 {
                   "key": "Content-Type",
@@ -1758,7 +1758,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "fc392132-7e1c-4190-979b-82aac530b9f4",
+              "id": "a9b20d40-cf5b-4cb1-9064-a414bda2573e",
               "name": "Result of Transaction processing.\n",
               "originalRequest": {
                 "url": {
@@ -1801,19 +1801,19 @@
                   "disabled": false,
                   "description": "Request limit per hour.",
                   "key": "X-RateLimit-Limit",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The number of requests left for the time window.",
                   "key": "X-RateLimit-Remaining",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The UTC date/time at which the current rate limit window resets.",
                   "key": "X-RateLimit-Reset",
-                  "value": "2014-02-23T12:35:21.404Z"
+                  "value": "1964-10-26T17:52:49.318Z"
                 },
                 {
                   "key": "Content-Type",
@@ -1825,7 +1825,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "50928678-652e-40d0-9d8d-410a8a967320",
+              "id": "460b516b-8150-494e-8b1d-d9d73ec26aec",
               "name": "Bad Request. Size of Transactions is invalid.\n",
               "originalRequest": {
                 "url": {
@@ -1868,19 +1868,19 @@
                   "disabled": false,
                   "description": "Request limit per hour.",
                   "key": "X-RateLimit-Limit",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The number of requests left for the time window.",
                   "key": "X-RateLimit-Remaining",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The UTC date/time at which the current rate limit window resets.",
                   "key": "X-RateLimit-Reset",
-                  "value": "2014-02-23T12:35:21.404Z"
+                  "value": "1964-10-26T17:52:49.318Z"
                 },
                 {
                   "key": "Content-Type",
@@ -1892,7 +1892,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "56f3613d-08cf-47b0-8232-5b9b8e4affeb",
+              "id": "3f1c4ed2-65be-4f4f-a9d5-449de068ea68",
               "name": "Unauthorized. Access Token is invalid or expired.\n",
               "originalRequest": {
                 "url": {
@@ -1935,19 +1935,19 @@
                   "disabled": false,
                   "description": "Request limit per hour.",
                   "key": "X-RateLimit-Limit",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The number of requests left for the time window.",
                   "key": "X-RateLimit-Remaining",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The UTC date/time at which the current rate limit window resets.",
                   "key": "X-RateLimit-Reset",
-                  "value": "2014-02-23T12:35:21.404Z"
+                  "value": "1964-10-26T17:52:49.318Z"
                 },
                 {
                   "key": "Content-Type",
@@ -1959,7 +1959,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "b0db9170-498e-46d8-a374-8b13385ceedd",
+              "id": "acb016c8-78f0-43d5-b7f9-9f1cd6696f3e",
               "name": "Rate Limit exceeded.\n",
               "originalRequest": {
                 "url": {
@@ -2002,19 +2002,19 @@
                   "disabled": false,
                   "description": "Request limit per hour.",
                   "key": "X-RateLimit-Limit",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The number of requests left for the time window.",
                   "key": "X-RateLimit-Remaining",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The UTC date/time at which the current rate limit window resets.",
                   "key": "X-RateLimit-Reset",
-                  "value": "2014-02-23T12:35:21.404Z"
+                  "value": "1964-10-26T17:52:49.318Z"
                 },
                 {
                   "key": "Content-Type",
@@ -2032,7 +2032,7 @@
           }
         },
         {
-          "id": "2825d3d3-7e99-4088-b7d1-b80b6f4deaff",
+          "id": "faebec87-6175-47b7-8504-a8c4372a3af2",
           "name": "Get Available Questions for Refinement of Specific Transactions",
           "request": {
             "name": "Get Available Questions for Refinement of Specific Transactions",
@@ -2078,7 +2078,7 @@
           },
           "response": [
             {
-              "id": "b14a2a9f-d9c4-45f4-b170-9033020272c5",
+              "id": "313596f1-0bb6-4ab4-901c-08630018ffb9",
               "name": "A list of transaction ids and their corresponding question ids. If the question is already answered the field `answer_id` is set. Otherwise it is `null`.",
               "originalRequest": {
                 "url": {
@@ -2118,19 +2118,19 @@
                   "disabled": false,
                   "description": "Request limit per hour.",
                   "key": "X-RateLimit-Limit",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The number of requests left for the time window.",
                   "key": "X-RateLimit-Remaining",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The UTC date/time at which the current rate limit window resets.",
                   "key": "X-RateLimit-Reset",
-                  "value": "2014-02-23T12:35:21.404Z"
+                  "value": "1964-10-26T17:52:49.318Z"
                 },
                 {
                   "key": "Content-Type",
@@ -2142,7 +2142,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "2bc7aba5-3889-4d52-b687-df38d001d6f2",
+              "id": "44a98bf7-ed64-46e5-9258-ea1559647724",
               "name": "Bad Request\n",
               "originalRequest": {
                 "url": {
@@ -2182,19 +2182,19 @@
                   "disabled": false,
                   "description": "Request limit per hour.",
                   "key": "X-RateLimit-Limit",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The number of requests left for the time window.",
                   "key": "X-RateLimit-Remaining",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The UTC date/time at which the current rate limit window resets.",
                   "key": "X-RateLimit-Reset",
-                  "value": "2014-02-23T12:35:21.404Z"
+                  "value": "1964-10-26T17:52:49.318Z"
                 },
                 {
                   "key": "Content-Type",
@@ -2206,7 +2206,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "10f01d4a-7296-4ee2-9d9c-755dc5e16db2",
+              "id": "2c004ba7-6548-4c56-ad88-880168b4cb6e",
               "name": "Unauthorized. Access Token is invalid or expired.\n",
               "originalRequest": {
                 "url": {
@@ -2246,19 +2246,19 @@
                   "disabled": false,
                   "description": "Request limit per hour.",
                   "key": "X-RateLimit-Limit",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The number of requests left for the time window.",
                   "key": "X-RateLimit-Remaining",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The UTC date/time at which the current rate limit window resets.",
                   "key": "X-RateLimit-Reset",
-                  "value": "2014-02-23T12:35:21.404Z"
+                  "value": "1964-10-26T17:52:49.318Z"
                 },
                 {
                   "key": "Content-Type",
@@ -2270,7 +2270,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "8e33db1c-7198-478d-9a03-9e7aba557be3",
+              "id": "599a1974-6e91-400d-b9db-b88a07283197",
               "name": "Rate Limit exceeded.\n",
               "originalRequest": {
                 "url": {
@@ -2310,19 +2310,19 @@
                   "disabled": false,
                   "description": "Request limit per hour.",
                   "key": "X-RateLimit-Limit",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The number of requests left for the time window.",
                   "key": "X-RateLimit-Remaining",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The UTC date/time at which the current rate limit window resets.",
                   "key": "X-RateLimit-Reset",
-                  "value": "2014-02-23T12:35:21.404Z"
+                  "value": "1964-10-26T17:52:49.318Z"
                 },
                 {
                   "key": "Content-Type",
@@ -2340,7 +2340,7 @@
           }
         },
         {
-          "id": "48d4e421-6075-41ac-8d15-d00539acf056",
+          "id": "4918a6d7-585b-4aea-bf89-44a7d0abe8eb",
           "name": "Provide Answers for Transaction Refinement",
           "request": {
             "name": "Provide Answers for Transaction Refinement",
@@ -2392,7 +2392,7 @@
           },
           "response": [
             {
-              "id": "4a91b051-0aa3-44a1-a865-d7ac3ffddd62",
+              "id": "8e33badc-b058-4756-a637-6523ea666a72",
               "name": "Confirmation that answer is saved",
               "originalRequest": {
                 "url": {
@@ -2435,19 +2435,19 @@
                   "disabled": false,
                   "description": "Request limit per hour.",
                   "key": "X-RateLimit-Limit",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The number of requests left for the time window.",
                   "key": "X-RateLimit-Remaining",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The UTC date/time at which the current rate limit window resets.",
                   "key": "X-RateLimit-Reset",
-                  "value": "2014-02-23T12:35:21.404Z"
+                  "value": "1964-10-26T17:52:49.318Z"
                 },
                 {
                   "key": "Content-Type",
@@ -2459,7 +2459,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "0e3932d0-360c-4dbe-a947-687fa572be2a",
+              "id": "6fc5f4ee-d3cd-4114-9b11-788eda4dd788",
               "name": "Bad Request. Size of Transactions is invalid.\n",
               "originalRequest": {
                 "url": {
@@ -2502,19 +2502,19 @@
                   "disabled": false,
                   "description": "Request limit per hour.",
                   "key": "X-RateLimit-Limit",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The number of requests left for the time window.",
                   "key": "X-RateLimit-Remaining",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The UTC date/time at which the current rate limit window resets.",
                   "key": "X-RateLimit-Reset",
-                  "value": "2014-02-23T12:35:21.404Z"
+                  "value": "1964-10-26T17:52:49.318Z"
                 },
                 {
                   "key": "Content-Type",
@@ -2526,7 +2526,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "2030fb81-6ae5-42c7-a671-1c5cba373832",
+              "id": "b529f636-c8cf-4fb8-8231-4f6dd95186e6",
               "name": "Unauthorized. Access Token is invalid or expired.\n",
               "originalRequest": {
                 "url": {
@@ -2569,19 +2569,19 @@
                   "disabled": false,
                   "description": "Request limit per hour.",
                   "key": "X-RateLimit-Limit",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The number of requests left for the time window.",
                   "key": "X-RateLimit-Remaining",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The UTC date/time at which the current rate limit window resets.",
                   "key": "X-RateLimit-Reset",
-                  "value": "2014-02-23T12:35:21.404Z"
+                  "value": "1964-10-26T17:52:49.318Z"
                 },
                 {
                   "key": "Content-Type",
@@ -2593,7 +2593,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "65fd689b-9acd-46b7-8f4e-618b653f37a4",
+              "id": "d22fa622-fa44-4547-a21f-92bc98a1a7d4",
               "name": "Rate Limit exceeded.\n",
               "originalRequest": {
                 "url": {
@@ -2636,19 +2636,19 @@
                   "disabled": false,
                   "description": "Request limit per hour.",
                   "key": "X-RateLimit-Limit",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The number of requests left for the time window.",
                   "key": "X-RateLimit-Remaining",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The UTC date/time at which the current rate limit window resets.",
                   "key": "X-RateLimit-Reset",
-                  "value": "2014-02-23T12:35:21.404Z"
+                  "value": "1964-10-26T17:52:49.318Z"
                 },
                 {
                   "key": "Content-Type",
@@ -2666,7 +2666,7 @@
           }
         },
         {
-          "id": "acb10b09-4207-45a8-bc94-83d07964c74d",
+          "id": "fdf357b4-222a-498b-8c27-1e9b7ae1d16a",
           "name": "Get Questions and Answers for Transaction Refinement (by IDs)",
           "request": {
             "name": "Get Questions and Answers for Transaction Refinement (by IDs)",
@@ -2718,7 +2718,7 @@
           },
           "response": [
             {
-              "id": "7740f254-f14b-4bbe-90ba-e6f4e95f23ae",
+              "id": "4324d5ae-ffab-485c-9613-8ab447fbb243",
               "name": "A list of Questions",
               "originalRequest": {
                 "url": {
@@ -2762,31 +2762,31 @@
                   "disabled": false,
                   "description": "Request limit per hour.",
                   "key": "X-RateLimit-Limit",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The number of requests left for the time window.",
                   "key": "X-RateLimit-Remaining",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The UTC date/time at which the current rate limit window resets.",
                   "key": "X-RateLimit-Reset",
-                  "value": "2014-02-23T12:35:21.404Z"
+                  "value": "1964-10-26T17:52:49.318Z"
                 },
                 {
                   "key": "Content-Type",
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"request_id\": \"6bf3202ade4a7411\",\n  \"results\": [\n    {\n      \"id\": \"fugiat qui quis\",\n      \"type\": \"SELECTABLE\",\n      \"categories\": [\n        \"in nisi ullamco\",\n        \"labore tempor aute\"\n      ],\n      \"text\": [\n        {\n          \"language\": \"cupidatat dolore\",\n          \"text\": \"anim sint pariatur\"\n        },\n        {\n          \"language\": \"eiusmod laborum cupidatat\",\n          \"text\": \"velit laboris\"\n        }\n      ],\n      \"selectable\": [\n        {\n          \"id\": \"cillum sit amet in\",\n          \"text\": [\n            {\n              \"language\": \"id ut non culpa\",\n              \"text\": \"incididunt dolore dolor\"\n            },\n            {\n              \"language\": \"laboris dolore non culpa amet\",\n              \"text\": \"in occaecat in\"\n            }\n          ]\n        },\n        {\n          \"id\": \"incididunt cupidatat\",\n          \"text\": [\n            {\n              \"language\": \"labore non eiusmod\",\n              \"text\": \"incididunt\"\n            },\n            {\n              \"language\": \"Duis consequat et ea in\",\n              \"text\": \"d\"\n            }\n          ]\n        }\n      ],\n      \"input\": {\n        \"id\": \"ips\",\n        \"datatype\": \"NUMBER\",\n        \"validation\": [\n          {\n            \"name\": \"GREATER\",\n            \"condition\": \"amet\"\n          },\n          {\n            \"name\": \"LESS\",\n            \"condition\": \"occaecat quis sed\"\n          }\n        ]\n      }\n    },\n    {\n      \"id\": \"culpa occaecat voluptate\",\n      \"type\": \"SELECTABLE\",\n      \"categories\": [\n        \"occaecat do aute\",\n        \"occaecat ex ut\"\n      ],\n      \"text\": [\n        {\n          \"language\": \"esse elit \",\n          \"text\": \"sed culpa fugiat pariatur\"\n        },\n        {\n          \"language\": \"sint tempor minim ex aliqua\",\n          \"text\": \"laboris irure dolor\"\n        }\n      ],\n      \"selectable\": [\n        {\n          \"id\": \"ut sit ea reprehenderit\",\n          \"text\": [\n            {\n              \"language\": \"quis sed culpa dolor\",\n              \"text\": \"voluptate do commodo Excepteur\"\n            },\n            {\n              \"language\": \"sunt nulla\",\n              \"text\": \"exercitation\"\n            }\n          ]\n        },\n        {\n          \"id\": \"consectetur dolor\",\n          \"text\": [\n            {\n              \"language\": \"en\",\n              \"text\": \"officia dolor\"\n            },\n            {\n              \"language\": \"est et nostrud\",\n              \"text\": \"Duis irure esse\"\n            }\n          ]\n        }\n      ],\n      \"input\": {\n        \"id\": \"Duis Lorem Ut\",\n        \"datatype\": \"INTEGER\",\n        \"validation\": [\n          {\n            \"name\": \"LESS\",\n            \"condition\": \"minim esse\"\n          },\n          {\n            \"name\": \"MIN_LENGTH\",\n            \"condition\": \"nulla deserunt aliqua et\"\n          }\n        ]\n      }\n    }\n  ],\n  \"errors\": [\n    {\n      \"code\": \"nisi minim velit id deserunt\",\n      \"description\": \"aute qui\",\n      \"id\": \"ullamco magna adipisicing\"\n    },\n    {\n      \"code\": \"ut est consectetur culpa\",\n      \"description\": \"Ex\",\n      \"id\": \"commodo elit adipisicing et\"\n    }\n  ]\n}",
+              "body": "{\n  \"request_id\": \"6bf3202ade4a7411\",\n  \"results\": [\n    {\n      \"id\": \"elit sed ea\",\n      \"type\": \"INPUT\",\n      \"categories\": [\n        \"est labore amet\",\n        \"sed\"\n      ],\n      \"text\": [\n        {\n          \"language\": \"et do m\",\n          \"text\": \"eiusmod pariatur\"\n        },\n        {\n          \"language\": \"anim amet non\",\n          \"text\": \"dolor dolore\"\n        }\n      ],\n      \"selectable\": [\n        {\n          \"id\": \"ad cupidatat voluptate\",\n          \"text\": [\n            {\n              \"language\": \"ex nisi\",\n              \"text\": \"\"\n            },\n            {\n              \"language\": \"do reprehenderit consectetur\",\n              \"text\": \"ut commodo non\"\n            }\n          ]\n        },\n        {\n          \"id\": \"in in occaecat Duis minim\",\n          \"text\": [\n            {\n              \"language\": \"eiusmod dolore\",\n              \"text\": \"ut dolor\"\n            },\n            {\n              \"language\": \"dolor\",\n              \"text\": \"\"\n            }\n          ]\n        }\n      ],\n      \"input\": {\n        \"id\": \"voluptate eu\",\n        \"datatype\": \"INTEGER\",\n        \"validation\": [\n          {\n            \"name\": \"MAX_LENGTH\",\n            \"condition\": \"aliqua in deserunt do dolore\"\n          },\n          {\n            \"name\": \"LESS\",\n            \"condition\": \"consectetur in occaecat in pariatur\"\n          }\n        ]\n      }\n    },\n    {\n      \"id\": \"incididunt pariatur Duis magna labore\",\n      \"type\": \"SELECTABLE\",\n      \"categories\": [\n        \"pariatur tempor in cupidatat\",\n        \"dolor minim\"\n      ],\n      \"text\": [\n        {\n          \"language\": \"sunt veniam\",\n          \"text\": \"exercitation pariatur in\"\n        },\n        {\n          \"language\": \"minim cillum culpa commodo consequat\",\n          \"text\": \"voluptate culpa in \"\n        }\n      ],\n      \"selectable\": [\n        {\n          \"id\": \"do esse ut sunt adipisicing\",\n          \"text\": [\n            {\n              \"language\": \"nostrud\",\n              \"text\": \"magna tempor enim\"\n            },\n            {\n              \"language\": \"irure incididunt fugiat cupidatat non\",\n              \"text\": \"in commodo dolore\"\n            }\n          ]\n        },\n        {\n          \"id\": \"nulla non\",\n          \"text\": [\n            {\n              \"language\": \"reprehenderit id Lorem laborum ipsum\",\n              \"text\": \"aliquip\"\n            },\n            {\n              \"language\": \"Ut aliquip sed\",\n              \"text\": \"ip\"\n            }\n          ]\n        }\n      ],\n      \"input\": {\n        \"id\": \"eu labore aliqua\",\n        \"datatype\": \"STRING\",\n        \"validation\": [\n          {\n            \"name\": \"GREATER\",\n            \"condition\": \"tempor in ullamco\"\n          },\n          {\n            \"name\": \"MIN_LENGTH\",\n            \"condition\": \"id\"\n          }\n        ]\n      }\n    }\n  ],\n  \"errors\": [\n    {\n      \"code\": \"nisi deserunt\",\n      \"description\": \"nisi culpa\",\n      \"id\": \"occaecat amet\"\n    },\n    {\n      \"code\": \"id irure nisi dolor\",\n      \"description\": \"cillum Ut non\",\n      \"id\": \"id Duis\"\n    }\n  ]\n}",
               "cookie": [],
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "dbede337-6ccc-44eb-8ed9-c49c7b4d4969",
+              "id": "5d46f2b2-b45b-43e0-b0fa-89f4ef73f454",
               "name": "Bad Request. Size of Transactions is invalid.\n",
               "originalRequest": {
                 "url": {
@@ -2830,19 +2830,19 @@
                   "disabled": false,
                   "description": "Request limit per hour.",
                   "key": "X-RateLimit-Limit",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The number of requests left for the time window.",
                   "key": "X-RateLimit-Remaining",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The UTC date/time at which the current rate limit window resets.",
                   "key": "X-RateLimit-Reset",
-                  "value": "2014-02-23T12:35:21.404Z"
+                  "value": "1964-10-26T17:52:49.318Z"
                 },
                 {
                   "key": "Content-Type",
@@ -2854,7 +2854,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "a516cf65-e2d8-4d50-9c13-6170e557b287",
+              "id": "e3d97dda-8e19-41b7-98c0-764f497aa61d",
               "name": "Unauthorized. Access Token is invalid or expired.\n",
               "originalRequest": {
                 "url": {
@@ -2898,19 +2898,19 @@
                   "disabled": false,
                   "description": "Request limit per hour.",
                   "key": "X-RateLimit-Limit",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The number of requests left for the time window.",
                   "key": "X-RateLimit-Remaining",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The UTC date/time at which the current rate limit window resets.",
                   "key": "X-RateLimit-Reset",
-                  "value": "2014-02-23T12:35:21.404Z"
+                  "value": "1964-10-26T17:52:49.318Z"
                 },
                 {
                   "key": "Content-Type",
@@ -2922,7 +2922,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "b458f927-7172-47fb-a52d-530e50f3ec34",
+              "id": "adc6a9f3-6d4a-4a56-9fc3-78e0daca7be9",
               "name": "Rate Limit exceeded.\n",
               "originalRequest": {
                 "url": {
@@ -2966,19 +2966,19 @@
                   "disabled": false,
                   "description": "Request limit per hour.",
                   "key": "X-RateLimit-Limit",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The number of requests left for the time window.",
                   "key": "X-RateLimit-Remaining",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The UTC date/time at which the current rate limit window resets.",
                   "key": "X-RateLimit-Reset",
-                  "value": "2014-02-23T12:35:21.404Z"
+                  "value": "1964-10-26T17:52:49.318Z"
                 },
                 {
                   "key": "Content-Type",
@@ -2999,7 +2999,7 @@
       "event": []
     },
     {
-      "id": "0e411535-cdcd-47e0-84d7-db2c78865e48",
+      "id": "66b23aff-e154-42ac-92e1-68b5d0fb7e3d",
       "name": "Content API",
       "description": {
         "content": "The ecolytiq Sustainability-as-a-Service&reg; platform offers a variety of product features that go beyond pure calculation of the CO<sub>2</sub> footprint related to a financial transaction.\nThere are \n\n* Comparables: Small information pieces that put a given CO<sub>2</sub> footprint into perspective by comparing it to something easily comprehensible, like a distance driven by car.\n  As the name suggests a Comparable is a concrete example of what a certain CO<sub>2</sub> footprint means.  \n  It can be used to create awareness on the end customers side on how much of an impact a certain financial transaction has.\n\n* Insights: Information pieces with tips and tricks how an and customer can reduce their personal CO<sub>2</sub> emissions\n\n* Explanations: Information pieces detailing how the ecolytiq calculation method works.\n\nThose content pieces can be retrieved via the content API in various languages.\n",
@@ -3007,7 +3007,7 @@
       },
       "item": [
         {
-          "id": "a3f57ef7-82bf-412a-b6e7-73f75e49d613",
+          "id": "aa117e86-da59-48bb-954f-f7149f54ba22",
           "name": "Get Comparables for a Given CO2 Footprint",
           "request": {
             "name": "Get Comparables for a Given CO2 Footprint",
@@ -3065,7 +3065,7 @@
           },
           "response": [
             {
-              "id": "944c56e6-8418-4a43-a973-98fc1a0dd1da",
+              "id": "b46f1cf3-3352-464b-8000-d39478b8af2e",
               "name": "A list of comparables",
               "originalRequest": {
                 "url": {
@@ -3113,19 +3113,19 @@
                   "disabled": false,
                   "description": "Request limit per hour.",
                   "key": "X-RateLimit-Limit",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The number of requests left for the time window.",
                   "key": "X-RateLimit-Remaining",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The UTC date/time at which the current rate limit window resets.",
                   "key": "X-RateLimit-Reset",
-                  "value": "2014-02-23T12:35:21.404Z"
+                  "value": "1964-10-26T17:52:49.318Z"
                 },
                 {
                   "key": "Content-Type",
@@ -3137,7 +3137,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "7581ffa2-8ae7-4b0f-957c-016bef49aead",
+              "id": "ab9eb02c-3c9f-4b5f-80bd-299ddf2a2a73",
               "name": "Bad Request.\n",
               "originalRequest": {
                 "url": {
@@ -3185,19 +3185,19 @@
                   "disabled": false,
                   "description": "Request limit per hour.",
                   "key": "X-RateLimit-Limit",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The number of requests left for the time window.",
                   "key": "X-RateLimit-Remaining",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The UTC date/time at which the current rate limit window resets.",
                   "key": "X-RateLimit-Reset",
-                  "value": "2014-02-23T12:35:21.404Z"
+                  "value": "1964-10-26T17:52:49.318Z"
                 },
                 {
                   "key": "Content-Type",
@@ -3209,7 +3209,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "7ea09526-07ef-48de-a442-36912666fd23",
+              "id": "706ec9ef-3546-4c2b-97ff-790d39602efc",
               "name": "Unauthorized. Access Token is invalid or expired.\n",
               "originalRequest": {
                 "url": {
@@ -3257,19 +3257,19 @@
                   "disabled": false,
                   "description": "Request limit per hour.",
                   "key": "X-RateLimit-Limit",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The number of requests left for the time window.",
                   "key": "X-RateLimit-Remaining",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The UTC date/time at which the current rate limit window resets.",
                   "key": "X-RateLimit-Reset",
-                  "value": "2014-02-23T12:35:21.404Z"
+                  "value": "1964-10-26T17:52:49.318Z"
                 },
                 {
                   "key": "Content-Type",
@@ -3281,7 +3281,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "c3bf4b29-428e-45ad-9513-5910c454fa13",
+              "id": "9172e065-37eb-4397-acc7-e8a1739ff50b",
               "name": "Rate Limit exceeded.\n",
               "originalRequest": {
                 "url": {
@@ -3329,19 +3329,19 @@
                   "disabled": false,
                   "description": "Request limit per hour.",
                   "key": "X-RateLimit-Limit",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The number of requests left for the time window.",
                   "key": "X-RateLimit-Remaining",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The UTC date/time at which the current rate limit window resets.",
                   "key": "X-RateLimit-Reset",
-                  "value": "2014-02-23T12:35:21.404Z"
+                  "value": "1964-10-26T17:52:49.318Z"
                 },
                 {
                   "key": "Content-Type",
@@ -3359,7 +3359,7 @@
           }
         },
         {
-          "id": "92764ff1-a885-4f67-b5b4-6c7d8bb09baa",
+          "id": "193c2917-9117-46ef-acb0-91392229c2cd",
           "name": "Get Random Comparables for a Given CO2 Footprint",
           "request": {
             "name": "Get Random Comparables for a Given CO2 Footprint",
@@ -3424,7 +3424,7 @@
           },
           "response": [
             {
-              "id": "daa3e0a1-880f-4b1a-98b1-b7dfdcdad56e",
+              "id": "42262307-708c-4fbe-86a8-bd76715fbc5e",
               "name": "A list of comparables",
               "originalRequest": {
                 "url": {
@@ -3477,19 +3477,19 @@
                   "disabled": false,
                   "description": "Request limit per hour.",
                   "key": "X-RateLimit-Limit",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The number of requests left for the time window.",
                   "key": "X-RateLimit-Remaining",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The UTC date/time at which the current rate limit window resets.",
                   "key": "X-RateLimit-Reset",
-                  "value": "2014-02-23T12:35:21.404Z"
+                  "value": "1964-10-26T17:52:49.318Z"
                 },
                 {
                   "key": "Content-Type",
@@ -3501,7 +3501,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "fe19390d-f7f2-4933-b102-a9bea7b54e8a",
+              "id": "8732acdd-aec7-48ed-95f5-ed6d679b135f",
               "name": "Bad Request.\n",
               "originalRequest": {
                 "url": {
@@ -3554,19 +3554,19 @@
                   "disabled": false,
                   "description": "Request limit per hour.",
                   "key": "X-RateLimit-Limit",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The number of requests left for the time window.",
                   "key": "X-RateLimit-Remaining",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The UTC date/time at which the current rate limit window resets.",
                   "key": "X-RateLimit-Reset",
-                  "value": "2014-02-23T12:35:21.404Z"
+                  "value": "1964-10-26T17:52:49.318Z"
                 },
                 {
                   "key": "Content-Type",
@@ -3578,7 +3578,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "ef3d623f-10c6-4dad-b852-b0f523c2c876",
+              "id": "4636131c-ab44-4163-98f4-a61eac79fcf2",
               "name": "Unauthorized. Access Token is invalid or expired.\n",
               "originalRequest": {
                 "url": {
@@ -3631,19 +3631,19 @@
                   "disabled": false,
                   "description": "Request limit per hour.",
                   "key": "X-RateLimit-Limit",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The number of requests left for the time window.",
                   "key": "X-RateLimit-Remaining",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The UTC date/time at which the current rate limit window resets.",
                   "key": "X-RateLimit-Reset",
-                  "value": "2014-02-23T12:35:21.404Z"
+                  "value": "1964-10-26T17:52:49.318Z"
                 },
                 {
                   "key": "Content-Type",
@@ -3655,7 +3655,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "2ee3b774-65a6-4bfa-854c-9a4eb7386523",
+              "id": "989a2ec4-59e2-4572-a9dd-0d64e28be268",
               "name": "Rate Limit exceeded.\n",
               "originalRequest": {
                 "url": {
@@ -3708,19 +3708,19 @@
                   "disabled": false,
                   "description": "Request limit per hour.",
                   "key": "X-RateLimit-Limit",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The number of requests left for the time window.",
                   "key": "X-RateLimit-Remaining",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The UTC date/time at which the current rate limit window resets.",
                   "key": "X-RateLimit-Reset",
-                  "value": "2014-02-23T12:35:21.404Z"
+                  "value": "1964-10-26T17:52:49.318Z"
                 },
                 {
                   "key": "Content-Type",
@@ -3738,7 +3738,7 @@
           }
         },
         {
-          "id": "c77e5186-e977-49b2-bcb8-a2433bf3f600",
+          "id": "0c509ec0-775b-4c65-ad0d-89c32d04d95b",
           "name": "Get Insights by IDs",
           "request": {
             "name": "Get Insights by IDs",
@@ -3790,7 +3790,7 @@
           },
           "response": [
             {
-              "id": "c490f4ff-2b8a-4b98-8ad4-568cbb5f5d57",
+              "id": "05aed115-1b86-46a1-9245-e18d075864b3",
               "name": "A list of insights",
               "originalRequest": {
                 "url": {
@@ -3834,19 +3834,19 @@
                   "disabled": false,
                   "description": "Request limit per hour.",
                   "key": "X-RateLimit-Limit",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The number of requests left for the time window.",
                   "key": "X-RateLimit-Remaining",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The UTC date/time at which the current rate limit window resets.",
                   "key": "X-RateLimit-Reset",
-                  "value": "2014-02-23T12:35:21.404Z"
+                  "value": "1964-10-26T17:52:49.318Z"
                 },
                 {
                   "key": "Content-Type",
@@ -3858,7 +3858,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "d17220fa-c180-4354-a85e-7f0ef184e765",
+              "id": "c81bee08-0147-444f-ae8c-7fc0741b7caa",
               "name": "Bad Request.\n",
               "originalRequest": {
                 "url": {
@@ -3902,19 +3902,19 @@
                   "disabled": false,
                   "description": "Request limit per hour.",
                   "key": "X-RateLimit-Limit",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The number of requests left for the time window.",
                   "key": "X-RateLimit-Remaining",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The UTC date/time at which the current rate limit window resets.",
                   "key": "X-RateLimit-Reset",
-                  "value": "2014-02-23T12:35:21.404Z"
+                  "value": "1964-10-26T17:52:49.318Z"
                 },
                 {
                   "key": "Content-Type",
@@ -3926,7 +3926,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "bb724812-5ef7-4151-a368-182feaca3099",
+              "id": "36ad0c2f-70c0-4635-9c04-8ddabf542e6e",
               "name": "Unauthorized. Access Token is invalid or expired.\n",
               "originalRequest": {
                 "url": {
@@ -3970,19 +3970,19 @@
                   "disabled": false,
                   "description": "Request limit per hour.",
                   "key": "X-RateLimit-Limit",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The number of requests left for the time window.",
                   "key": "X-RateLimit-Remaining",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The UTC date/time at which the current rate limit window resets.",
                   "key": "X-RateLimit-Reset",
-                  "value": "2014-02-23T12:35:21.404Z"
+                  "value": "1964-10-26T17:52:49.318Z"
                 },
                 {
                   "key": "Content-Type",
@@ -3994,7 +3994,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "bfdce83d-7848-487c-8438-e8d9d1fddd0a",
+              "id": "7ce7e071-f9ed-4ba1-9ac7-c26346e8bde0",
               "name": "Rate Limit exceeded.\n",
               "originalRequest": {
                 "url": {
@@ -4038,19 +4038,19 @@
                   "disabled": false,
                   "description": "Request limit per hour.",
                   "key": "X-RateLimit-Limit",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The number of requests left for the time window.",
                   "key": "X-RateLimit-Remaining",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The UTC date/time at which the current rate limit window resets.",
                   "key": "X-RateLimit-Reset",
-                  "value": "2014-02-23T12:35:21.404Z"
+                  "value": "1964-10-26T17:52:49.318Z"
                 },
                 {
                   "key": "Content-Type",
@@ -4068,7 +4068,7 @@
           }
         },
         {
-          "id": "99bca6ea-cad6-4f2c-82a4-6f9a9a6d9d7c",
+          "id": "bee61d50-e2d3-438d-9406-3413b30dcb38",
           "name": "Get Contextual Insights by IDs.",
           "request": {
             "name": "Get Contextual Insights by IDs.",
@@ -4120,7 +4120,7 @@
           },
           "response": [
             {
-              "id": "fdbcf116-9816-4ba5-a5a7-f01f359594e1",
+              "id": "34864151-69a0-4930-ae0c-03976142aec6",
               "name": "A list of insights",
               "originalRequest": {
                 "url": {
@@ -4164,19 +4164,19 @@
                   "disabled": false,
                   "description": "Request limit per hour.",
                   "key": "X-RateLimit-Limit",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The number of requests left for the time window.",
                   "key": "X-RateLimit-Remaining",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The UTC date/time at which the current rate limit window resets.",
                   "key": "X-RateLimit-Reset",
-                  "value": "2014-02-23T12:35:21.404Z"
+                  "value": "1964-10-26T17:52:49.318Z"
                 },
                 {
                   "key": "Content-Type",
@@ -4188,7 +4188,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "9c87e060-61ec-43a7-bf33-90651266f5d6",
+              "id": "e0cb17e3-2f34-4cc0-a33b-834ed1680b03",
               "name": "Bad Request.\n",
               "originalRequest": {
                 "url": {
@@ -4232,19 +4232,19 @@
                   "disabled": false,
                   "description": "Request limit per hour.",
                   "key": "X-RateLimit-Limit",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The number of requests left for the time window.",
                   "key": "X-RateLimit-Remaining",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The UTC date/time at which the current rate limit window resets.",
                   "key": "X-RateLimit-Reset",
-                  "value": "2014-02-23T12:35:21.404Z"
+                  "value": "1964-10-26T17:52:49.318Z"
                 },
                 {
                   "key": "Content-Type",
@@ -4256,7 +4256,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "d3c92385-957c-4d53-8e9e-c019eb38d84e",
+              "id": "54ea8a9c-7815-4a34-ad3b-6b0bff76498d",
               "name": "Unauthorized. Access Token is invalid or expired.\n",
               "originalRequest": {
                 "url": {
@@ -4300,19 +4300,19 @@
                   "disabled": false,
                   "description": "Request limit per hour.",
                   "key": "X-RateLimit-Limit",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The number of requests left for the time window.",
                   "key": "X-RateLimit-Remaining",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The UTC date/time at which the current rate limit window resets.",
                   "key": "X-RateLimit-Reset",
-                  "value": "2014-02-23T12:35:21.404Z"
+                  "value": "1964-10-26T17:52:49.318Z"
                 },
                 {
                   "key": "Content-Type",
@@ -4324,7 +4324,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "ae4a13b3-c108-4e47-b713-b4333c4b21c0",
+              "id": "f0c53db8-49b5-49e7-8848-69d239885fb2",
               "name": "Rate Limit exceeded.\n",
               "originalRequest": {
                 "url": {
@@ -4368,19 +4368,19 @@
                   "disabled": false,
                   "description": "Request limit per hour.",
                   "key": "X-RateLimit-Limit",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The number of requests left for the time window.",
                   "key": "X-RateLimit-Remaining",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The UTC date/time at which the current rate limit window resets.",
                   "key": "X-RateLimit-Reset",
-                  "value": "2014-02-23T12:35:21.404Z"
+                  "value": "1964-10-26T17:52:49.318Z"
                 },
                 {
                   "key": "Content-Type",
@@ -4398,7 +4398,7 @@
           }
         },
         {
-          "id": "de7d75cb-3246-4084-b937-c1721b25d36b",
+          "id": "a79c6ed4-2e90-4a2b-a419-d636339ad044",
           "name": "Get Insights (for a Given Category)",
           "request": {
             "name": "Get Insights (for a Given Category)",
@@ -4457,7 +4457,7 @@
           },
           "response": [
             {
-              "id": "9a889ca7-4ebf-44c5-9270-1b044eb424a8",
+              "id": "a789f8fa-2639-4825-8fc4-8f28906b3852",
               "name": "A list of insights",
               "originalRequest": {
                 "url": {
@@ -4506,19 +4506,19 @@
                   "disabled": false,
                   "description": "Request limit per hour.",
                   "key": "X-RateLimit-Limit",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The number of requests left for the time window.",
                   "key": "X-RateLimit-Remaining",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The UTC date/time at which the current rate limit window resets.",
                   "key": "X-RateLimit-Reset",
-                  "value": "2014-02-23T12:35:21.404Z"
+                  "value": "1964-10-26T17:52:49.318Z"
                 },
                 {
                   "key": "Content-Type",
@@ -4530,7 +4530,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "6ed9d1e5-03c9-4179-9558-3ecc6f500735",
+              "id": "332e07f4-e15a-4ea6-8a2e-77dae5e1d83b",
               "name": "Bad Request.\n",
               "originalRequest": {
                 "url": {
@@ -4579,19 +4579,19 @@
                   "disabled": false,
                   "description": "Request limit per hour.",
                   "key": "X-RateLimit-Limit",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The number of requests left for the time window.",
                   "key": "X-RateLimit-Remaining",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The UTC date/time at which the current rate limit window resets.",
                   "key": "X-RateLimit-Reset",
-                  "value": "2014-02-23T12:35:21.404Z"
+                  "value": "1964-10-26T17:52:49.318Z"
                 },
                 {
                   "key": "Content-Type",
@@ -4603,7 +4603,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "7d97b83b-763f-4810-9897-a4e40483760a",
+              "id": "0becf78b-56f9-45d3-b642-64839d05e178",
               "name": "Unauthorized. Access Token is invalid or expired.\n",
               "originalRequest": {
                 "url": {
@@ -4652,19 +4652,19 @@
                   "disabled": false,
                   "description": "Request limit per hour.",
                   "key": "X-RateLimit-Limit",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The number of requests left for the time window.",
                   "key": "X-RateLimit-Remaining",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The UTC date/time at which the current rate limit window resets.",
                   "key": "X-RateLimit-Reset",
-                  "value": "2014-02-23T12:35:21.404Z"
+                  "value": "1964-10-26T17:52:49.318Z"
                 },
                 {
                   "key": "Content-Type",
@@ -4676,7 +4676,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "936f2c5b-e324-4460-8380-8878464b046f",
+              "id": "2307c0ce-9b79-45cc-b72d-698538da66b4",
               "name": "Rate Limit exceeded.\n",
               "originalRequest": {
                 "url": {
@@ -4725,19 +4725,19 @@
                   "disabled": false,
                   "description": "Request limit per hour.",
                   "key": "X-RateLimit-Limit",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The number of requests left for the time window.",
                   "key": "X-RateLimit-Remaining",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The UTC date/time at which the current rate limit window resets.",
                   "key": "X-RateLimit-Reset",
-                  "value": "2014-02-23T12:35:21.404Z"
+                  "value": "1964-10-26T17:52:49.318Z"
                 },
                 {
                   "key": "Content-Type",
@@ -4755,7 +4755,7 @@
           }
         },
         {
-          "id": "1a46e31b-6cbe-4c42-9b98-f2e66e293024",
+          "id": "274c5ffd-16d4-4a80-ba35-fb32a3334df9",
           "name": "Get Explanations by ID",
           "request": {
             "name": "Get Explanations by ID",
@@ -4807,7 +4807,7 @@
           },
           "response": [
             {
-              "id": "dc34c137-ecf4-4639-8fad-ae1fc38f7227",
+              "id": "b11789db-3130-46d7-b325-a6f7b0280d5e",
               "name": "A list of explanations",
               "originalRequest": {
                 "url": {
@@ -4851,19 +4851,19 @@
                   "disabled": false,
                   "description": "Request limit per hour.",
                   "key": "X-RateLimit-Limit",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The number of requests left for the time window.",
                   "key": "X-RateLimit-Remaining",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The UTC date/time at which the current rate limit window resets.",
                   "key": "X-RateLimit-Reset",
-                  "value": "2014-02-23T12:35:21.404Z"
+                  "value": "1964-10-26T17:52:49.318Z"
                 },
                 {
                   "key": "Content-Type",
@@ -4875,7 +4875,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "5455eae9-2e27-40de-ad19-29e2e005dad3",
+              "id": "4522b560-77b3-4644-9634-a314d54fca09",
               "name": "Bad Request.\n",
               "originalRequest": {
                 "url": {
@@ -4919,19 +4919,19 @@
                   "disabled": false,
                   "description": "Request limit per hour.",
                   "key": "X-RateLimit-Limit",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The number of requests left for the time window.",
                   "key": "X-RateLimit-Remaining",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The UTC date/time at which the current rate limit window resets.",
                   "key": "X-RateLimit-Reset",
-                  "value": "2014-02-23T12:35:21.404Z"
+                  "value": "1964-10-26T17:52:49.318Z"
                 },
                 {
                   "key": "Content-Type",
@@ -4943,7 +4943,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "91a4586a-4ae0-4524-ba82-cfc1e63d9fa4",
+              "id": "700b7308-3258-4cc7-bb45-8575999f8cda",
               "name": "Unauthorized. Access Token is invalid or expired.\n",
               "originalRequest": {
                 "url": {
@@ -4987,19 +4987,19 @@
                   "disabled": false,
                   "description": "Request limit per hour.",
                   "key": "X-RateLimit-Limit",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The number of requests left for the time window.",
                   "key": "X-RateLimit-Remaining",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The UTC date/time at which the current rate limit window resets.",
                   "key": "X-RateLimit-Reset",
-                  "value": "2014-02-23T12:35:21.404Z"
+                  "value": "1964-10-26T17:52:49.318Z"
                 },
                 {
                   "key": "Content-Type",
@@ -5011,7 +5011,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "4ab25aa4-cfb2-4387-bc89-1db8759bff3d",
+              "id": "4f1586a6-e4ce-4783-b63c-bda726933753",
               "name": "Rate Limit exceeded.\n",
               "originalRequest": {
                 "url": {
@@ -5055,19 +5055,19 @@
                   "disabled": false,
                   "description": "Request limit per hour.",
                   "key": "X-RateLimit-Limit",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The number of requests left for the time window.",
                   "key": "X-RateLimit-Remaining",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The UTC date/time at which the current rate limit window resets.",
                   "key": "X-RateLimit-Reset",
-                  "value": "2014-02-23T12:35:21.404Z"
+                  "value": "1964-10-26T17:52:49.318Z"
                 },
                 {
                   "key": "Content-Type",
@@ -5085,7 +5085,7 @@
           }
         },
         {
-          "id": "0abff954-c466-4f6d-b7a0-633c3177ff00",
+          "id": "9bbc3a27-822a-4ae1-91fc-c490b4178371",
           "name": "Get Explanations (for given categories)",
           "request": {
             "name": "Get Explanations (for given categories)",
@@ -5144,7 +5144,7 @@
           },
           "response": [
             {
-              "id": "dff94a18-b287-478f-b0ee-53b3fdd5dae6",
+              "id": "039b4ca7-662d-4393-9348-ac4120e9147e",
               "name": "A list of explanations",
               "originalRequest": {
                 "url": {
@@ -5193,19 +5193,19 @@
                   "disabled": false,
                   "description": "Request limit per hour.",
                   "key": "X-RateLimit-Limit",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The number of requests left for the time window.",
                   "key": "X-RateLimit-Remaining",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The UTC date/time at which the current rate limit window resets.",
                   "key": "X-RateLimit-Reset",
-                  "value": "2014-02-23T12:35:21.404Z"
+                  "value": "1964-10-26T17:52:49.318Z"
                 },
                 {
                   "key": "Content-Type",
@@ -5217,7 +5217,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "61ea3e04-3d23-485b-8180-7688ff5911c1",
+              "id": "b8c45e8e-9fe1-43b2-83b5-70597d32a455",
               "name": "Bad Request.\n",
               "originalRequest": {
                 "url": {
@@ -5266,19 +5266,19 @@
                   "disabled": false,
                   "description": "Request limit per hour.",
                   "key": "X-RateLimit-Limit",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The number of requests left for the time window.",
                   "key": "X-RateLimit-Remaining",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The UTC date/time at which the current rate limit window resets.",
                   "key": "X-RateLimit-Reset",
-                  "value": "2014-02-23T12:35:21.404Z"
+                  "value": "1964-10-26T17:52:49.318Z"
                 },
                 {
                   "key": "Content-Type",
@@ -5290,7 +5290,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "2a3cc825-2277-48ee-a187-17fbd00c57f8",
+              "id": "b8fcd894-e2da-44b5-9491-96b111efbcb4",
               "name": "Unauthorized. Access Token is invalid or expired.\n",
               "originalRequest": {
                 "url": {
@@ -5339,19 +5339,19 @@
                   "disabled": false,
                   "description": "Request limit per hour.",
                   "key": "X-RateLimit-Limit",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The number of requests left for the time window.",
                   "key": "X-RateLimit-Remaining",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The UTC date/time at which the current rate limit window resets.",
                   "key": "X-RateLimit-Reset",
-                  "value": "2014-02-23T12:35:21.404Z"
+                  "value": "1964-10-26T17:52:49.318Z"
                 },
                 {
                   "key": "Content-Type",
@@ -5363,7 +5363,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "3f4d10c1-4262-47cd-97a6-2a386db2f0c5",
+              "id": "0ee728b8-e368-4923-b036-2f2e7f47445a",
               "name": "Rate Limit exceeded.\n",
               "originalRequest": {
                 "url": {
@@ -5412,19 +5412,19 @@
                   "disabled": false,
                   "description": "Request limit per hour.",
                   "key": "X-RateLimit-Limit",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The number of requests left for the time window.",
                   "key": "X-RateLimit-Remaining",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The UTC date/time at which the current rate limit window resets.",
                   "key": "X-RateLimit-Reset",
-                  "value": "2014-02-23T12:35:21.404Z"
+                  "value": "1964-10-26T17:52:49.318Z"
                 },
                 {
                   "key": "Content-Type",
@@ -5445,7 +5445,7 @@
       "event": []
     },
     {
-      "id": "482385b1-dd3c-4a41-9867-4f26f0cb03df",
+      "id": "fd3e84fd-cb65-4375-859b-fe828aca18c0",
       "name": "Profiling API",
       "description": {
         "content": "In the most basic way the ecolytiq Sustainability-as-a-Service&reg; platform is used to calculate the CO<sub>2</sub> footprint related to a \"spending transaction\" by taking into account the amount of money spent and the category of the transaction.\nThis gives an estimate of the footprint based on average consumer behavior. \nFor example, in the average grocery basket is still plenty of meat.\nHowever, a specific end customer may have chosen to live by a meat-reduced, meat-free, vegetarian, or vegan diet.\nHence the average shopping basket will give an inaccurate CO<sub>2</sub> footprint for them.\nTo improve the footprint calculation it is possible to store additional information about an end customer and improving the calculation accuracy in turn.\n",
@@ -5453,7 +5453,7 @@
       },
       "item": [
         {
-          "id": "9a02e111-ca37-4321-a05d-d01ebd9b168d",
+          "id": "11fce64f-7139-4383-b7ca-b65dc04c93fb",
           "name": "Get Insights (for accounts)",
           "request": {
             "name": "Get Insights (for accounts)",
@@ -5505,7 +5505,7 @@
           },
           "response": [
             {
-              "id": "de1d2afe-bbd0-41bf-a316-ee7d309a0a3d",
+              "id": "4ed596ba-68d7-47b7-9325-4e12b5837ddd",
               "name": "Returns a list of content ids for the given accounts",
               "originalRequest": {
                 "url": {
@@ -5549,19 +5549,19 @@
                   "disabled": false,
                   "description": "Request limit per hour.",
                   "key": "X-RateLimit-Limit",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The number of requests left for the time window.",
                   "key": "X-RateLimit-Remaining",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The UTC date/time at which the current rate limit window resets.",
                   "key": "X-RateLimit-Reset",
-                  "value": "2014-02-23T12:35:21.404Z"
+                  "value": "1964-10-26T17:52:49.318Z"
                 },
                 {
                   "key": "Content-Type",
@@ -5573,7 +5573,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "8b214949-a412-481f-b732-40060f317678",
+              "id": "5ac7b2a5-9c88-45c5-b744-c6c41f475870",
               "name": "Bad Request.\n",
               "originalRequest": {
                 "url": {
@@ -5617,19 +5617,19 @@
                   "disabled": false,
                   "description": "Request limit per hour.",
                   "key": "X-RateLimit-Limit",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The number of requests left for the time window.",
                   "key": "X-RateLimit-Remaining",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The UTC date/time at which the current rate limit window resets.",
                   "key": "X-RateLimit-Reset",
-                  "value": "2014-02-23T12:35:21.404Z"
+                  "value": "1964-10-26T17:52:49.318Z"
                 },
                 {
                   "key": "Content-Type",
@@ -5641,7 +5641,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "df202844-3297-4102-b4cd-adfae3c1f30e",
+              "id": "a251f893-1325-4a4d-8374-158914f3b4ba",
               "name": "Unauthorized. Access Token is invalid or expired.\n",
               "originalRequest": {
                 "url": {
@@ -5685,19 +5685,19 @@
                   "disabled": false,
                   "description": "Request limit per hour.",
                   "key": "X-RateLimit-Limit",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The number of requests left for the time window.",
                   "key": "X-RateLimit-Remaining",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The UTC date/time at which the current rate limit window resets.",
                   "key": "X-RateLimit-Reset",
-                  "value": "2014-02-23T12:35:21.404Z"
+                  "value": "1964-10-26T17:52:49.318Z"
                 },
                 {
                   "key": "Content-Type",
@@ -5709,7 +5709,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "de91ee1a-e9f2-40f1-9bae-03c20390c29e",
+              "id": "a4e9e119-4966-4137-b097-a5a82cedd56f",
               "name": "Rate Limit exceeded.\n",
               "originalRequest": {
                 "url": {
@@ -5753,19 +5753,19 @@
                   "disabled": false,
                   "description": "Request limit per hour.",
                   "key": "X-RateLimit-Limit",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The number of requests left for the time window.",
                   "key": "X-RateLimit-Remaining",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The UTC date/time at which the current rate limit window resets.",
                   "key": "X-RateLimit-Reset",
-                  "value": "2014-02-23T12:35:21.404Z"
+                  "value": "1964-10-26T17:52:49.318Z"
                 },
                 {
                   "key": "Content-Type",
@@ -5783,7 +5783,7 @@
           }
         },
         {
-          "id": "8c1f1a90-c0ad-42b3-9068-5bbf7062b60a",
+          "id": "5c5c3b44-0bc1-44b9-ad39-13cc4da07179",
           "name": "Get Contextual Insights (for accounts)",
           "request": {
             "name": "Get Contextual Insights (for accounts)",
@@ -5829,7 +5829,7 @@
           },
           "response": [
             {
-              "id": "b44a3170-2a76-4d83-95ec-f67ea3f542c6",
+              "id": "e1b9a98e-efd7-486b-9844-be458eb2d7a5",
               "name": "Returns a list of content ids for the given accounts",
               "originalRequest": {
                 "url": {
@@ -5869,19 +5869,19 @@
                   "disabled": false,
                   "description": "Request limit per hour.",
                   "key": "X-RateLimit-Limit",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The number of requests left for the time window.",
                   "key": "X-RateLimit-Remaining",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The UTC date/time at which the current rate limit window resets.",
                   "key": "X-RateLimit-Reset",
-                  "value": "2014-02-23T12:35:21.404Z"
+                  "value": "1964-10-26T17:52:49.318Z"
                 },
                 {
                   "key": "Content-Type",
@@ -5893,7 +5893,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "837a4bf8-85e0-424f-a6f8-bf98c855f936",
+              "id": "1153c113-6444-4e80-bb3e-8dfe459dcc64",
               "name": "Bad Request.\n",
               "originalRequest": {
                 "url": {
@@ -5933,19 +5933,19 @@
                   "disabled": false,
                   "description": "Request limit per hour.",
                   "key": "X-RateLimit-Limit",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The number of requests left for the time window.",
                   "key": "X-RateLimit-Remaining",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The UTC date/time at which the current rate limit window resets.",
                   "key": "X-RateLimit-Reset",
-                  "value": "2014-02-23T12:35:21.404Z"
+                  "value": "1964-10-26T17:52:49.318Z"
                 },
                 {
                   "key": "Content-Type",
@@ -5957,7 +5957,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "aa6b94a9-7d0d-4094-97ce-f9d9f8f2d849",
+              "id": "a9f6389b-a95e-42f8-9f3b-02ebeb04efee",
               "name": "Unauthorized. Access Token is invalid or expired.\n",
               "originalRequest": {
                 "url": {
@@ -5997,19 +5997,19 @@
                   "disabled": false,
                   "description": "Request limit per hour.",
                   "key": "X-RateLimit-Limit",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The number of requests left for the time window.",
                   "key": "X-RateLimit-Remaining",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The UTC date/time at which the current rate limit window resets.",
                   "key": "X-RateLimit-Reset",
-                  "value": "2014-02-23T12:35:21.404Z"
+                  "value": "1964-10-26T17:52:49.318Z"
                 },
                 {
                   "key": "Content-Type",
@@ -6021,7 +6021,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "705377d7-c43e-4ef5-ae68-787a8d7b40e6",
+              "id": "e8e1bebf-931c-4efd-af68-3c9c8b15d9c2",
               "name": "Rate Limit exceeded.\n",
               "originalRequest": {
                 "url": {
@@ -6061,19 +6061,19 @@
                   "disabled": false,
                   "description": "Request limit per hour.",
                   "key": "X-RateLimit-Limit",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The number of requests left for the time window.",
                   "key": "X-RateLimit-Remaining",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The UTC date/time at which the current rate limit window resets.",
                   "key": "X-RateLimit-Reset",
-                  "value": "2014-02-23T12:35:21.404Z"
+                  "value": "1964-10-26T17:52:49.318Z"
                 },
                 {
                   "key": "Content-Type",
@@ -6091,7 +6091,7 @@
           }
         },
         {
-          "id": "1dc79fc3-00bc-4d17-af0f-39722a972638",
+          "id": "d0e18a72-2fbf-4d59-8131-54102418c90d",
           "name": "Get Questions for Profiling by IDs",
           "request": {
             "name": "Get Questions for Profiling by IDs",
@@ -6143,7 +6143,7 @@
           },
           "response": [
             {
-              "id": "776bd475-277c-40dc-a1b5-f857dfa56494",
+              "id": "ab70ae19-4a48-4e7f-b608-1dad4d95a8ac",
               "name": "A list of Questions",
               "originalRequest": {
                 "url": {
@@ -6187,26 +6187,26 @@
                   "disabled": false,
                   "description": "Request limit per hour.",
                   "key": "X-RateLimit-Limit",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The number of requests left for the time window.",
                   "key": "X-RateLimit-Remaining",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The UTC date/time at which the current rate limit window resets.",
                   "key": "X-RateLimit-Reset",
-                  "value": "2014-02-23T12:35:21.404Z"
+                  "value": "1964-10-26T17:52:49.318Z"
                 },
                 {
                   "key": "Content-Type",
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"request_id\": \"6bf3202ade4a7411\",\n  \"results\": [\n    {\n      \"id\": \"Ut officia ut elit\",\n      \"type\": \"SELECTABLE\",\n      \"categories\": [\n        \"\",\n        \"mollit nisi dolor esse\"\n      ],\n      \"text\": [\n        {\n          \"language\": \"mollit\",\n          \"text\": \"ea \"\n        },\n        {\n          \"language\": \"eiusmod dolore magna\",\n          \"text\": \"ex Duis reprehenderit\"\n        }\n      ],\n      \"selectable\": [\n        {\n          \"id\": \"fugiat dolor\",\n          \"text\": [\n            {\n              \"language\": \"ut\",\n              \"text\": \"cupidatat irure aliquip\"\n            },\n            {\n              \"language\": \"consequat pariatur\",\n              \"text\": \"cillum in elit voluptate\"\n            }\n          ]\n        },\n        {\n          \"id\": \"Excepteur in est\",\n          \"text\": [\n            {\n              \"language\": \"deserunt aliqua l\",\n              \"text\": \"in officia laboris Lorem\"\n            },\n            {\n              \"language\": \"nisi non mollit Ut\",\n              \"text\": \"do aute laboris sint\"\n            }\n          ]\n        }\n      ],\n      \"input\": {\n        \"id\": \"ullamco sint tempor non dolor\",\n        \"datatype\": \"STRING\",\n        \"validation\": [\n          {\n            \"name\": \"MAX_LENGTH\",\n            \"condition\": \"elit Ut aliquip\"\n          },\n          {\n            \"name\": \"GREATER\",\n            \"condition\": \"commodo sunt Excepteur occaecat\"\n          }\n        ]\n      }\n    },\n    {\n      \"id\": \"esse labore Excepteur irure\",\n      \"type\": \"SELECTABLE\",\n      \"categories\": [\n        \"sunt in dolore\",\n        \"laborum quis Lorem et\"\n      ],\n      \"text\": [\n        {\n          \"language\": \"consectetur nostrud\",\n          \"text\": \"dolor officia cillum Lorem\"\n        },\n        {\n          \"language\": \"quis voluptate laborum\",\n          \"text\": \"reprehenderit\"\n        }\n      ],\n      \"selectable\": [\n        {\n          \"id\": \"culpa amet ut eu\",\n          \"text\": [\n            {\n              \"language\": \"dolore sit Excepteur\",\n              \"text\": \"culpa tempor voluptate\"\n            },\n            {\n              \"language\": \"dolor veniam ut pariatur\",\n              \"text\": \"fugiat ex\"\n            }\n          ]\n        },\n        {\n          \"id\": \"labore Duis dolor\",\n          \"text\": [\n            {\n              \"language\": \"in Duis anim\",\n              \"text\": \"officia magna labore\"\n            },\n            {\n              \"language\": \"sunt tempor\",\n              \"text\": \"laboris amet\"\n            }\n          ]\n        }\n      ],\n      \"input\": {\n        \"id\": \"ut magna incididunt laborum\",\n        \"datatype\": \"STRING\",\n        \"validation\": [\n          {\n            \"name\": \"GREATER\",\n            \"condition\": \"officia tempor consequat\"\n          },\n          {\n            \"name\": \"LESS\",\n            \"condition\": \"in elit sint cillum\"\n          }\n        ]\n      }\n    }\n  ],\n  \"errors\": [\n    {\n      \"code\": \"anim proident ex aute\",\n      \"description\": \"dolor consectetur\",\n      \"id\": \"amet incididunt do\"\n    },\n    {\n      \"code\": \"aliquip\",\n      \"description\": \"et sed reprehenderit ex\",\n      \"id\": \"Ut elit aliqua\"\n    }\n  ]\n}",
+              "body": "{\n  \"request_id\": \"6bf3202ade4a7411\",\n  \"results\": [\n    {\n      \"id\": \"magna mollit sit\",\n      \"type\": \"SELECTABLE\",\n      \"categories\": [\n        \"Excepteur sunt ex fugiat\",\n        \"et ullamco\"\n      ],\n      \"text\": [\n        {\n          \"language\": \"reprehenderit Lorem anim eu\",\n          \"text\": \"incididunt sed\"\n        },\n        {\n          \"language\": \"in eiusmod nulla nisi cupidatat\",\n          \"text\": \"tempor dolor\"\n        }\n      ],\n      \"selectable\": [\n        {\n          \"id\": \"id dolor irure ut in\",\n          \"text\": [\n            {\n              \"language\": \"nostrud nisi\",\n              \"text\": \"ullamco\"\n            },\n            {\n              \"language\": \"officia irure cillum sed sint\",\n              \"text\": \"voluptate culpa sunt\"\n            }\n          ]\n        },\n        {\n          \"id\": \"tempor id eu veniam\",\n          \"text\": [\n            {\n              \"language\": \"velit\",\n              \"text\": \"cupidatat enim cillum ut\"\n            },\n            {\n              \"language\": \"anim in\",\n              \"text\": \"exercitation sit\"\n            }\n          ]\n        }\n      ],\n      \"input\": {\n        \"id\": \"esse aliquip\",\n        \"datatype\": \"INTEGER\",\n        \"validation\": [\n          {\n            \"name\": \"LESS\",\n            \"condition\": \"ut consequat Ut sint\"\n          },\n          {\n            \"name\": \"MAX_LENGTH\",\n            \"condition\": \"qui minim deserunt dolor\"\n          }\n        ]\n      }\n    },\n    {\n      \"id\": \"in in voluptate\",\n      \"type\": \"INPUT\",\n      \"categories\": [\n        \"incididunt amet velit\",\n        \"do esse\"\n      ],\n      \"text\": [\n        {\n          \"language\": \"ullamco reprehenderit\",\n          \"text\": \"nostrud \"\n        },\n        {\n          \"language\": \"ipsum\",\n          \"text\": \"ullamco in nostrud\"\n        }\n      ],\n      \"selectable\": [\n        {\n          \"id\": \"esse est in pariatur\",\n          \"text\": [\n            {\n              \"language\": \"Duis in non\",\n              \"text\": \"id irure ea \"\n            },\n            {\n              \"language\": \"esse nisi\",\n              \"text\": \"consequat ex ipsum\"\n            }\n          ]\n        },\n        {\n          \"id\": \"tempor enim\",\n          \"text\": [\n            {\n              \"language\": \"laborum id est\",\n              \"text\": \"deserunt\"\n            },\n            {\n              \"language\": \"null\",\n              \"text\": \"cillum eu quis minim\"\n            }\n          ]\n        }\n      ],\n      \"input\": {\n        \"id\": \"ipsum dolore id dolor labore\",\n        \"datatype\": \"NUMBER\",\n        \"validation\": [\n          {\n            \"name\": \"GREATER\",\n            \"condition\": \"non irure\"\n          },\n          {\n            \"name\": \"LESS\",\n            \"condition\": \"dolor proident\"\n          }\n        ]\n      }\n    }\n  ],\n  \"errors\": [\n    {\n      \"code\": \"occaecat officia\",\n      \"description\": \"in veniam\",\n      \"id\": \"est sed\"\n    },\n    {\n      \"code\": \"proident occaecat\",\n      \"description\": \"commodo voluptate\",\n      \"id\": \"ut est\"\n    }\n  ]\n}",
               "cookie": [],
               "_postman_previewlanguage": "json"
             }
@@ -6217,7 +6217,7 @@
           }
         },
         {
-          "id": "cd391e44-e944-418c-9510-c87cf9b6b237",
+          "id": "049bffd9-b330-4a1b-bfcd-171c47589cec",
           "name": "Save Answer for a given Question",
           "request": {
             "name": "Save Answer for a given Question",
@@ -6269,7 +6269,7 @@
           },
           "response": [
             {
-              "id": "7af6f843-249d-4514-aa32-c3ce6073a79c",
+              "id": "ce3802d6-a8d0-4704-a78f-5bf196a8b503",
               "name": "Confirmation that answer is saved",
               "originalRequest": {
                 "url": {
@@ -6312,26 +6312,26 @@
                   "disabled": false,
                   "description": "Request limit per hour.",
                   "key": "X-RateLimit-Limit",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The number of requests left for the time window.",
                   "key": "X-RateLimit-Remaining",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The UTC date/time at which the current rate limit window resets.",
                   "key": "X-RateLimit-Reset",
-                  "value": "2014-02-23T12:35:21.404Z"
+                  "value": "1964-10-26T17:52:49.318Z"
                 },
                 {
                   "key": "Content-Type",
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"request_id\": \"id ea qui amet commodo\",\n  \"results\": [\n    {\n      \"account_id\": \"anim Duis ad aliqua magna\",\n      \"question_id\": \"in pariatur Duis\",\n      \"answer_id\": \"sint cillum aliqua\"\n    },\n    {\n      \"account_id\": \"ullamco\",\n      \"question_id\": \"sint veniam Ut magna elit\",\n      \"answer_id\": \"ullamc\"\n    }\n  ],\n  \"errors\": [\n    {\n      \"account_id\": \"ex esse consequat\",\n      \"answer_id\": \"ut consequat minim\",\n      \"code\": \"magna ut sint\",\n      \"description\": \"commodo et veniam\"\n    },\n    {\n      \"account_id\": \"dolore dolor esse\",\n      \"answer_id\": \"dolore cillum voluptat\",\n      \"code\": \"et amet enim\",\n      \"description\": \"aute in occaecat\"\n    }\n  ]\n}",
+              "body": "{\n  \"request_id\": \"nulla Duis nisi\",\n  \"results\": [\n    {\n      \"account_id\": \"ad sed amet nostrud\",\n      \"question_id\": \"irure eiusmod\",\n      \"answer_id\": \"d\"\n    },\n    {\n      \"account_id\": \"in sint ut dolore nulla\",\n      \"question_id\": \"aute sunt\",\n      \"answer_id\": \"quis\"\n    }\n  ],\n  \"errors\": [\n    {\n      \"account_id\": \"ex\",\n      \"answer_id\": \"consectetur\",\n      \"code\": \"ad reprehenderit dolore\",\n      \"description\": \"dolore\"\n    },\n    {\n      \"account_id\": \"dolore et Excepteur\",\n      \"answer_id\": \"aute\",\n      \"code\": \"in amet deserunt eu\",\n      \"description\": \"labore magna no\"\n    }\n  ]\n}",
               "cookie": [],
               "_postman_previewlanguage": "json"
             }
@@ -6345,7 +6345,7 @@
       "event": []
     },
     {
-      "id": "5ee6b76c-5b43-41cc-8f0b-76db26a312d3",
+      "id": "af5e1a8a-a90c-443a-b05f-d5154b95a18a",
       "name": "Account API",
       "description": {
         "content": "Should the necessity arise to remove all data of a specific end customer from the ecolytiq platform this can be done using the account API.\n",
@@ -6353,7 +6353,7 @@
       },
       "item": [
         {
-          "id": "2ff5788e-3cfd-45f1-b6e1-824664eac511",
+          "id": "850b6dd4-3de4-4356-9235-ddf764c26a22",
           "name": "Delete all data of the given accounts",
           "request": {
             "name": "Delete all data of the given accounts",
@@ -6405,7 +6405,7 @@
           },
           "response": [
             {
-              "id": "14eb79da-75bc-4040-84f1-de1f1100cf8e",
+              "id": "411594d8-6200-4e98-9917-9c63d04afe39",
               "name": "Confirmation that the request has been processed",
               "originalRequest": {
                 "url": {
@@ -6448,19 +6448,19 @@
                   "disabled": false,
                   "description": "Request limit per hour.",
                   "key": "X-RateLimit-Limit",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The number of requests left for the time window.",
                   "key": "X-RateLimit-Remaining",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The UTC date/time at which the current rate limit window resets.",
                   "key": "X-RateLimit-Reset",
-                  "value": "2014-02-23T12:35:21.404Z"
+                  "value": "1964-10-26T17:52:49.318Z"
                 },
                 {
                   "key": "Content-Type",
@@ -6472,7 +6472,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "45f54895-18d1-4477-b556-8613a3091238",
+              "id": "3f7d35b6-082f-42b8-b5ea-1f47f4a49327",
               "name": "Confirmation that request can be handled",
               "originalRequest": {
                 "url": {
@@ -6515,19 +6515,19 @@
                   "disabled": false,
                   "description": "Request limit per hour.",
                   "key": "X-RateLimit-Limit",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The number of requests left for the time window.",
                   "key": "X-RateLimit-Remaining",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The UTC date/time at which the current rate limit window resets.",
                   "key": "X-RateLimit-Reset",
-                  "value": "2014-02-23T12:35:21.404Z"
+                  "value": "1964-10-26T17:52:49.318Z"
                 },
                 {
                   "key": "Content-Type",
@@ -6548,7 +6548,7 @@
       "event": []
     },
     {
-      "id": "969ead2d-8435-4590-9cdb-190fb1d2395f",
+      "id": "32ff9ff3-7c9e-4ff2-b3f5-045a8e6a04db",
       "name": "onPrem API",
       "description": {
         "content": "In some cases the ecolytiq Sustainability-as-a-Service&reg; platform is not used as Software as a Service (SaaS) solution but hosted on a customers own premises or inside their own cloud instance.\nIf the customers whish they can use a rating system for content delivered by the ecolytiq platform.\nWe recommend to regularly submit the content ratings back to ecolytiq so that we can improve the content quality.\n\n\n> #### Please Note \n>\n> This endpoint must be called on the ecolytiq SaaS platform which is accessible over the public internet. \n> Is may be necessary to obtain a special pair of `client_id` and `client_secret` credentials for the SaaS platform to use this endpoint.\n> No PII is transmitted via this endpoint.\n",
@@ -6556,7 +6556,7 @@
       },
       "item": [
         {
-          "id": "59a3b7b1-849e-46ab-ba58-6fafc4e186bf",
+          "id": "71fadfb6-7e86-480b-a41b-c001c2f853ba",
           "name": "Send us Feedback about Content Rating",
           "request": {
             "name": "Send us Feedback about Content Rating",
@@ -6608,7 +6608,7 @@
           },
           "response": [
             {
-              "id": "268a550d-ed5c-448e-9cf1-66956a900c53",
+              "id": "c961b2e8-5106-41e6-ba46-58fc9b7edf3f",
               "name": "Confirmation that the request has been processed",
               "originalRequest": {
                 "url": {
@@ -6651,19 +6651,19 @@
                   "disabled": false,
                   "description": "Request limit per hour.",
                   "key": "X-RateLimit-Limit",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The number of requests left for the time window.",
                   "key": "X-RateLimit-Remaining",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The UTC date/time at which the current rate limit window resets.",
                   "key": "X-RateLimit-Reset",
-                  "value": "2014-02-23T12:35:21.404Z"
+                  "value": "1964-10-26T17:52:49.318Z"
                 },
                 {
                   "key": "Content-Type",
@@ -6675,7 +6675,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "f4e2907e-026a-4fe0-85e3-2e0f4f0f4510",
+              "id": "9ebce93d-0763-4ea8-b75c-c837d81870b4",
               "name": "Bad Request.\n",
               "originalRequest": {
                 "url": {
@@ -6718,19 +6718,19 @@
                   "disabled": false,
                   "description": "Request limit per hour.",
                   "key": "X-RateLimit-Limit",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The number of requests left for the time window.",
                   "key": "X-RateLimit-Remaining",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The UTC date/time at which the current rate limit window resets.",
                   "key": "X-RateLimit-Reset",
-                  "value": "2014-02-23T12:35:21.404Z"
+                  "value": "1964-10-26T17:52:49.318Z"
                 },
                 {
                   "key": "Content-Type",
@@ -6742,7 +6742,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "c3b8f896-0543-48a7-9838-8603020163dc",
+              "id": "fd9d8e40-5b9c-45b9-a695-31f5e313c9ba",
               "name": "Unauthorized. Access Token is invalid or expired.\n",
               "originalRequest": {
                 "url": {
@@ -6785,19 +6785,19 @@
                   "disabled": false,
                   "description": "Request limit per hour.",
                   "key": "X-RateLimit-Limit",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The number of requests left for the time window.",
                   "key": "X-RateLimit-Remaining",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The UTC date/time at which the current rate limit window resets.",
                   "key": "X-RateLimit-Reset",
-                  "value": "2014-02-23T12:35:21.404Z"
+                  "value": "1964-10-26T17:52:49.318Z"
                 },
                 {
                   "key": "Content-Type",
@@ -6809,7 +6809,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "d5fb6429-79de-467b-9912-d4970c165d7b",
+              "id": "8cdfa6db-fe02-42fc-ba4c-ea4efdb7a6d8",
               "name": "Rate Limit exceeded.\n",
               "originalRequest": {
                 "url": {
@@ -6852,19 +6852,19 @@
                   "disabled": false,
                   "description": "Request limit per hour.",
                   "key": "X-RateLimit-Limit",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The number of requests left for the time window.",
                   "key": "X-RateLimit-Remaining",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The UTC date/time at which the current rate limit window resets.",
                   "key": "X-RateLimit-Reset",
-                  "value": "2014-02-23T12:35:21.404Z"
+                  "value": "1964-10-26T17:52:49.318Z"
                 },
                 {
                   "key": "Content-Type",
@@ -6885,7 +6885,7 @@
       "event": []
     },
     {
-      "id": "f5d5b611-f06b-4c66-9239-4f6ee0609353",
+      "id": "7168ca43-97ae-415e-8d23-d819ed6ec77a",
       "name": "Offsetting API",
       "description": {
         "content": "> #### Note:\n> \n> This preview for the carbon footprint offsetting functionality of the ecoAction package is **work in progress**.\n> **Some things might change!**\n\nUse these endpoints for handling carbon footprint offsets.\n\n> #### Note:\n> \n> These endpoints are only meant for handling the data about carbon footprint offsets between a Customer (e.g., bank) and a carbon Offsetting provider.\n> They are not meant to initiate actual flow of offsetting payments between the Customer and the Offsetting provider!\n",
@@ -6893,7 +6893,7 @@
       },
       "item": [
         {
-          "id": "5efa92de-23fc-4bbe-b7c5-adad686b7486",
+          "id": "560ad951-90f0-4007-99f2-f65954e41460",
           "name": "Get Projects for Offsetting",
           "request": {
             "name": "Get Projects for Offsetting",
@@ -6939,7 +6939,7 @@
           },
           "response": [
             {
-              "id": "e743c6a4-54a9-4961-91ec-88fe1b9dc25f",
+              "id": "ab111ba2-8800-4d99-a246-dc75561f5256",
               "name": "A List of projects for carbon footprint compensation",
               "originalRequest": {
                 "url": {
@@ -6979,31 +6979,31 @@
                   "disabled": false,
                   "description": "Request limit per hour.",
                   "key": "X-RateLimit-Limit",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The number of requests left for the time window.",
                   "key": "X-RateLimit-Remaining",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The UTC date/time at which the current rate limit window resets.",
                   "key": "X-RateLimit-Reset",
-                  "value": "2014-02-23T12:35:21.404Z"
+                  "value": "1964-10-26T17:52:49.318Z"
                 },
                 {
                   "key": "Content-Type",
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"request_id\": \"6bf3202ade4a7411\",\n  \"results\": [\n    {\n      \"project_id\": \"laboris officia esse\",\n      \"project_title\": \"sint ullamco quis in\",\n      \"project_images\": [\n        {\n          \"image_url\": \"ullamco fugiat\"\n        },\n        {\n          \"image_url\": \"qui dolore deserunt\"\n        }\n      ],\n      \"project_certification\": \"aliquip labore in\",\n      \"project_country\": \"labore incididunt do\",\n      \"project_sdg_descriptions\": [\n        {\n          \"sdg\": 6,\n          \"description\": \"mollit cupidatat anim et\"\n        },\n        {\n          \"sdg\": 12,\n          \"description\": \"adipisicing nost\"\n        }\n      ],\n      \"project_operator\": \"quis\",\n      \"price_per_kg\": {\n        \"value\": 225933495500700.4,\n        \"currency_code\": \"cupidatat qui veniam mollit\"\n      },\n      \"translations\": [\n        {\n          \"language_code\": \"dolor laborum culpa do Ex\",\n          \"project_title\": \"veniam commodo id\",\n          \"project_sdg_descriptions\": [\n            {\n              \"sdg\": 2,\n              \"description\": \"consequat sunt et\"\n            },\n            {\n              \"sdg\": 15,\n              \"description\": \"ea dolor\"\n            }\n          ],\n          \"project_description\": \"cupidatat culpa ullamco adipisicing\"\n        },\n        {\n          \"language_code\": \"Ut minim proident dolore\",\n          \"project_title\": \"esse velit deserunt\",\n          \"project_sdg_descriptions\": [\n            {\n              \"sdg\": 9,\n              \"description\": \"culpa mollit adipisicing ullamco\"\n            },\n            {\n              \"sdg\": 4,\n              \"description\": \"nostrud culp\"\n            }\n          ],\n          \"project_description\": \"anim laborum elit magna irure\"\n        }\n      ],\n      \"project_categories\": [\n        \"sunt\",\n        \"esse magna nulla dolore\"\n      ],\n      \"project_description\": \"deserunt\",\n      \"annual_reduction_in_t\": 27723084.557879314,\n      \"expiration_date\": \"1976-01-10\"\n    },\n    {\n      \"project_id\": \"est elit am\",\n      \"project_title\": \"nulla sint incididunt\",\n      \"project_images\": [\n        {\n          \"image_url\": \"sint consequat officia Lorem\"\n        },\n        {\n          \"image_url\": \"incididunt Duis consequat\"\n        }\n      ],\n      \"project_certification\": \"adipisicing minim\",\n      \"project_country\": \"nulla mollit id eiusmod \",\n      \"project_sdg_descriptions\": [\n        {\n          \"sdg\": 15,\n          \"description\": \"an\"\n        },\n        {\n          \"sdg\": 13,\n          \"description\": \"voluptate officia exercitation\"\n        }\n      ],\n      \"project_operator\": \"do nulla dolore et\",\n      \"price_per_kg\": {\n        \"value\": 953896811004774.1,\n        \"currency_code\": \"in ad id\"\n      },\n      \"translations\": [\n        {\n          \"language_code\": \"exercitation sed ea\",\n          \"project_title\": \"nisi anim Lorem laborum\",\n          \"project_sdg_descriptions\": [\n            {\n              \"sdg\": 11,\n              \"description\": \"dolor \"\n            },\n            {\n              \"sdg\": 13,\n              \"description\": \"laborum mollit dolore\"\n            }\n          ],\n          \"project_description\": \"dolore et\"\n        },\n        {\n          \"language_code\": \"est adipisicing occaecat dolore minim\",\n          \"project_title\": \"ea\",\n          \"project_sdg_descriptions\": [\n            {\n              \"sdg\": 9,\n              \"description\": \"dolore adipisicing cupidatat consectetur\"\n            },\n            {\n              \"sdg\": 16,\n              \"description\": \"exercitation quis ipsum aute labor\"\n            }\n          ],\n          \"project_description\": \"Ut ut commodo ut enim\"\n        }\n      ],\n      \"project_categories\": [\n        \"dolor occaecat\",\n        \"minim ut consectetur\"\n      ],\n      \"project_description\": \"commodo fugiat dolore pariatur velit\",\n      \"annual_reduction_in_t\": -81163659.51493335,\n      \"expiration_date\": \"1969-11-09\"\n    }\n  ]\n}",
+              "body": "{\n  \"request_id\": \"6bf3202ade4a7411\",\n  \"results\": [\n    {\n      \"project_id\": \"adipisicing cupidatat\",\n      \"project_title\": \"dolore velit ipsum vo\",\n      \"project_images\": [\n        {\n          \"image_url\": \"ullamco\"\n        },\n        {\n          \"image_url\": \"amet aliqua Ut\"\n        }\n      ],\n      \"project_certification\": \"mollit ex nostrud\",\n      \"project_country\": \"in anim\",\n      \"project_sdg_descriptions\": [\n        {\n          \"sdg\": 16,\n          \"description\": \"eiusmod anim\"\n        },\n        {\n          \"sdg\": 14,\n          \"description\": \"cillum fugiat\"\n        }\n      ],\n      \"project_operator\": \"magna laboru\",\n      \"price_per_kg\": {\n        \"value\": 119846959529529.97,\n        \"currency_code\": \"labore ut\"\n      },\n      \"translations\": [\n        {\n          \"language_code\": \"esse in sed\",\n          \"project_title\": \"elit ut culpa voluptate\",\n          \"project_sdg_descriptions\": [\n            {\n              \"sdg\": 16,\n              \"description\": \"irure Ut\"\n            },\n            {\n              \"sdg\": 3,\n              \"description\": \"laborum\"\n            }\n          ],\n          \"project_description\": \"deserunt Lorem laborum\"\n        },\n        {\n          \"language_code\": \"exercitation magna in ut amet\",\n          \"project_title\": \"est sit officia\",\n          \"project_sdg_descriptions\": [\n            {\n              \"sdg\": 4,\n              \"description\": \"proident commodo labore dolor\"\n            },\n            {\n              \"sdg\": 13,\n              \"description\": \"ex mollit nulla veniam\"\n            }\n          ],\n          \"project_description\": \"sunt reprehenderit do irure\"\n        }\n      ],\n      \"project_categories\": [\n        \"laboris tempor\",\n        \"proident adipisicing labore\"\n      ],\n      \"project_description\": \"adipisicin\",\n      \"annual_reduction_in_t\": -72468110.75936179,\n      \"expiration_date\": \"1956-01-23\"\n    },\n    {\n      \"project_id\": \"veniam ad dolor labore laboris\",\n      \"project_title\": \"Excepteur exercitation\",\n      \"project_images\": [\n        {\n          \"image_url\": \"enim magna\"\n        },\n        {\n          \"image_url\": \"sunt proident id\"\n        }\n      ],\n      \"project_certification\": \"officia nisi magna proident reprehenderit\",\n      \"project_country\": \"anim officia cillum labore\",\n      \"project_sdg_descriptions\": [\n        {\n          \"sdg\": 14,\n          \"description\": \"anim tempor officia id\"\n        },\n        {\n          \"sdg\": 3,\n          \"description\": \"cupidatat enim\"\n        }\n      ],\n      \"project_operator\": \"pariatur ut\",\n      \"price_per_kg\": {\n        \"value\": 307449648155079.94,\n        \"currency_code\": \"do labore\"\n      },\n      \"translations\": [\n        {\n          \"language_code\": \"Ut cupidatat incididunt sed ea\",\n          \"project_title\": \"qui commodo eu\",\n          \"project_sdg_descriptions\": [\n            {\n              \"sdg\": 4,\n              \"description\": \"quis laborum aute officia sint\"\n            },\n            {\n              \"sdg\": 1,\n              \"description\": \"irure in ut incididunt\"\n            }\n          ],\n          \"project_description\": \"eu\"\n        },\n        {\n          \"language_code\": \"ipsum\",\n          \"project_title\": \"non ea in dolore ipsum\",\n          \"project_sdg_descriptions\": [\n            {\n              \"sdg\": 5,\n              \"description\": \"proident officia minim\"\n            },\n            {\n              \"sdg\": 11,\n              \"description\": \"ut\"\n            }\n          ],\n          \"project_description\": \"proident laborum\"\n        }\n      ],\n      \"project_categories\": [\n        \"dolore Lorem\",\n        \"officia Ut amet pariatur\"\n      ],\n      \"project_description\": \"veniam ad occaecat enim\",\n      \"annual_reduction_in_t\": 45824228.90330133,\n      \"expiration_date\": \"2020-12-30\"\n    }\n  ]\n}",
               "cookie": [],
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "cb809dc7-5eb1-4496-89c2-76294f998786",
+              "id": "9c707ed0-dd72-45db-b0fa-b4733f42b8e7",
               "name": "Bad Request.\n",
               "originalRequest": {
                 "url": {
@@ -7043,19 +7043,19 @@
                   "disabled": false,
                   "description": "Request limit per hour.",
                   "key": "X-RateLimit-Limit",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The number of requests left for the time window.",
                   "key": "X-RateLimit-Remaining",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The UTC date/time at which the current rate limit window resets.",
                   "key": "X-RateLimit-Reset",
-                  "value": "2014-02-23T12:35:21.404Z"
+                  "value": "1964-10-26T17:52:49.318Z"
                 },
                 {
                   "key": "Content-Type",
@@ -7067,7 +7067,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "3148410e-1d3a-468c-b2c3-004007bcf113",
+              "id": "096336f6-14a9-4197-adae-74c9606d6a04",
               "name": "Unauthorized. Access Token is invalid or expired.\n",
               "originalRequest": {
                 "url": {
@@ -7107,19 +7107,19 @@
                   "disabled": false,
                   "description": "Request limit per hour.",
                   "key": "X-RateLimit-Limit",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The number of requests left for the time window.",
                   "key": "X-RateLimit-Remaining",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The UTC date/time at which the current rate limit window resets.",
                   "key": "X-RateLimit-Reset",
-                  "value": "2014-02-23T12:35:21.404Z"
+                  "value": "1964-10-26T17:52:49.318Z"
                 },
                 {
                   "key": "Content-Type",
@@ -7131,7 +7131,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "a2f5f440-71f3-4da5-ba9c-2b95cde68e9a",
+              "id": "17bff06c-e22b-46ef-af4c-f00d1c7e38fb",
               "name": "Rate Limit exceeded.\n",
               "originalRequest": {
                 "url": {
@@ -7171,19 +7171,19 @@
                   "disabled": false,
                   "description": "Request limit per hour.",
                   "key": "X-RateLimit-Limit",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The number of requests left for the time window.",
                   "key": "X-RateLimit-Remaining",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The UTC date/time at which the current rate limit window resets.",
                   "key": "X-RateLimit-Reset",
-                  "value": "2014-02-23T12:35:21.404Z"
+                  "value": "1964-10-26T17:52:49.318Z"
                 },
                 {
                   "key": "Content-Type",
@@ -7201,7 +7201,7 @@
           }
         },
         {
-          "id": "5a4d3eff-cfff-45a1-90bc-479944c48c41",
+          "id": "5c67dcf1-678b-4806-aa88-197643bb4251",
           "name": "Get Donation Report",
           "request": {
             "name": "Get Donation Report",
@@ -7253,7 +7253,7 @@
           },
           "response": [
             {
-              "id": "c7780165-89da-474a-9cea-23d2c9328ccb",
+              "id": "6c0b31b0-c5b5-44c9-882a-7af9e9c3b1ad",
               "name": "A Donation Report",
               "originalRequest": {
                 "url": {
@@ -7297,31 +7297,31 @@
                   "disabled": false,
                   "description": "Request limit per hour.",
                   "key": "X-RateLimit-Limit",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The number of requests left for the time window.",
                   "key": "X-RateLimit-Remaining",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The UTC date/time at which the current rate limit window resets.",
                   "key": "X-RateLimit-Reset",
-                  "value": "2014-02-23T12:35:21.404Z"
+                  "value": "1964-10-26T17:52:49.318Z"
                 },
                 {
                   "key": "Content-Type",
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"request_id\": \"6bf3202ade4a7411\",\n  \"results\": [\n    {\n      \"donation_id\": \"velit sed sint\",\n      \"project_id\": \"ex in proident incididunt sit\",\n      \"created_at\": \"1962-03-18T09:03:11.517Z\",\n      \"updated_at\": \"1987-12-23T01:00:37.521Z\",\n      \"account_id\": \"1c974398-4d2b-44fa-b292-64a46c0e6577\",\n      \"amount\": {\n        \"value\": 64244124944034.2,\n        \"currency_code\": \"velit\"\n      },\n      \"offset_co2_kg\": -70424887.90637904,\n      \"status\": \"pending\"\n    },\n    {\n      \"donation_id\": \"incididunt minim esse est\",\n      \"project_id\": \"amet eiusmod\",\n      \"created_at\": \"2010-01-25T02:35:00.340Z\",\n      \"updated_at\": \"1970-06-08T06:05:00.537Z\",\n      \"account_id\": \"1c974398-4d2b-44fa-b292-64a46c0e6577\",\n      \"amount\": {\n        \"value\": 178480114962950.9,\n        \"currency_code\": \"sunt esse proident dolore\"\n      },\n      \"offset_co2_kg\": -22985296.90202105,\n      \"status\": \"cancelled\"\n    }\n  ]\n}",
+              "body": "{\n  \"request_id\": \"6bf3202ade4a7411\",\n  \"results\": [\n    {\n      \"donation_id\": \"in aliqua d\",\n      \"project_id\": \"cupidatat\",\n      \"created_at\": \"1958-04-28T07:54:10.130Z\",\n      \"updated_at\": \"1945-11-08T11:33:08.114Z\",\n      \"account_id\": \"1c974398-4d2b-44fa-b292-64a46c0e6577\",\n      \"amount\": {\n        \"value\": 703260015793805.4,\n        \"currency_code\": \"reprehenderit sed id\"\n      },\n      \"offset_co2_kg\": 34864181.93692571,\n      \"status\": \"cancelled\"\n    },\n    {\n      \"donation_id\": \"ut veniam qui voluptate\",\n      \"project_id\": \"in nostrud quis\",\n      \"created_at\": \"1958-06-21T20:09:51.528Z\",\n      \"updated_at\": \"2001-03-15T01:12:08.794Z\",\n      \"account_id\": \"1c974398-4d2b-44fa-b292-64a46c0e6577\",\n      \"amount\": {\n        \"value\": 864471295942543.6,\n        \"currency_code\": \"non esse eiusmod est\"\n      },\n      \"offset_co2_kg\": -14541796.065329432,\n      \"status\": \"pending\"\n    }\n  ]\n}",
               "cookie": [],
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "cb3a2a5a-d7e6-4e4c-9bec-5dacbf4c5f5a",
+              "id": "4484bf34-1eb7-4fc5-b148-1eaba5be9dba",
               "name": "Bad Request.\n",
               "originalRequest": {
                 "url": {
@@ -7365,19 +7365,19 @@
                   "disabled": false,
                   "description": "Request limit per hour.",
                   "key": "X-RateLimit-Limit",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The number of requests left for the time window.",
                   "key": "X-RateLimit-Remaining",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The UTC date/time at which the current rate limit window resets.",
                   "key": "X-RateLimit-Reset",
-                  "value": "2014-02-23T12:35:21.404Z"
+                  "value": "1964-10-26T17:52:49.318Z"
                 },
                 {
                   "key": "Content-Type",
@@ -7389,7 +7389,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "bcae4724-4d7e-4705-b80f-91dad5c82932",
+              "id": "4d8e4bb6-501b-4def-8903-3323047fc511",
               "name": "Unauthorized. Access Token is invalid or expired.\n",
               "originalRequest": {
                 "url": {
@@ -7433,19 +7433,19 @@
                   "disabled": false,
                   "description": "Request limit per hour.",
                   "key": "X-RateLimit-Limit",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The number of requests left for the time window.",
                   "key": "X-RateLimit-Remaining",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The UTC date/time at which the current rate limit window resets.",
                   "key": "X-RateLimit-Reset",
-                  "value": "2014-02-23T12:35:21.404Z"
+                  "value": "1964-10-26T17:52:49.318Z"
                 },
                 {
                   "key": "Content-Type",
@@ -7457,7 +7457,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "1b2c5e25-c9c6-43d6-890d-e291a331dc1c",
+              "id": "cc56fcc9-7466-414d-96ab-3a9ce8c53bad",
               "name": "Rate Limit exceeded.\n",
               "originalRequest": {
                 "url": {
@@ -7501,19 +7501,19 @@
                   "disabled": false,
                   "description": "Request limit per hour.",
                   "key": "X-RateLimit-Limit",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The number of requests left for the time window.",
                   "key": "X-RateLimit-Remaining",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The UTC date/time at which the current rate limit window resets.",
                   "key": "X-RateLimit-Reset",
-                  "value": "2014-02-23T12:35:21.404Z"
+                  "value": "1964-10-26T17:52:49.318Z"
                 },
                 {
                   "key": "Content-Type",
@@ -7531,7 +7531,7 @@
           }
         },
         {
-          "id": "84dad8a1-9234-465e-a2d9-a0af74ba45dd",
+          "id": "a2ae2ea9-8104-424b-919e-1d4c92add7d6",
           "name": "Offset carbon footprint",
           "request": {
             "name": "Offset carbon footprint",
@@ -7584,7 +7584,7 @@
           },
           "response": [
             {
-              "id": "b9f845d4-ac8a-4f45-a0e0-44ebeffc5759",
+              "id": "0b365875-1617-4b26-aa94-e6a1df9d3aec",
               "name": "A List of donations",
               "originalRequest": {
                 "url": {
@@ -7628,31 +7628,31 @@
                   "disabled": false,
                   "description": "Request limit per hour.",
                   "key": "X-RateLimit-Limit",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The number of requests left for the time window.",
                   "key": "X-RateLimit-Remaining",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The UTC date/time at which the current rate limit window resets.",
                   "key": "X-RateLimit-Reset",
-                  "value": "2014-02-23T12:35:21.404Z"
+                  "value": "1964-10-26T17:52:49.318Z"
                 },
                 {
                   "key": "Content-Type",
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"request_id\": \"6bf3202ade4a7411\",\n  \"results\": [\n    {\n      \"donation_id\": \"te\",\n      \"project_id\": \"Excepteur aliquip in\",\n      \"created_at\": \"2018-07-18T06:54:17.524Z\",\n      \"updated_at\": \"1996-06-22T07:29:10.099Z\",\n      \"account_id\": \"1c974398-4d2b-44fa-b292-64a46c0e6577\",\n      \"amount\": {\n        \"value\": 201395275200143.56,\n        \"currency_code\": \"in in\"\n      },\n      \"offset_co2_kg\": 20517067.48561153,\n      \"status\": \"pending\"\n    },\n    {\n      \"donation_id\": \"labore culpa ut incididunt\",\n      \"project_id\": \"in deserunt id i\",\n      \"created_at\": \"1989-10-10T23:10:56.423Z\",\n      \"updated_at\": \"1944-08-12T23:33:40.462Z\",\n      \"account_id\": \"1c974398-4d2b-44fa-b292-64a46c0e6577\",\n      \"amount\": {\n        \"value\": 608343673539005.4,\n        \"currency_code\": \"esse in\"\n      },\n      \"offset_co2_kg\": -88522708.55219615,\n      \"status\": \"cancelled\"\n    }\n  ]\n}",
+              "body": "{\n  \"request_id\": \"6bf3202ade4a7411\",\n  \"results\": [\n    {\n      \"donation_id\": \"amet sit commodo\",\n      \"project_id\": \"dolore est Excepteur enim\",\n      \"created_at\": \"1982-02-12T17:11:37.750Z\",\n      \"updated_at\": \"1990-12-06T11:48:05.029Z\",\n      \"account_id\": \"1c974398-4d2b-44fa-b292-64a46c0e6577\",\n      \"amount\": {\n        \"value\": 361296997384148,\n        \"currency_code\": \"aliquip ad\"\n      },\n      \"offset_co2_kg\": 62699509.96379569,\n      \"status\": \"cancelled\"\n    },\n    {\n      \"donation_id\": \"Lorem\",\n      \"project_id\": \"amet dolor Excepteur\",\n      \"created_at\": \"1979-01-18T04:28:41.137Z\",\n      \"updated_at\": \"2021-09-30T17:30:14.060Z\",\n      \"account_id\": \"1c974398-4d2b-44fa-b292-64a46c0e6577\",\n      \"amount\": {\n        \"value\": 860548065060322.8,\n        \"currency_code\": \"Excepteur sed\"\n      },\n      \"offset_co2_kg\": 1389627.2425395548,\n      \"status\": \"cancelled\"\n    }\n  ]\n}",
               "cookie": [],
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "906b0ae9-5d29-4ca7-a20a-23bee776b9ae",
+              "id": "be0f56ca-4cb4-4d86-a9fb-a07bc4f377bb",
               "name": "Bad Request.\n",
               "originalRequest": {
                 "url": {
@@ -7696,19 +7696,19 @@
                   "disabled": false,
                   "description": "Request limit per hour.",
                   "key": "X-RateLimit-Limit",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The number of requests left for the time window.",
                   "key": "X-RateLimit-Remaining",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The UTC date/time at which the current rate limit window resets.",
                   "key": "X-RateLimit-Reset",
-                  "value": "2014-02-23T12:35:21.404Z"
+                  "value": "1964-10-26T17:52:49.318Z"
                 },
                 {
                   "key": "Content-Type",
@@ -7720,7 +7720,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "7a6b2686-8636-4cca-8843-b19f8d2630c2",
+              "id": "8e7c047f-b4ac-4bd8-a00b-78a082fa4e21",
               "name": "Unauthorized. Access Token is invalid or expired.\n",
               "originalRequest": {
                 "url": {
@@ -7764,19 +7764,19 @@
                   "disabled": false,
                   "description": "Request limit per hour.",
                   "key": "X-RateLimit-Limit",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The number of requests left for the time window.",
                   "key": "X-RateLimit-Remaining",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The UTC date/time at which the current rate limit window resets.",
                   "key": "X-RateLimit-Reset",
-                  "value": "2014-02-23T12:35:21.404Z"
+                  "value": "1964-10-26T17:52:49.318Z"
                 },
                 {
                   "key": "Content-Type",
@@ -7788,7 +7788,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "d19efd22-244c-47c2-a824-b7a8a4ac0beb",
+              "id": "54395d06-1c5c-4d14-99d4-4dccb1b1eccb",
               "name": "Rate Limit exceeded.\n",
               "originalRequest": {
                 "url": {
@@ -7832,19 +7832,19 @@
                   "disabled": false,
                   "description": "Request limit per hour.",
                   "key": "X-RateLimit-Limit",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The number of requests left for the time window.",
                   "key": "X-RateLimit-Remaining",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The UTC date/time at which the current rate limit window resets.",
                   "key": "X-RateLimit-Reset",
-                  "value": "2014-02-23T12:35:21.404Z"
+                  "value": "1964-10-26T17:52:49.318Z"
                 },
                 {
                   "key": "Content-Type",
@@ -7862,7 +7862,7 @@
           }
         },
         {
-          "id": "ea3b2973-9850-4a50-bcc8-b7cb86dfa58f",
+          "id": "2562a30f-844f-40cc-a43b-5e63c9cf8265",
           "name": "Offset with Amount",
           "request": {
             "name": "Offset with Amount",
@@ -7915,7 +7915,7 @@
           },
           "response": [
             {
-              "id": "d1d6c4fa-5f12-4f2a-bb79-53e273e6633b",
+              "id": "c68b8387-9160-46f0-a8d4-a681518e4bcd",
               "name": "A List of donations",
               "originalRequest": {
                 "url": {
@@ -7959,31 +7959,31 @@
                   "disabled": false,
                   "description": "Request limit per hour.",
                   "key": "X-RateLimit-Limit",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The number of requests left for the time window.",
                   "key": "X-RateLimit-Remaining",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The UTC date/time at which the current rate limit window resets.",
                   "key": "X-RateLimit-Reset",
-                  "value": "2014-02-23T12:35:21.404Z"
+                  "value": "1964-10-26T17:52:49.318Z"
                 },
                 {
                   "key": "Content-Type",
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"request_id\": \"6bf3202ade4a7411\",\n  \"results\": [\n    {\n      \"donation_id\": \"quis dolore proident adipisicing magna\",\n      \"project_id\": \"sed\",\n      \"created_at\": \"1955-06-01T06:34:45.240Z\",\n      \"updated_at\": \"1952-12-05T21:28:50.680Z\",\n      \"account_id\": \"1c974398-4d2b-44fa-b292-64a46c0e6577\",\n      \"amount\": {\n        \"value\": \"<number>\",\n        \"currency_code\": \"<string>\"\n      },\n      \"offset_co2_kg\": 23234170.217300847,\n      \"status\": \"cancelled\"\n    },\n    {\n      \"donation_id\": \"in culpa ul\",\n      \"project_id\": \"ex quis nulla eiusmod\",\n      \"created_at\": \"1997-05-06T23:31:39.355Z\",\n      \"updated_at\": \"1964-10-19T09:40:39.133Z\",\n      \"account_id\": \"1c974398-4d2b-44fa-b292-64a46c0e6577\",\n      \"amount\": {\n        \"value\": \"<number>\",\n        \"currency_code\": \"<string>\"\n      },\n      \"offset_co2_kg\": -61926841.09742741,\n      \"status\": \"pending\"\n    }\n  ]\n}",
+              "body": "{\n  \"request_id\": \"6bf3202ade4a7411\",\n  \"results\": [\n    {\n      \"donation_id\": \"nisi ei\",\n      \"project_id\": \"occaecat qui commodo\",\n      \"created_at\": \"1977-07-18T06:52:25.044Z\",\n      \"updated_at\": \"1989-05-31T21:41:08.644Z\",\n      \"account_id\": \"1c974398-4d2b-44fa-b292-64a46c0e6577\",\n      \"amount\": {\n        \"value\": \"<number>\",\n        \"currency_code\": \"<string>\"\n      },\n      \"offset_co2_kg\": -30905254.44196959,\n      \"status\": \"cancelled\"\n    },\n    {\n      \"donation_id\": \"in anim enim\",\n      \"project_id\": \"Excepteur occaecat nostrud\",\n      \"created_at\": \"2011-02-27T15:39:49.724Z\",\n      \"updated_at\": \"1971-07-03T15:51:51.747Z\",\n      \"account_id\": \"1c974398-4d2b-44fa-b292-64a46c0e6577\",\n      \"amount\": {\n        \"value\": \"<number>\",\n        \"currency_code\": \"<string>\"\n      },\n      \"offset_co2_kg\": 40066623.51187682,\n      \"status\": \"completed\"\n    }\n  ]\n}",
               "cookie": [],
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "b7a479c8-6b9c-418b-b76d-9864b0e517f3",
+              "id": "b52eb867-6457-4062-91a5-5bbff2acbdce",
               "name": "Bad Request.\n",
               "originalRequest": {
                 "url": {
@@ -8027,19 +8027,19 @@
                   "disabled": false,
                   "description": "Request limit per hour.",
                   "key": "X-RateLimit-Limit",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The number of requests left for the time window.",
                   "key": "X-RateLimit-Remaining",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The UTC date/time at which the current rate limit window resets.",
                   "key": "X-RateLimit-Reset",
-                  "value": "2014-02-23T12:35:21.404Z"
+                  "value": "1964-10-26T17:52:49.318Z"
                 },
                 {
                   "key": "Content-Type",
@@ -8051,7 +8051,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "522968f1-3adb-41a8-9232-1c51f6882877",
+              "id": "6a49ae30-fba1-42de-a25a-2fbcd6d6a41b",
               "name": "Unauthorized. Access Token is invalid or expired.\n",
               "originalRequest": {
                 "url": {
@@ -8095,19 +8095,19 @@
                   "disabled": false,
                   "description": "Request limit per hour.",
                   "key": "X-RateLimit-Limit",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The number of requests left for the time window.",
                   "key": "X-RateLimit-Remaining",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The UTC date/time at which the current rate limit window resets.",
                   "key": "X-RateLimit-Reset",
-                  "value": "2014-02-23T12:35:21.404Z"
+                  "value": "1964-10-26T17:52:49.318Z"
                 },
                 {
                   "key": "Content-Type",
@@ -8119,7 +8119,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "ae6ff75f-3fee-4e41-a9ab-3cf1e7183fa9",
+              "id": "c03d6969-3f4d-4273-81b1-dc3342350a78",
               "name": "Rate Limit exceeded.\n",
               "originalRequest": {
                 "url": {
@@ -8163,19 +8163,19 @@
                   "disabled": false,
                   "description": "Request limit per hour.",
                   "key": "X-RateLimit-Limit",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The number of requests left for the time window.",
                   "key": "X-RateLimit-Remaining",
-                  "value": "-79212324"
+                  "value": "-54128415"
                 },
                 {
                   "disabled": false,
                   "description": "The UTC date/time at which the current rate limit window resets.",
                   "key": "X-RateLimit-Reset",
-                  "value": "2014-02-23T12:35:21.404Z"
+                  "value": "1964-10-26T17:52:49.318Z"
                 },
                 {
                   "key": "Content-Type",
@@ -8205,7 +8205,7 @@
     }
   ],
   "info": {
-    "_postman_id": "4f41b5b4-275f-4197-a826-0cec87ea7857",
+    "_postman_id": "27d37726-0289-4301-af42-054375988a31",
     "name": "ecolytiq SaaS",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
     "description": {
