@@ -25,4 +25,8 @@ redoc-cli build v3-2023-02-23/openapi.yaml --options=theme.json --disableGoogleF
 cp redoc-static.html v3-2023-02-23/index.html
 mv redoc-static.html index.html
 
+redoc-cli build v3-2023-04-25/openapi.yaml --options=theme.json --disableGoogleFont -t ecolytiq.hbs
+cp redoc-static.html v3-2023-04-25/index.html
+mv redoc-static.html index.html
+
  

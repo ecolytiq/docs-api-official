@@ -31,7 +31,7 @@ TEMP1=$(mktemp)
 
 # TEMP3=$(mktemp)
 
-openapi2postmanv2 -s $INPUT -o $TEMP1 -p -O folderStrategy=Tags,optimizeConversion=false,stackLimit=20
+openapi2postmanv2 -s $INPUT -o $TEMP1 -p -O folderStrategy=Tags,optimizeConversion=false,stackLimit=20,parametersResolution=Example
 
 sed -i "" -e "s/<Bearer Token>/{{bearerToken}}/g"  \
     -e "s/<Basic Auth Username>/{{clientId}}/g" \
