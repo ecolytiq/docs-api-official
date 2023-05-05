@@ -33,9 +33,9 @@ TEMP1=$(mktemp)
 
 openapi2postmanv2 -s $INPUT -o $TEMP1 -p -O folderStrategy=Tags,optimizeConversion=false,stackLimit=20,parametersResolution=Example
 
-sed -i "" -e "s/<Bearer Token>/{{bearerToken}}/g"  \
-    -e "s/<Basic Auth Username>/{{clientId}}/g" \
-    -e "s/<Basic Auth Password>/{{clientSecret}}/g" $TEMP1
+sed -i "" -e "s/Bearer null/Bearer {{bearerToken}}/g"  \
+    -e "s/{{basicAuthUsername}}/{{clientId}}/g" \
+    -e "s/{{basicAuthPassword}}/{{clientSecret}}/g" $TEMP1
 
 jq '(.item[] 
         | select(.name=="Authentication").item[] 
