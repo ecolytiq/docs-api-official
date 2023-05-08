@@ -277,6 +277,7 @@ tags:
       > They are not meant to initiate actual flow of payments between the customer and the provider!
 
 
+
 security:
   - bearerAuth: [ ]
 
@@ -285,7 +286,7 @@ paths:
     post:
       operationId: postOAuthToken
       security:
-        - BasicAuth: []
+        - BasicAuth: [ ]
       description: Request OAuth 2.0 Access Token with client credentials grant. This endpoint is proteced with Basic Auth. Use the client_id as username and the client_secret as password.
       summary: Request Access Token
       tags:
@@ -319,7 +320,7 @@ paths:
     get:
       operationId: getInfoCo2models
       security:
-        - BearerAuth: []
+        - BearerAuth: [ ]
       description: |
         Retrieve a list of supported calculation models for CO<sub>2</sub> footprint calculation.
         The `enabled` flag informs wether a specific model is available for use by the requesting set of client credentials since access to the models may vary from customer to customer.
@@ -383,7 +384,7 @@ paths:
     get:
       operationId: getInfoCategorySystems
       security:
-        - BearerAuth: []
+        - BearerAuth: [ ]
       description: >-
         Retrieve a list of category systems that are supported by the platform.
         The `enabled` flag informs wether a customer / set of client credentials is permitted to use a specific category system, since not all supported category systems may be accessible by every customer.
@@ -447,11 +448,21 @@ paths:
     get:
       operationId: getInfoCategories
       security:
-        - BearerAuth: []
+        - BearerAuth: [ ]
       description: Retrieve a list of available transaction categories.
       summary: List of categories
       tags:
         - Info API
+      parameters:
+        - in: query
+          required: false
+          name: model
+          description: |
+            The model for supported categories.
+            
+            If unset, then all categories will be returned.
+          schema:
+            type: string
       responses:
         '200':
           description: |
@@ -509,7 +520,7 @@ paths:
     post:
       operationId: postTransactionsTransactions
       security:
-        - BearerAuth: []
+        - BearerAuth: [ ]
       description: |
         Use this endpoint to process and store bank transactions. 
 
@@ -651,7 +662,7 @@ paths:
     get:
       operationId: getTransactionsTransactions
       security:
-        - BearerAuth: []
+        - BearerAuth: [ ]
       summary: Get Transactions by IDs
       description: Retrieve information about previously processed transactions identified by their IDs.
       tags:
@@ -847,7 +858,7 @@ paths:
     get:
       operationId: getTransactionsRefinements
       security:
-        - BearerAuth: []
+        - BearerAuth: [ ]
       summary: Get Available Questions for Refinement of Specific Transactions
       description: >-
         For certain types of goods or services the amount spent may not actually be an accurate representation of the CO<sub>2</sub> (equivalent) emission caused by that good or service. 
@@ -955,7 +966,7 @@ paths:
     post:
       operationId: postTransactionsRefinements
       security:
-        - BearerAuth: []
+        - BearerAuth: [ ]
       description: |
         Recalculate the carbon footprint associated with a transaction by providing answers to specific questions. 
 
@@ -1050,7 +1061,7 @@ paths:
     get:
       operationId: getTransactionsQuestions
       security:
-        - BearerAuth: []
+        - BearerAuth: [ ]
       summary: Get Questions and Answers for Transaction Refinement (by IDs)
       description: |
         Retrieve questions and answers that can be used to refine a transaction. 
@@ -1151,7 +1162,7 @@ paths:
     get:
       operationId: getContentComparables
       security:
-        - BearerAuth: []
+        - BearerAuth: [ ]
       tags:
         - Content API
       description: |
@@ -1255,7 +1266,7 @@ paths:
     get:
       operationId: getContentComparablesRandom
       security:
-        - BearerAuth: []
+        - BearerAuth: [ ]
       tags:
         - Content API
       description: >-
@@ -1374,7 +1385,7 @@ paths:
     get:
       operationId: getContentInsights
       security:
-        - BearerAuth: []
+        - BearerAuth: [ ]
       tags:
         - Content API
       description: >-
@@ -1465,7 +1476,7 @@ paths:
     get:
       operationId: getContextualInsights
       security:
-        - BearerAuth: []
+        - BearerAuth: [ ]
       tags:
         - Content API
       description: Get Contextual Insights by IDs.
@@ -1556,7 +1567,7 @@ paths:
     get:
       operationId: getContentInsightsRandom
       security:
-        - BearerAuth: []
+        - BearerAuth: [ ]
       tags:
         - Content API
       description: >-
@@ -1658,7 +1669,7 @@ paths:
     get:
       operationId: getProfilingInsights
       security:
-        - BearerAuth: []
+        - BearerAuth: [ ]
       tags:
         - Profiling API
       description: >-
@@ -1859,7 +1870,7 @@ paths:
     get:
       operationId: getContentExplanations
       security:
-        - BearerAuth: []
+        - BearerAuth: [ ]
       tags:
         - Content API
       description: >-
@@ -1952,7 +1963,7 @@ paths:
     get:
       operationId: getContentExplanationsRandom
       security:
-        - BearerAuth: []
+        - BearerAuth: [ ]
       tags:
         - Content API
       description: >-
@@ -2054,7 +2065,7 @@ paths:
     get:
       operationId: getProfilingQuestions
       security:
-        - BearerAuth: []
+        - BearerAuth: [ ]
       summary: Get Questions for Profiling by IDs
       description: >-
         Get questions, answers and translations used for Profiling. 
@@ -2102,7 +2113,7 @@ paths:
     post:
       operationId: postProfilingAnswer
       security:
-        - BearerAuth: []
+        - BearerAuth: [ ]
       description: >-
         Save Answer for a given Question. 
 
@@ -2136,7 +2147,7 @@ paths:
     post: # Should this not be DELETE?
       operationId: postAccountDeleteAccounts
       security:
-        - BearerAuth: []
+        - BearerAuth: [ ]
       description: |
         By calling this endpoint all data for the given accounts is deleted from the ecolytiq platform.
         This includes
@@ -2190,7 +2201,7 @@ paths:
     post:
       operationId: postOnPremContentRatings
       security:
-        - BearerAuth: []
+        - BearerAuth: [ ]
       description: >-
         Use this endpoint to send us feedback about content.         
         
@@ -2283,10 +2294,10 @@ paths:
     get:
       operationId: getActionProjects
       security:
-        - BearerAuth: []
+        - BearerAuth: [ ]
       description: >-
         Use this endpoint to retrieve a list of climate projects.
-      summary: "Get Climate Projects"
+      summary: "Get climate projects"
       tags:
         - "Action API"
       parameters:
@@ -2303,7 +2314,7 @@ paths:
               description: A category of projects
       responses:
         '200':
-          description: A List climate projects.
+          description: A List of climate projects
           headers:
             X-RateLimit-Limit:
               $ref: '#/components/headers/X-RateLimit-Limit'
@@ -2371,7 +2382,7 @@ paths:
     get:
       operationId: getOrderReport
       security:
-        - BearerAuth: []
+        - BearerAuth: [ ]
       description: >-
         Use this endpoint to retrieve an order report.
       summary: "Get Order Report"
@@ -2468,7 +2479,7 @@ paths:
     post:
       operationId: calculateMoneyAmountForCo2Impact
       security:
-        - BearerAuth: []
+        - BearerAuth: [ ]
       description: >-
         Use this endpoint to retrieve the amount of money, which would be required to get the amount of impact in CO<sub>2</sub> kg for the given project.
       summary: "Money calculation for CO<sub>2</sub> impact"
@@ -2550,7 +2561,7 @@ paths:
     post:
       operationId: calculateCo2ImpactForAmount
       security:
-        - BearerAuth: []
+        - BearerAuth: [ ]
       description: |
         Use this endpoint to retrieve the CO<sub>2</sub> impact in kg, which would be achieved by the given amount of money for the given project.
       summary: "CO<sub>2</sub> impact calculation for money"
@@ -2691,7 +2702,7 @@ components:
       value:
         request_id: 6bf3202ade4a7411
         results:
-          - code: ECOLYTIQ
+          - code: ECOLYTIQ_V2
             description: The ecolytiq category system
             enabled: true
           - code: FTS
@@ -2705,10 +2716,10 @@ components:
         request_id: 6bf3202ade4a7411
         results:
           - category: ex:misc
-            system: ECOLYTIQ
+            system: ECOLYTIQ_V2
             description: General
           - category: ex:food.groceries
-            system: ECOLYTIQ
+            system: ECOLYTIQ_V2
             description: Category for groceries
     CurrencyCodeListExample:
       value:
@@ -2736,9 +2747,9 @@ components:
         results:
           - id: 02805b59-878d-438d-a68b-9d721766ec60
             categories:
-              - system: ECOLYTIQ
+              - system: ECOLYTIQ_V2
                 value: "ex:misc"
-              - system: ECOLYTIQ
+              - system: ECOLYTIQ_V2
                 value: "ex:food.groceries"
             content:
               - language_code: de
@@ -2747,22 +2758,22 @@ components:
                 text: Equal to 14 parcel deliveries.
           - id: 0c21d5d2-9992-4d97-ae0f-713af30e1165
             categories:
-              - system: ECOLYTIQ
+              - system: ECOLYTIQ_V2
                 value: "ex:misc"
-              - system: ECOLYTIQ
+              - system: ECOLYTIQ_V2
                 value: "ex:food.groceries"
             content:
               - language_code: de
                 text: Das entspricht einem Kurzstreckenflug von 2 Kilometern.
               - language_code: en
                 text: Equal to a short-distance flight of 2 kilometres.
-        errors: []
+        errors: [ ]
 
     RefinementsUnavailableResponseExample:
       value:
         request_id: afb21a0fa3446220
-        results: []
-        errors: []
+        results: [ ]
+        errors: [ ]
     RefinementsUnansweredResponseExample:
       value:
         request_id: ce359f490283d703
@@ -2779,7 +2790,7 @@ components:
             question_id: a94bc4b7-2664-43d3-97ee-1556bc6674ab
             answer_id: null
             input: null
-        errors: []
+        errors: [ ]
     RefinementsAnsweredResponseExample:
       value:
         request_id: ce9904cad20e303d
@@ -2796,7 +2807,7 @@ components:
             question_id: a94bc4b7-2664-43d3-97ee-1556bc6674ab
             answer_id: a8c60936-c821-48c6-8975-9f209423d9d9
             input: null
-        errors: []
+        errors: [ ]
 
 
     RefinementsAnswerFlightsRequestExample:
@@ -2816,11 +2827,11 @@ components:
           - transaction_id: 62c12ecc-17d7-469f-9ecc-b08e00eb8c90
             category:
               value: ex:transport.flight
-              system: ECOLYTIQ
+              system: ECOLYTIQ_V2
             co2_footprint:
               value: 2120016
               unit: g
-        errors: []
+        errors: [ ]
 
 
     InsightsResponseExample:
@@ -2829,7 +2840,7 @@ components:
         results:
           - id: 06462ed4-32e7-46b0-8920-31e982ba22c0
             categories:
-              - system: ECOLYTIQ
+              - system: ECOLYTIQ_V2
                 value: "ex:transport.flight"
             content:
               - language_code: de
@@ -2840,7 +2851,7 @@ components:
                 text: Choosing closer holiday destinations and video conferences over business trips can make air travel unnecessary and more sustainable!
           - id: 1b265b3b-d3b6-4e37-9f55-8c1632dc379e
             categories:
-              - system: ECOLYTIQ
+              - system: ECOLYTIQ_V2
                 value: "ex:misc.travel"
             content:
               - language_code: de
@@ -2849,7 +2860,7 @@ components:
               - language_code: en
                 title: A great tip to save money while driving!
                 text: "Want to save up some energy and money while you drive? Here are some tips: pay attention to the correct tire pressure, don't carry unnecessary weight in the car, shift gears early, and don't drive too fast."
-        errors: []
+        errors: [ ]
 
     ContextualInsightsResponseExample:
       value:
@@ -2875,7 +2886,7 @@ components:
             content:
               - language_code: en
                 text: "Because you use solar energy, you save 95 percent on energy."
-        errors: []
+        errors: [ ]
 
     InsightsProfilingResponseExample:
       value:
@@ -2890,7 +2901,7 @@ components:
             content_ids:
               - 035657e8-63d1-435a-a202-ef7ce6280093
               - 59501d85-a610-d41f-7bce-46944a0f90fe
-        errors: []
+        errors: [ ]
 
     ExplanationResponseExample:
       value:
@@ -2898,14 +2909,14 @@ components:
         results:
           - id: 3f967ccf-8b20-4bee-9879-1174f7a7b250
             categories:
-              - system: ECOLYTIQ
+              - system: ECOLYTIQ_V2
                 value: "ex:shopping.online"
             content:
               - language_code: de
                 text: "Die Umweltbilanz von Online Einkäufen basiert in unserer Berechnung auf zwei Aspekten.\r\n\r\n1. Der Wert für generellen Konsum / \u20AC\r\n2. Der Wert für Lieferungen / \u20AC (Amazon)\r\n\r\n1. Beim Onlinekauf eines Produktes beachten wir das CO\u00B2, das während der Produktion entsteht. Hierfür nutzen wir den Wert unserer Kategorie 'Genereller Konsum'.\r\n\r\n2. Dazu kommen die Emissionen, die durch die Lieferung entstehen. Hierfür nutzen wir Amazon Daten, da Amazon ein großer Repräsentant des Onlinehandels ist.\r\n\r\nEs ist wichtig anzumerken, dass ein Onlinekauf umweltschonender sein kann als ein persönlicher Einkauf, allerdings ist in dieser Kategorie sowohl die Emission für das Produkt, als auch für die Lieferung repräsentiert, während z.B. die Fahrt zum Geschäft und der dafür genutzte Treibstoff bei einem Offlinekauf in mehrere Kategorien aufgeteilt ist."
               - language_code: en
                 text: "The footprint of online shopping in our calculation is based on two aspects.\r\n\r\n1. Value for general consumption / \u20AC\r\n2. Value for delivery / \u20AC (Amazon)\r\n\r\n1. In purchasing an item online we need to regard the amount of CO\u00B2 that was necessary for the production, as referred to in our category 'general consumption'.\r\n\r\n2. On top of this general consumption value we have the process of delivering the package to your doorstep. We use Amazon data for this, as they are the major representative for deliveries.\r\n\r\nGenerally speaking, an online delivery can be more sustainable than a purchase in person. In our calculation for online shopping the value is higher than in general consumption. However, if you take your car to drive to the store and buy the same product, you are likely to have a larger footprint for the added fuel and car use."
-        errors: []
+        errors: [ ]
     BadRequestRefinements-Example:
       value:
         timestamp: "2022-12-02T15:40:48.413+00:00"
@@ -2960,7 +2971,7 @@ components:
           - transaction_id: "62c12ecc-17d7-469f-9ecc-b08e00eb8c90"
             account_id: "a083e879-b37c-4307-9407-a9825d82800b"
             category:
-              system: "ECOLYTIQ"
+              system: "ECOLYTIQ_V2"
               value: "ex:transport.flight"
             co2_model: "DE"
             amount:
@@ -2970,7 +2981,7 @@ components:
           - transaction_id: "fa2e6d26-fb0f-49f5-bc8d-ccedbc1ca084"
             account_id: "a083e879-b37c-4307-9407-a9825d82800b"
             category:
-              system: "ECOLYTIQ"
+              system: "ECOLYTIQ_V2"
               value: "ex:transport.servicestations"
             amount:
               value: -192.60
@@ -2984,18 +2995,18 @@ components:
           - transaction_id: "62c12ecc-17d7-469f-9ecc-b08e00eb8c90"
             category:
               value: "ex:transport.flight"
-              system: "ECOLYTIQ"
+              system: "ECOLYTIQ_V2"
             co2_footprint:
               value: 4486488
               unit: "g"
           - transaction_id: "fa2e6d26-fb0f-49f5-bc8d-ccedbc1ca084"
             category:
               value: "ex:transport.servicestations"
-              system: "ECOLYTIQ"
+              system: "ECOLYTIQ_V2"
             co2_footprint:
               value: 348606
               unit: "g"
-        errors: []
+        errors: [ ]
 
     Transaction-Request-Example-02:
       value:
@@ -3037,18 +3048,18 @@ components:
           - transaction_id: 71b24bdd-8aa4-4b8d-893b-4e74b05a1c98
             category:
               value: ex:misc
-              system: ECOLYTIQ
+              system: ECOLYTIQ_V2
             co2_footprint:
               value: 16472
               unit: g
           - transaction_id: fbc78d6b-122b-4ae3-8b5b-50f45230a39f
             category:
               value: ex:food.groceries
-              system: ECOLYTIQ
+              system: ECOLYTIQ_V2
             co2_footprint:
               value: 17666
               unit: g
-        errors: []
+        errors: [ ]
 
     Transaction-Request-Example-03:
       value:
@@ -3094,12 +3105,12 @@ components:
         transactions:
           - transaction_id: 71b24bdd-8aa4-4b8d-893b-4e74b05a1c98
             category:
-              system: "ECOLYTIQ"
+              system: "ECOLYTIQ_V2"
               value: "ex:misc"
           - transaction_id: fbc78d6b-122b-4ae3-8b5b-50f45230a39f
             account_id: 10547323-5594-45a7-a58f-3b8618770b7c
             category:
-              system: "ECOLYTIQ"
+              system: "ECOLYTIQ_V2"
               value: "ex:food.groceries"
     Transaction-Category-Update-Request-Example-02:
       value:
@@ -3107,11 +3118,11 @@ components:
         transactions:
           - transaction_id: 71b24bdd-8aa4-4b8d-893b-4e74b05a1c98
             category:
-              system: "ECOLYTIQ"
+              system: "ECOLYTIQ_V2"
               value: "ex:misc"
           - transaction_id: fbc78d6b-122b-4ae3-8b5b-50f45230a39f
             category:
-              system: "ECOLYTIQ"
+              system: "ECOLYTIQ_V2"
               value: "ex:food.groceries"
 
 
@@ -3121,7 +3132,7 @@ components:
         results:
           - transaction_id: 71b24bdd-8aa4-4b8d-893b-4e74b05a1c98
             category:
-              system: ECOLYTIQ
+              system: ECOLYTIQ_V2
               value: "ex:misc"
             co2_footprint:
               unit: g
@@ -3129,12 +3140,12 @@ components:
           - transaction_id: fbc78d6b-122b-4ae3-8b5b-50f45230a39f
             account_id: 10547323-5594-45a7-a58f-3b8618770b7c
             category:
-              system: ECOLYTIQ
+              system: ECOLYTIQ_V2
               value: "ex:food.groceries"
             co2_footprint:
               unit: g
               value: 1260
-        errors: []
+        errors: [ ]
 
     Transaction-Category-Update-Response-Example-02:
       value:
@@ -3561,7 +3572,7 @@ components:
         rating_system:
           description: Type of the used rating system.
           type: string
-          enum: [five_star]
+          enum: [ five_star ]
         five_star:
           $ref: '#/components/schemas/FiveStarRating'
 
