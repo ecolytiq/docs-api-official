@@ -273,8 +273,8 @@ tags:
 
       > #### Note:
       > 
-      > These endpoints are only meant for handling the data about carbon footprint impact orders between a Customer (e.g., bank) and a carbon project provider.
-      > They are not meant to initiate actual flow of payments between the customer and the provider!
+      > These endpoints are only meant for handling the data about carbon footprint impact orders between a Customer (e.g., bank) and a carbon project provider through ecolytiq.
+      > They are not meant to initiate actual flow of payments between the customer and the provider or ecolytiq!
 
 
 
