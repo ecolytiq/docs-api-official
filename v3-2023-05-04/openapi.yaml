@@ -2482,7 +2482,7 @@ paths:
         - BearerAuth: [ ]
       description: >-
         Use this endpoint to retrieve the amount of money, which would be required to get the amount of impact in CO<sub>2</sub> kg for the given project.
-      summary: "Money calculation for CO<sub>2</sub> impact"
+      summary: "Money calculation for CO2 impact"
       tags:
         - "Action API"
       requestBody:
@@ -2564,7 +2564,7 @@ paths:
         - BearerAuth: [ ]
       description: |
         Use this endpoint to retrieve the CO<sub>2</sub> impact in kg, which would be achieved by the given amount of money for the given project.
-      summary: "CO<sub>2</sub> impact calculation for money"
+      summary: "CO2 impact calculation for money"
       tags:
         - "Action API"
       requestBody:
