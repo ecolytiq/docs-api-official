@@ -1,0 +1,3 @@
+#Code to not allow any search engines!
+User-agent: *
+Disallow: /
