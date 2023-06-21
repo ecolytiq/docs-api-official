@@ -1,31 +1,13 @@
 #!/bin/sh
 
-redoc-cli build 2.4.0/openapi-2.4.0.yaml --options=theme.json --disableGoogleFont -t ecolytiq.hbs
-cp redoc-static.html 2.4.0/index.html
+version_directory=v3-2023-05-15
 
-redoc-cli build 3.0.0/openapi-3.0.0.yaml --options=theme.json --disableGoogleFont -t ecolytiq.hbs 
-cp redoc-static.html 3.0.0/index.html
+redoc-cli build ${version_directory}/openapi.yaml --options=theme.json --disableGoogleFont -t ecolytiq.hbs
+cp redoc-static.html ${version_directory}/index.html
 
-redoc-cli build 3.2.0/openapi-3.2.0.yaml --options=theme.json --disableGoogleFont -t ecolytiq.hbs
-cp redoc-static.html 3.2.0/index.html
+mkdir -p ${version_directory}/postman
 
-redoc-cli build preview/openapi.yaml --options=theme.json --disableGoogleFont -t ecolytiq.hbs
-cp redoc-static.html preview/index.html
-
-redoc-cli build private-modelfactor-preview/openapi.yaml --options=theme.json --disableGoogleFont -t ecolytiq.hbs
-cp redoc-static.html private-modelfactor-preview/index.html
-
-redoc-cli build v3-2022-10-04/openapi.yaml --options=theme.json --disableGoogleFont -t ecolytiq.hbs
-cp redoc-static.html v3-2022-10-04/index.html
-
-redoc-cli build v3-2022-12-15/openapi.yaml --options=theme.json --disableGoogleFont -t ecolytiq.hbs
-cp redoc-static.html v3-2022-12-15/index.html
-
-redoc-cli build v3-2023-02-23/openapi.yaml --options=theme.json --disableGoogleFont -t ecolytiq.hbs
-cp redoc-static.html v3-2023-02-23/index.html
-
-redoc-cli build v3-2023-05-04/openapi.yaml --options=theme.json --disableGoogleFont -t ecolytiq.hbs
-cp redoc-static.html v3-2023-05-04/index.html
+./buildPostman.sh ${version_directory}/openapi.yaml ${version_directory}/postman/ecolytiq_Sandbox.postman_collection.json
 
 mv redoc-static.html index.html
 
