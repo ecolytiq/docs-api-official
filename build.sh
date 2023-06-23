@@ -1,6 +1,6 @@
 #!/bin/sh
 
-version_directory=v3-2023-05-15
+version_directory=v3-2023-06-23
 
 redoc-cli build ${version_directory}/openapi.yaml --options=theme.json --disableGoogleFont -t ecolytiq.hbs
 cp redoc-static.html ${version_directory}/index.html
