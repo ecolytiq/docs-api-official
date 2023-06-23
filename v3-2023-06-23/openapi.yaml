@@ -1904,7 +1904,8 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/BulkAnswersRequest'
-              example: 
+            examples: 
+              Example:
                 $ref: '#/components/examples/Profile-Answer-Request-Example'
       responses:
         '200':
@@ -1920,7 +1921,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/BulkAnswerResponse'
-                example: 
+              examples:
+                Example: 
                   $ref: '#/components/examples/Profile-Answer-Response-Example'
         '401': 
           description: |
@@ -1960,7 +1962,8 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/DeleteAccountsRequest'
-              example: 
+            examples:
+              Example: 
                 $ref: "#/components/examples/Delete-Account-Request-Example"
       responses:
         '200':
@@ -1976,7 +1979,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/DeleteAccountsResponse'
-                example: 
+              examples: 
+                Example:
                   $ref: "#/components/examples/Delete-Account-Response-Example"
         '202':
           description: Confirmation that request can be handled
@@ -3081,7 +3085,7 @@ components:
             input: null
           - account_id: 1c974398-4d2b-44fa-b292-64a46c0e6577
             answer_id: 8948045b-d163-4d03-b9ec-3d5237a4550a
-            input: 3
+            input: "3"
     Profile-Answer-Response-Example:
       value: 
         request_id: 55edea99d812cf0f
