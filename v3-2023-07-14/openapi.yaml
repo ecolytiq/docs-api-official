@@ -3,7 +3,7 @@ openapi: 3.0.3
 info:
   description: |
     APIs of the ecolytiq SaaS
-  version: v3 - 2023-07-14
+  version: v3 - 2023-06-27
   title: ecolytiq SaaS
   contact:
     email: support@ecolytiq.com
@@ -183,7 +183,7 @@ tags:
 
       ## Download
 
-      <a href ="http://developer.ecolytiq.com/v3-2023-07-14/postman/ecolytiq_Sandbox.postman_collection.json" download>ecolytiq_Sandbox.postman_collection.json</a>
+      <a href ="http://developer.ecolytiq.com/v3-2023-06-27/postman/ecolytiq_Sandbox.postman_collection.json" download>ecolytiq_Sandbox.postman_collection.json</a>
 
   - name: Info API
     description: |
@@ -260,7 +260,7 @@ paths:
     post:
       operationId: postOAuthToken
       security:
-        - BasicAuth: []
+        - BasicAuth: [ ]
       description: |
         Request OAuth 2.0 Access Token with client credentials grant. This endpoint is protected with Basic Auth. Use the `client_id` as username and the `client_secret` as password.
 
@@ -290,7 +290,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ApiValidationError'
               examples:
-                Unauthorized: 
+                Unauthorized:
                   value:
                     timestamp: 2023-04-25T12:11:15.795+00:00
                     status: 401
@@ -664,7 +664,7 @@ paths:
                 $ref: '#/components/schemas/ApiValidationError'
               examples:
                 Example:
-                  value: 
+                  value:
                     $ref: '#/components/examples/BadRequestExample/value'
                     path: /transactions/v1/transactions
         '401':
@@ -767,7 +767,7 @@ paths:
                 $ref: '#/components/schemas/ApiValidationError'
               examples:
                 BadRequest-Example:
-                  value: 
+                  value:
                     $ref: '#/components/examples/BadRequestExample/value'
                     path: /transaction/v1/update-category
         '401':
@@ -958,7 +958,7 @@ paths:
                 $ref: '#/components/schemas/ApiValidationError'
               examples:
                 BadRequest-Example:
-                  value: 
+                  value:
                     $ref: '#/components/examples/BadRequestExample/value'
                     path: /transactions/v1/refinements
         '401':
@@ -1023,7 +1023,7 @@ paths:
             type: array
             items:
               type: string
-          example: 
+          example:
             - 9ce39d4f-cb36-4e93-b896-822156c9c159
             - 1411f1a1-251f-4220-a44b-441e6941ebf0
         - in: query
@@ -1105,7 +1105,7 @@ paths:
             type: array
             items:
               type: string
-            example: 
+            example:
               - 02805b59-878d-438d-a68b-9d721766ec60
         - $ref: "#/components/parameters/languageCodes"
       responses:
@@ -1143,7 +1143,7 @@ paths:
                   value:
                     $ref: '#/components/examples/BadRequestExample/value'
                     path: /content/v1/comparables
-            
+
         '401':
           description: |
             Unauthorized. Access Token is invalid or expired.
@@ -1201,8 +1201,8 @@ paths:
             format: int64
             minimum: 1
             example: 12345
-        - $ref: "#/components/parameters/categories" 
-        - $ref: "#/components/parameters/size" 
+        - $ref: "#/components/parameters/categories"
+        - $ref: "#/components/parameters/size"
         - $ref: "#/components/parameters/languageCodes"
       responses:
         '200':
@@ -1237,7 +1237,7 @@ paths:
                 $ref: '#/components/schemas/ApiValidationError'
               examples:
                 Example:
-                  value: 
+                  value:
                     $ref: '#/components/examples/BadRequestExample/value'
                     path: /content/v1/comparables/random
         '401':
@@ -1289,7 +1289,7 @@ paths:
             type: array
             items:
               type: string
-            example: 
+            example:
               - 06462ed4-32e7-46b0-8920-31e982ba22c0
         - $ref: "#/components/parameters/languageCodesOptional"
       responses:
@@ -1456,7 +1456,7 @@ paths:
                 $ref: '#/components/schemas/ApiError'
               examples:
                 Example:
-                  value: 
+                  value:
                     $ref: '#/components/examples/BadRequest-Example/value'
                     error_code: Invalid request
                     error_description: Your request is invalid. Please see API spec.
@@ -1550,7 +1550,7 @@ paths:
                 $ref: '#/components/schemas/ApiValidationError'
               examples:
                 Example:
-                  value: 
+                  value:
                     $ref: '#/components/examples/BadRequestExample/value'
                     path: /profiling/v1/insights
         '401':
@@ -1641,7 +1641,7 @@ paths:
                 $ref: '#/components/schemas/ApiValidationError'
               examples:
                 Example:
-                  value: 
+                  value:
                     $ref: '#/components/examples/BadRequestExample/value'
                     path: /profiling/v1/contextual-insights
         '401':
@@ -1874,7 +1874,7 @@ paths:
               examples:
                 Example:
                   $ref: '#/components/examples/Profile-Refinement-Request-With-IDs-Example'
-        '401': 
+        '401':
           description: |
             Unauthorized. Access Token is invalid or expired.
           headers:
@@ -1904,7 +1904,7 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/BulkAnswersRequest'
-            examples: 
+            examples:
               Example:
                 $ref: '#/components/examples/Profile-Answer-Request-Example'
       responses:
@@ -1922,9 +1922,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/BulkAnswerResponse'
               examples:
-                Example: 
+                Example:
                   $ref: '#/components/examples/Profile-Answer-Response-Example'
-        '401': 
+        '401':
           description: |
             Unauthorized. Access Token is invalid or expired.
           headers:
@@ -1936,7 +1936,7 @@ paths:
               $ref: '#/components/headers/X-RateLimit-Reset'
 
   /account/v1/delete-accounts:
-    post: 
+    post:
       operationId: postAccountDeleteAccounts
       security:
         - BearerAuth: [ ]
@@ -1963,7 +1963,7 @@ paths:
             schema:
               $ref: '#/components/schemas/DeleteAccountsRequest'
             examples:
-              Example: 
+              Example:
                 $ref: "#/components/examples/Delete-Account-Request-Example"
       responses:
         '200':
@@ -1979,7 +1979,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/DeleteAccountsResponse'
-              examples: 
+              examples:
                 Example:
                   $ref: "#/components/examples/Delete-Account-Response-Example"
         '202':
@@ -2129,9 +2129,9 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ClimateProjectsResponse'
-              examples: 
+              examples:
                 Example:
-                  $ref: "#/components/examples/ClimateProjectsExample"
+                  $ref: "#/components/examples/ActionProjectsExample"
         '400':
           description: |
             Bad Request.
@@ -2148,7 +2148,7 @@ paths:
                 $ref: '#/components/schemas/ApiValidationError'
               examples:
                 Example:
-                  value: 
+                  value:
                     $ref: '#/components/examples/BadRequestExample/value'
                     path: /action/v1/projects
         '401':
@@ -2245,7 +2245,7 @@ paths:
                 $ref: '#/components/schemas/ApiError'
               examples:
                 Invalid-date:
-                  value: 
+                  value:
                     request_id: 05633c2da4cafd32
                     error_code: Invalid request
                     error_description: Parse attempt failed for value [<value>]
@@ -2311,7 +2311,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CalculationResponse'
-              examples: 
+              examples:
                 Monetary value by carbon impact:
                   $ref: '#/components/examples/ActionByCarbonResponseExample'
         '400':
@@ -2330,7 +2330,7 @@ paths:
                 $ref: '#/components/schemas/ApiValidationError'
               examples:
                 Example:
-                  value: 
+                  value:
                     $ref: '#/components/examples/BadRequestExample/value'
                     path: /action/v1/order/carbon
         '401':
@@ -2377,7 +2377,7 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/Co2ImpactForMoneyRequest'
-            examples: 
+            examples:
               Carbon impact for monetary value:
                 $ref: "#/components/examples/ActionByMoneyRequestExample"
       responses:
@@ -2394,10 +2394,10 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CalculationResponse'
-              examples: 
+              examples:
                 Carbon impact for monetary value:
                   $ref: "#/components/examples/ActionByMoneyResponseExample"
-          
+
         '400':
           description: |
             Bad Request.
@@ -2458,14 +2458,14 @@ components:
         type: array
         items:
           type: string
-        example: 
+        example:
           - de
           - en
     languageCodesOptional:
       name: "language_codes"
       in: "query"
       description: ISO639-1 two-letter language code(s) to select output language(s) of the content piece(s).
-                   If the array is unset or empty all languages are included.
+        If the array is unset or empty all languages are included.
       required: false
       style: form
       explode: false
@@ -2483,7 +2483,7 @@ components:
         used as filter for categories. 
         If it is unset or empty all categories are used.
         A  [list of categories](#operation/getInfoCategories) can be retrieved using the [Info API](#tag/Info-API).
-    
+        
         Supports both ecolytiq 1.4 (`ECOLYTIQ`) and ecolytiq EEIO (`ECOLYTIQ_V2`) categories. 
       required: false
       style: form
@@ -2495,7 +2495,7 @@ components:
         example:
           - ex:food.groceries
           - ex:transport.localtransport
-    size: 
+    size:
       name: size
       in: query
       description: Number of content pieces returned.
@@ -2505,8 +2505,8 @@ components:
         minimum: 1
         maximum: 10
         example: 2
-    
-    
+
+
 
   headers:
     X-RateLimit-Limit:
@@ -3072,22 +3072,22 @@ components:
                     text: vegan
             input: null
           - id: 4f8d7bdf-6906-4680-a1d8-b05468b3e530
-            categories: []
+            categories: [ ]
             text:
               - language: en
                 text: How many people live in your household?
             type: INPUT
-            selectable: []
+            selectable: [ ]
             input:
               id: 8948045b-d163-4d03-b9ec-3d5237a4550a
               datatype: INTEGER
               validation:
                 - name: GREATER
                   condition: "0"
-        errors: []
+        errors: [ ]
     
     Profile-Answer-Request-Example:
-      value: 
+      value:
         answers:
           - account_id: 1c974398-4d2b-44fa-b292-64a46c0e6577
             answer_id: 9d1d0a2b-597b-4608-8371-9af6e178c969
@@ -3102,7 +3102,7 @@ components:
             answer_id: 8948045b-d163-4d03-b9ec-3d5237a4550a
             input: "3"
     Profile-Answer-Response-Example:
-      value: 
+      value:
         request_id: 55edea99d812cf0f
         results:
           - account_id: 1c974398-4d2b-44fa-b292-64a46c0e6577
@@ -3117,11 +3117,11 @@ components:
           - account_id: 1c974398-4d2b-44fa-b292-64a46c0e6577
             question_id: 4f8d7bdf-6906-4680-a1d8-b05468b3e530
             answer_id: 8948045b-d163-4d03-b9ec-3d5237a4550a
-        errors: []
+        errors: [ ]
 
     Delete-Account-Request-Example:
-      value: 
-        account_ids: 
+      value:
+        account_ids:
           - 1c974398-4d2b-44fa-b292-64a46c0e6577
         async: false
     
@@ -3171,7 +3171,7 @@ components:
             error_description: Resource not found
 
     ActionByCarbonRequestExample:
-      value: 
+      value:
         orders:
           - account_id: a083e879-b37c-4307-9407-a9825d82800b
             project_id: 5c406074-2fe9-4181-83d9-8dcae764a86b
@@ -3194,7 +3194,7 @@ components:
             updated_at: 2023-04-26T05:29:08.080240997Z
 
     ActionOrderReportResponseExample:
-      value: 
+      value:
         request_id: 31a8443b5e5906b3
         results:
           - order_id: 7bee5105-23d8-4f9e-8df9-8208cdc3ed6b
@@ -3219,7 +3219,7 @@ components:
             updated_at: 2023-04-26T05:29:08.080240997Z
 
 
-    ClimateProjectsExample:
+    ActionProjectsExample:
       value:
         request_id: cd1cdd07da9c5d6b
         results:
@@ -3249,22 +3249,22 @@ components:
             project_description: Project description
             annual_reduction_in_t: 9253
             expiration_date: 2024-01-14
-            projectClassification: AVOIDANCE
-            projectFunction: CONTRIBUTION
-            paymentMode: DONATION
-    
+            project_classification: AVOIDANCE
+            project_function: CONTRIBUTION
+            payment_mode: DONATION
+
     ActionByMoneyRequestExample:
-      value: 
+      value:
         orders:
           - account_id: a083e879-b37c-4307-9407-a9825d82800b
             project_id: 5c406074-2fe9-4181-83d9-8dcae764a86b
             amount:
-                value: 50.00
-                currency_code: EUR
+              value: 50.00
+              currency_code: EUR
             reference: A Reference For The Book Keepers
-      
+
     ActionByMoneyResponseExample:
-      value: 
+      value:
         request_id: 4e7346ea6b8cb20f
         results:
           - order_id: dddf2436-b9fe-4970-a36c-c89c7d02c26f
@@ -3285,7 +3285,7 @@ components:
         status: 400
         error: Bad Request
         # path: 
-        
+
 
   schemas:
 
@@ -3551,22 +3551,13 @@ components:
             $ref: '#/components/schemas/ProjectTranslation'
         project_classification:
           type: string
-          enum:
-            - AVOIDANCE
-            - REMOVAL
-            - TREE_PLANTING
+          description: Possible values are `AVOIDANCE`, `REMOVAL`, `TREE_PLANTING`
         project_function:
           type: string
-          enum:
-            - CONTRIBUTION
-            - CARBON_CREDIT
-            - INVEST
+          description: Possible values are `CONTRIBUTION`, `CARBON_CREDIT`, `INVEST`
         payment_mode:
           type: string
-          enum:
-            - DONATION
-            - PURCHASE
-
+          description: Possible values are `DONATION`, `PURCHASE`
     SdgDescription:
       type: object
       required:
@@ -4175,7 +4166,7 @@ components:
           type: string
         path:
           type: string
-        
+
     ###########################
 
     TransactionRequest:
