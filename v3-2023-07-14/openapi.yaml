@@ -815,9 +815,6 @@ paths:
         Calling this endpoint with valid transaction IDs will return a list of suitable refinement question IDs for the transactions in request. 
         If the question has already been answered the reference to the corresponding answer (or the value if it is not a predefined answer) will be also returned.
 
-        If no questions for the given `ids` or translations for the given `languages_codes` are found, the response is handled as partial success. Corresponding informations
-        will be returned in the error list of the response.
-
         > #### Note
 
         > Calling this endpoint returns only references to content pieces (i.e., content IDs for questions and/or answers).
@@ -1009,6 +1006,9 @@ paths:
 
         To get a list of references to questions relevant for a specific transaction, please use the 
         ["Get refinements for transactions"](#operation/getTransactionsRefinements) endpoint.
+
+        If no questions for the given `ids` or translations for the given `languages_codes` are found, the response is handled as partial success. Corresponding informations
+        will be returned in the error list of the response.
 
         > #### Note
         >
