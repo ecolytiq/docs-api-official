@@ -815,11 +815,14 @@ paths:
         Calling this endpoint with valid transaction IDs will return a list of suitable refinement question IDs for the transactions in request. 
         If the question has already been answered the reference to the corresponding answer (or the value if it is not a predefined answer) will be also returned.
 
+        If no questions for the given `ids` or translations for the given `languages_codes` are not found, the response is handled as partial success. Corresponding informations
+        will be returned in the error list of the response.
+
         > #### Note
 
         > Calling this endpoint returns only references to content pieces (i.e., content IDs for questions and/or answers).
 
-        > The mapping of question IDs / answer IDs and their text representation can be obtained from the [`GET /transactions/v1/questions`](#operation/getTransactionsQuestions) endpoint
+        > The mapping of question IDs / answer IDs and their text representation can be obtained from the [`GET /transactions/v1/questions`](#operation/getTransactionsQuestions) endpoint.
       tags:
         - Transaction API
       parameters:
@@ -1837,6 +1840,9 @@ paths:
 
         The questions can be retrieved in multiple languages using the `language_codes` parameter.
 
+        If no questions for the given `ids` or translations for the given `languages_codes` are not found, the response is handled as partial success. Corresponding informations
+        will be returned in the error list of the response.
+
         > #### Note:
 
         > This endpoint returns the actual content.
@@ -1866,7 +1872,7 @@ paths:
               $ref: '#/components/headers/X-RateLimit-Remaining'
             X-RateLimit-Reset:
               $ref: '#/components/headers/X-RateLimit-Reset'
-          description: A list of Questions
+          description: A list of profiling questions.
           content:
             application/json:
               schema:
