@@ -1,6 +1,6 @@
 #!/bin/sh
 
-version=v3-2023-06-27
+version=v3-2023-07-25
 
 redoc-cli build openapi.yaml --options=theme.json --disableGoogleFont -t ecolytiq.hbs --output index.html
 ./buildPostman.sh openapi.yaml ecolytiq_Sandbox.postman_collection.json
