@@ -10,12 +10,16 @@
       ```
 3. jq (`brew install jq`)
 
-## Build Docs
+## Update and Build Docs
+1. Update `openapi.yaml` in the root directory with your changes.
+2. Run the build script:
 ```
 ./build.sh
 ```
 
 ## Build Postman Collection from OpenAPI
+
+INFO: This step is included in the `build.sh` script and is not needed to be executed additionally.
 
 Requirements 2 and 3 must be met for this!
 
