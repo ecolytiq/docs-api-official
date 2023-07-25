@@ -10,12 +10,12 @@
       ```
 3. jq (`brew install jq`)
 
-## Build Docs
-```
-./build.sh
-```
+## Update and Build Docs
+See [Confluence](https://ecolytiq.atlassian.net/wiki/spaces/EC/pages/4528275659/API+Documentation#Changing-API-Docs).
 
 ## Build Postman Collection from OpenAPI
+
+INFO: This step is included in the `build.sh` script and is not needed to be executed additionally.
 
 Requirements 2 and 3 must be met for this!
 
