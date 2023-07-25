@@ -1,14 +1,11 @@
 #!/bin/sh
 
-version=v3-$(date '+%Y-%m-%d')
+version=v3-2023-06-27
 
-mkdir -p ${version}/postman
+redoc-cli build openapi.yaml --options=theme.json --disableGoogleFont -t ecolytiq.hbs --output index.html
+./buildPostman.sh openapi.yaml ecolytiq_Sandbox.postman_collection.json
 
-cp openapi.yaml ${version}/openapi.yaml
-
-redoc-cli build ${version}/openapi.yaml --options=theme.json --disableGoogleFont -t ecolytiq.hbs
-cp redoc-static.html ${version}/index.html
-
-./buildPostman.sh ${version}/openapi.yaml ${version}/postman/ecolytiq_Sandbox.postman_collection.json
-
-mv redoc-static.html index.html
+mkdir -p "${version}"/postman
+cp openapi.yaml "${version}"/openapi.yaml
+cp index.html "${version}"/index.html
+cp ecolytiq_Sandbox.postman_collection.json "${version}"/postman/ecolytiq_Sandbox.postman_collection.json

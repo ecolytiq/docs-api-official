@@ -12,7 +12,8 @@
 
 ## Update and Build Docs
 1. Update `openapi.yaml` in the root directory with your changes.
-2. Run the build script:
+2. Update the version variable in `build.sh` with the same date as in the `openapi.yaml` on line 6.
+3. Run the build script:
 ```
 ./build.sh
 ```
