@@ -31,11 +31,14 @@ OUTPUT=$2
 TEMP1='tmp1'
 touch $TEMP1
 
+TEMP2='tmp2'
+touch $TEMP2
+
 npx openapi-to-postmanv2@4.15.0 -s $INPUT -o $TEMP1 -p -O folderStrategy=Tags,optimizeConversion=false,stackLimit=20,parametersResolution=Example
 
 sed -i -e 's/Bearer null/Bearer {{bearerToken}}/g'  \
     -e 's/{{basicAuthUsername}}/{{clientId}}/g' \
-    -e 's/{{basicAuthPassword}}/{{clientSecret}}/g' $TEMP1
+    -e 's/{{basicAuthPassword}}/{{clientSecret}}/g' $TEMP1 > $TEMP2
 
 jq '(.item[]
         | select(.name=="Authentication").item[] 
@@ -74,5 +77,6 @@ jq '(.item[]
         | select(.name=="Authentication").item[]
         | select(.name=="Request Access Token").request.body.urlencoded[] 
         | select(.key=="scope")).type="text"
-    |del(.item[] | select(.name == "Postman"))' $TEMP1 > $OUTPUT
+    |del(.item[] | select(.name == "Postman"))' $TEMP2 > $OUTPUT
 rm $TEMP1
+rm $TEMP2
