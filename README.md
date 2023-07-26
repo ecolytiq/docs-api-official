@@ -1,8 +1,10 @@
 # ecolytiq API Docs
 
 ## Requirements
-1. Install `jq` https://jqlang.github.io/jq/
-   (Make sure jq is added to your PATH)
+1. Install `jq` https://jqlang.github.io/jq/ and make sure `jq` is added to your PATH. \
+   (The version used while writing this was `1.6`)
+2. Install `Node.js` https://nodejs.org/en and make sure `npx` is added to your PATH. \
+   (The version used while writing this was `18.15.0`)
 
 ## Update and Build Docs
 See [Confluence](https://ecolytiq.atlassian.net/wiki/spaces/EC/pages/4528275659/API+Documentation#Changing-API-Docs).

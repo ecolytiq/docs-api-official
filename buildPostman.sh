@@ -31,12 +31,6 @@ OUTPUT=$2
 TEMP1='tmp1'
 touch $TEMP1
 
-# TEMP2='tmp2'
-# touch $TEMP1
-
-# TEMP3='tmp3'
-# touch $TEMP1
-
 npx openapi-to-postmanv2@4.15.0 -s $INPUT -o $TEMP1 -p -O folderStrategy=Tags,optimizeConversion=false,stackLimit=20,parametersResolution=Example
 
 sed -i -e 's/Bearer null/Bearer {{bearerToken}}/g'  \
@@ -82,9 +76,3 @@ jq '(.item[]
         | select(.key=="scope")).type="text"
     |del(.item[] | select(.name == "Postman"))' $TEMP1 > $OUTPUT
 rm $TEMP1
-
-# jq '(.item[] | select(.name=="Authentication").item[] | select(.name="Request Access Token")).url={"raw": "{{tokenUrl}}", "host": ["{{tokenUrl}}"]}' $TEMP2 > $TEMP3
-# rm $TEMP2
-
-# jq 'del(.item[] | select(.name == "Postman"))' $TEMP3 > $OUTPUT
-# rm $TEMP3

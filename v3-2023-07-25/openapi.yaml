@@ -3,7 +3,7 @@ openapi: 3.0.3
 info:
   description: |
     APIs of the ecolytiq SaaS
-  version: v3 - 2023-07-25
+  version: v3 - 2023-07-26
   title: ecolytiq SaaS
   contact:
     email: support@ecolytiq.com
@@ -524,8 +524,10 @@ paths:
             schema:
               $ref: '#/components/schemas/TransactionRequest'
             examples:
-              Minimal Request:
-                $ref: '#/components/examples/Transaction-Request-Example-01'
+              Minimal Request for Retail Banking:
+                $ref: '#/components/examples/Transaction-Request-Example-01-retail'
+              Minimal Request for Commercial Banking:
+                $ref: '#/components/examples/Transaction-Request-Example-01-Commercial'
               Request With Merchant:
                 $ref: '#/components/examples/Transaction-Request-Example-02'
               Asynchronous Request With Merchant:
@@ -819,7 +821,7 @@ paths:
 
         > Calling this endpoint returns only references to content pieces (i.e., content IDs for questions and/or answers).
 
-        > The mapping of question IDs / answer IDs and their text representation can be obtained from the [`GET /transactions/v1/questions`](#operation/getTransactionsQuestions) endpoint.
+        > The mapping of question IDs / answer IDs and their text representation can be obtained from the [`GET /transactions/v1/questions`](#operation/getTransactionsQuestions) endpoint
       tags:
         - Transaction API
       parameters:
@@ -995,19 +997,23 @@ paths:
       operationId: getTransactionsQuestions
       security:
         - BearerAuth: [ ]
-      summary: Get Questions and Answers for Transaction Refinement (by IDs)
+      summary: Get Questions and Answers for Transaction Refinement
       description: |
-        Retrieve questions and answers that can be used to refine a transaction. 
+        Get questions, answers, and translations, used to refine a transaction.
 
         Calling this endpoint without the `question_ids` parameter will return the text of all questions that can be used for transaction refinement. 
         A client application could fetch the question and answer texts once and cache them for a certain amount of time.
 
         Including the `question_ids` parameter returns only the content for the referenced questions.
+        
+        Calling this endpoint without the `languages_codes` parameter will return the text of all questions, and their associated answers, in all available language translations.
+
+        Including the `languages_codes` parameter returns only the content with the referenced language translations.
 
         To get a list of references to questions relevant for a specific transaction, please use the 
         ["Get refinements for transactions"](#operation/getTransactionsRefinements) endpoint.
-
-        If no questions for the given `ids` or translations for the given `languages_codes` are found, the response is handled as partial success. Corresponding informations
+        
+        If no questions for the given `ids` or translations for the given `languages_codes` are found, the response is handled as partial success. Corresponding information
         will be returned in the error list of the response.
 
         > #### Note
@@ -1829,18 +1835,22 @@ paths:
       operationId: getProfilingQuestions
       security:
         - BearerAuth: [ ]
-      summary: Get Questions for Profiling by IDs
+      summary: Get Questions and Answers for Profiling
       description: >-
-        Get questions, answers and translations used for Profiling. 
+        Get questions, answers, and translations, used for Profiling. 
         
         The answers to the questions are used to store additional information for specific end customers. 
         This is useful for improving the calculation results (e.g., if the end customer is known to be vegan, the vegan "base basket" is used for calculation of the footprint after shopping in the supermarket) as well as reducing unsuitable Insights (i.e., someone known to be vegan will not be shown information on how much CO<sub>2</sub> they can save by reducing meat in their diet).
 
-        By calling this endpoint all or specific profile-related questions and their answers can be retrieved.
+        Calling this endpoint without the `question_ids` parameter will return the text of all questions that can be used for Profiling. 
 
-        The questions can be retrieved in multiple languages using the `language_codes` parameter.
+        Including the `question_ids` parameter returns only the content for the referenced questions.
+        
+        Calling this endpoint without the `languages_codes` parameter will return the text of all questions, and their associated answers, in all available language translations.
 
-        If no questions for the given `ids` or translations for the given `languages_codes` are found, the response is handled as partial success. Corresponding informations
+        Including the `languages_codes` parameter returns only the content with the referenced language translations.
+        
+        If no questions for the given `ids` or translations for the given `languages_codes` are found, the response is handled as partial success. Corresponding information
         will be returned in the error list of the response.
 
         > #### Note:
@@ -2844,7 +2854,7 @@ components:
             explanations: true
             comparables: false
             questions: false
-    Transaction-Request-Example-01:
+    Transaction-Request-Example-01-retail:
       value:
         transactions:
           - transaction_id: "62c12ecc-17d7-469f-9ecc-b08e00eb8c90"
@@ -2886,6 +2896,52 @@ components:
               value: 348606
               unit: "g"
         errors: [ ]
+
+    Transaction-Request-Example-01-Commercial:
+      value:
+        transactions:
+          - transaction_id: "62c12ecc-17d7-469f-9ecc-b08e00eb8c90"
+            account_id: "a083e879-b37c-4307-9407-a9825d82800b"
+            business_id: "1f061f83-961e-4617-97fd-02372b9aa613"
+            sub_account_id: "12760c06-b928-4ddb-911b-01d1e3e4eb28"
+            category:
+              system: "ECOLYTIQ_V2"
+              value: "ex:transport.flight"
+            co2_model: "DE"
+            amount:
+              value: -2854.00
+              currency_code: "EUR"
+            datetime: "2022-05-15T14:18:34Z"
+          - transaction_id: "fa2e6d26-fb0f-49f5-bc8d-ccedbc1ca084"
+            account_id: "a083e879-b37c-4307-9407-a9825d82800b"
+            category:
+              system: "ECOLYTIQ_V2"
+              value: "ex:transport.servicestations"
+            amount:
+              value: -192.60
+              currency_code: "EUR"
+            co2_model: "DE"
+            datetime: "2022-09-05T11:18:34Z"
+    Transaction-Response-Example-01-Sme:
+      value:
+        request_id: "1d2dd5f3b23d3870"
+        results:
+          - transaction_id: "62c12ecc-17d7-469f-9ecc-b08e00eb8c90"
+            category:
+              value: "ex:transport.flight"
+              system: "ECOLYTIQ_V2"
+            co2_footprint:
+              value: 4486488
+              unit: "g"
+          - transaction_id: "fa2e6d26-fb0f-49f5-bc8d-ccedbc1ca084"
+            category:
+              value: "ex:transport.servicestations"
+              system: "ECOLYTIQ_V2"
+            co2_footprint:
+              value: 348606
+              unit: "g"
+        errors: [ ]
+
 
     Transaction-Request-Example-02:
       value:
@@ -4316,6 +4372,18 @@ components:
       maxLength: 64
       example: 1c974398-4d2b-44fa-b292-64a46c0e6577
 
+    BusinessId:
+      description: identifies banks as enterprise user.
+      type: string
+      maxLength: 64
+      example: e36a9e67-3202-4dfa-883a-838d966e14f3
+
+    SubAccountId:
+      description: identifies sub-accounts of the used account.
+      type: string
+      maxLength: 64
+      example: 12760c06-b928-4ddb-911b-01d1e3e4eb28
+
     Datetime:
       description: identifies a bank account / user.
       type: string
@@ -4335,6 +4403,10 @@ components:
       properties:
         transaction_id:
           $ref: '#/components/schemas/TransactionId'
+        business_id:
+          $ref: '#/components/schemas/BusinessId'
+        sub_account_id:
+          $ref: '#/components/schemas/SubAccountId'
         account_id:
           $ref: '#/components/schemas/AccountId'
         amount:
