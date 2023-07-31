@@ -1,15 +1,18 @@
 #!/bin/sh
 # Use this script to convert an OpenAPI json file to a postman collection
 
-print_usage() {
-    echo "Usage: `basename $0` INPUT OUTPUT"
-}
+# Needed for windows
+if command -v jq.exe &> /dev/null
+then
+    alias jq='jq.exe'
+    shopt -s expand_aliases
+fi
 
 E_BADARGS=85
 
 if [ ! -n "$1" ] && [ ! -n "$2" ]
 then
-    print_usage
+    echo "Usage: `basename $0` INPUT OUTPUT"
     exit $E_BADARGS
 fi
 
@@ -18,26 +21,26 @@ E_FILENOTFOUND=2
 if [ ! -f $1 ]
 then 
     echo "Input file $1 not found"
-    print_usage 
+    echo "Usage: `basename $0` INPUT OUTPUT"
     exit $E_FILENOTFOUND
 fi
 
 INPUT=$1
 OUTPUT=$2
 
-TEMP1=$(mktemp)
+TEMP1='tmp1'
+touch $TEMP1
 
-# TEMP2=$(mktemp)
+TEMP2='tmp2'
+touch $TEMP2
 
-# TEMP3=$(mktemp)
+npx openapi-to-postmanv2@4.15.0 -s $INPUT -o $TEMP1 -p -O folderStrategy=Tags,optimizeConversion=false,stackLimit=20,parametersResolution=Example
 
-openapi2postmanv2 -s $INPUT -o $TEMP1 -p -O folderStrategy=Tags,optimizeConversion=false,stackLimit=20,parametersResolution=Example
+sed -e 's/Bearer null/Bearer {{bearerToken}}/g' \
+    -e 's/{{basicAuthUsername}}/{{clientId}}/g' \
+    -e 's/{{basicAuthPassword}}/{{clientSecret}}/g' $TEMP1 > $TEMP2
 
-sed -i "" -e "s/Bearer null/Bearer {{bearerToken}}/g"  \
-    -e "s/{{basicAuthUsername}}/{{clientId}}/g" \
-    -e "s/{{basicAuthPassword}}/{{clientSecret}}/g" $TEMP1
-
-jq '(.item[] 
+jq '(.item[]
         | select(.name=="Authentication").item[] 
         | select(.name="Request Access Token")).event=
             [ 
@@ -74,11 +77,6 @@ jq '(.item[]
         | select(.name=="Authentication").item[]
         | select(.name=="Request Access Token").request.body.urlencoded[] 
         | select(.key=="scope")).type="text"
-    |del(.item[] | select(.name == "Postman"))' $TEMP1 > $OUTPUT
+    |del(.item[] | select(.name == "Postman"))' $TEMP2 > $OUTPUT
 rm $TEMP1
-
-# jq '(.item[] | select(.name=="Authentication").item[] | select(.name="Request Access Token")).url={"raw": "{{tokenUrl}}", "host": ["{{tokenUrl}}"]}' $TEMP2 > $TEMP3
-# rm $TEMP2
-
-# jq 'del(.item[] | select(.name == "Postman"))' $TEMP3 > $OUTPUT
-# rm $TEMP3
+rm $TEMP2

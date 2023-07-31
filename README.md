@@ -1,14 +1,10 @@
 # ecolytiq API Docs
 
 ## Requirements
-1. redoc-cli (`npm i -g redoc-cli`)
-2. openapi-to-postmanv2 (`npm i -g openapi-to-postmanv2`)
-   * must provide the `openapi2postmanv2` command.
-   * this can be achieved by creating an alias, e.g., 
-      ```console
-      alias openapi2postmanv2="/opt/homebrew/lib/node_modules/openapi-to-postmanv2/bin/openapi2postmanv2.js"
-      ```
-3. jq (`brew install jq`)
+1. Install `jq` https://jqlang.github.io/jq/ and make sure `jq` is added to your PATH. \
+   (The version used while writing this was `1.6`)
+2. Install `Node.js` https://nodejs.org/en and make sure `npx` is added to your PATH. \
+   (The version used while writing this was `18.15.0`)
 
 ## Update and Build Docs
 See [Confluence](https://ecolytiq.atlassian.net/wiki/spaces/EC/pages/4528275659/API+Documentation#Changing-API-Docs).
