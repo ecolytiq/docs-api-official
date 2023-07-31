@@ -524,14 +524,14 @@ paths:
             schema:
               $ref: '#/components/schemas/TransactionRequest'
             examples:
-              Minimal Request for Retail Banking:
-                $ref: '#/components/examples/Transaction-Request-Example-01-retail'
-              Minimal Request for Commercial Banking:
-                $ref: '#/components/examples/Transaction-Request-Example-01-Commercial'
-              Request With Merchant:
-                $ref: '#/components/examples/Transaction-Request-Example-02'
-              Asynchronous Request With Merchant:
-                $ref: '#/components/examples/Transaction-Request-Example-03'
+              Request for Retail Banking:
+                $ref: '#/components/examples/Transaction-Request-Example-Retail'
+              Request for Commercial Banking:
+                $ref: '#/components/examples/Transaction-Request-Example-Commercial'
+              Request with Merchant:
+                $ref: '#/components/examples/Transaction-Request-Example-Merchant'
+              Request for asynchronously processing:
+                $ref: '#/components/examples/Transaction-Request-Example-Async'
       responses:
         '200':
           description: |
@@ -548,10 +548,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/TransactionResponse'
               examples:
-                Response-Without-Request:
-                  $ref: '#/components/examples/Transaction-Response-Example-01'
-                Response-With-Request:
-                  $ref: '#/components/examples/Transaction-Response-Example-02'
+                Response:
+                  $ref: '#/components/examples/Transaction-Response-Example'
         '202':
           description: |
             Result of Transaction processing.
@@ -2854,7 +2852,7 @@ components:
             explanations: true
             comparables: false
             questions: false
-    Transaction-Request-Example-01-retail:
+    Transaction-Request-Example-Retail:
       value:
         transactions:
           - transaction_id: "62c12ecc-17d7-469f-9ecc-b08e00eb8c90"
@@ -2877,27 +2875,8 @@ components:
               currency_code: "EUR"
             co2_model: "DE"
             datetime: "2022-09-05T11:18:34Z"
-    Transaction-Response-Example-01:
-      value:
-        request_id: "1d2dd5f3b23d3870"
-        results:
-          - transaction_id: "62c12ecc-17d7-469f-9ecc-b08e00eb8c90"
-            category:
-              value: "ex:transport.flight"
-              system: "ECOLYTIQ_V2"
-            co2_footprint:
-              value: 4486488
-              unit: "g"
-          - transaction_id: "fa2e6d26-fb0f-49f5-bc8d-ccedbc1ca084"
-            category:
-              value: "ex:transport.servicestations"
-              system: "ECOLYTIQ_V2"
-            co2_footprint:
-              value: 348606
-              unit: "g"
-        errors: [ ]
 
-    Transaction-Request-Example-01-Commercial:
+    Transaction-Request-Example-Commercial:
       value:
         transactions:
           - transaction_id: "62c12ecc-17d7-469f-9ecc-b08e00eb8c90"
@@ -2914,6 +2893,8 @@ components:
             datetime: "2022-05-15T14:18:34Z"
           - transaction_id: "fa2e6d26-fb0f-49f5-bc8d-ccedbc1ca084"
             account_id: "a083e879-b37c-4307-9407-a9825d82800b"
+            business_id: "1f061f83-961e-4617-97fd-02372b9aa613"
+            sub_account_id: "12760c06-b928-4ddb-911b-01d1e3e4eb28"
             category:
               system: "ECOLYTIQ_V2"
               value: "ex:transport.servicestations"
@@ -2922,7 +2903,67 @@ components:
               currency_code: "EUR"
             co2_model: "DE"
             datetime: "2022-09-05T11:18:34Z"
-    Transaction-Response-Example-01-Sme:
+
+    Transaction-Request-Example-Merchant:
+      value:
+        transactions:
+          - transaction_id: "71b24bdd-8aa4-4b8d-893b-4e74b05a1c98"
+            account_id: "10547323-5594-45a7-a58f-3b8618770b7c"
+            category:
+              system: "MCC"
+              value: "5422"
+            co2_model: "DE"
+            amount:
+              value: -20.59
+              currency_code: "EUR"
+            datetime: "2021-01-17T12:45:00Z"
+            merchant:
+              name: "Fancy Supermarket"
+              address:
+                city: "Berlin"
+                country_code: "DE"
+          - transaction_id: "fbc78d6b-122b-4ae3-8b5b-50f45230a39f"
+            account_id: "10547323-5594-45a7-a58f-3b8618770b7c"
+            category:
+              system: "MCC"
+              value: "5411"
+            co2_model: "DE"
+            amount:
+              value: -20.59
+              currency_code: "EUR"
+            datetime: "2021-01-17T12:45:00Z"
+            merchant:
+              name: "Fancy Supermarket"
+              address:
+                city: "London"
+                country_code: "GB"
+
+    Transaction-Request-Example-Async:
+      value:
+        async: true
+        transactions:
+          - transaction_id: "62c12ecc-17d7-469f-9ecc-b08e00eb8c90"
+            account_id: "a083e879-b37c-4307-9407-a9825d82800b"
+            category:
+              system: "ECOLYTIQ_V2"
+              value: "ex:transport.flight"
+            co2_model: "DE"
+            amount:
+              value: -2854.00
+              currency_code: "EUR"
+            datetime: "2022-05-15T14:18:34Z"
+          - transaction_id: "fa2e6d26-fb0f-49f5-bc8d-ccedbc1ca084"
+            account_id: "a083e879-b37c-4307-9407-a9825d82800b"
+            category:
+              system: "ECOLYTIQ_V2"
+              value: "ex:transport.servicestations"
+            amount:
+              value: -192.60
+              currency_code: "EUR"
+            co2_model: "DE"
+            datetime: "2022-09-05T11:18:34Z"
+
+    Transaction-Response-Example:
       value:
         request_id: "1d2dd5f3b23d3870"
         results:
@@ -2941,99 +2982,6 @@ components:
               value: 348606
               unit: "g"
         errors: [ ]
-
-
-    Transaction-Request-Example-02:
-      value:
-        transactions:
-          - transaction_id: 71b24bdd-8aa4-4b8d-893b-4e74b05a1c98
-            account_id: 10547323-5594-45a7-a58f-3b8618770b7c
-            category:
-              system: MCC
-              value: "5422"
-            co2_model: DE
-            amount:
-              value: -20.59
-              currency_code: EUR
-            datetime: "2021-01-17T12:45:00Z"
-            merchant:
-              name: Fancy Supermarket
-              address:
-                city: Berlin
-                country_code: DE
-          - transaction_id: fbc78d6b-122b-4ae3-8b5b-50f45230a39f
-            account_id: 10547323-5594-45a7-a58f-3b8618770b7c
-            category:
-              system: MCC
-              value: "5411"
-            co2_model: DE
-            amount:
-              value: -20.59
-              currency_code: EUR
-            datetime: "2021-01-17T12:45:00Z"
-            merchant:
-              name: Fancy Supermarket
-              address:
-                city: London
-                country_code: GB
-    Transaction-Response-Example-02:
-      value:
-        request_id: 2bbf33459525a4e2
-        results:
-          - transaction_id: 71b24bdd-8aa4-4b8d-893b-4e74b05a1c98
-            category:
-              value: ex:food.groceries
-              system: ECOLYTIQ_V2
-            co2_footprint:
-              value: 16472
-              unit: g
-          - transaction_id: fbc78d6b-122b-4ae3-8b5b-50f45230a39f
-            category:
-              value: ex:food.groceries
-              system: ECOLYTIQ_V2
-            co2_footprint:
-              value: 17666
-              unit: g
-        errors: [ ]
-
-    Transaction-Request-Example-03:
-      value:
-        async: true
-        transactions:
-          - transaction_id: 46cd8390-ccda-4773-b59d-03b2e6d3d11d
-            account_id: 10547323-5594-45a7-a58f-3b8618770b7c
-            category:
-              system: MCC
-              value: "5422"
-            co2_model: DE
-            amount:
-              value: -20.59
-              currency_code: EUR
-            datetime: "2021-01-17T12:45:00Z"
-            merchant:
-              name: Fancy Supermarket
-              address:
-                city: Berlin
-                country_code: DE
-          - transaction_id: 21e41260-7107-4a65-804c-d9b4f5f25e3a
-            account_id: 10547323-5594-45a7-a58f-3b8618770b7c
-            category:
-              system: MCC
-              value: "5411"
-            co2_model: DE
-            amount:
-              value: -20.59
-              currency_code: EUR
-            datetime: "2021-01-17T12:45:00Z"
-            merchant:
-              name: Fancy Supermarket
-              address:
-                city: London
-                country_code: GB
-
-    Transaction-Response-Example-03:
-      value:
-        request_id: "f90b728d538cf847"
 
     Transaction-Category-Update-Request-Example-01:
       value:
@@ -4373,13 +4321,13 @@ components:
       example: 1c974398-4d2b-44fa-b292-64a46c0e6577
 
     BusinessId:
-      description: identifies banks as enterprise user.
+      description: identifies the business of a commercial banking user. Mandatory for commercial banking.
       type: string
       maxLength: 64
       example: e36a9e67-3202-4dfa-883a-838d966e14f3
 
     SubAccountId:
-      description: identifies sub-accounts of the used account.
+      description: identifies the business of a commercial banking user. Can only be used for commercial banking.
       type: string
       maxLength: 64
       example: 12760c06-b928-4ddb-911b-01d1e3e4eb28
