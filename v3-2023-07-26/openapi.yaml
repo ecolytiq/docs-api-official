@@ -566,7 +566,7 @@ paths:
                 $ref: '#/components/schemas/TransactionAsyncResponse'
               examples:
                 Response:
-                  $ref: '#/components/examples/Transaction-Response-Example-03'
+                  $ref: '#/components/examples/Transaction-Response-Example'
         '400':
           description: |
             Bad Request. Size of Transactions is invalid.
