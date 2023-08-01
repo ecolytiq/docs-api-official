@@ -548,8 +548,13 @@ paths:
               schema:
                 $ref: '#/components/schemas/TransactionResponse'
               examples:
-                Response:
-                  $ref: '#/components/examples/Transaction-Response-Example-200-OK'
+                Response for Retail Banking:
+                  $ref: '#/components/examples/Transaction-Response-Example-200-Retail'
+                Response for Commercial Banking:
+                  $ref: '#/components/examples/Transaction-Response-Example-200-Commercial'
+                Response with Merchant:
+                  $ref: '#/components/examples/Transaction-Response-Example-200-With-Merchant'
+
         '202':
           description: |
             Result of Transaction processing.
@@ -2879,35 +2884,35 @@ components:
     Transaction-Request-Example-Commercial:
       value:
         transactions:
-          - transaction_id: "62c12ecc-17d7-469f-9ecc-b08e00eb8c90"
+          - transaction_id: "87b170fb-4974-4d0e-9733-a429373d86ce"
             account_id: "a083e879-b37c-4307-9407-a9825d82800b"
             business_id: "1f061f83-961e-4617-97fd-02372b9aa613"
             sub_account_id: "12760c06-b928-4ddb-911b-01d1e3e4eb28"
             category:
-              system: "ECOLYTIQ_V2"
-              value: "ex:transport.flight"
+              system: "ECOLYTIQ_COMMERCIAL_V1"
+              value: "ex:businesstravel.air"
             co2_model: "DE"
             amount:
               value: -2854.00
               currency_code: "EUR"
-            datetime: "2022-05-15T14:18:34Z"
-          - transaction_id: "fa2e6d26-fb0f-49f5-bc8d-ccedbc1ca084"
+            datetime: "2023-04-12T10:11:19Z"
+          - transaction_id: "010f1516-a98a-4934-b49d-edf074e1bece"
             account_id: "a083e879-b37c-4307-9407-a9825d82800b"
             business_id: "1f061f83-961e-4617-97fd-02372b9aa613"
             sub_account_id: "12760c06-b928-4ddb-911b-01d1e3e4eb28"
             category:
-              system: "ECOLYTIQ_V2"
-              value: "ex:transport.servicestations"
+              system: "ECOLYTIQ_COMMERCIAL_V1"
+              value: "ex:material.books"
             amount:
               value: -192.60
               currency_code: "EUR"
             co2_model: "DE"
-            datetime: "2022-09-05T11:18:34Z"
+            datetime: "2023-07-25T14:12:14Z"
 
     Transaction-Request-Example-Merchant:
       value:
         transactions:
-          - transaction_id: "71b24bdd-8aa4-4b8d-893b-4e74b05a1c98"
+          - transaction_id: "d042df14-c1a8-4bd4-9a3f-5a67826aaebe"
             account_id: "10547323-5594-45a7-a58f-3b8618770b7c"
             category:
               system: "MCC"
@@ -2922,11 +2927,11 @@ components:
               address:
                 city: "Berlin"
                 country_code: "DE"
-          - transaction_id: "fbc78d6b-122b-4ae3-8b5b-50f45230a39f"
+          - transaction_id: "c5ae3fdb-73f9-4707-bdfa-98ee8a132322"
             account_id: "10547323-5594-45a7-a58f-3b8618770b7c"
             category:
               system: "MCC"
-              value: "5411"
+              value: "5021"
             co2_model: "DE"
             amount:
               value: -20.59
@@ -2963,7 +2968,7 @@ components:
             co2_model: "DE"
             datetime: "2022-09-05T11:18:34Z"
 
-    Transaction-Response-Example-200-OK:
+    Transaction-Response-Example-200-Retail:
       value:
         request_id: "1d2dd5f3b23d3870"
         results:
@@ -2972,14 +2977,54 @@ components:
               value: "ex:transport.flight"
               system: "ECOLYTIQ_V2"
             co2_footprint:
-              value: 4486488
+              value: 4269584
               unit: "g"
           - transaction_id: "fa2e6d26-fb0f-49f5-bc8d-ccedbc1ca084"
             category:
               value: "ex:transport.servicestations"
               system: "ECOLYTIQ_V2"
             co2_footprint:
-              value: 348606
+              value: 267907
+              unit: "g"
+        errors: [ ]
+
+    Transaction-Response-Example-200-Commercial:
+      value:
+        request_id: "1d2dd5f3b23d3870"
+        results:
+          - transaction_id: "87b170fb-4974-4d0e-9733-a429373d86ce"
+            category:
+              value: "ex:businesstravel.air"
+              system: "ECOLYTIQ_COMMERCIAL_V1"
+            co2_footprint:
+              value: 2166129
+              unit: "g"
+          - transaction_id: "010f1516-a98a-4934-b49d-edf074e1bece"
+            category:
+              value: "ex:material.books"
+              system: "ECOLYTIQ_COMMERCIAL_V1"
+            co2_footprint:
+              value: 32673
+              unit: "g"
+        errors: [ ]
+
+    Transaction-Response-Example-200-With-Merchant:
+      value:
+        request_id: "1d2dd5f3b23d3870"
+        results:
+          - transaction_id: "d042df14-c1a8-4bd4-9a3f-5a67826aaebe"
+            category:
+              value: "ex:food.groceries"
+              system: "ECOLYTIQ_V2"
+            co2_footprint:
+              value: 8854
+              unit: "g"
+          - transaction_id: "c5ae3fdb-73f9-4707-bdfa-98ee8a132322"
+            category:
+              value: "ex:shopping.furniture"
+              system: "ECOLYTIQ_V2"
+            co2_footprint:
+              value: 2574
               unit: "g"
         errors: [ ]
 
