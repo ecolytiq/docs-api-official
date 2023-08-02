@@ -2891,7 +2891,7 @@ components:
             category:
               system: "ECOLYTIQ_COMMERCIAL_V1"
               value: "ex:businesstravel.air"
-            co2_model: "DE"
+            co2_model: "DE_COMMERCIAL"
             amount:
               value: -2854.00
               currency_code: "EUR"
@@ -2906,7 +2906,7 @@ components:
             amount:
               value: -192.60
               currency_code: "EUR"
-            co2_model: "DE"
+            co2_model: "DE_COMMERCIAL" 
             datetime: "2023-07-25T14:12:14Z"
 
     Transaction-Request-Example-Merchant:
