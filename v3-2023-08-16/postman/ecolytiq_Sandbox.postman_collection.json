@@ -2,7 +2,7 @@
   "item": [
     {
       "name": "General Information",
-      "description": "This document describes the API of the ecolytiq Sustainability-as-a-Service&reg; platform.\n\necolytiq has developed a method of assigning financial (bank) transactions with a CO<sub>2</sub> footprint therefore allowing financial institutions to inform their end customers about the ecological impact of their transactions. \nThe calculation is based on the amount of the (outgoing) transaction and a category of the transaction which are both components of various region-specific calculation models.\n\n## Basic Requirements\n\nTo use the ecolytiq platform a customer is required to have a working pair of client credentials consisting of a `client_id` and a `client_secret`.\nThose credentials are provided by ecolytiq after a contract is signed.\n\nThe customer is responsible for providing the client application that manages the integration of the ecolytiq services into their systems.\n\nCertain features may not be available to or necessary for all customers. \nHence, the set of enabled features is bound to a set of client credentials.\n\n## Information on Available and Enabled Features\n\nAs not all features may be relevant to all customers the feature set can vary for different client credentials.\nThe ecolytiq platform provides an [info API](#tag/Info-API) to get information about the features that are available (in general) and accessible/enabled (for the customer).\n\n## Processing of Financial Transactions\n\n### Transaction Enrichment\n\nThe core functionality is enriching the transactions with the ecological footprint (at present: CO<sub>2</sub>) related to the purchase. \nThis can be achieved by sending transactions to the [transaction API](#tags/Transaction-API). \n\nThe ecolytiq platform has the ability to immediately return the calculation result (\"synchronous processing\") or to only accept the transactions and schedule the calculations until a later point in time (\"asynchronous processing\").\nIn any case the [result of the calculation](#operation/getTransactionsTransactions) can also be retrieved at a later point in time.\n\n### Refinement of Transactions\n\nIn some cases the amount of the transaction is not a good indicator on the ecological footprint related to the transaction.\nIn such instances the transactions can be refined by [answering transaction-specific questions](#operation/postTransactionsQuestions) (e.g., \"How many liters was your refill at the gas station?\").\n\n### Transaction Processing and Refinement Workflow\n\nA suggested workflow for processing an end customer's transaction looks as follows:\n\n1. Send the transaction to the ecolytiq service for processing:          \n   [`POST /transactions/v1/transactions`](#operation/postTransactionTransaction)\n\n2. Request a list of references to refinement questions that are available for this transaction:  \n   [`GET /transactions/v1/refinements?transaction_ids=<transaction_ids>`](#operation/getTransactionsRefinements)\n3. Retrieve the content (questions and answers) associated with the refinement question and answer IDs:          \n   [`GET /transactions/v1/questions?question_ids=<question_ids>`](#operation/getTransactionsQuestions)\n   > #### Note\n   > This step can also be executed in the very beginning omitting the `question_ids` parameter.\n   In that case, **all available** questions are returned. \n   The result can then be cached at the client side.\n\n4. Have the end customer answer the refinement question(s):  \n   This must be handled in the client application\n\n5. Send the answers to the refinement questions to the ecolytiq platform:  \n   [`POST /transactions/v1/refinements`](#operation/postTransactionsRefinements)\n\n6. Retrieve the calculation result for the refined transaction:  \n   [`GET /transactions/v1/transactions?transaction_ids=<transaction_ids>`](#operation/getTransactionsTransactions) \n\n### Account Profiling\n\nFor some types of purchases it can be helpful to have additional knowledge about the end customer. \nFor example, the supermarket shopping basket of a person regularly having meat on their plated differs from that of a vegan person. \nIt is possible to request such information for each individual transaction.\nHowever, it can be easier to attribute such information to an end customer once.\nFor this, the [profiling API](#tag/Profiling-API) is available.\n\n## Educational and Informational Content\n\nAnother important feature of the ecolytiq Sustainability-as-a-Service&reg; platform is the educational content that allows end customers to gain more knowledge and and awareness of the ecological footprint created by their purchase decisions.\nIn the long term informing and educating end customers about their individual impact will help making them more literate choices when consuming goods and services. \n\nAt present, ecolytiq offers the following types of content: \n\n  * **Comparables** are small examples that for a given CO<sub>2</sub> footprint show in a concrete and easily graspable way how much of an impact that is.\n\n  * **Insights** are short and simple tips and tricks that help end customers to reduce their impact.\n    In combination with the [profiling API](#tag/Profiling-API) the Insights shown are even more relevant to the end customer.\n\n  * **Explanations** are content pieces that give information about the ecolytiq calculation method.\n\nThe [profiling API](#tag/Profiling-API) delivers references to the content pieces.\nUsing the [content API](#tag/Content-API) the texts of the educational and informational content pieces can be fetched various different languages.\n\n## Use of the SaaS Platform\n\nThe ecolytiq platform is available as Software-as-a-Service (SaaS) solution shared among different Customers and accessible via public internet. \nOther modes of access, such as VPN access or dedicated SaaS platforms may be available upon request.\n\nThe customer is required to build and maintain the client application. Operations of the ecolytiq platform is handled by ecolytiq GmbH.\n\n## Security and Data Protection\n\nWe as ecolytiq GmbH adhere to and are compliant with all relevant data protection standards, such as GDPR, ISO27001, or PCI-DSS. \nOur platforms are regularly checked for security vulnerabilities.\n\nHowever, financial data contains highly sensitive information about individuals. Therefore, our customers **are not allowed** to send actual personally identifiable information to the ecolytiq SaaS platform.\nThis is especially important for account identifiers -- **Do not use actual bank account numbers or PANs** (personal account numbers, i.e., credit card numbers) as account identifiers!\n\nAccount data must be pseudonymized. We recommend using [UUIDs](https://en.wikipedia.org/wiki/Universally_unique_identifier) as account identifiers. \nMapping the account identifier to the end customer account **must be handled on the customer client application side**.\n",
+      "description": "This document describes the API of the ecolytiq Sustainability-as-a-Service&reg; platform.\n\necolytiq has developed a method of assigning financial (bank) transactions with a CO<sub>2</sub> footprint, therefore, allowing financial institutions to inform their end customers about the ecological impact of their transactions. \nThe calculation is based on the amount of the (outgoing) transaction and a category of the transaction which are both components of various region-specific calculation models.\n\n## Basic Requirements\n\nTo use the ecolytiq platform a customer is required to have a working pair of client credentials consisting of a `client_id` and a `client_secret`.\nThose credentials are provided by ecolytiq after a contract is signed.\n\nThe customer is responsible for providing the client application that manages the integration of the ecolytiq services into their systems.\n\nCertain features may not be available to or necessary for all customers. \nHence, the set of enabled features is bound to a set of client credentials.\n\n## Information on Available and Enabled Features\n\nAs not all features may be relevant to all customers the feature set can vary for different client credentials.\nThe ecolytiq platform provides an [info API](#tag/Info-API) to get information about the features that are available (in general) and accessible/enabled (for the customer).\n\n## Processing of Financial Transactions\n\n### Transaction Enrichment\n\nThe core functionality is enriching the transactions with the ecological footprint (at present: CO<sub>2</sub>) related to the purchase. \nThis can be achieved by sending transactions to the [transaction API](#tags/Transaction-API). \n\nThe ecolytiq platform has the ability to immediately return the calculation result (\"synchronous processing\") or to only accept the transactions and schedule the calculations until a later point in time (\"asynchronous processing\").\nIn any case, the [result of the calculation](#operation/getTransactionsTransactions) can also be retrieved at a later point in time.\n\n### Refinement of Transactions\n\nIn some cases, the amount of the transaction is not a good indicator of the ecological footprint related to the transaction.\nIn such instances, the transactions can be refined by [answering transaction-specific questions](#operation/postTransactionsQuestions) (e.g., \"How many liters was your refill at the gas station?\").\n\n### Transaction Processing and Refinement Workflow\n\nA suggested workflow for processing an end customer's transaction looks as follows:\n\n1. Send the transaction to the ecolytiq service for processing:          \n   [`POST /transactions/v1/transactions`](#operation/postTransactionTransaction)\n\n2. Request a list of references to refinement questions that are available for this transaction:  \n   [`GET /transactions/v1/refinements?transaction_ids=<transaction_ids>`](#operation/getTransactionsRefinements)\n3. Retrieve the content (questions and answers) associated with the refinement question and answer IDs:          \n   [`GET /transactions/v1/questions?question_ids=<question_ids>`](#operation/getTransactionsQuestions)\n   > #### Note\n   > This step can also be executed in the very beginning by omitting the `question_ids` parameter.\n   In that case, **all available** questions are returned. \n   The result can then be cached on the client side.\n\n4. Have the end customer answer the refinement question(s):  \n   This must be handled in the client application\n\n5. Send the answers to the refinement questions to the ecolytiq platform:  \n   [`POST /transactions/v1/refinements`](#operation/postTransactionsRefinements)\n\n6. Retrieve the calculation result for the refined transaction:  \n   [`GET /transactions/v1/transactions?transaction_ids=<transaction_ids>`](#operation/getTransactionsTransactions) \n\n### Account Profiling\n\nFor some types of purchases, having additional knowledge about the end customer can be helpful. \nFor example, the supermarket shopping basket of a person regularly having meat on their plate differs from that of a vegan person. \nIt is possible to request such information for each individual transaction.\nHowever, it can be easier to attribute such information to an end customer once.\nThe [profiling API](#tag/Profiling-API) is available for this.\n\n## Educational and Informational Content\n\nAnother important feature of the ecolytiq Sustainability-as-a-Service&reg; platform is the educational content that allows end customers to gain more knowledge and awareness of the ecological footprint created by their purchase decisions.\nIn the long term informing and educating end customers about their individual impact will help make them more literate choices when consuming goods and services. \n\nAt present, ecolytiq offers the following types of content: \n\n  * **Comparables** are small examples that for a given CO<sub>2</sub> footprint show in a concrete and easily graspable way how much of an impact that is.\n\n  * **Insights** are short and simple tips and tricks that help end customers reduce their impact.\n    In combination with the [profiling API](#tag/Profiling-API), the Insights shown are even more relevant to the end customer.\n\n  * **Explanations** are content pieces that give information about the ecolytiq calculation method.\n\nThe [profiling API](#tag/Profiling-API) delivers references to the content pieces.\nUsing the [content API](#tag/Content-API) the texts of the educational and informational content pieces can be fetched in various different languages.\n\n## Use of the SaaS Platform\n\nThe ecolytiq platform is available as Software-as-a-Service (SaaS) solution shared among different Customers and accessible via public internet. \nOther modes of access, such as VPN access or dedicated SaaS platforms may be available upon request.\n\nThe customer is required to build and maintain the client application. Operations of the ecolytiq platform are handled by ecolytiq GmbH.\n\n## Security and Data Protection\n\nWe as ecolytiq GmbH adhere to and are compliant with all relevant data protection standards, such as GDPR, ISO27001, or PCI-DSS. \nOur platforms are regularly checked for security vulnerabilities.\n\nHowever, financial data contains highly sensitive information about individuals. Therefore, our customers **are not allowed** to send actual personally identifiable information to the ecolytiq SaaS platform.\nThis is especially important for account identifiers -- **Do not use actual bank account numbers or PANs** (personal account numbers, i.e., credit card numbers) as account identifiers!\n\nAccount data must be pseudonymized. We recommend using [UUIDs](https://en.wikipedia.org/wiki/Universally_unique_identifier) as account identifiers. \nMapping the account identifier to the end customer account **must be handled on the customer client application side**.\n",
       "item": []
     },
     {
@@ -10,7 +10,7 @@
       "description": "",
       "item": [
         {
-          "id": "d2c47d26-667f-489b-bd29-9649e51dc329",
+          "id": "329d3ea5-2c8e-4616-b90e-9b9f81d2bfa8",
           "name": "Request Access Token",
           "request": {
             "name": "Request Access Token",
@@ -81,7 +81,7 @@
           },
           "response": [
             {
-              "id": "d726fdcc-0762-4a40-8b60-8df598713db7",
+              "id": "f98d8ebc-d317-4ea2-89da-21b085ec8e12",
               "name": "AccessToken and Lifetime\n",
               "originalRequest": {
                 "url": {
@@ -151,7 +151,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "d40d7fab-8295-4653-8ff2-4e6377a24139",
+              "id": "70103f1b-7b64-41b9-b135-9a525d4393cb",
               "name": "Unauthorized. Invalid or expired Client Credentials\n",
               "originalRequest": {
                 "url": {
@@ -251,7 +251,7 @@
     },
     {
       "name": "Rate Limit",
-      "description": "In each response you find Rate Limit Information fields like `X-RateLimit-Limit`, `X-RateLimit-Remaining` and `X-RateLimit-Reset`.\n\n## Rate Limit Headers\n| Header                | Description                                                         |\n|-----------------------|---------------------------------------------------------------------|\n| X-RateLimit-Limit     | Number of requests for the specific endpoint                        |\n| X-RateLimit-Remaining | Number of remaining requests for the specific endpoint               |\n| X-RateLimit-Reset     | Date-Time, when X-RateLimit-Remaining is reset to X-RateLimit-Limit |\n\nAt the moment we do not use rate limits. However, we reserve the right to use them. This will be announced.\n",
+      "description": "In each response, you find Rate Limit Information fields like `X-RateLimit-Limit`, `X-RateLimit-Remaining`, and `X-RateLimit-Reset`.\n\n## Rate Limit Headers\n| Header                | Description                                                         |\n|-----------------------|---------------------------------------------------------------------|\n| X-RateLimit-Limit     | Number of requests for the specific endpoint                        |\n| X-RateLimit-Remaining | Number of remaining requests for the specific endpoint               |\n| X-RateLimit-Reset     | Date-Time, when X-RateLimit-Remaining is reset to X-RateLimit-Limit |\n\nAt the moment we do not use rate limits. However, we reserve the right to use them. This will be announced.\n",
       "item": []
     },
     {
@@ -259,12 +259,12 @@
       "description": "The info API can be used to obtain information about the ecolytiq platform configuration and available features. \nIt offers a simple and reliable method to verify, \n\n* Which [country models for CO<sub>2</sub>](#operation/getInfoCo2models) footprint calculation are available and accessible to the requestor,\n\n* Which [categorization systems](#operation/getInfoCategorySystems) for transactions are available and accessible for transaction enrichment,\n\n* For some categorization systems, which [categories](#operation/getInfoCategories) are available\n",
       "item": [
         {
-          "id": "32343f9f-6ab4-4e3a-bc2d-68de4a83ecb6",
+          "id": "a3286120-61d9-41bb-b917-cc868d00bee8",
           "name": "List of CO2 models",
           "request": {
             "name": "List of CO2 models",
             "description": {
-              "content": "Retrieve a list of supported calculation models for CO<sub>2</sub> footprint calculation.\nThe `enabled` flag informs wether a specific model is available for use by the requesting set of client credentials since access to the models may vary from customer to customer.\n",
+              "content": "Retrieve a list of supported calculation models for CO<sub>2</sub> footprint calculation.\nThe `enabled` flag informs whether a specific model is available for use by the requesting set of client credentials since access to the models may vary from customer to customer.\n",
               "type": "text/plain"
             },
             "url": {
@@ -299,7 +299,7 @@
           },
           "response": [
             {
-              "id": "ebe3383f-4c06-48e4-97a9-5cdabbafa562",
+              "id": "c493d143-7927-453e-888a-b402156092cb",
               "name": "List of supported and enabled CO<sub>2</sub> models.\n",
               "originalRequest": {
                 "url": {
@@ -371,7 +371,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "40c12a35-f05c-4152-92ff-f01b40c82cf2",
+              "id": "a6013949-67bc-4593-8259-063f9fc1256d",
               "name": "Unauthorized. Access Token is invalid or expired.\n",
               "originalRequest": {
                 "url": {
@@ -434,7 +434,7 @@
               "_postman_previewlanguage": "text"
             },
             {
-              "id": "efd68a1a-82bb-4b8b-a139-5de9f23f8d2c",
+              "id": "850ff3d9-bb02-472b-bbe6-69ca53528dcb",
               "name": "Rate Limit exceeded.\n",
               "originalRequest": {
                 "url": {
@@ -512,12 +512,12 @@
           }
         },
         {
-          "id": "493d7a09-d017-4460-8f2c-50941350c36d",
+          "id": "f31e33f9-bcbb-4f31-a427-f0b18af26583",
           "name": "List of category systems",
           "request": {
             "name": "List of category systems",
             "description": {
-              "content": "Retrieve a list of category systems that are supported by the platform. The `enabled` flag informs wether a customer / set of client credentials is permitted to use a specific category system, since not all supported category systems may be accessible by every customer.",
+              "content": "Retrieve a list of category systems that are supported by the platform. The `enabled` flag informs whether a customer/set of client credentials is permitted to use a specific category system, since not all supported category systems may be accessible by every customer.",
               "type": "text/plain"
             },
             "url": {
@@ -552,7 +552,7 @@
           },
           "response": [
             {
-              "id": "5dbf78bb-f1d3-4932-894f-2ee99da0803d",
+              "id": "f9ffea94-a016-420c-88ed-dc6367a16764",
               "name": "List of supported and enabled category systems.\n",
               "originalRequest": {
                 "url": {
@@ -624,7 +624,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "31fa0b3f-c79f-4c90-8894-92da706e0093",
+              "id": "8c08a3f1-10a6-4349-b4d4-a0be6004a32b",
               "name": "Unauthorized. Access Token is invalid or expired.\n",
               "originalRequest": {
                 "url": {
@@ -687,7 +687,7 @@
               "_postman_previewlanguage": "text"
             },
             {
-              "id": "16612f51-7ea0-49a5-838e-95c80b1cfe9c",
+              "id": "894ff409-cddf-4556-aff6-cac1e0f6ee1b",
               "name": "Rate Limit exceeded.\n",
               "originalRequest": {
                 "url": {
@@ -765,7 +765,7 @@
           }
         },
         {
-          "id": "8e7b5ec4-3883-422c-b829-2c040f693842",
+          "id": "cbe15160-020c-4aa0-9214-95ad0713c1e1",
           "name": "List of categories",
           "request": {
             "name": "List of categories",
@@ -790,7 +790,7 @@
                     "type": "text/plain"
                   },
                   "key": "model",
-                  "value": "irure"
+                  "value": "ut occaecat aute pariatur"
                 }
               ],
               "variable": []
@@ -815,7 +815,7 @@
           },
           "response": [
             {
-              "id": "baf764c6-d156-4dd2-9bbc-ed589a51ae90",
+              "id": "f30d3156-9da0-46e7-a953-84ccf3d44a4f",
               "name": "List of categories\n",
               "originalRequest": {
                 "url": {
@@ -835,7 +835,7 @@
                         "type": "text/plain"
                       },
                       "key": "model",
-                      "value": "irure"
+                      "value": "ut occaecat aute pariatur"
                     }
                   ],
                   "variable": []
@@ -897,7 +897,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "a7203ff6-f532-4f96-9b4b-bfe0325b285d",
+              "id": "9d0585f7-beb0-4d70-8e79-f9940d8ffbca",
               "name": "Unauthorized. Access Token is invalid or expired.\n",
               "originalRequest": {
                 "url": {
@@ -917,7 +917,7 @@
                         "type": "text/plain"
                       },
                       "key": "model",
-                      "value": "irure"
+                      "value": "ut occaecat aute pariatur"
                     }
                   ],
                   "variable": []
@@ -970,7 +970,7 @@
               "_postman_previewlanguage": "text"
             },
             {
-              "id": "a99d3e81-1ba7-4a57-83fc-bee706c9a794",
+              "id": "3ce7670f-35ce-482a-980e-5490bfbd60ba",
               "name": "Rate Limit exceeded.\n",
               "originalRequest": {
                 "url": {
@@ -990,7 +990,7 @@
                         "type": "text/plain"
                       },
                       "key": "model",
-                      "value": "irure"
+                      "value": "ut occaecat aute pariatur"
                     }
                   ],
                   "variable": []
@@ -1061,15 +1061,15 @@
     },
     {
       "name": "Transaction API",
-      "description": "The transaction API is used to process financial transactions by the ecolytiq Sustainability-as-a-Service&reg; platform.\n\nIt is possible to send transactions for enrichment and receive the calculated CO<sub>2</sub> footprint based on a combination of transaction amount and transaction category. \n\nFor some types of transactions this may, however, be insufficient as the amount of money spent does not directly correlate to the CO<sub>2</sub> (equivalent) emissions of the purchased goods and services.\nFor example, airline ticket prices are becoming increasingly expensive the closer the date of travel is. But the amount of CO<sub>2</sub> emissions is independent on whether the ticket was bought last minute or a year in advance. \nIn such cases the transaction data can be refined by answering specific transaction-related questions, like the duration of the flight, which will in turn allow for a much more accurate calculation of the CO<sub>2</sub> emissions.\n",
+      "description": "The transaction API is used to process financial transactions by the ecolytiq Sustainability-as-a-Service&reg; platform.\n\nIt is possible to send transactions for enrichment and receive the calculated CO<sub>2</sub> footprint based on a combination of the transaction amount and transaction category. \n\nFor some types of transactions, this may, however, be insufficient as the amount of money spent does not directly correlate to the CO<sub>2</sub> (equivalent) emissions of the purchased goods and services.\nFor example, airline ticket prices are becoming increasingly expensive the closer the date of travel is. But the amount of CO<sub>2</sub> emissions is independent of whether the ticket was bought last minute or a year in advance. \nIn such cases, the transaction data can be refined by answering specific transaction-related questions, like the duration of the flight, which will in turn allow for a much more accurate calculation of the CO<sub>2</sub> emissions.\n",
       "item": [
         {
-          "id": "a9a3d3e4-7068-4514-bcf5-b16a85a32ee1",
+          "id": "408978e4-b197-422f-82e0-fdabeb356e34",
           "name": "Process transactions",
           "request": {
             "name": "Process transactions",
             "description": {
-              "content": "Use this endpoint to process and store bank transactions. \n\n### Identification of transactions and accounts\n\nTo be able to request information about a transaction at a later time each transaction must be uniquely identifiable by its `transaction_id`. \nWe recommend using [Universally Unique Identifiers](https://en.wikipedia.org/wiki/Universally_unique_identifier) for the `transaction_id`.\n\nThe transactions must also be assigned to individual accounts.\nThis allows using the account's [profile data](#tag/Profiling-API) for more accurate calculations.\n\n> #### IMPORTANT\n>\n> Although ecolytiq GmbH follows data protection and data security best practices and is compliant with ISO27001 and PCI-DSS, actual bank account numbers, personal account numbers (PAN, i.e., credit card numbers), or other personally identifiable information (PII) **must not be used as `account_id`**.\n>\n> Pseudonymization of account information and maintaining the list relating the end customer's PII to the `account_id`s used on the ecolytiq platform **must be handled on the customer side**.\n>\n> ecolytiq GmbH cannot be held liable for any loss, leak, unauthorized publication of PII which are a direct result of violating\n\nWe recommend using [Universally Unique Identifier](https://en.wikipedia.org/wiki/Universally_unique_identifier) for the `account_id`s.\n\n### Immediate Response\n\nThe request is by default synchronous, i.e. the processing result is returned immediately in the response body to the request.\nSuccessfully processed transactions are in the results list, identifiable by their `transaction_id`. \nIn case of an error (e.g. unknown category), you can find  the transaction in the errors list, identifiable by their `transaction_id` as well. \n\n### Asynchronous Request\n\nIt is also possible to only send the data for processing and not wait for an immediate server response with the calculation results.\nIn that case the `async` flag in the request has to be set to `true`.\nThe server will only respond with a `202` status, i.e., accept the request, but will que the transactions for later processing.\nThe calculation result can later be requested by calling the [`GET /transactions/v1/transactions`](#operation/getTransactionsTransactions) endpoint with the corresponding `transaction_id`s.\n",
+              "content": "Use this endpoint to process and store bank transactions. \n\n### Identification of transactions and accounts\n\nTo be able to request information about a transaction at a later time each transaction must be uniquely identifiable by its `transaction_id`. \nWe recommend using [Universally Unique Identifiers](https://en.wikipedia.org/wiki/Universally_unique_identifier) for the `transaction_id`.\n\nThe transactions must also be assigned to individual accounts.\nThis allows using the account's [profile data](#tag/Profiling-API) for more accurate calculations.\n\n> #### IMPORTANT\n>\n> Although ecolytiq GmbH follows data protection and data security best practices and is compliant with ISO27001 and PCI-DSS, actual bank account numbers, personal account numbers (PAN, i.e., credit card numbers), or other personally identifiable information (PII) **must not be used as `account_id`**.\n>\n> Pseudonymization of account information and maintaining the list relating the end customer's PII to the `account_id`s used on the ecolytiq platform **must be handled on the customer side**.\n>\n> ecolytiq GmbH cannot be held liable for any loss, leak, or unauthorized publication of PII which is a direct result of violating\n\nWe recommend using [Universally Unique Identifier](https://en.wikipedia.org/wiki/Universally_unique_identifier) for the `account_id`s.\n\n### Immediate Response\n\nThe request is by default synchronous, i.e. the processing result is returned immediately in the response body to the request.\nSuccessfully processed transactions are in the results list, identifiable by their `transaction_id`. \nIn case of an error (e.g. unknown category), you can find the transaction in the errors list, identifiable by their `transaction_id` as well. \n\n### Asynchronous Request\n\nIt is also possible to only send the data for processing and not wait for an immediate server response with the calculation results.\nIn that case, the `async` flag in the request has to be set to `true`.\nThe server will only respond with a `202` status, i.e., accept the request, but will queue the transactions for later processing.\nThe calculation result can later be requested by calling the [`GET /transactions/v1/transactions`](#operation/getTransactionsTransactions) endpoint with the corresponding `transaction_id`s.\n",
               "type": "text/plain"
             },
             "url": {
@@ -1117,7 +1117,7 @@
           },
           "response": [
             {
-              "id": "a7fcc22a-a47b-4cc6-aefb-78ee1b2e4ba8",
+              "id": "dc45a9a0-fd3e-4858-998d-b6c8e222b6b2",
               "name": "Result of Transaction processing.\n",
               "originalRequest": {
                 "url": {
@@ -1202,7 +1202,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "b3ecc855-8d18-480b-9bef-cda321d91d65",
+              "id": "dc4d1792-debc-45e6-9832-2073f95976c2",
               "name": "Result of Transaction processing.\n",
               "originalRequest": {
                 "url": {
@@ -1287,7 +1287,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "d19bb89b-347c-4689-85e5-eeddf999ebd0",
+              "id": "a24996a7-9c70-4025-8224-9ebe99ddf945",
               "name": "Bad Request. Size of Transactions is invalid.\n",
               "originalRequest": {
                 "url": {
@@ -1372,7 +1372,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "13683eba-899f-4fcb-aaa0-8667d2aa89bd",
+              "id": "d8159c6b-403b-4f8b-89f3-cd94e63366cc",
               "name": "Unauthorized. Access Token is invalid or expired.\n",
               "originalRequest": {
                 "url": {
@@ -1448,7 +1448,7 @@
               "_postman_previewlanguage": "text"
             },
             {
-              "id": "ad0733e7-6558-4fde-ae05-52e305dffd9c",
+              "id": "dda497cc-e4e8-4bad-b612-04f877f72db3",
               "name": "Rate Limit exceeded.\n",
               "originalRequest": {
                 "url": {
@@ -1539,7 +1539,7 @@
           }
         },
         {
-          "id": "281c430d-8eb5-4f60-8a47-8b7e8731b0b7",
+          "id": "886b9a07-bbe3-48ad-bf1f-50cf2ccd2018",
           "name": "Get Transactions by IDs",
           "request": {
             "name": "Get Transactions by IDs",
@@ -1589,7 +1589,7 @@
           },
           "response": [
             {
-              "id": "22633ab7-8655-4cb4-aa12-0950f0ec22f9",
+              "id": "a2dc99aa-686a-4303-b170-9088a4685b98",
               "name": "List of requested Transactions",
               "originalRequest": {
                 "url": {
@@ -1666,12 +1666,12 @@
                   "value": ""
                 }
               ],
-              "body": "{\n  \"request_id\": \"6bf3202ade4a7411\",\n  \"results\": [\n    {\n      \"transaction_id\": \"74263e87-93cb-46be-a132-9cd260716f07\",\n      \"category\": {\n        \"value\": \"quis irure consequat culpa aliquip\",\n        \"system\": \"mollit consectetur cillum\"\n      },\n      \"co2_footprint\": {\n        \"value\": 10,\n        \"unit\": \"g\"\n      }\n    },\n    {\n      \"transaction_id\": \"74263e87-93cb-46be-a132-9cd260716f07\",\n      \"category\": {\n        \"value\": \"culpa ex\",\n        \"system\": \"ullamco laboris\"\n      },\n      \"co2_footprint\": {\n        \"value\": 10,\n        \"unit\": \"g\"\n      }\n    }\n  ],\n  \"errors\": [\n    {\n      \"transaction_id\": \"74263e87-93cb-46be-a132-9cd260716f07\",\n      \"error_code\": \"anim\",\n      \"error_description\": \"non occaecat Lorem dolor\"\n    },\n    {\n      \"transaction_id\": \"74263e87-93cb-46be-a132-9cd260716f07\",\n      \"error_code\": \"qui aliqua\",\n      \"error_description\": \"Duis \"\n    }\n  ]\n}",
+              "body": "{\n  \"request_id\": \"6bf3202ade4a7411\",\n  \"results\": [\n    {\n      \"transaction_id\": \"74263e87-93cb-46be-a132-9cd260716f07\",\n      \"category\": {\n        \"value\": \"ut aute officia Lorem\",\n        \"system\": \"incididunt\"\n      },\n      \"co2_footprint\": {\n        \"value\": 10,\n        \"unit\": \"g\"\n      }\n    },\n    {\n      \"transaction_id\": \"74263e87-93cb-46be-a132-9cd260716f07\",\n      \"category\": {\n        \"value\": \"cupidatat cillum in Ut ipsum\",\n        \"system\": \"nisi ea\"\n      },\n      \"co2_footprint\": {\n        \"value\": 10,\n        \"unit\": \"g\"\n      }\n    }\n  ],\n  \"errors\": [\n    {\n      \"transaction_id\": \"74263e87-93cb-46be-a132-9cd260716f07\",\n      \"error_code\": \"fugiat minim do nisi\",\n      \"error_description\": \"ullamco veniam velit\"\n    },\n    {\n      \"transaction_id\": \"74263e87-93cb-46be-a132-9cd260716f07\",\n      \"error_code\": \"cupidatat sed dolore\",\n      \"error_description\": \"commodo et Lorem non\"\n    }\n  ]\n}",
               "cookie": [],
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "daf0d5a7-c8b9-4472-987a-83ba2cb9e895",
+              "id": "91345e95-4b90-4c7f-bbfb-051061e8f428",
               "name": "Bad Request",
               "originalRequest": {
                 "url": {
@@ -1753,7 +1753,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "616025f7-c9de-41ff-974c-efc7a28aae3a",
+              "id": "e01f6987-315a-466a-af15-83d83a83d50c",
               "name": "Unauthorized. Access Token is invalid or expired.\n",
               "originalRequest": {
                 "url": {
@@ -1826,7 +1826,7 @@
               "_postman_previewlanguage": "text"
             },
             {
-              "id": "142eea43-2f16-4b7f-85b9-a9ba016436a6",
+              "id": "d8f0193d-552f-43b0-a1b5-72f62afc094a",
               "name": "Rate Limit exceeded.\n",
               "originalRequest": {
                 "url": {
@@ -1914,7 +1914,7 @@
           }
         },
         {
-          "id": "43e7c44c-9a83-4ecd-ae5b-3e90d85ba203",
+          "id": "ef9c7424-7488-4cbe-9353-0c3ac42abe57",
           "name": "Update Category",
           "request": {
             "name": "Update Category",
@@ -1967,7 +1967,7 @@
           },
           "response": [
             {
-              "id": "5e50b49b-9730-43bd-965b-49a5f601fdfe",
+              "id": "eedeebc3-1588-479b-8d08-b2ef8c3bce78",
               "name": "Result of Transaction Category Update.\n",
               "originalRequest": {
                 "url": {
@@ -2052,7 +2052,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "d2184d0c-27be-4cf5-a38c-6a5608aae718",
+              "id": "77751772-2458-4730-9724-22f982953db9",
               "name": "Result of Transaction processing.\n",
               "originalRequest": {
                 "url": {
@@ -2137,7 +2137,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "3f75d97f-290b-4dc1-b09c-8709b4552ace",
+              "id": "3ee2305b-c040-478c-afbf-5cfa4663e50d",
               "name": "Bad Request. Size of Transactions is invalid.\n",
               "originalRequest": {
                 "url": {
@@ -2222,7 +2222,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "af561859-694e-40c4-9620-99690a7f2076",
+              "id": "e3b0f6d0-c8eb-4b64-87e3-a9c94533f3a9",
               "name": "Unauthorized. Access Token is invalid or expired.\n",
               "originalRequest": {
                 "url": {
@@ -2298,7 +2298,7 @@
               "_postman_previewlanguage": "text"
             },
             {
-              "id": "af098f97-6b26-47c3-af8a-d1794a9e946b",
+              "id": "5d1e3638-2038-4ef4-8d9a-0e01492267ad",
               "name": "Rate Limit exceeded.\n",
               "originalRequest": {
                 "url": {
@@ -2389,12 +2389,12 @@
           }
         },
         {
-          "id": "227427af-2738-4d26-890c-975b57c2e837",
+          "id": "322dbabb-910a-43ea-8c1e-a1b182dc7e44",
           "name": "Get Available Questions for Refinement of Specific Transactions",
           "request": {
             "name": "Get Available Questions for Refinement of Specific Transactions",
             "description": {
-              "content": "For certain types of goods or services the amount spent may not actually be an accurate representation of the CO<sub>2</sub> (equivalent) emission caused by that good or service. \nA few examples for such types of transactions are:\n  * Service stations: Fuel prices are highly volatile and vary from station to station. Therefore, the volume and type of fuel could be used for better calculation of the CO<sub>2</sub> emission related with a service station transaction.\n  * Air travel: Prices for airline tickets are dependent on the day of flight as well and even more so on the date of purchase. Therefore, the hours of the flight give the better basis for calculating CO<sub>2</sub> emissions for air travel.\n\nCalling this endpoint with valid transaction IDs will return a list of suitable refinement question IDs for the transactions in request.  If the question has already been answered the reference to the corresponding answer (or the value if it is not a predefined answer) will be also returned.\n> #### Note\n> Calling this endpoint returns only references to content pieces (i.e., content IDs for questions and/or answers).\n> The mapping of question IDs / answer IDs and their text representation can be obtained from the [`GET /transactions/v1/questions`](#operation/getTransactionsQuestions) endpoint",
+              "content": "For certain types of goods or services the amount spent may not actually be an accurate representation of the CO<sub>2</sub> (equivalent) emission caused by that good or service. \nA few examples of such types of transactions are:\n  * Service stations: Fuel prices are highly volatile and vary from station to station. Therefore, the volume and type of fuel could be used for better calculation of the CO<sub>2</sub> emission related to a service station transaction.\n  * Air travel: Prices for airline tickets are dependent on the day of the flight as well as even more so on the date of purchase. Therefore, the hours of the flight give a better basis for calculating CO<sub>2</sub> emissions for air travel.\n\nCalling this endpoint with valid transaction IDs will return a list of suitable refinement question IDs for the transactions in request.  If the question has already been answered the reference to the corresponding answer (or the value if it is not a predefined answer) will be also returned.\n> #### Note\n> Calling this endpoint returns only references to content pieces (i.e., content IDs for questions and/or answers).\n> The mapping of question IDs / answer IDs and their text representation can be obtained from the [`GET /transactions/v1/questions`](#operation/getTransactionsQuestions) endpoint",
               "type": "text/plain"
             },
             "url": {
@@ -2439,8 +2439,8 @@
           },
           "response": [
             {
-              "id": "cf9d8094-5d12-485b-9ab0-fb09426a8dd7",
-              "name": "A list of transaction ids and their corresponding question ids. If the question is already answered the field `answer_id` is set. Otherwise it is `null`.",
+              "id": "91adc6e7-a7fc-408a-90df-2fbde6c430f9",
+              "name": "A list of transaction ids and their corresponding question ids. If the question is already answered the field `answer_id` is set. Otherwise, it is `null`.",
               "originalRequest": {
                 "url": {
                   "path": [
@@ -2521,7 +2521,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "be7c83cc-4b80-4666-b00f-0a8c427d133f",
+              "id": "48a14995-a4c0-43b6-b500-204ed754db8c",
               "name": "Bad Request",
               "originalRequest": {
                 "url": {
@@ -2603,7 +2603,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "7bfb0e2c-8c74-49db-a351-3a9754cee0d2",
+              "id": "291ca56a-574c-4d6a-be10-dcec2ea33d3e",
               "name": "Unauthorized. Access Token is invalid or expired.\n",
               "originalRequest": {
                 "url": {
@@ -2676,7 +2676,7 @@
               "_postman_previewlanguage": "text"
             },
             {
-              "id": "acfc83a7-8999-440f-8cbf-c55cf495459b",
+              "id": "c64186bd-7103-4555-ae74-796f364f9865",
               "name": "Rate Limit exceeded.\n",
               "originalRequest": {
                 "url": {
@@ -2764,12 +2764,12 @@
           }
         },
         {
-          "id": "c15a9fe7-31ca-43bb-ba61-8d26321f9ca6",
+          "id": "5dd1b1b9-761e-499d-bb8b-d94a5c3f0621",
           "name": "Provide Answers for Transaction Refinement",
           "request": {
             "name": "Provide Answers for Transaction Refinement",
             "description": {
-              "content": "Recalculate the carbon footprint associated with a transaction by providing answers to specific questions. \n\nThe request must include the `transaction_id` and the `answer_id`. \nFor questions with answers of the `SELECTABLE` type this is already sufficient.\nFor questions with answers of the `INPUT` type the `input` value must also be included.\n\nReferences to questions relevant for certain transaction can be retrieved by calling the [`GET /transactions/v1/refinements`](#operation/getTransactionsRefinements) endpoint with the corresponding transaction ID.\nThe text version of the questions and possible answers can be obtained by calling the [`GET /transactions/v1/questions`](#operation/getTransactionsQuestions) endpoint (with the question IDs).\n",
+              "content": "Recalculate the carbon footprint associated with a transaction by providing answers to specific questions. \n\nThe request must include the `transaction_id` and the `answer_id`. \nFor questions with answers of the `SELECTABLE` type, this is already sufficient.\nFor questions with answers of the `INPUT` type, the `input` value must also be included.\n\nReferences to questions relevant to certain transaction can be retrieved by calling the [`GET /transactions/v1/refinements`](#operation/getTransactionsRefinements) endpoint with the corresponding transaction ID.\nThe text version of the questions and possible answers can be obtained by calling the [`GET /transactions/v1/questions`](#operation/getTransactionsQuestions) endpoint (with the question IDs).\n",
               "type": "text/plain"
             },
             "url": {
@@ -2817,7 +2817,7 @@
           },
           "response": [
             {
-              "id": "8ad9f05f-9691-4b64-a553-e96abf471674",
+              "id": "5725e018-2746-4347-89de-567fcb02ca26",
               "name": "Confirmation that answer is saved",
               "originalRequest": {
                 "url": {
@@ -2902,7 +2902,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "4b52965a-b474-4444-9b94-9e1582f96fc5",
+              "id": "ba4a8b5e-3d84-4112-8ce9-4134e9f48f17",
               "name": "Bad Request. Size of Transactions is invalid.\n",
               "originalRequest": {
                 "url": {
@@ -2987,7 +2987,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "6a51a4c9-30c7-4b68-a641-70d67e34f00c",
+              "id": "265def65-eb6f-4c89-b1f4-671d7d5a22ca",
               "name": "Unauthorized. Access Token is invalid or expired.\n",
               "originalRequest": {
                 "url": {
@@ -3063,7 +3063,7 @@
               "_postman_previewlanguage": "text"
             },
             {
-              "id": "6f55b399-dac1-4507-8433-29b65b3a740d",
+              "id": "9da07d3a-5206-4b44-95e9-24ce19e8a8fe",
               "name": "Rate Limit exceeded.\n",
               "originalRequest": {
                 "url": {
@@ -3154,12 +3154,12 @@
           }
         },
         {
-          "id": "04b64328-a7c2-411e-80cc-56e612f063d8",
+          "id": "c680b822-034e-4229-b068-5cc46d8235fd",
           "name": "Get Questions and Answers for Transaction Refinement",
           "request": {
             "name": "Get Questions and Answers for Transaction Refinement",
             "description": {
-              "content": "Get questions, answers, and translations, used to refine a transaction.\n\nCalling this endpoint without the `question_ids` parameter will return the text of all questions that can be used for transaction refinement. \nA client application could fetch the question and answer texts once and cache them for a certain amount of time.\n\nIncluding the `question_ids` parameter returns only the content for the referenced questions.\n\nCalling this endpoint without the `languages_codes` parameter will return the text of all questions, and their associated answers, in all available language translations.\n\nIncluding the `languages_codes` parameter returns only the content with the referenced language translations.\n\nTo get a list of references to questions relevant for a specific transaction, please use the \n[\"Get refinements for transactions\"](#operation/getTransactionsRefinements) endpoint.\n\nIf no questions for the given `ids` or translations for the given `languages_codes` are found, the response is handled as partial success. Corresponding information\nwill be returned in the error list of the response.\n\n> #### Note\n>\n> This endpoint returns actual content pieces.\n",
+              "content": "Get questions, answers, and translations, used to refine a transaction.\n\nCalling this endpoint without the `question_ids` parameter will return the text of all questions that can be used for transaction refinement. \nA client application could fetch the question-and-answer texts once and cache them for a certain amount of time.\n\nIncluding the `question_ids` parameter returns only the content for the referenced questions.\n\nCalling this endpoint without the `languages_codes` parameter will return the text of all questions, and their associated answers, in all available language translations.\n\nIncluding the `languages_codes` parameter returns only the content with the referenced language translations.\n\nTo get a list of references to questions relevant to a specific transaction, please use the \n[\"Get refinements for transactions\"](#operation/getTransactionsRefinements) endpoint.\n\nIf no questions for the given `ids` or translations for the given `languages_codes` are found, the response is handled as a partial success. Corresponding information\nwill be returned in the error list of the response.\n\n> #### Note\n>\n> This endpoint returns actual content pieces.\n",
               "type": "text/plain"
             },
             "url": {
@@ -3175,7 +3175,7 @@
                 {
                   "disabled": false,
                   "description": {
-                    "content": "a list of question ids. If list of ids are not present, all questions (+answers) returned.",
+                    "content": "a list of question ids. If the list of ids is not present, all questions (+answers) are returned.",
                     "type": "text/plain"
                   },
                   "key": "question_ids",
@@ -3213,7 +3213,7 @@
           },
           "response": [
             {
-              "id": "d11068aa-629b-4209-81f4-49d80859316d",
+              "id": "794bd560-f101-4e8b-a592-bac8ed885561",
               "name": "A list of Questions",
               "originalRequest": {
                 "url": {
@@ -3229,7 +3229,7 @@
                     {
                       "disabled": false,
                       "description": {
-                        "content": "a list of question ids. If list of ids are not present, all questions (+answers) returned.",
+                        "content": "a list of question ids. If the list of ids is not present, all questions (+answers) are returned.",
                         "type": "text/plain"
                       },
                       "key": "question_ids",
@@ -3299,12 +3299,12 @@
                   "value": ""
                 }
               ],
-              "body": "{\n  \"request_id\": \"6bf3202ade4a7411\",\n  \"results\": [\n    {\n      \"id\": \"aliqua nisi dolor \",\n      \"type\": \"INPUT\",\n      \"categories\": [\n        \"incididunt\",\n        \"velit incididunt esse\"\n      ],\n      \"text\": [\n        {\n          \"language\": \"deserunt laboris cupidatat\",\n          \"text\": \"et anim\"\n        },\n        {\n          \"language\": \"et\",\n          \"text\": \"labore cupidatat occaecat\"\n        }\n      ],\n      \"selectable\": [\n        {\n          \"id\": \"dolore sint\",\n          \"text\": [\n            {\n              \"language\": \"nostrud Lorem\",\n              \"text\": \"esse anim culpa\"\n            },\n            {\n              \"language\": \"Excepteur commodo ad\",\n              \"text\": \"deserunt\"\n            }\n          ]\n        },\n        {\n          \"id\": \"in aliquip in non eiusmod\",\n          \"text\": [\n            {\n              \"language\": \"tempor\",\n              \"text\": \"eiusmod ad veniam\"\n            },\n            {\n              \"language\": \"ipsum proident\",\n              \"text\": \"ad exercitation magna\"\n            }\n          ]\n        }\n      ],\n      \"input\": {\n        \"id\": \"cillum ex aute\",\n        \"datatype\": \"NUMBER\",\n        \"validation\": [\n          {\n            \"name\": \"GREATER\",\n            \"condition\": \"velit incididunt irure\"\n          },\n          {\n            \"name\": \"GREATER\",\n            \"condition\": \"elit amet est nisi labore\"\n          }\n        ]\n      }\n    },\n    {\n      \"id\": \"Lorem in ut sed\",\n      \"type\": \"SELECTABLE\",\n      \"categories\": [\n        \"sint\",\n        \"quis sed\"\n      ],\n      \"text\": [\n        {\n          \"language\": \"\",\n          \"text\": \"dolor officia\"\n        },\n        {\n          \"language\": \"in incididunt\",\n          \"text\": \"deserunt in do\"\n        }\n      ],\n      \"selectable\": [\n        {\n          \"id\": \"id te\",\n          \"text\": [\n            {\n              \"language\": \"deserunt proident culpa Ut cupidatat\",\n              \"text\": \"aliquip sunt cillum in\"\n            },\n            {\n              \"language\": \"aliquip ve\",\n              \"text\": \"labore dolor\"\n            }\n          ]\n        },\n        {\n          \"id\": \"eiusmod amet\",\n          \"text\": [\n            {\n              \"language\": \"nostrud cupidatat\",\n              \"text\": \"aliqua\"\n            },\n            {\n              \"language\": \"reprehenderit ullamco ut\",\n              \"text\": \"sint dolore labore\"\n            }\n          ]\n        }\n      ],\n      \"input\": {\n        \"id\": \"irure Lorem ipsum qui\",\n        \"datatype\": \"STRING\",\n        \"validation\": [\n          {\n            \"name\": \"GREATER\",\n            \"condition\": \"veniam ullamc\"\n          },\n          {\n            \"name\": \"GREATER\",\n            \"condition\": \"labore voluptate est minim\"\n          }\n        ]\n      }\n    }\n  ],\n  \"errors\": [\n    {\n      \"code\": \"veniam e\",\n      \"description\": \"ea quis\",\n      \"id\": \"aliquip aute\"\n    },\n    {\n      \"code\": \"enim\",\n      \"description\": \"ex in\",\n      \"id\": \"sunt Excepteur Lorem consequat\"\n    }\n  ]\n}",
+              "body": "{\n  \"request_id\": \"6bf3202ade4a7411\",\n  \"results\": [\n    {\n      \"id\": \"dolore incididunt tempor nulla\",\n      \"type\": \"INPUT\",\n      \"categories\": [\n        \"nulla voluptate Ut Duis\",\n        \"aliquip ut cupida\"\n      ],\n      \"text\": [\n        {\n          \"language\": \"quis \",\n          \"text\": \"cillum dolore\"\n        },\n        {\n          \"language\": \"sed Ut\",\n          \"text\": \"in dolor\"\n        }\n      ],\n      \"selectable\": [\n        {\n          \"id\": \"sed cillum\",\n          \"text\": [\n            {\n              \"language\": \"ipsum dolore ut ad magna\",\n              \"text\": \"sed in\"\n            },\n            {\n              \"language\": \"eu esse\",\n              \"text\": \"labore ipsum\"\n            }\n          ]\n        },\n        {\n          \"id\": \"nulla et ad\",\n          \"text\": [\n            {\n              \"language\": \"ad dolore\",\n              \"text\": \"\"\n            },\n            {\n              \"language\": \"commodo officia sit enim\",\n              \"text\": \"Ut Excepteur nostrud occaecat\"\n            }\n          ]\n        }\n      ],\n      \"input\": {\n        \"id\": \"anim nulla\",\n        \"datatype\": \"INTEGER\",\n        \"validation\": [\n          {\n            \"name\": \"MAX_LENGTH\",\n            \"condition\": \"laboris esse\"\n          },\n          {\n            \"name\": \"MAX_LENGTH\",\n            \"condition\": \"Lorem consectetur\"\n          }\n        ]\n      }\n    },\n    {\n      \"id\": \"magna dolor\",\n      \"type\": \"SELECTABLE\",\n      \"categories\": [\n        \"in cupidatat adipisicing esse\",\n        \"est sit dolor commodo\"\n      ],\n      \"text\": [\n        {\n          \"language\": \"esse nostrud exercitation\",\n          \"text\": \"sit ut\"\n        },\n        {\n          \"language\": \"officia ut \",\n          \"text\": \"nulla est\"\n        }\n      ],\n      \"selectable\": [\n        {\n          \"id\": \"aliqua\",\n          \"text\": [\n            {\n              \"language\": \"dolore qui labore laboris pariatur\",\n              \"text\": \"ullamco non voluptate labore\"\n            },\n            {\n              \"language\": \"qui culpa ea proident exercitation\",\n              \"text\": \"ullamco et dolor reprehenderit\"\n            }\n          ]\n        },\n        {\n          \"id\": \"deserunt dolore in\",\n          \"text\": [\n            {\n              \"language\": \"nulla deserunt dolor Lorem proident\",\n              \"text\": \"voluptate elit ut\"\n            },\n            {\n              \"language\": \"reprehenderit exercitation aliquip\",\n              \"text\": \"ipsum\"\n            }\n          ]\n        }\n      ],\n      \"input\": {\n        \"id\": \"aliqua sit\",\n        \"datatype\": \"NUMBER\",\n        \"validation\": [\n          {\n            \"name\": \"LESS\",\n            \"condition\": \"deserunt\"\n          },\n          {\n            \"name\": \"GREATER\",\n            \"condition\": \"minim sint culpa in\"\n          }\n        ]\n      }\n    }\n  ],\n  \"errors\": [\n    {\n      \"code\": \"laborum nulla Excepteur ullamco non\",\n      \"description\": \"irure anim in sunt\",\n      \"id\": \"ad tempor Lorem non\"\n    },\n    {\n      \"code\": \"nisi\",\n      \"description\": \"ea culpa consectetur\",\n      \"id\": \"deserunt nostrud Excepteur\"\n    }\n  ]\n}",
               "cookie": [],
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "2ce9b345-930e-493c-a821-d6f9ddea863e",
+              "id": "0b9420ad-5e25-4cfc-8832-3a078f357cec",
               "name": "Unauthorized. Access Token is invalid or expired.\n",
               "originalRequest": {
                 "url": {
@@ -3320,7 +3320,7 @@
                     {
                       "disabled": false,
                       "description": {
-                        "content": "a list of question ids. If list of ids are not present, all questions (+answers) returned.",
+                        "content": "a list of question ids. If the list of ids is not present, all questions (+answers) are returned.",
                         "type": "text/plain"
                       },
                       "key": "question_ids",
@@ -3386,7 +3386,7 @@
               "_postman_previewlanguage": "text"
             },
             {
-              "id": "83172894-8144-48f3-8008-cc365721fd4f",
+              "id": "a76e38e3-d568-43cc-8914-54168dd625f1",
               "name": "Rate Limit exceeded.\n",
               "originalRequest": {
                 "url": {
@@ -3402,7 +3402,7 @@
                     {
                       "disabled": false,
                       "description": {
-                        "content": "a list of question ids. If list of ids are not present, all questions (+answers) returned.",
+                        "content": "a list of question ids. If the list of ids is not present, all questions (+answers) are returned.",
                         "type": "text/plain"
                       },
                       "key": "question_ids",
@@ -3486,15 +3486,15 @@
     },
     {
       "name": "Content API",
-      "description": "The ecolytiq Sustainability-as-a-Service&reg; platform offers a variety of product features that go beyond pure calculation of the CO<sub>2</sub> footprint related to a financial transaction.\nThere are \n\n* Comparables: Small information pieces that put a given CO<sub>2</sub> footprint into perspective by comparing it to something easily comprehensible, like a distance driven by car.\n  As the name suggests a Comparable is a concrete example of what a certain CO<sub>2</sub> footprint means.  \n  It can be used to create awareness on the end customers side on how much of an impact a certain financial transaction has.\n\n* Insights: Information pieces with tips and tricks how an and customer can reduce their personal CO<sub>2</sub> emissions\n\n* Explanations: Information pieces detailing how the ecolytiq calculation method works.\n\nThose content pieces can be retrieved via the content API in various languages.\n",
+      "description": "The ecolytiq Sustainability-as-a-Service&reg; platform offers a variety of product features that go beyond pure calculation of the CO<sub>2</sub> footprint related to a financial transaction.\nThere are \n\n* Comparables: Small information pieces that put a given CO<sub>2</sub> footprint into perspective by comparing it to something easily comprehensible, like a distance driven by a car.\n  As the name suggests a Comparable is a concrete example of what a certain CO<sub>2</sub> footprint means.  \n  It can be used to create awareness on the end customer's side on how much of an impact a certain financial transaction has.\n\n* Insights: Information pieces with tips and tricks on how a customer can reduce their personal CO<sub>2</sub> emissions\n\n* Explanations: Information pieces detailing how the ecolytiq calculation method works.\n\nThose content pieces can be retrieved via the content API in various languages.\n",
       "item": [
         {
-          "id": "b80c9669-a4f0-494a-b53a-02d81ef6bfe8",
+          "id": "305cc880-f12e-4571-8d48-9bdcea636215",
           "name": "Get Comparables for a Given CO2 Footprint",
           "request": {
             "name": "Get Comparables for a Given CO2 Footprint",
             "description": {
-              "content": "Get a specific Comparable or a list of Comparables or all Comparables for a given CO<sub>2</sub> footprint.\n\nThe amount of CO<sub>2</sub> (`co2_footprint`) in grams to compare is required for calling this endpoint. \nIn addition it can be called with a list of content IDs (`ids` parameter) to select which Comparables shall be displayed.\n\nIt is possible to retrieve the Comparables in different languages via the `language_codes` parameter.\n",
+              "content": "Get a specific Comparable or a list of Comparables or all Comparables for a given CO<sub>2</sub> footprint.\n\nThe amount of CO<sub>2</sub> (`co2_footprint`) in grams to compare is required for calling this endpoint. \nIn addition, it can be called with a list of content IDs (`ids` parameter) to select which Comparables shall be displayed.\n\nIt is possible to retrieve the Comparables in different languages via the `language_codes` parameter.\n",
               "type": "text/plain"
             },
             "url": {
@@ -3519,7 +3519,7 @@
                 {
                   "disabled": false,
                   "description": {
-                    "content": "a list of ids. If list of ids are not present, all Comparables returned.",
+                    "content": "a list of ids. If the list of ids is not present, all Comparables are returned.",
                     "type": "text/plain"
                   },
                   "key": "ids",
@@ -3557,7 +3557,7 @@
           },
           "response": [
             {
-              "id": "7c0bdd03-12d8-4c6e-b989-408d93852a43",
+              "id": "73ab87b2-8934-4582-a462-3cfded56beb0",
               "name": "A list of Comparables",
               "originalRequest": {
                 "url": {
@@ -3582,7 +3582,7 @@
                     {
                       "disabled": false,
                       "description": {
-                        "content": "a list of ids. If list of ids are not present, all Comparables returned.",
+                        "content": "a list of ids. If the list of ids is not present, all Comparables are returned.",
                         "type": "text/plain"
                       },
                       "key": "ids",
@@ -3657,7 +3657,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "47ab512f-85b2-49ab-8ed9-a8c07685fae1",
+              "id": "97401545-afb7-465f-b7b4-160d53623bb3",
               "name": "Bad Request",
               "originalRequest": {
                 "url": {
@@ -3682,7 +3682,7 @@
                     {
                       "disabled": false,
                       "description": {
-                        "content": "a list of ids. If list of ids are not present, all Comparables returned.",
+                        "content": "a list of ids. If the list of ids is not present, all Comparables are returned.",
                         "type": "text/plain"
                       },
                       "key": "ids",
@@ -3757,7 +3757,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "10256f65-ccea-4e57-bf7d-c127df91682d",
+              "id": "dedd493c-44d3-4bf7-8d99-497cda13454f",
               "name": "Unauthorized. Access Token is invalid or expired.\n",
               "originalRequest": {
                 "url": {
@@ -3782,7 +3782,7 @@
                     {
                       "disabled": false,
                       "description": {
-                        "content": "a list of ids. If list of ids are not present, all Comparables returned.",
+                        "content": "a list of ids. If the list of ids is not present, all Comparables are returned.",
                         "type": "text/plain"
                       },
                       "key": "ids",
@@ -3848,7 +3848,7 @@
               "_postman_previewlanguage": "text"
             },
             {
-              "id": "b30f166e-43e9-4f94-b413-3c2749c9257a",
+              "id": "888403a6-dded-4ab5-b7d7-53eab1e93e3f",
               "name": "Rate Limit exceeded.\n",
               "originalRequest": {
                 "url": {
@@ -3873,7 +3873,7 @@
                     {
                       "disabled": false,
                       "description": {
-                        "content": "a list of ids. If list of ids are not present, all Comparables returned.",
+                        "content": "a list of ids. If the list of ids is not present, all Comparables are returned.",
                         "type": "text/plain"
                       },
                       "key": "ids",
@@ -3954,7 +3954,7 @@
           }
         },
         {
-          "id": "56da9e21-23e5-455d-869c-36d0ccb338f2",
+          "id": "0c734889-5918-488b-a7dd-294b5aeda761",
           "name": "Get Random Comparables for a Given CO2 Footprint",
           "request": {
             "name": "Get Random Comparables for a Given CO2 Footprint",
@@ -3985,7 +3985,7 @@
                 {
                   "disabled": false,
                   "description": {
-                    "content": "used as filter for categories.  If it is unset or empty all categories are used. A  [list of categories](#operation/getInfoCategories) can be retrieved using the [Info API](#tag/Info-API).\nSupports both ecolytiq 1.4 (`ECOLYTIQ`) and ecolytiq EEIO (`ECOLYTIQ_V2`) categories.",
+                    "content": "used as a filter for categories.  If it is unset or empty all categories are used. A  [list of categories](#operation/getInfoCategories) can be retrieved using the [Info API](#tag/Info-API).\nSupports both ecolytiq 1.4 (`ECOLYTIQ`) and ecolytiq EEIO (`ECOLYTIQ_V2`) categories.",
                     "type": "text/plain"
                   },
                   "key": "categories",
@@ -4032,7 +4032,7 @@
           },
           "response": [
             {
-              "id": "7d3a109a-621d-4a1a-9d1d-971b461e10ce",
+              "id": "512fec57-744c-4ecb-9986-ab6f9fe9d92c",
               "name": "A list of comparables",
               "originalRequest": {
                 "url": {
@@ -4058,7 +4058,7 @@
                     {
                       "disabled": false,
                       "description": {
-                        "content": "used as filter for categories.  If it is unset or empty all categories are used. A  [list of categories](#operation/getInfoCategories) can be retrieved using the [Info API](#tag/Info-API).\nSupports both ecolytiq 1.4 (`ECOLYTIQ`) and ecolytiq EEIO (`ECOLYTIQ_V2`) categories.",
+                        "content": "used as a filter for categories.  If it is unset or empty all categories are used. A  [list of categories](#operation/getInfoCategories) can be retrieved using the [Info API](#tag/Info-API).\nSupports both ecolytiq 1.4 (`ECOLYTIQ`) and ecolytiq EEIO (`ECOLYTIQ_V2`) categories.",
                         "type": "text/plain"
                       },
                       "key": "categories",
@@ -4142,7 +4142,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "b531f189-ce6e-482c-a913-40be99d48999",
+              "id": "cd85f366-f6a3-44f6-965b-456fe62c1f9d",
               "name": "Bad Request.\n",
               "originalRequest": {
                 "url": {
@@ -4168,7 +4168,7 @@
                     {
                       "disabled": false,
                       "description": {
-                        "content": "used as filter for categories.  If it is unset or empty all categories are used. A  [list of categories](#operation/getInfoCategories) can be retrieved using the [Info API](#tag/Info-API).\nSupports both ecolytiq 1.4 (`ECOLYTIQ`) and ecolytiq EEIO (`ECOLYTIQ_V2`) categories.",
+                        "content": "used as a filter for categories.  If it is unset or empty all categories are used. A  [list of categories](#operation/getInfoCategories) can be retrieved using the [Info API](#tag/Info-API).\nSupports both ecolytiq 1.4 (`ECOLYTIQ`) and ecolytiq EEIO (`ECOLYTIQ_V2`) categories.",
                         "type": "text/plain"
                       },
                       "key": "categories",
@@ -4252,7 +4252,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "6d6d6421-c194-47ba-83d8-2eb3fdb12c1c",
+              "id": "d3423a3c-86ab-485b-aaaa-a46db737c0bb",
               "name": "Unauthorized. Access Token is invalid or expired.\n",
               "originalRequest": {
                 "url": {
@@ -4278,7 +4278,7 @@
                     {
                       "disabled": false,
                       "description": {
-                        "content": "used as filter for categories.  If it is unset or empty all categories are used. A  [list of categories](#operation/getInfoCategories) can be retrieved using the [Info API](#tag/Info-API).\nSupports both ecolytiq 1.4 (`ECOLYTIQ`) and ecolytiq EEIO (`ECOLYTIQ_V2`) categories.",
+                        "content": "used as a filter for categories.  If it is unset or empty all categories are used. A  [list of categories](#operation/getInfoCategories) can be retrieved using the [Info API](#tag/Info-API).\nSupports both ecolytiq 1.4 (`ECOLYTIQ`) and ecolytiq EEIO (`ECOLYTIQ_V2`) categories.",
                         "type": "text/plain"
                       },
                       "key": "categories",
@@ -4353,7 +4353,7 @@
               "_postman_previewlanguage": "text"
             },
             {
-              "id": "c912e0a7-ba3d-408b-942a-61ae5c5368a0",
+              "id": "eafcc675-c885-4b72-b560-348a2108ba41",
               "name": "Rate Limit exceeded.\n",
               "originalRequest": {
                 "url": {
@@ -4379,7 +4379,7 @@
                     {
                       "disabled": false,
                       "description": {
-                        "content": "used as filter for categories.  If it is unset or empty all categories are used. A  [list of categories](#operation/getInfoCategories) can be retrieved using the [Info API](#tag/Info-API).\nSupports both ecolytiq 1.4 (`ECOLYTIQ`) and ecolytiq EEIO (`ECOLYTIQ_V2`) categories.",
+                        "content": "used as a filter for categories.  If it is unset or empty all categories are used. A  [list of categories](#operation/getInfoCategories) can be retrieved using the [Info API](#tag/Info-API).\nSupports both ecolytiq 1.4 (`ECOLYTIQ`) and ecolytiq EEIO (`ECOLYTIQ_V2`) categories.",
                         "type": "text/plain"
                       },
                       "key": "categories",
@@ -4469,7 +4469,7 @@
           }
         },
         {
-          "id": "e2978ae0-5261-4842-9c52-67ac33e42020",
+          "id": "58dda942-7f79-49ac-bf39-927a297b9244",
           "name": "Get Insights by IDs",
           "request": {
             "name": "Get Insights by IDs",
@@ -4490,7 +4490,7 @@
                 {
                   "disabled": false,
                   "description": {
-                    "content": "a list of ids. If list of ids are not present, all insights returned.",
+                    "content": "a list of ids. If the list of ids is not present, all insights are returned.",
                     "type": "text/plain"
                   },
                   "key": "ids",
@@ -4528,7 +4528,7 @@
           },
           "response": [
             {
-              "id": "17fced2d-6bfd-4fe4-b930-d85f69d38fb3",
+              "id": "2a7a8a50-cc49-41d6-ac1a-6576f9ab5207",
               "name": "A list of insights",
               "originalRequest": {
                 "url": {
@@ -4544,7 +4544,7 @@
                     {
                       "disabled": false,
                       "description": {
-                        "content": "a list of ids. If list of ids are not present, all insights returned.",
+                        "content": "a list of ids. If the list of ids is not present, all insights are returned.",
                         "type": "text/plain"
                       },
                       "key": "ids",
@@ -4619,7 +4619,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "4b7050c9-0061-4b79-9d39-1b036d3abdb8",
+              "id": "e957ef1a-c2d7-404a-9f95-a09af950e8b3",
               "name": "Unauthorized. Access Token is invalid or expired.\n",
               "originalRequest": {
                 "url": {
@@ -4635,7 +4635,7 @@
                     {
                       "disabled": false,
                       "description": {
-                        "content": "a list of ids. If list of ids are not present, all insights returned.",
+                        "content": "a list of ids. If the list of ids is not present, all insights are returned.",
                         "type": "text/plain"
                       },
                       "key": "ids",
@@ -4701,7 +4701,7 @@
               "_postman_previewlanguage": "text"
             },
             {
-              "id": "57d77cb7-0b68-40ad-abad-6e3f8307beb6",
+              "id": "77f2cdd8-3971-476a-9fb0-20ce003754db",
               "name": "Rate Limit exceeded.\n",
               "originalRequest": {
                 "url": {
@@ -4717,7 +4717,7 @@
                     {
                       "disabled": false,
                       "description": {
-                        "content": "a list of ids. If list of ids are not present, all insights returned.",
+                        "content": "a list of ids. If the list of ids is not present, all insights are returned.",
                         "type": "text/plain"
                       },
                       "key": "ids",
@@ -4798,7 +4798,7 @@
           }
         },
         {
-          "id": "41bcfd40-c7e1-4d24-b800-ad2a9ccf0888",
+          "id": "90c73109-a8b9-40a9-a138-17393b6029cc",
           "name": "Get Contextual Insights by IDs.",
           "request": {
             "name": "Get Contextual Insights by IDs.",
@@ -4819,7 +4819,7 @@
                 {
                   "disabled": false,
                   "description": {
-                    "content": "a list of content ids. If list of ids is not present, all contextual insights returned.",
+                    "content": "a list of content ids. If the list of ids is not present, all contextual insights are returned.",
                     "type": "text/plain"
                   },
                   "key": "ids",
@@ -4857,7 +4857,7 @@
           },
           "response": [
             {
-              "id": "7c209df0-b72a-4b3d-873b-e1b30997e3ee",
+              "id": "5711f0c5-e85a-4b46-a072-3fba33595291",
               "name": "A list of insights",
               "originalRequest": {
                 "url": {
@@ -4873,7 +4873,7 @@
                     {
                       "disabled": false,
                       "description": {
-                        "content": "a list of content ids. If list of ids is not present, all contextual insights returned.",
+                        "content": "a list of content ids. If the list of ids is not present, all contextual insights are returned.",
                         "type": "text/plain"
                       },
                       "key": "ids",
@@ -4948,7 +4948,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "53f7e987-86cb-46db-8080-cbe6ec815885",
+              "id": "25307a85-380e-4e26-864e-17b29066e53b",
               "name": "Unauthorized. Access Token is invalid or expired.\n",
               "originalRequest": {
                 "url": {
@@ -4964,7 +4964,7 @@
                     {
                       "disabled": false,
                       "description": {
-                        "content": "a list of content ids. If list of ids is not present, all contextual insights returned.",
+                        "content": "a list of content ids. If the list of ids is not present, all contextual insights are returned.",
                         "type": "text/plain"
                       },
                       "key": "ids",
@@ -5030,7 +5030,7 @@
               "_postman_previewlanguage": "text"
             },
             {
-              "id": "75467080-92e7-41a5-bc5e-6a517c86ddc2",
+              "id": "ae88cb5a-eae5-4a2b-a58a-55406d6b652e",
               "name": "Rate Limit exceeded.\n",
               "originalRequest": {
                 "url": {
@@ -5046,7 +5046,7 @@
                     {
                       "disabled": false,
                       "description": {
-                        "content": "a list of content ids. If list of ids is not present, all contextual insights returned.",
+                        "content": "a list of content ids. If the list of ids is not present, all contextual insights are returned.",
                         "type": "text/plain"
                       },
                       "key": "ids",
@@ -5127,7 +5127,7 @@
           }
         },
         {
-          "id": "8f536eac-a5c3-4cf4-99d6-647c17610091",
+          "id": "2930e82a-39c6-4f80-9b54-6902283c5f71",
           "name": "Get Insights (for a Given Category)",
           "request": {
             "name": "Get Insights (for a Given Category)",
@@ -5149,7 +5149,7 @@
                 {
                   "disabled": false,
                   "description": {
-                    "content": "used as filter for categories.  If it is unset or empty all categories are used. A  [list of categories](#operation/getInfoCategories) can be retrieved using the [Info API](#tag/Info-API).\nSupports both ecolytiq 1.4 (`ECOLYTIQ`) and ecolytiq EEIO (`ECOLYTIQ_V2`) categories.",
+                    "content": "used as a filter for categories.  If it is unset or empty all categories are used. A  [list of categories](#operation/getInfoCategories) can be retrieved using the [Info API](#tag/Info-API).\nSupports both ecolytiq 1.4 (`ECOLYTIQ`) and ecolytiq EEIO (`ECOLYTIQ_V2`) categories.",
                     "type": "text/plain"
                   },
                   "key": "categories",
@@ -5196,7 +5196,7 @@
           },
           "response": [
             {
-              "id": "eb6257c8-b4cf-4d68-9eaa-21738f0fddeb",
+              "id": "5d5a1ac1-a5c7-4a5e-9bfa-0bad14724a25",
               "name": "A list of insights",
               "originalRequest": {
                 "url": {
@@ -5213,7 +5213,7 @@
                     {
                       "disabled": false,
                       "description": {
-                        "content": "used as filter for categories.  If it is unset or empty all categories are used. A  [list of categories](#operation/getInfoCategories) can be retrieved using the [Info API](#tag/Info-API).\nSupports both ecolytiq 1.4 (`ECOLYTIQ`) and ecolytiq EEIO (`ECOLYTIQ_V2`) categories.",
+                        "content": "used as a filter for categories.  If it is unset or empty all categories are used. A  [list of categories](#operation/getInfoCategories) can be retrieved using the [Info API](#tag/Info-API).\nSupports both ecolytiq 1.4 (`ECOLYTIQ`) and ecolytiq EEIO (`ECOLYTIQ_V2`) categories.",
                         "type": "text/plain"
                       },
                       "key": "categories",
@@ -5297,7 +5297,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "201c62df-c3b5-46d0-a927-3e82adb2ee5e",
+              "id": "3ce6538d-b204-4e4f-8ec1-a0deaff232c8",
               "name": "Bad Request.\n",
               "originalRequest": {
                 "url": {
@@ -5314,7 +5314,7 @@
                     {
                       "disabled": false,
                       "description": {
-                        "content": "used as filter for categories.  If it is unset or empty all categories are used. A  [list of categories](#operation/getInfoCategories) can be retrieved using the [Info API](#tag/Info-API).\nSupports both ecolytiq 1.4 (`ECOLYTIQ`) and ecolytiq EEIO (`ECOLYTIQ_V2`) categories.",
+                        "content": "used as a filter for categories.  If it is unset or empty all categories are used. A  [list of categories](#operation/getInfoCategories) can be retrieved using the [Info API](#tag/Info-API).\nSupports both ecolytiq 1.4 (`ECOLYTIQ`) and ecolytiq EEIO (`ECOLYTIQ_V2`) categories.",
                         "type": "text/plain"
                       },
                       "key": "categories",
@@ -5398,7 +5398,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "b9b27330-6c06-46a2-ad7a-0f08eda5b77f",
+              "id": "e9584ab9-9e4b-49cd-a68f-89f371c1b977",
               "name": "Unauthorized. Access Token is invalid or expired.\n",
               "originalRequest": {
                 "url": {
@@ -5415,7 +5415,7 @@
                     {
                       "disabled": false,
                       "description": {
-                        "content": "used as filter for categories.  If it is unset or empty all categories are used. A  [list of categories](#operation/getInfoCategories) can be retrieved using the [Info API](#tag/Info-API).\nSupports both ecolytiq 1.4 (`ECOLYTIQ`) and ecolytiq EEIO (`ECOLYTIQ_V2`) categories.",
+                        "content": "used as a filter for categories.  If it is unset or empty all categories are used. A  [list of categories](#operation/getInfoCategories) can be retrieved using the [Info API](#tag/Info-API).\nSupports both ecolytiq 1.4 (`ECOLYTIQ`) and ecolytiq EEIO (`ECOLYTIQ_V2`) categories.",
                         "type": "text/plain"
                       },
                       "key": "categories",
@@ -5490,7 +5490,7 @@
               "_postman_previewlanguage": "text"
             },
             {
-              "id": "97593746-b65e-480a-b4d0-5a1d0ef3230a",
+              "id": "56722cb3-a5f4-4028-9834-7ef7b3669370",
               "name": "Rate Limit exceeded.\n",
               "originalRequest": {
                 "url": {
@@ -5507,7 +5507,7 @@
                     {
                       "disabled": false,
                       "description": {
-                        "content": "used as filter for categories.  If it is unset or empty all categories are used. A  [list of categories](#operation/getInfoCategories) can be retrieved using the [Info API](#tag/Info-API).\nSupports both ecolytiq 1.4 (`ECOLYTIQ`) and ecolytiq EEIO (`ECOLYTIQ_V2`) categories.",
+                        "content": "used as a filter for categories.  If it is unset or empty all categories are used. A  [list of categories](#operation/getInfoCategories) can be retrieved using the [Info API](#tag/Info-API).\nSupports both ecolytiq 1.4 (`ECOLYTIQ`) and ecolytiq EEIO (`ECOLYTIQ_V2`) categories.",
                         "type": "text/plain"
                       },
                       "key": "categories",
@@ -5597,7 +5597,7 @@
           }
         },
         {
-          "id": "f76cd2ba-9f66-470d-a5dc-b40ae387550c",
+          "id": "1c0ebbae-781b-48c7-91a0-284089ea9b1f",
           "name": "Get Explanations by ID",
           "request": {
             "name": "Get Explanations by ID",
@@ -5618,7 +5618,7 @@
                 {
                   "disabled": false,
                   "description": {
-                    "content": "a list of ids. If list of ids are not present, all explanations returned.",
+                    "content": "a list of ids. If the list of ids is not present, all explanations are returned.",
                     "type": "text/plain"
                   },
                   "key": "ids",
@@ -5656,7 +5656,7 @@
           },
           "response": [
             {
-              "id": "95936c83-f91f-4ef4-8090-7d274766ae2b",
+              "id": "a54356c2-4bec-420c-9639-efa82e89ba62",
               "name": "A list of explanations",
               "originalRequest": {
                 "url": {
@@ -5672,7 +5672,7 @@
                     {
                       "disabled": false,
                       "description": {
-                        "content": "a list of ids. If list of ids are not present, all explanations returned.",
+                        "content": "a list of ids. If the list of ids is not present, all explanations are returned.",
                         "type": "text/plain"
                       },
                       "key": "ids",
@@ -5747,7 +5747,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "fbdd95a8-24ea-4c12-9467-301e14d46b35",
+              "id": "e53fd59b-e243-4fdf-a034-4dbd7f63aca4",
               "name": "Unauthorized. Access Token is invalid or expired.\n",
               "originalRequest": {
                 "url": {
@@ -5763,7 +5763,7 @@
                     {
                       "disabled": false,
                       "description": {
-                        "content": "a list of ids. If list of ids are not present, all explanations returned.",
+                        "content": "a list of ids. If the list of ids is not present, all explanations are returned.",
                         "type": "text/plain"
                       },
                       "key": "ids",
@@ -5829,7 +5829,7 @@
               "_postman_previewlanguage": "text"
             },
             {
-              "id": "1fea309c-8b6c-4936-aa6f-bec5f004a107",
+              "id": "82534488-6437-4f29-98bb-eed3ecdb6ec8",
               "name": "Rate Limit exceeded.\n",
               "originalRequest": {
                 "url": {
@@ -5845,7 +5845,7 @@
                     {
                       "disabled": false,
                       "description": {
-                        "content": "a list of ids. If list of ids are not present, all explanations returned.",
+                        "content": "a list of ids. If the list of ids is not present, all explanations are returned.",
                         "type": "text/plain"
                       },
                       "key": "ids",
@@ -5926,7 +5926,7 @@
           }
         },
         {
-          "id": "ed646eac-9696-464b-9996-5b215efb5a12",
+          "id": "79468b1e-e33e-4e0e-b3a4-2cfcbe5ea4f5",
           "name": "Get Explanations (for given categories)",
           "request": {
             "name": "Get Explanations (for given categories)",
@@ -5948,7 +5948,7 @@
                 {
                   "disabled": false,
                   "description": {
-                    "content": "used as filter for categories.  If it is unset or empty all categories are used. A  [list of categories](#operation/getInfoCategories) can be retrieved using the [Info API](#tag/Info-API).\nSupports both ecolytiq 1.4 (`ECOLYTIQ`) and ecolytiq EEIO (`ECOLYTIQ_V2`) categories.",
+                    "content": "used as a filter for categories.  If it is unset or empty all categories are used. A  [list of categories](#operation/getInfoCategories) can be retrieved using the [Info API](#tag/Info-API).\nSupports both ecolytiq 1.4 (`ECOLYTIQ`) and ecolytiq EEIO (`ECOLYTIQ_V2`) categories.",
                     "type": "text/plain"
                   },
                   "key": "categories",
@@ -5995,7 +5995,7 @@
           },
           "response": [
             {
-              "id": "51a1eb97-3457-4da5-8be3-b32fa747bb51",
+              "id": "03bf78c6-fc96-46dd-acd4-63deb57ce347",
               "name": "A list of explanations",
               "originalRequest": {
                 "url": {
@@ -6012,7 +6012,7 @@
                     {
                       "disabled": false,
                       "description": {
-                        "content": "used as filter for categories.  If it is unset or empty all categories are used. A  [list of categories](#operation/getInfoCategories) can be retrieved using the [Info API](#tag/Info-API).\nSupports both ecolytiq 1.4 (`ECOLYTIQ`) and ecolytiq EEIO (`ECOLYTIQ_V2`) categories.",
+                        "content": "used as a filter for categories.  If it is unset or empty all categories are used. A  [list of categories](#operation/getInfoCategories) can be retrieved using the [Info API](#tag/Info-API).\nSupports both ecolytiq 1.4 (`ECOLYTIQ`) and ecolytiq EEIO (`ECOLYTIQ_V2`) categories.",
                         "type": "text/plain"
                       },
                       "key": "categories",
@@ -6096,7 +6096,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "18a55f84-25e4-4124-9e7d-1e9c3f7193b5",
+              "id": "c4b43c81-784a-4126-bdd3-6cf1be26a5bd",
               "name": "Bad Request.\n",
               "originalRequest": {
                 "url": {
@@ -6113,7 +6113,7 @@
                     {
                       "disabled": false,
                       "description": {
-                        "content": "used as filter for categories.  If it is unset or empty all categories are used. A  [list of categories](#operation/getInfoCategories) can be retrieved using the [Info API](#tag/Info-API).\nSupports both ecolytiq 1.4 (`ECOLYTIQ`) and ecolytiq EEIO (`ECOLYTIQ_V2`) categories.",
+                        "content": "used as a filter for categories.  If it is unset or empty all categories are used. A  [list of categories](#operation/getInfoCategories) can be retrieved using the [Info API](#tag/Info-API).\nSupports both ecolytiq 1.4 (`ECOLYTIQ`) and ecolytiq EEIO (`ECOLYTIQ_V2`) categories.",
                         "type": "text/plain"
                       },
                       "key": "categories",
@@ -6197,7 +6197,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "8ab8f9e0-2d9d-4ed1-8ff0-ff89093d761b",
+              "id": "e6719aa3-2efa-48e7-a990-fd6ce69611a4",
               "name": "Unauthorized. Access Token is invalid or expired.\n",
               "originalRequest": {
                 "url": {
@@ -6214,7 +6214,7 @@
                     {
                       "disabled": false,
                       "description": {
-                        "content": "used as filter for categories.  If it is unset or empty all categories are used. A  [list of categories](#operation/getInfoCategories) can be retrieved using the [Info API](#tag/Info-API).\nSupports both ecolytiq 1.4 (`ECOLYTIQ`) and ecolytiq EEIO (`ECOLYTIQ_V2`) categories.",
+                        "content": "used as a filter for categories.  If it is unset or empty all categories are used. A  [list of categories](#operation/getInfoCategories) can be retrieved using the [Info API](#tag/Info-API).\nSupports both ecolytiq 1.4 (`ECOLYTIQ`) and ecolytiq EEIO (`ECOLYTIQ_V2`) categories.",
                         "type": "text/plain"
                       },
                       "key": "categories",
@@ -6289,7 +6289,7 @@
               "_postman_previewlanguage": "text"
             },
             {
-              "id": "73b4f389-ba5c-4edb-a112-7ea025918fae",
+              "id": "7ab5225d-10ba-430e-bd1d-ede9b4cc3c3a",
               "name": "Rate Limit exceeded.\n",
               "originalRequest": {
                 "url": {
@@ -6306,7 +6306,7 @@
                     {
                       "disabled": false,
                       "description": {
-                        "content": "used as filter for categories.  If it is unset or empty all categories are used. A  [list of categories](#operation/getInfoCategories) can be retrieved using the [Info API](#tag/Info-API).\nSupports both ecolytiq 1.4 (`ECOLYTIQ`) and ecolytiq EEIO (`ECOLYTIQ_V2`) categories.",
+                        "content": "used as a filter for categories.  If it is unset or empty all categories are used. A  [list of categories](#operation/getInfoCategories) can be retrieved using the [Info API](#tag/Info-API).\nSupports both ecolytiq 1.4 (`ECOLYTIQ`) and ecolytiq EEIO (`ECOLYTIQ_V2`) categories.",
                         "type": "text/plain"
                       },
                       "key": "categories",
@@ -6399,10 +6399,10 @@
     },
     {
       "name": "Profiling API",
-      "description": "In the most basic way the ecolytiq Sustainability-as-a-Service&reg; platform is used to calculate the CO<sub>2</sub> footprint related to a \"spending transaction\" by taking into account the amount of money spent and the category of the transaction.\nThis gives an estimate of the footprint based on average consumer behavior. \nFor example, in the average grocery basket is still plenty of meat.\nHowever, a specific end customer may have chosen to live by a meat-reduced, meat-free, vegetarian, or vegan diet.\nHence the average shopping basket will give an inaccurate CO<sub>2</sub> footprint for them.\nTo improve the footprint calculation it is possible to store additional information about an end customer and improving the calculation accuracy in turn.\n",
+      "description": "In the most basic way the ecolytiq Sustainability-as-a-Service&reg; platform is used to calculate the CO<sub>2</sub> footprint related to a \"spending transaction\" by taking into account the amount of money spent and the category of the transaction.\nThis gives an estimate of the footprint based on average consumer behavior. \nFor example, the average grocery basket is still plenty of meat.\nHowever, a specific end customer may have chosen to live a meat-reduced, meat-free, vegetarian, or vegan diet.\nHence the average shopping basket will give an inaccurate CO<sub>2</sub> footprint for them.\nTo improve the footprint calculation it is possible to store additional information about an end customer and improve the calculation accuracy in turn.\n",
       "item": [
         {
-          "id": "b592fcf3-f93f-4e1d-9d87-bbf16c75cb4b",
+          "id": "9858343a-d80c-4202-8631-56b213edd2e9",
           "name": "Get Insights (for accounts)",
           "request": {
             "name": "Get Insights (for accounts)",
@@ -6432,7 +6432,7 @@
                 {
                   "disabled": false,
                   "description": {
-                    "content": "used as filter for categories.  If it is unset or empty all categories are used. A  [list of categories](#operation/getInfoCategories) can be retrieved using the [Info API](#tag/Info-API).\nSupports both ecolytiq 1.4 (`ECOLYTIQ`) and ecolytiq EEIO (`ECOLYTIQ_V2`) categories.",
+                    "content": "used as a filter for categories.  If it is unset or empty all categories are used. A  [list of categories](#operation/getInfoCategories) can be retrieved using the [Info API](#tag/Info-API).\nSupports both ecolytiq 1.4 (`ECOLYTIQ`) and ecolytiq EEIO (`ECOLYTIQ_V2`) categories.",
                     "type": "text/plain"
                   },
                   "key": "categories",
@@ -6461,7 +6461,7 @@
           },
           "response": [
             {
-              "id": "3d011e31-eb31-4070-aab6-660eaa24d907",
+              "id": "bbae1f42-ab40-46de-8e1b-fb3ef20959cd",
               "name": "Returns a list of content ids for the given accounts",
               "originalRequest": {
                 "url": {
@@ -6486,7 +6486,7 @@
                     {
                       "disabled": false,
                       "description": {
-                        "content": "used as filter for categories.  If it is unset or empty all categories are used. A  [list of categories](#operation/getInfoCategories) can be retrieved using the [Info API](#tag/Info-API).\nSupports both ecolytiq 1.4 (`ECOLYTIQ`) and ecolytiq EEIO (`ECOLYTIQ_V2`) categories.",
+                        "content": "used as a filter for categories.  If it is unset or empty all categories are used. A  [list of categories](#operation/getInfoCategories) can be retrieved using the [Info API](#tag/Info-API).\nSupports both ecolytiq 1.4 (`ECOLYTIQ`) and ecolytiq EEIO (`ECOLYTIQ_V2`) categories.",
                         "type": "text/plain"
                       },
                       "key": "categories",
@@ -6552,7 +6552,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "d37e41fd-b665-453d-a498-0aeeb8ec26f5",
+              "id": "ebd62ead-5956-4c56-bad4-03dbf01fbdbb",
               "name": "Bad Request.",
               "originalRequest": {
                 "url": {
@@ -6577,7 +6577,7 @@
                     {
                       "disabled": false,
                       "description": {
-                        "content": "used as filter for categories.  If it is unset or empty all categories are used. A  [list of categories](#operation/getInfoCategories) can be retrieved using the [Info API](#tag/Info-API).\nSupports both ecolytiq 1.4 (`ECOLYTIQ`) and ecolytiq EEIO (`ECOLYTIQ_V2`) categories.",
+                        "content": "used as a filter for categories.  If it is unset or empty all categories are used. A  [list of categories](#operation/getInfoCategories) can be retrieved using the [Info API](#tag/Info-API).\nSupports both ecolytiq 1.4 (`ECOLYTIQ`) and ecolytiq EEIO (`ECOLYTIQ_V2`) categories.",
                         "type": "text/plain"
                       },
                       "key": "categories",
@@ -6643,7 +6643,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "5de1ee1e-56e4-4496-ae2d-f32b00b3ee15",
+              "id": "06cda0eb-6aa7-44dd-983a-4e2987a67889",
               "name": "Unauthorized. Access Token is invalid or expired.\n",
               "originalRequest": {
                 "url": {
@@ -6668,7 +6668,7 @@
                     {
                       "disabled": false,
                       "description": {
-                        "content": "used as filter for categories.  If it is unset or empty all categories are used. A  [list of categories](#operation/getInfoCategories) can be retrieved using the [Info API](#tag/Info-API).\nSupports both ecolytiq 1.4 (`ECOLYTIQ`) and ecolytiq EEIO (`ECOLYTIQ_V2`) categories.",
+                        "content": "used as a filter for categories.  If it is unset or empty all categories are used. A  [list of categories](#operation/getInfoCategories) can be retrieved using the [Info API](#tag/Info-API).\nSupports both ecolytiq 1.4 (`ECOLYTIQ`) and ecolytiq EEIO (`ECOLYTIQ_V2`) categories.",
                         "type": "text/plain"
                       },
                       "key": "categories",
@@ -6725,7 +6725,7 @@
               "_postman_previewlanguage": "text"
             },
             {
-              "id": "cda5b24c-c89e-4e77-8079-d87bd292d633",
+              "id": "292975e2-b0ed-47da-a53c-b2df2069b8d1",
               "name": "Rate Limit exceeded.\n",
               "originalRequest": {
                 "url": {
@@ -6750,7 +6750,7 @@
                     {
                       "disabled": false,
                       "description": {
-                        "content": "used as filter for categories.  If it is unset or empty all categories are used. A  [list of categories](#operation/getInfoCategories) can be retrieved using the [Info API](#tag/Info-API).\nSupports both ecolytiq 1.4 (`ECOLYTIQ`) and ecolytiq EEIO (`ECOLYTIQ_V2`) categories.",
+                        "content": "used as a filter for categories.  If it is unset or empty all categories are used. A  [list of categories](#operation/getInfoCategories) can be retrieved using the [Info API](#tag/Info-API).\nSupports both ecolytiq 1.4 (`ECOLYTIQ`) and ecolytiq EEIO (`ECOLYTIQ_V2`) categories.",
                         "type": "text/plain"
                       },
                       "key": "categories",
@@ -6822,7 +6822,7 @@
           }
         },
         {
-          "id": "7dff0320-c8c5-4c97-bc64-4d0286ffd0fc",
+          "id": "ab23d019-68bd-401d-a64a-b3207881a3ae",
           "name": "Get Contextual Insights (for accounts)",
           "request": {
             "name": "Get Contextual Insights (for accounts)",
@@ -6872,7 +6872,7 @@
           },
           "response": [
             {
-              "id": "9f41500c-e5bf-405a-8a14-547d8f8b56ad",
+              "id": "338d2698-1116-4711-bab3-a97a5ea84ed7",
               "name": "Returns a list of content ids for the given accounts",
               "originalRequest": {
                 "url": {
@@ -6954,7 +6954,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "171a1bde-d2fa-4844-8bd1-40c1e71a792b",
+              "id": "2c813fd8-90ac-45a9-936b-c3753e32af28",
               "name": "Bad Request.\n",
               "originalRequest": {
                 "url": {
@@ -7036,7 +7036,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "b30c2893-78c8-426d-ba4a-8e1718347918",
+              "id": "efc9c92d-8890-4a3d-8433-0a81256aa411",
               "name": "Unauthorized. Access Token is invalid or expired.\n",
               "originalRequest": {
                 "url": {
@@ -7109,7 +7109,7 @@
               "_postman_previewlanguage": "text"
             },
             {
-              "id": "f4d3cf76-a759-4efa-a586-a13b32dcbee2",
+              "id": "d67dcefd-5736-4725-b7b4-2c6d0aba90bc",
               "name": "Rate Limit exceeded.\n",
               "originalRequest": {
                 "url": {
@@ -7197,12 +7197,12 @@
           }
         },
         {
-          "id": "db1e03c0-00be-464b-b4b4-578301c6a47e",
+          "id": "8fb9acb5-c5c2-4c73-b87a-7a65c0a1c056",
           "name": "Get Questions and Answers for Profiling",
           "request": {
             "name": "Get Questions and Answers for Profiling",
             "description": {
-              "content": "Get questions, answers, and translations, used for Profiling. \nThe answers to the questions are used to store additional information for specific end customers.  This is useful for improving the calculation results (e.g., if the end customer is known to be vegan, the vegan \"base basket\" is used for calculation of the footprint after shopping in the supermarket) as well as reducing unsuitable Insights (i.e., someone known to be vegan will not be shown information on how much CO<sub>2</sub> they can save by reducing meat in their diet).\nCalling this endpoint without the `question_ids` parameter will return the text of all questions that can be used for Profiling. \nIncluding the `question_ids` parameter returns only the content for the referenced questions.\nCalling this endpoint without the `languages_codes` parameter will return the text of all questions, and their associated answers, in all available language translations.\nIncluding the `languages_codes` parameter returns only the content with the referenced language translations.\nIf no questions for the given `ids` or translations for the given `languages_codes` are found, the response is handled as partial success. Corresponding information will be returned in the error list of the response.\n> #### Note:\n> This endpoint returns the actual content.",
+              "content": "Get questions, answers, and translations, used for Profiling. \nThe answers to the questions are used to store additional information for specific end customers.  This is useful for improving the calculation results (e.g., if the end customer is known to be vegan, the vegan \"base basket\" is used for the calculation of the footprint after shopping in the supermarket) as well as reducing unsuitable Insights (i.e., someone known to be vegan will not be shown information on how much CO<sub>2</sub> they can save by reducing meat in their diet).\nCalling this endpoint without the `question_ids` parameter will return the text of all questions that can be used for Profiling. \nIncluding the `question_ids` parameter returns only the content for the referenced questions.\nCalling this endpoint without the `languages_codes` parameter will return the text of all questions, and their associated answers, in all available language translations.\nIncluding the `languages_codes` parameter returns only the content with the referenced language translations.\nIf no questions for the given `ids` or translations for the given `languages_codes` are found, the response is handled as a partial success. Corresponding information will be returned in the error list of the response. > #### Note:\n> This endpoint returns the actual content.",
               "type": "text/plain"
             },
             "url": {
@@ -7218,7 +7218,7 @@
                 {
                   "disabled": false,
                   "description": {
-                    "content": "a list of question ids. If list of ids are not present, all questions (+answers) are returned.",
+                    "content": "a list of question ids. If the list of ids is not present, all questions (+answers) are returned.",
                     "type": "text/plain"
                   },
                   "key": "ids",
@@ -7256,7 +7256,7 @@
           },
           "response": [
             {
-              "id": "93f72c0c-ca81-4fe0-b925-6a69dc2818c4",
+              "id": "7a9e1c77-65b8-4d80-8c2f-17524d1f6378",
               "name": "A list of profiling questions.",
               "originalRequest": {
                 "url": {
@@ -7272,7 +7272,7 @@
                     {
                       "disabled": false,
                       "description": {
-                        "content": "a list of question ids. If list of ids are not present, all questions (+answers) are returned.",
+                        "content": "a list of question ids. If the list of ids is not present, all questions (+answers) are returned.",
                         "type": "text/plain"
                       },
                       "key": "ids",
@@ -7347,7 +7347,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "c0eaf954-196b-412d-8abb-1f0692a1e987",
+              "id": "4653b92c-5210-46da-9774-88a23a1b464c",
               "name": "Unauthorized. Access Token is invalid or expired.\n",
               "originalRequest": {
                 "url": {
@@ -7363,7 +7363,7 @@
                     {
                       "disabled": false,
                       "description": {
-                        "content": "a list of question ids. If list of ids are not present, all questions (+answers) are returned.",
+                        "content": "a list of question ids. If the list of ids is not present, all questions (+answers) are returned.",
                         "type": "text/plain"
                       },
                       "key": "ids",
@@ -7435,12 +7435,12 @@
           }
         },
         {
-          "id": "64d094ea-e412-4e43-98ed-20b7a9040c63",
+          "id": "f29f3b4a-2fc1-4860-923a-88358e696591",
           "name": "Save Answer for a given Question",
           "request": {
             "name": "Save Answer for a given Question",
             "description": {
-              "content": "Save Answer for a given Question. \nIn case of pre-defined answers only the `answer_id` and the `account_id` are necessary. If the answer is \"free text\" the `input` must be submitted as well.",
+              "content": "Save Answer for a given Question. \nIn the case of pre-defined answers only the `answer_id` and the `account_id` are necessary. If the answer is \"free text\" the `input` must be submitted as well.",
               "type": "text/plain"
             },
             "url": {
@@ -7488,7 +7488,7 @@
           },
           "response": [
             {
-              "id": "f0c5c30c-9731-4dc0-81b3-2c769c794ead",
+              "id": "9c55e076-6b1c-4110-b34c-60ed735a6ce6",
               "name": "Confirmation that answer is saved",
               "originalRequest": {
                 "url": {
@@ -7573,7 +7573,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "45dace20-152b-4cc0-8e8d-02bf59f78b53",
+              "id": "acf927b1-9414-4964-87df-0fdbcf65af94",
               "name": "Unauthorized. Access Token is invalid or expired.\n",
               "originalRequest": {
                 "url": {
@@ -7661,7 +7661,7 @@
       "description": "Should the necessity arise to remove all data of a specific end customer from the ecolytiq platform this can be done using the account API.\n",
       "item": [
         {
-          "id": "3ad7a29b-65e1-493a-adb2-35c8f57865bc",
+          "id": "929e5b69-39d6-4c7f-83de-cda29b932053",
           "name": "Delete all data of the given accounts",
           "request": {
             "name": "Delete all data of the given accounts",
@@ -7714,7 +7714,7 @@
           },
           "response": [
             {
-              "id": "e7243e13-c5fa-4860-8cc2-9651cf308a67",
+              "id": "6d03da76-d5ba-42a3-b312-e084c8cbebb6",
               "name": "Confirmation that the request has been processed",
               "originalRequest": {
                 "url": {
@@ -7799,8 +7799,8 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "950c0187-3ca6-40b3-a25d-463a4c548bfe",
-              "name": "Confirmation that request can be handled",
+              "id": "6a89e274-6bad-41e7-9855-8674cc8ed56a",
+              "name": "Confirmation that the request can be handled",
               "originalRequest": {
                 "url": {
                   "path": [
@@ -7884,7 +7884,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "f21e436c-d463-4773-8948-e9a8a3ac0c1d",
+              "id": "df220fab-5090-4484-9a12-7237c31057b6",
               "name": "Unauthorized. Access Token is invalid or expired.\n",
               "originalRequest": {
                 "url": {
@@ -7969,15 +7969,15 @@
     },
     {
       "name": "onPrem API",
-      "description": "In some cases the ecolytiq Sustainability-as-a-Service&reg; platform is not used as Software as a Service (SaaS) solution but hosted on a customers own premises or inside their own cloud instance.\nIf the customers whish they can use a rating system for content delivered by the ecolytiq platform.\nWe recommend to regularly submit the content ratings back to ecolytiq so that we can improve the content quality.\n\n\n> #### Please Note \n>\n> This endpoint must be called on the ecolytiq SaaS platform which is accessible over the public internet. \n> Is may be necessary to obtain a special pair of `client_id` and `client_secret` credentials for the SaaS platform to use this endpoint.\n> No PII is transmitted via this endpoint.\n",
+      "description": "In some cases the ecolytiq Sustainability-as-a-Service&reg; platform is not used as Software as a Service (SaaS) solution but hosted on customers' own premises or inside their own cloud instance.\nIf the customers wish they can use a rating system for content delivered by the ecolytiq platform.\nWe recommend regularly submitting the content ratings back to ecolytiq so that we can improve the content quality.\n\n\n> #### Please Note \n>\n> This endpoint must be called on the ecolytiq SaaS platform which is accessible over the public internet. \n> Is may be necessary to obtain a special pair of `client_id` and `client_secret` credentials for the SaaS platform to use this endpoint.\n> No PII is transmitted via this endpoint.\n",
       "item": [
         {
-          "id": "6eeb8b8b-42b0-4238-82d3-4d7501d442c2",
+          "id": "0cd22ccf-c806-414f-92d0-c0f39379f3f4",
           "name": "Send us Feedback about Content Rating",
           "request": {
             "name": "Send us Feedback about Content Rating",
             "description": {
-              "content": "Use this endpoint to send us feedback about content.         \n\nCurrently, only the \"five star\" rating system is supported. To send feedback about a content piece please send the accumulated number of *all* ratings for each rating category also when updating. ",
+              "content": "Use this endpoint to send us feedback about the content.         \n\nCurrently, only the \"five star\" rating system is supported. To send feedback about a content piece please send the accumulated number of *all* ratings for each rating category also when updatin.",
               "type": "text/plain"
             },
             "url": {
@@ -8025,7 +8025,7 @@
           },
           "response": [
             {
-              "id": "aae461ab-a725-4221-b02f-f0e4952b6fdd",
+              "id": "c41bc397-6eea-4f85-94eb-5a06cf1aa9d0",
               "name": "Confirmation that the request has been processed",
               "originalRequest": {
                 "url": {
@@ -8110,7 +8110,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "809c96f0-549b-4355-af60-ce2a70240c1d",
+              "id": "4f6837bd-bf8c-4847-9858-b04e5bee83b2",
               "name": "Bad Request.\n",
               "originalRequest": {
                 "url": {
@@ -8195,7 +8195,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "b30af093-6b36-40b0-9a2c-4b0de22a7f86",
+              "id": "620cb63e-3414-4fc3-b531-a6903a6c529a",
               "name": "Unauthorized. Access Token is invalid or expired.\n",
               "originalRequest": {
                 "url": {
@@ -8271,7 +8271,7 @@
               "_postman_previewlanguage": "text"
             },
             {
-              "id": "7d5a2bda-6c3e-43fb-8e27-d3f7d8c71eb8",
+              "id": "8e948922-f7dc-456c-a9b9-705de792327d",
               "name": "Rate Limit exceeded.\n",
               "originalRequest": {
                 "url": {
@@ -8365,10 +8365,10 @@
     },
     {
       "name": "Action API",
-      "description": "Use these endpoints for handling carbon footprint impact orders.\n\n> #### Note:\n> \n> These endpoints are only meant for handling the data about carbon footprint impact orders between a Customer (e.g., bank) and a carbon project provider through ecolytiq.\n> They are not meant to initiate actual flow of payments between the customer and the provider or ecolytiq!\n",
+      "description": "Use these endpoints for handling carbon footprint impact orders.\n\n> #### Note:\n> \n> These endpoints are only meant for handling the data about carbon footprint impact orders between a Customer (e.g., bank) and a carbon project provider through ecolytiq.\n> They are not meant to initiate the actual flow of payments between the customer and the provider or ecolytiq!\n",
       "item": [
         {
-          "id": "79b50336-3f72-4cfa-a9a7-0b889c310e46",
+          "id": "d3eb5170-7fdb-4b23-abe0-1336ab410e39",
           "name": "Get climate projects",
           "request": {
             "name": "Get climate projects",
@@ -8418,7 +8418,7 @@
           },
           "response": [
             {
-              "id": "7912b2ca-6743-41ab-a88b-c47f8b8450ea",
+              "id": "1aec0921-0a48-4c08-abc5-2eb91ff59d18",
               "name": "A List of climate projects",
               "originalRequest": {
                 "url": {
@@ -8500,7 +8500,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "a0688333-d75f-4291-b04b-9f3d0d105948",
+              "id": "799a1a42-757f-4cd4-99ba-36bf568aed6e",
               "name": "Bad Request.\n",
               "originalRequest": {
                 "url": {
@@ -8582,7 +8582,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "1c8e778a-8113-4ccb-aa65-3ba966b0e762",
+              "id": "b0eab2cd-2f25-4772-929e-044c904018b0",
               "name": "Unauthorized. Access Token is invalid or expired.\n",
               "originalRequest": {
                 "url": {
@@ -8655,7 +8655,7 @@
               "_postman_previewlanguage": "text"
             },
             {
-              "id": "387a405d-7653-418f-8cb8-41d830c2cb23",
+              "id": "746160e9-002a-4f20-a693-e14a6b26eb43",
               "name": "Rate Limit exceeded.\n",
               "originalRequest": {
                 "url": {
@@ -8743,7 +8743,7 @@
           }
         },
         {
-          "id": "0bc00b59-aaa8-435f-9816-b14498cc10f0",
+          "id": "1fa302e0-f194-49a9-89b9-9ef8c1c65514",
           "name": "Get Order Report",
           "request": {
             "name": "Get Order Report",
@@ -8802,7 +8802,7 @@
           },
           "response": [
             {
-              "id": "5243c8c8-be9d-46ed-b1a6-533a0b42d49a",
+              "id": "6bd04cc6-c95c-438e-9b03-4a770a09b3e7",
               "name": "An Order Report",
               "originalRequest": {
                 "url": {
@@ -8893,7 +8893,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "fc57f6a9-ecc5-46c2-9110-eeed73359588",
+              "id": "75a80d8e-6367-4da3-b6e8-bce67b1533cf",
               "name": "Bad Request.\n",
               "originalRequest": {
                 "url": {
@@ -8984,7 +8984,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "c333f0f9-20c6-416d-8587-6210120db5b4",
+              "id": "03b63cc7-1ee7-478f-b70c-970abd010107",
               "name": "Unauthorized. Access Token is invalid or expired.\n",
               "originalRequest": {
                 "url": {
@@ -9066,7 +9066,7 @@
               "_postman_previewlanguage": "text"
             },
             {
-              "id": "828d7571-df30-4443-80ca-99cc3d450a2b",
+              "id": "ee1f8408-916b-4d11-bf13-8ab4fb6c21cc",
               "name": "Rate Limit exceeded.\n",
               "originalRequest": {
                 "url": {
@@ -9163,7 +9163,7 @@
           }
         },
         {
-          "id": "6e80aee3-8e05-44dc-9312-2c83a5d7883a",
+          "id": "b2fc0bd9-9e89-4e68-8188-2c6240d957e2",
           "name": "Money calculation for CO2 impact",
           "request": {
             "name": "Money calculation for CO2 impact",
@@ -9217,7 +9217,7 @@
           },
           "response": [
             {
-              "id": "3bf210d1-1713-4a5e-a9f8-04ea8c4663c1",
+              "id": "c97ad1e5-aa21-464b-9e87-e20b82438f4a",
               "name": "A List of orders",
               "originalRequest": {
                 "url": {
@@ -9303,7 +9303,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "07c55fea-9ca2-4b71-8596-1861e1294d98",
+              "id": "b7fa05c8-8d2e-4b36-a4c0-4b3b2471e262",
               "name": "Bad Request.\n",
               "originalRequest": {
                 "url": {
@@ -9389,7 +9389,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "91a90a88-bcd0-41db-94ef-30fbf5a7836a",
+              "id": "61f45f78-662f-412f-931d-4e062eb264c8",
               "name": "Unauthorized. Access Token is invalid or expired.\n",
               "originalRequest": {
                 "url": {
@@ -9466,7 +9466,7 @@
               "_postman_previewlanguage": "text"
             },
             {
-              "id": "417860c8-8cff-4681-a01d-8d572a396819",
+              "id": "e10ab1be-51b5-45d2-9187-eb37598a99e1",
               "name": "Rate Limit exceeded.\n",
               "originalRequest": {
                 "url": {
@@ -9558,7 +9558,7 @@
           }
         },
         {
-          "id": "615a64e8-bbef-4cb8-90bf-ef88ad54c0dc",
+          "id": "ce3b30a8-cd47-45ba-a98c-266d4135b949",
           "name": "CO2 impact calculation for money",
           "request": {
             "name": "CO2 impact calculation for money",
@@ -9612,7 +9612,7 @@
           },
           "response": [
             {
-              "id": "f8bc444e-4047-4f31-9d94-cda20b21d2b3",
+              "id": "f1c9acc9-8120-4a86-8835-2fa07057f938",
               "name": "A List of orders",
               "originalRequest": {
                 "url": {
@@ -9698,7 +9698,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "20ce7725-24c0-407b-a097-a7b617f846be",
+              "id": "d2d0b4f4-12ef-4d86-9633-960b7da42d21",
               "name": "Bad Request.\n",
               "originalRequest": {
                 "url": {
@@ -9784,7 +9784,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "e47c0e87-63b2-406e-b440-2069a85c4ca5",
+              "id": "bef7432d-2d2b-4961-bae0-a63f342bdcb0",
               "name": "Unauthorized. Access Token is invalid or expired.\n",
               "originalRequest": {
                 "url": {
@@ -9861,7 +9861,7 @@
               "_postman_previewlanguage": "text"
             },
             {
-              "id": "e3c88f12-cdcc-40b5-9c01-d9c266056d08",
+              "id": "1fa10bc2-9b03-4d22-a529-527cd78bd6a4",
               "name": "Rate Limit exceeded.\n",
               "originalRequest": {
                 "url": {
@@ -9956,10 +9956,10 @@
     },
     {
       "name": "Statistic API",
-      "description": "",
+      "description": "Use these endpoints to get aggregated footprint data about accounts, businesses, or sub-accounts.\n",
       "item": [
         {
-          "id": "3f37ab34-7994-4444-a03f-f925bd68fbdb",
+          "id": "36aa144a-8abd-42b8-993c-3919a05875a5",
           "name": "Get total or monthly footprints over time",
           "request": {
             "name": "Get total or monthly footprints over time",
@@ -10000,7 +10000,7 @@
                 {
                   "disabled": false,
                   "description": {
-                    "content": "Defines in which intervals the footprint should be returned. Use `TOTAL` to get one single value for the whole timeframe. Use `MONTH` to return the footprint split by month. If interval is not given, `TOTAL` will be used.",
+                    "content": "Defines in which intervals the footprint should be returned. Use `TOTAL` to get one single value for the whole timeframe. Use `MONTH` to return the footprint split by month. If an interval is not given, `TOTAL` will be used.",
                     "type": "text/plain"
                   },
                   "key": "interval",
@@ -10009,11 +10009,11 @@
                 {
                   "disabled": false,
                   "description": {
-                    "content": "Filter by a given meta category. Mandatory if sub-category query parameter is used, otherwise optional.",
+                    "content": "Filter by a given meta category. It is mandatory if a sub-category query parameter is used, otherwise optional.",
                     "type": "text/plain"
                   },
                   "key": "meta-category",
-                  "value": "administration"
+                  "value": "food"
                 },
                 {
                   "disabled": false,
@@ -10022,7 +10022,7 @@
                     "type": "text/plain"
                   },
                   "key": "sub-category",
-                  "value": "accounting"
+                  "value": "groceries"
                 }
               ],
               "variable": [
@@ -10054,8 +10054,8 @@
           },
           "response": [
             {
-              "id": "d8abac7f-9f72-4e48-9135-a3ffe863d8a2",
-              "name": "Footprints for the given account. If the `account_id` doesn't exist, an empty list will be returned.",
+              "id": "db00c7a8-4e16-44d3-b222-cae9ca0c2452",
+              "name": "Footprints for the given account.",
               "originalRequest": {
                 "url": {
                   "path": [
@@ -10090,7 +10090,7 @@
                     {
                       "disabled": false,
                       "description": {
-                        "content": "Defines in which intervals the footprint should be returned. Use `TOTAL` to get one single value for the whole timeframe. Use `MONTH` to return the footprint split by month. If interval is not given, `TOTAL` will be used.",
+                        "content": "Defines in which intervals the footprint should be returned. Use `TOTAL` to get one single value for the whole timeframe. Use `MONTH` to return the footprint split by month. If an interval is not given, `TOTAL` will be used.",
                         "type": "text/plain"
                       },
                       "key": "interval",
@@ -10099,11 +10099,11 @@
                     {
                       "disabled": false,
                       "description": {
-                        "content": "Filter by a given meta category. Mandatory if sub-category query parameter is used, otherwise optional.",
+                        "content": "Filter by a given meta category. It is mandatory if a sub-category query parameter is used, otherwise optional.",
                         "type": "text/plain"
                       },
                       "key": "meta-category",
-                      "value": "administration"
+                      "value": "food"
                     },
                     {
                       "disabled": false,
@@ -10112,7 +10112,7 @@
                         "type": "text/plain"
                       },
                       "key": "sub-category",
-                      "value": "accounting"
+                      "value": "groceries"
                     }
                   ],
                   "variable": []
@@ -10147,7 +10147,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "c5295d2c-d853-402b-ac5d-ad07bb20f314",
+              "id": "4a2a5f5e-cab0-4d65-b717-046b9f7e68f4",
               "name": "Bad Request. Request parameter is not valid.",
               "originalRequest": {
                 "url": {
@@ -10183,7 +10183,7 @@
                     {
                       "disabled": false,
                       "description": {
-                        "content": "Defines in which intervals the footprint should be returned. Use `TOTAL` to get one single value for the whole timeframe. Use `MONTH` to return the footprint split by month. If interval is not given, `TOTAL` will be used.",
+                        "content": "Defines in which intervals the footprint should be returned. Use `TOTAL` to get one single value for the whole timeframe. Use `MONTH` to return the footprint split by month. If an interval is not given, `TOTAL` will be used.",
                         "type": "text/plain"
                       },
                       "key": "interval",
@@ -10192,11 +10192,11 @@
                     {
                       "disabled": false,
                       "description": {
-                        "content": "Filter by a given meta category. Mandatory if sub-category query parameter is used, otherwise optional.",
+                        "content": "Filter by a given meta category. It is mandatory if a sub-category query parameter is used, otherwise optional.",
                         "type": "text/plain"
                       },
                       "key": "meta-category",
-                      "value": "administration"
+                      "value": "food"
                     },
                     {
                       "disabled": false,
@@ -10205,7 +10205,7 @@
                         "type": "text/plain"
                       },
                       "key": "sub-category",
-                      "value": "accounting"
+                      "value": "groceries"
                     }
                   ],
                   "variable": []
@@ -10240,7 +10240,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "54cdab06-6cd2-41fd-b08a-baf3a83f2a1a",
+              "id": "359ab118-9016-4110-bf49-1a17a03799f3",
               "name": "Unauthorized. Access token is invalid or expired.",
               "originalRequest": {
                 "url": {
@@ -10276,7 +10276,7 @@
                     {
                       "disabled": false,
                       "description": {
-                        "content": "Defines in which intervals the footprint should be returned. Use `TOTAL` to get one single value for the whole timeframe. Use `MONTH` to return the footprint split by month. If interval is not given, `TOTAL` will be used.",
+                        "content": "Defines in which intervals the footprint should be returned. Use `TOTAL` to get one single value for the whole timeframe. Use `MONTH` to return the footprint split by month. If an interval is not given, `TOTAL` will be used.",
                         "type": "text/plain"
                       },
                       "key": "interval",
@@ -10285,11 +10285,11 @@
                     {
                       "disabled": false,
                       "description": {
-                        "content": "Filter by a given meta category. Mandatory if sub-category query parameter is used, otherwise optional.",
+                        "content": "Filter by a given meta category. It is mandatory if a sub-category query parameter is used, otherwise optional.",
                         "type": "text/plain"
                       },
                       "key": "meta-category",
-                      "value": "administration"
+                      "value": "food"
                     },
                     {
                       "disabled": false,
@@ -10298,7 +10298,7 @@
                         "type": "text/plain"
                       },
                       "key": "sub-category",
-                      "value": "accounting"
+                      "value": "groceries"
                     }
                   ],
                   "variable": []
@@ -10323,8 +10323,8 @@
               "_postman_previewlanguage": "text"
             },
             {
-              "id": "b51a0219-1bc5-4a0b-bbc3-d0221866fa44",
-              "name": "Not found. The `meta-category` | `sub-category` could not be found.",
+              "id": "ea95401b-cd5e-427c-866d-4962af3bad3f",
+              "name": "Not found.",
               "originalRequest": {
                 "url": {
                   "path": [
@@ -10359,7 +10359,7 @@
                     {
                       "disabled": false,
                       "description": {
-                        "content": "Defines in which intervals the footprint should be returned. Use `TOTAL` to get one single value for the whole timeframe. Use `MONTH` to return the footprint split by month. If interval is not given, `TOTAL` will be used.",
+                        "content": "Defines in which intervals the footprint should be returned. Use `TOTAL` to get one single value for the whole timeframe. Use `MONTH` to return the footprint split by month. If an interval is not given, `TOTAL` will be used.",
                         "type": "text/plain"
                       },
                       "key": "interval",
@@ -10368,11 +10368,11 @@
                     {
                       "disabled": false,
                       "description": {
-                        "content": "Filter by a given meta category. Mandatory if sub-category query parameter is used, otherwise optional.",
+                        "content": "Filter by a given meta category. It is mandatory if a sub-category query parameter is used, otherwise optional.",
                         "type": "text/plain"
                       },
                       "key": "meta-category",
-                      "value": "administration"
+                      "value": "food"
                     },
                     {
                       "disabled": false,
@@ -10381,7 +10381,7 @@
                         "type": "text/plain"
                       },
                       "key": "sub-category",
-                      "value": "accounting"
+                      "value": "groceries"
                     }
                   ],
                   "variable": []
@@ -10442,7 +10442,7 @@
     }
   ],
   "info": {
-    "_postman_id": "396ba939-e54d-4ea0-bf41-fa09d3b65b34",
+    "_postman_id": "4aa9d492-a531-4a1b-87a2-3ee5f3bd8ed5",
     "name": "ecolytiq SaaS",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
     "description": {

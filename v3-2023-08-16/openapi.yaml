@@ -22,7 +22,7 @@ tags:
     description: |
       This document describes the API of the ecolytiq Sustainability-as-a-Service&reg; platform.
 
-      ecolytiq has developed a method of assigning financial (bank) transactions with a CO<sub>2</sub> footprint therefore allowing financial institutions to inform their end customers about the ecological impact of their transactions. 
+      ecolytiq has developed a method of assigning financial (bank) transactions with a CO<sub>2</sub> footprint, therefore, allowing financial institutions to inform their end customers about the ecological impact of their transactions. 
       The calculation is based on the amount of the (outgoing) transaction and a category of the transaction which are both components of various region-specific calculation models.
 
       ## Basic Requirements
@@ -48,12 +48,12 @@ tags:
       This can be achieved by sending transactions to the [transaction API](#tags/Transaction-API). 
 
       The ecolytiq platform has the ability to immediately return the calculation result ("synchronous processing") or to only accept the transactions and schedule the calculations until a later point in time ("asynchronous processing").
-      In any case the [result of the calculation](#operation/getTransactionsTransactions) can also be retrieved at a later point in time.
+      In any case, the [result of the calculation](#operation/getTransactionsTransactions) can also be retrieved at a later point in time.
 
       ### Refinement of Transactions
 
-      In some cases the amount of the transaction is not a good indicator on the ecological footprint related to the transaction.
-      In such instances the transactions can be refined by [answering transaction-specific questions](#operation/postTransactionsQuestions) (e.g., "How many liters was your refill at the gas station?").
+      In some cases, the amount of the transaction is not a good indicator of the ecological footprint related to the transaction.
+      In such instances, the transactions can be refined by [answering transaction-specific questions](#operation/postTransactionsQuestions) (e.g., "How many liters was your refill at the gas station?").
 
       ### Transaction Processing and Refinement Workflow
       
@@ -67,9 +67,9 @@ tags:
       3. Retrieve the content (questions and answers) associated with the refinement question and answer IDs:          
          [`GET /transactions/v1/questions?question_ids=<question_ids>`](#operation/getTransactionsQuestions)
          > #### Note
-         > This step can also be executed in the very beginning omitting the `question_ids` parameter.
+         > This step can also be executed in the very beginning by omitting the `question_ids` parameter.
          In that case, **all available** questions are returned. 
-         The result can then be cached at the client side.
+         The result can then be cached on the client side.
       
       4. Have the end customer answer the refinement question(s):  
          This must be handled in the client application
@@ -82,35 +82,35 @@ tags:
       
       ### Account Profiling
 
-      For some types of purchases it can be helpful to have additional knowledge about the end customer. 
-      For example, the supermarket shopping basket of a person regularly having meat on their plated differs from that of a vegan person. 
+      For some types of purchases, having additional knowledge about the end customer can be helpful. 
+      For example, the supermarket shopping basket of a person regularly having meat on their plate differs from that of a vegan person. 
       It is possible to request such information for each individual transaction.
       However, it can be easier to attribute such information to an end customer once.
-      For this, the [profiling API](#tag/Profiling-API) is available.
-
+      The [profiling API](#tag/Profiling-API) is available for this.
+      
       ## Educational and Informational Content
 
-      Another important feature of the ecolytiq Sustainability-as-a-Service&reg; platform is the educational content that allows end customers to gain more knowledge and and awareness of the ecological footprint created by their purchase decisions.
-      In the long term informing and educating end customers about their individual impact will help making them more literate choices when consuming goods and services. 
+      Another important feature of the ecolytiq Sustainability-as-a-Service&reg; platform is the educational content that allows end customers to gain more knowledge and awareness of the ecological footprint created by their purchase decisions.
+      In the long term informing and educating end customers about their individual impact will help make them more literate choices when consuming goods and services. 
 
       At present, ecolytiq offers the following types of content: 
 
         * **Comparables** are small examples that for a given CO<sub>2</sub> footprint show in a concrete and easily graspable way how much of an impact that is.
       
-        * **Insights** are short and simple tips and tricks that help end customers to reduce their impact.
-          In combination with the [profiling API](#tag/Profiling-API) the Insights shown are even more relevant to the end customer.
+        * **Insights** are short and simple tips and tricks that help end customers reduce their impact.
+          In combination with the [profiling API](#tag/Profiling-API), the Insights shown are even more relevant to the end customer.
       
         * **Explanations** are content pieces that give information about the ecolytiq calculation method.
 
       The [profiling API](#tag/Profiling-API) delivers references to the content pieces.
-      Using the [content API](#tag/Content-API) the texts of the educational and informational content pieces can be fetched various different languages.
+      Using the [content API](#tag/Content-API) the texts of the educational and informational content pieces can be fetched in various different languages.
 
       ## Use of the SaaS Platform
 
       The ecolytiq platform is available as Software-as-a-Service (SaaS) solution shared among different Customers and accessible via public internet. 
       Other modes of access, such as VPN access or dedicated SaaS platforms may be available upon request.
 
-      The customer is required to build and maintain the client application. Operations of the ecolytiq platform is handled by ecolytiq GmbH.
+      The customer is required to build and maintain the client application. Operations of the ecolytiq platform are handled by ecolytiq GmbH.
 
       ## Security and Data Protection
       
@@ -144,7 +144,7 @@ tags:
       | 500, 502, 503, 504 - Server Errors | Something went wrong on ecolytiq's end.                                                          |
   - name: Rate Limit
     description: |
-      In each response you find Rate Limit Information fields like `X-RateLimit-Limit`, `X-RateLimit-Remaining` and `X-RateLimit-Reset`.
+      In each response, you find Rate Limit Information fields like `X-RateLimit-Limit`, `X-RateLimit-Remaining`, and `X-RateLimit-Reset`.
       
       ## Rate Limit Headers
       | Header                | Description                                                         |
@@ -199,21 +199,21 @@ tags:
     description: |
       The transaction API is used to process financial transactions by the ecolytiq Sustainability-as-a-Service&reg; platform.
 
-      It is possible to send transactions for enrichment and receive the calculated CO<sub>2</sub> footprint based on a combination of transaction amount and transaction category. 
+      It is possible to send transactions for enrichment and receive the calculated CO<sub>2</sub> footprint based on a combination of the transaction amount and transaction category. 
       
-      For some types of transactions this may, however, be insufficient as the amount of money spent does not directly correlate to the CO<sub>2</sub> (equivalent) emissions of the purchased goods and services.
-      For example, airline ticket prices are becoming increasingly expensive the closer the date of travel is. But the amount of CO<sub>2</sub> emissions is independent on whether the ticket was bought last minute or a year in advance. 
-      In such cases the transaction data can be refined by answering specific transaction-related questions, like the duration of the flight, which will in turn allow for a much more accurate calculation of the CO<sub>2</sub> emissions.
+      For some types of transactions, this may, however, be insufficient as the amount of money spent does not directly correlate to the CO<sub>2</sub> (equivalent) emissions of the purchased goods and services.
+      For example, airline ticket prices are becoming increasingly expensive the closer the date of travel is. But the amount of CO<sub>2</sub> emissions is independent of whether the ticket was bought last minute or a year in advance. 
+      In such cases, the transaction data can be refined by answering specific transaction-related questions, like the duration of the flight, which will in turn allow for a much more accurate calculation of the CO<sub>2</sub> emissions.
   - name: Content API
     description: |
       The ecolytiq Sustainability-as-a-Service&reg; platform offers a variety of product features that go beyond pure calculation of the CO<sub>2</sub> footprint related to a financial transaction.
       There are 
 
-      * Comparables: Small information pieces that put a given CO<sub>2</sub> footprint into perspective by comparing it to something easily comprehensible, like a distance driven by car.
+      * Comparables: Small information pieces that put a given CO<sub>2</sub> footprint into perspective by comparing it to something easily comprehensible, like a distance driven by a car.
         As the name suggests a Comparable is a concrete example of what a certain CO<sub>2</sub> footprint means.  
-        It can be used to create awareness on the end customers side on how much of an impact a certain financial transaction has.
+        It can be used to create awareness on the end customer's side on how much of an impact a certain financial transaction has.
       
-      * Insights: Information pieces with tips and tricks how an and customer can reduce their personal CO<sub>2</sub> emissions
+      * Insights: Information pieces with tips and tricks on how a customer can reduce their personal CO<sub>2</sub> emissions
 
       * Explanations: Information pieces detailing how the ecolytiq calculation method works.
 
@@ -222,18 +222,18 @@ tags:
     description: |
       In the most basic way the ecolytiq Sustainability-as-a-Service&reg; platform is used to calculate the CO<sub>2</sub> footprint related to a "spending transaction" by taking into account the amount of money spent and the category of the transaction.
       This gives an estimate of the footprint based on average consumer behavior. 
-      For example, in the average grocery basket is still plenty of meat.
-      However, a specific end customer may have chosen to live by a meat-reduced, meat-free, vegetarian, or vegan diet.
+      For example, the average grocery basket is still plenty of meat.
+      However, a specific end customer may have chosen to live a meat-reduced, meat-free, vegetarian, or vegan diet.
       Hence the average shopping basket will give an inaccurate CO<sub>2</sub> footprint for them.
-      To improve the footprint calculation it is possible to store additional information about an end customer and improving the calculation accuracy in turn.
+      To improve the footprint calculation it is possible to store additional information about an end customer and improve the calculation accuracy in turn.
   - name: Account API
     description: |
       Should the necessity arise to remove all data of a specific end customer from the ecolytiq platform this can be done using the account API.
   - name: onPrem API
     description: |
-      In some cases the ecolytiq Sustainability-as-a-Service&reg; platform is not used as Software as a Service (SaaS) solution but hosted on a customers own premises or inside their own cloud instance.
-      If the customers whish they can use a rating system for content delivered by the ecolytiq platform.
-      We recommend to regularly submit the content ratings back to ecolytiq so that we can improve the content quality.
+      In some cases the ecolytiq Sustainability-as-a-Service&reg; platform is not used as Software as a Service (SaaS) solution but hosted on customers' own premises or inside their own cloud instance.
+      If the customers wish they can use a rating system for content delivered by the ecolytiq platform.
+      We recommend regularly submitting the content ratings back to ecolytiq so that we can improve the content quality.
 
 
       > #### Please Note 
@@ -248,8 +248,10 @@ tags:
       > #### Note:
       > 
       > These endpoints are only meant for handling the data about carbon footprint impact orders between a Customer (e.g., bank) and a carbon project provider through ecolytiq.
-      > They are not meant to initiate actual flow of payments between the customer and the provider or ecolytiq!
-
+      > They are not meant to initiate the actual flow of payments between the customer and the provider or ecolytiq!
+  - name: Statistic API
+    description: |
+      Use these endpoints to get aggregated footprint data about accounts, businesses, or sub-accounts.
 
 
 security:
@@ -304,7 +306,7 @@ paths:
         - BearerAuth: [ ]
       description: |
         Retrieve a list of supported calculation models for CO<sub>2</sub> footprint calculation.
-        The `enabled` flag informs wether a specific model is available for use by the requesting set of client credentials since access to the models may vary from customer to customer.
+        The `enabled` flag informs whether a specific model is available for use by the requesting set of client credentials since access to the models may vary from customer to customer.
       summary: List of CO2 models
       tags:
         - Info API
@@ -361,7 +363,7 @@ paths:
         - BearerAuth: [ ]
       description: >-
         Retrieve a list of category systems that are supported by the platform.
-        The `enabled` flag informs wether a customer / set of client credentials is permitted to use a specific category system, since not all supported category systems may be accessible by every customer.
+        The `enabled` flag informs whether a customer/set of client credentials is permitted to use a specific category system, since not all supported category systems may be accessible by every customer.
       summary: List of category systems
       tags:
         - Info API
@@ -498,7 +500,7 @@ paths:
         >
         > Pseudonymization of account information and maintaining the list relating the end customer's PII to the `account_id`s used on the ecolytiq platform **must be handled on the customer side**.
         >
-        > ecolytiq GmbH cannot be held liable for any loss, leak, unauthorized publication of PII which are a direct result of violating
+        > ecolytiq GmbH cannot be held liable for any loss, leak, or unauthorized publication of PII which is a direct result of violating
         
         We recommend using [Universally Unique Identifier](https://en.wikipedia.org/wiki/Universally_unique_identifier) for the `account_id`s.
 
@@ -506,13 +508,13 @@ paths:
 
         The request is by default synchronous, i.e. the processing result is returned immediately in the response body to the request.
         Successfully processed transactions are in the results list, identifiable by their `transaction_id`. 
-        In case of an error (e.g. unknown category), you can find  the transaction in the errors list, identifiable by their `transaction_id` as well. 
+        In case of an error (e.g. unknown category), you can find the transaction in the errors list, identifiable by their `transaction_id` as well. 
         
         ### Asynchronous Request
 
         It is also possible to only send the data for processing and not wait for an immediate server response with the calculation results.
-        In that case the `async` flag in the request has to be set to `true`.
-        The server will only respond with a `202` status, i.e., accept the request, but will que the transactions for later processing.
+        In that case, the `async` flag in the request has to be set to `true`.
+        The server will only respond with a `202` status, i.e., accept the request, but will queue the transactions for later processing.
         The calculation result can later be requested by calling the [`GET /transactions/v1/transactions`](#operation/getTransactionsTransactions) endpoint with the corresponding `transaction_id`s.
       summary: Process transactions
       tags:
@@ -813,9 +815,9 @@ paths:
       description: >-
         For certain types of goods or services the amount spent may not actually be an accurate representation of the CO<sub>2</sub> (equivalent) emission caused by that good or service. 
 
-        A few examples for such types of transactions are:
-          * Service stations: Fuel prices are highly volatile and vary from station to station. Therefore, the volume and type of fuel could be used for better calculation of the CO<sub>2</sub> emission related with a service station transaction.
-          * Air travel: Prices for airline tickets are dependent on the day of flight as well and even more so on the date of purchase. Therefore, the hours of the flight give the better basis for calculating CO<sub>2</sub> emissions for air travel.
+        A few examples of such types of transactions are:
+          * Service stations: Fuel prices are highly volatile and vary from station to station. Therefore, the volume and type of fuel could be used for better calculation of the CO<sub>2</sub> emission related to a service station transaction.
+          * Air travel: Prices for airline tickets are dependent on the day of the flight as well as even more so on the date of purchase. Therefore, the hours of the flight give a better basis for calculating CO<sub>2</sub> emissions for air travel.
 
         Calling this endpoint with valid transaction IDs will return a list of suitable refinement question IDs for the transactions in request. 
         If the question has already been answered the reference to the corresponding answer (or the value if it is not a predefined answer) will be also returned.
@@ -843,7 +845,7 @@ paths:
             - 75353c62-6757-4740-979d-dfa52cdb9fba
       responses:
         '200':
-          description: A list of transaction ids and their corresponding question ids. If the question is already answered the field `answer_id` is set. Otherwise it is `null`.
+          description: A list of transaction ids and their corresponding question ids. If the question is already answered the field `answer_id` is set. Otherwise, it is `null`.
           headers:
             X-RateLimit-Limit:
               $ref: '#/components/headers/X-RateLimit-Limit'
@@ -913,10 +915,10 @@ paths:
         Recalculate the carbon footprint associated with a transaction by providing answers to specific questions. 
 
         The request must include the `transaction_id` and the `answer_id`. 
-        For questions with answers of the `SELECTABLE` type this is already sufficient.
-        For questions with answers of the `INPUT` type the `input` value must also be included.
+        For questions with answers of the `SELECTABLE` type, this is already sufficient.
+        For questions with answers of the `INPUT` type, the `input` value must also be included.
         
-        References to questions relevant for certain transaction can be retrieved by calling the [`GET /transactions/v1/refinements`](#operation/getTransactionsRefinements) endpoint with the corresponding transaction ID.
+        References to questions relevant to certain transaction can be retrieved by calling the [`GET /transactions/v1/refinements`](#operation/getTransactionsRefinements) endpoint with the corresponding transaction ID.
         The text version of the questions and possible answers can be obtained by calling the [`GET /transactions/v1/questions`](#operation/getTransactionsQuestions) endpoint (with the question IDs).
       summary: Provide Answers for Transaction Refinement
       tags:
@@ -1005,7 +1007,7 @@ paths:
         Get questions, answers, and translations, used to refine a transaction.
 
         Calling this endpoint without the `question_ids` parameter will return the text of all questions that can be used for transaction refinement. 
-        A client application could fetch the question and answer texts once and cache them for a certain amount of time.
+        A client application could fetch the question-and-answer texts once and cache them for a certain amount of time.
 
         Including the `question_ids` parameter returns only the content for the referenced questions.
         
@@ -1013,10 +1015,10 @@ paths:
 
         Including the `languages_codes` parameter returns only the content with the referenced language translations.
 
-        To get a list of references to questions relevant for a specific transaction, please use the 
+        To get a list of references to questions relevant to a specific transaction, please use the 
         ["Get refinements for transactions"](#operation/getTransactionsRefinements) endpoint.
         
-        If no questions for the given `ids` or translations for the given `languages_codes` are found, the response is handled as partial success. Corresponding information
+        If no questions for the given `ids` or translations for the given `languages_codes` are found, the response is handled as a partial success. Corresponding information
         will be returned in the error list of the response.
 
         > #### Note
@@ -1027,7 +1029,7 @@ paths:
       parameters:
         - in: query
           name: question_ids
-          description: a list of question ids. If list of ids are not present, all questions (+answers) returned.
+          description: a list of question ids. If the list of ids is not present, all questions (+answers) are returned.
           required: false
           style: form
           explode: false
@@ -1093,7 +1095,7 @@ paths:
         Get a specific Comparable or a list of Comparables or all Comparables for a given CO<sub>2</sub> footprint.
 
         The amount of CO<sub>2</sub> (`co2_footprint`) in grams to compare is required for calling this endpoint. 
-        In addition it can be called with a list of content IDs (`ids` parameter) to select which Comparables shall be displayed.
+        In addition, it can be called with a list of content IDs (`ids` parameter) to select which Comparables shall be displayed.
         
         It is possible to retrieve the Comparables in different languages via the `language_codes` parameter.
       summary: Get Comparables for a Given CO2 Footprint
@@ -1109,7 +1111,7 @@ paths:
             example: 12345
         - in: query
           name: ids
-          description: a list of ids. If list of ids are not present, all Comparables returned.
+          description: a list of ids. If the list of ids is not present, all Comparables are returned.
           required: false
           style: form
           explode: false
@@ -1201,7 +1203,6 @@ paths:
         The Comparables returned can be limited to specific categories using the `categories` parameter.
 
         It is possible to retrieve the Comparables in different languages via the `language_codes` parameter.
-
       summary: Get Random Comparables for a Given CO2 Footprint
       parameters:
         - in: query
@@ -1293,7 +1294,7 @@ paths:
       parameters:
         - in: query
           name: ids
-          description: a list of ids. If list of ids are not present, all insights returned.
+          description: a list of ids. If the list of ids is not present, all insights are returned.
           required: false
           style: form
           explode: false
@@ -1361,7 +1362,7 @@ paths:
       parameters:
         - in: query
           name: ids
-          description: a list of content ids. If list of ids is not present, all contextual insights returned.
+          description: a list of content ids. If the list of ids is not present, all contextual insights are returned.
           required: false
           style: form
           explode: false
@@ -1696,7 +1697,7 @@ paths:
       parameters:
         - in: query
           name: ids
-          description: a list of ids. If list of ids are not present, all explanations returned.
+          description: a list of ids. If the list of ids is not present, all explanations are returned.
           required: false
           style: form
           explode: false
@@ -1843,7 +1844,7 @@ paths:
         Get questions, answers, and translations, used for Profiling. 
         
         The answers to the questions are used to store additional information for specific end customers. 
-        This is useful for improving the calculation results (e.g., if the end customer is known to be vegan, the vegan "base basket" is used for calculation of the footprint after shopping in the supermarket) as well as reducing unsuitable Insights (i.e., someone known to be vegan will not be shown information on how much CO<sub>2</sub> they can save by reducing meat in their diet).
+        This is useful for improving the calculation results (e.g., if the end customer is known to be vegan, the vegan "base basket" is used for the calculation of the footprint after shopping in the supermarket) as well as reducing unsuitable Insights (i.e., someone known to be vegan will not be shown information on how much CO<sub>2</sub> they can save by reducing meat in their diet).
 
         Calling this endpoint without the `question_ids` parameter will return the text of all questions that can be used for Profiling. 
 
@@ -1853,9 +1854,7 @@ paths:
 
         Including the `languages_codes` parameter returns only the content with the referenced language translations.
         
-        If no questions for the given `ids` or translations for the given `languages_codes` are found, the response is handled as partial success. Corresponding information
-        will be returned in the error list of the response.
-
+        If no questions for the given `ids` or translations for the given `languages_codes` are found, the response is handled as a partial success. Corresponding information will be returned in the error list of the response.
         > #### Note:
 
         > This endpoint returns the actual content.
@@ -1864,7 +1863,7 @@ paths:
       parameters:
         - in: query
           name: ids
-          description: a list of question ids. If list of ids are not present, all questions (+answers) are returned.
+          description: a list of question ids. If the list of ids is not present, all questions (+answers) are returned.
           required: false
           style: form
           explode: false
@@ -1912,7 +1911,7 @@ paths:
       description: >-
         Save Answer for a given Question. 
 
-        In case of pre-defined answers only the `answer_id` and the `account_id` are necessary.
+        In the case of pre-defined answers only the `answer_id` and the `account_id` are necessary.
         If the answer is "free text" the `input` must be submitted as well.
       summary: Save Answer for a given Question
       tags:
@@ -2002,7 +2001,7 @@ paths:
                 Example:
                   $ref: "#/components/examples/Delete-Account-Response-Example"
         '202':
-          description: Confirmation that request can be handled
+          description: Confirmation that the request can be handled
           headers:
             X-RateLimit-Limit:
               $ref: '#/components/headers/X-RateLimit-Limit'
@@ -2031,12 +2030,11 @@ paths:
       security:
         - BearerAuth: [ ]
       description: >-
-        Use this endpoint to send us feedback about content.         
+        Use this endpoint to send us feedback about the content.         
         
         
         Currently, only the "five star" rating system is supported.
-        To send feedback about a content piece please send the accumulated number of *all* ratings for each rating category also when updating. 
-
+        To send feedback about a content piece please send the accumulated number of *all* ratings for each rating category also when updatin.
       summary: Send us Feedback about Content Rating
       tags:
         - onPrem API
@@ -2477,7 +2475,7 @@ paths:
         - name: account_id
           in: path
           required: true
-          description: The ID of the user/bank account.
+          description: The ID of the user/bank account. If the `account_id` doesn't exist, an empty list will be returned.
           schema:
             type: string
           example: aecdcc5f-e128-4814-93c3-57a4382675e5
@@ -2488,9 +2486,9 @@ paths:
           schema:
             type: string
           examples:
-            DateExample:
+            Date Example:
               value: "2023-06-01"
-            TimestampExample:
+            Timestamp Example:
               value: "2023-06-01T18:43:26.000Z"
         - name: to
           in: query
@@ -2499,14 +2497,14 @@ paths:
           schema:
             type: string
           examples:
-            DateExample:
+            Date Example:
               value: "2023-06-01"
-            TimestampExample:
+            Timestamp Example:
               value: "2023-06-01T18:43:26.000Z"
         - name: interval
           in: query
           required: false
-          description: Defines in which intervals the footprint should be returned. Use `TOTAL` to get one single value for the whole timeframe. Use `MONTH` to return the footprint split by month. If interval is not given, `TOTAL` will be used.
+          description: Defines in which intervals the footprint should be returned. Use `TOTAL` to get one single value for the whole timeframe. Use `MONTH` to return the footprint split by month. If an interval is not given, `TOTAL` will be used.
           schema:
             type: string
             enum:
@@ -2516,20 +2514,28 @@ paths:
         - name: meta-category
           in: query
           required: false
-          description: Filter by a given meta category. Mandatory if sub-category query parameter is used, otherwise optional.
+          description: Filter by a given meta category. It is mandatory if a sub-category query parameter is used, otherwise optional.
           schema:
             type: string
-          example: administration
+          examples:
+            Retail Example:
+              value: "food"
+            Commercial Example:
+              value: "administration"
         - name: sub-category
           in: query
           required: false
           description: Filter by a given sub category.
           schema:
             type: string
-          example: accounting
+          examples:
+            Retail Example:
+              value: "groceries"
+            Commercial Example:
+              value: "health"
       responses:
         '200':
-          description: Footprints for the given account. If the `account_id` doesn't exist, an empty list will be returned.
+          description: Footprints for the given account.
           content:
             application/json:
               schema:
@@ -2551,7 +2557,7 @@ paths:
         '401':
           description: Unauthorized. Access token is invalid or expired.
         '404':
-          description: Not found. The `meta-category` | `sub-category` could not be found.
+          description: Not found.
           content:
             application/json:
               schema:
@@ -2597,7 +2603,7 @@ components:
       name: categories
       in: query
       description: >-
-        used as filter for categories. 
+        used as a filter for categories. 
         If it is unset or empty all categories are used.
         A  [list of categories](#operation/getInfoCategories) can be retrieved using the [Info API](#tag/Info-API).
         
@@ -3903,7 +3909,7 @@ components:
 
     FiveStarRating:
       type: object
-      description: 5-Star rating system. Present, iff rating_system is `five_star`
+      description: 5-Star rating system. Present, if rating_system is `five_star`
       required:
         - 1_star
         - 2_star
@@ -3960,7 +3966,7 @@ components:
             Currency of the model. The model can be applied only if the amount of the transaction is in the same currency. If another currency is used, the amount is internally converted to the model's currency.
         enabled:
           type: boolean
-          description: True, iff the CO2 model is enabled.
+          description: True, if the CO2 model is enabled.
 
     CategorySystemListResponse:
       type: object
@@ -3989,7 +3995,7 @@ components:
           description: Description of the category system
         enabled:
           type: boolean
-          description: True, iff the category system is enabled.
+          description: True, if the category system is enabled.
 
     CategoryListResponse:
       type: object
@@ -4052,7 +4058,7 @@ components:
           description: Number of decimal places of the currency
         enabled:
           type: boolean
-          description: True, iff the currency is enabled.
+          description: True, if the currency is enabled.
 
     LanguageCodeListResponse:
       type: object
@@ -4085,16 +4091,16 @@ components:
           description: Description of the currency
         insights:
           type: boolean
-          description: True, iff translations of insights are available
+          description: True, if translations of insights are available
         explanations:
           type: boolean
-          description: True, iff translations of explanations are available
+          description: True, if translations of explanations are available
         comparables:
           type: boolean
-          description: True, iff translations of comparables are available
+          description: True, if translations of comparables are available
         questions:
           type: boolean
-          description: True, iff translations of questions are available
+          description: True, if translations of questions are available
 
     RequestId:
       type: string
@@ -4398,7 +4404,7 @@ components:
       properties:
         async:
           type: boolean
-          description: true, iff the request should be processed asynchronously
+          description: true, if the request should be processed asynchronously
         transactions:
           type: array
           minItems: 1
@@ -4414,7 +4420,7 @@ components:
       properties:
         async:
           type: boolean
-          description: true, iff the request should be processed asynchronously
+          description: true, if the request should be processed asynchronously
         transactions:
           type: array
           minItems: 1
@@ -4898,10 +4904,10 @@ components:
         question_id:
           type: string
         answer_id:
-          description: null, iff question is not answered
+          description: null, if question is not answered
           type: string
         input:
-          description: null, iff question is not answered with an user input
+          description: null, if question is not answered with an user input
           type: string
 
     TransactionQuestionAnswerError:
@@ -5080,7 +5086,7 @@ components:
       properties:
         async:
           type: boolean
-          description: "true, iff the request should be processed asynchronously. Default: false"
+          description: "true, if the request should be processed asynchronously. Default: false"
         account_ids:
           type: array
           description: a list of account ids
