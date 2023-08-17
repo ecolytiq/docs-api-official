@@ -1040,8 +1040,7 @@ paths:
           example:
             - 9ce39d4f-cb36-4e93-b896-822156c9c159
             - 1411f1a1-251f-4220-a44b-441e6941ebf0
-        - in: query
-          $ref: '#/components/parameters/languageCodes'
+        - $ref: '#/components/parameters/languageCodes'
       responses:
         '200':
           headers:
@@ -2034,7 +2033,7 @@ paths:
         
         
         Currently, only the "five star" rating system is supported.
-        To send feedback about a content piece please send the accumulated number of *all* ratings for each rating category also when updatin.
+        To send feedback about a content piece please send the accumulated number of *all* ratings for each rating category also when updating.
       summary: Send us Feedback about Content Rating
       tags:
         - onPrem API
@@ -3467,9 +3466,7 @@ components:
     GetTotalFootprintExample:
       value:
         intervals:
-          - co2_footprint_in_g: 8793376
-            year: null
-            month: null
+          - co2_footprint_in_g: 8793376744
 
     GetMonthlyFootprintExample:
       value:
