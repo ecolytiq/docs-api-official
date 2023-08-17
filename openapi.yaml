@@ -500,7 +500,7 @@ paths:
         >
         > Pseudonymization of account information and maintaining the list relating the end customer's PII to the `account_id`s used on the ecolytiq platform **must be handled on the customer side**.
         >
-        > ecolytiq GmbH cannot be held liable for any loss, leak, or unauthorized publication of PII which is a direct result of violating  these rules.
+        > ecolytiq GmbH cannot be held liable for any loss, leak, or unauthorized publication of PII which is a direct result of violating these rules.
         
         We recommend using [Universally Unique Identifier](https://en.wikipedia.org/wiki/Universally_unique_identifier) for the `account_id`s.
 
