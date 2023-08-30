@@ -2850,126 +2850,82 @@ components:
       value:
         categories:
           - transaction_count: 12
-            co2_footprint_in_g:
-              value: 78262
-              unit: g
+            co2_footprint_in_g: 78262
             meta_category: administration
           - transaction_count: 15
-            co2_footprint_in_g:
-              value: 38663
-              unit: g
+            co2_footprint_in_g: 38663
             meta_category: businesstravel
           - transaction_count: 3
-            co2_footprint_in_g:
-              value: 65723
-              unit: g
+            co2_footprint_in_g: 65723
             meta_category: equipment
           - transaction_count: 8
-            co2_footprint_in_g:
-              value: 13605
-              unit: g
+            co2_footprint_in_g: 13605
             meta_category: general
           - transaction_count: 13
-            co2_footprint_in_g:
-              value: 27030
-              unit: g
+            co2_footprint_in_g: 27030
             meta_category: material
           - transaction_count: 10
-            co2_footprint_in_g:
-              value: 79746
-              unit: g
+            co2_footprint_in_g: 79746
             meta_category: personnel
           - transaction_count: 32
-            co2_footprint_in_g:
-              value: 47389
-              unit: g
+            co2_footprint_in_g: 47389
             meta_category: utilities
 
     GetCo2ByCategory_Retail_MetaExample:
       value:
         categories:
           - transaction_count: 7
-            co2_footprint_in_g:
-              value: 56132
-              unit: g
+            co2_footprint_in_g: 56132
             meta_category: food
           - transaction_count: 5
-            co2_footprint_in_g:
-              value: 17864
-              unit: g
+            co2_footprint_in_g: 17864
             meta_category: general
           - transaction_count: 11
-            co2_footprint_in_g:
-              value: 127532
-              unit: g
+            co2_footprint_in_g: 127532
             meta_category: living
           - transaction_count: 15
-            co2_footprint_in_g:
-              value: 87214
-              unit: g
+            co2_footprint_in_g: 87214
             meta_category: misc
           - transaction_count: 3
-            co2_footprint_in_g:
-              value: 9967
-              unit: g
+            co2_footprint_in_g: 9967
             meta_category: shopping
           - transaction_count: 11
-            co2_footprint_in_g:
-              value: 10242
-              unit: g
+            co2_footprint_in_g: 10242
             meta_category: transport
 
     GetCo2ByCategory_Commercial_SubExample:
       value:
         categories:
           - transaction_count: 3
-            co2_footprint_in_g:
-              value: 78262
-              unit: g
+            co2_footprint_in_g: 78262
             category: "ex:general.miscellaneous"
           - transaction_count: 6
-            co2_footprint_in_g:
-              value: 38663
-              unit: g
+            co2_footprint_in_g: 38663
             category: "ex:general.recreational"
           - transaction_count: 0
-            co2_footprint_in_g:
-              value: 0
-              unit: g
+            co2_footprint_in_g: 0
             category: "ex:general.wholesale"
 
     GetCo2ByCategory_Retail_SubExample:
       value:
         categories:
           - transaction_count: 4
-            co2_footprint_in_g:
-              value: 38425
-              unit: g
+            co2_footprint_in_g: 38425
             category: "ex:food.cafe"
           - transaction_count: 4
-            co2_footprint_in_g:
-              value: 25421
-              unit: g
+            co2_footprint_in_g: 25421
             category: "ex:food.groceries"
           - transaction_count: 7
-            co2_footprint_in_g:
-              value: 52147
-              unit: g
+            co2_footprint_in_g: 52147
             category: "ex:food.alcohol"
           - transaction_count: 3
-            co2_footprint_in_g:
-              value: 17234
-              unit: g
+            co2_footprint_in_g: 17234
             category: "ex:food.beverages"
           - transaction_count: 6
-            co2_footprint_in_g:
-              value: 41017
-              unit: g
+            co2_footprint_in_g: 41017
             category: "ex:food.catering"
           - transaction_count: 2
-            co2_footprint_in_g:
-              value: 13007
-              unit: g
+            co2_footprint_in_g: 13007
             category: "ex:food.corner"
 
 
@@ -2977,68 +2933,44 @@ components:
       value:
         categories:
           - transaction_count: 0
-            co2_footprint_in_g:
-              value: 0
-              unit: g
+            co2_footprint_in_g: 0
             meta_category: food
           - transaction_count: 0
-            co2_footprint_in_g:
-              value: 0
-              unit: g
+            co2_footprint_in_g: 0
             meta_category: general
           - transaction_count: 0
-            co2_footprint_in_g:
-              value: 0
-              unit: g
+            co2_footprint_in_g: 0
             meta_category: living
           - transaction_count: 0
-            co2_footprint_in_g:
-              value: 0
-              unit: g
+            co2_footprint_in_g: 0
             meta_category: misc
           - transaction_count: 0
-            co2_footprint_in_g:
-              value: 0
-              unit: g
+            co2_footprint_in_g: 0
             meta_category: shopping
           - transaction_count: 0
-            co2_footprint_in_g:
-              value: 0
-              unit: g
+            co2_footprint_in_g: 0
             meta_category: transport
 
     GetCo2ByCategory_NotExists_SubExample:
       value:
         categories:
           - transaction_count: 0
-            co2_footprint_in_g:
-              value: 0
-              unit: g
+            co2_footprint_in_g: 0
             category: "ex:food.cafe"
           - transaction_count: 0
-            co2_footprint_in_g:
-              value: 0
-              unit: g
+            co2_footprint_in_g: 0
             category: "ex:food.groceries"
           - transaction_count: 0
-            co2_footprint_in_g:
-              value: 0
-              unit: g
+            co2_footprint_in_g: 0
             category: "ex:food.alcohol"
           - transaction_count: 0
-            co2_footprint_in_g:
-              value: 0
-              unit: g
+            co2_footprint_in_g: 0
             category: "ex:food.beverages"
           - transaction_count: 0
-            co2_footprint_in_g:
-              value: 0
-              unit: g
+            co2_footprint_in_g: 0
             category: "ex:food.catering"
           - transaction_count: 0
-            co2_footprint_in_g:
-              value: 0
-              unit: g
+            co2_footprint_in_g: 0
             category: "ex:food.corner"
 
     CO2ModelListExample:
@@ -4106,7 +4038,7 @@ components:
           description: The number of transactions in that category.
           example: 12
         co2_footprint_in_g:
-          $ref: '#/components/schemas/CO2Footprint'
+          $ref: '#/components/schemas/CO2FootprintInG'
 
     FullAddress:
       description: |
