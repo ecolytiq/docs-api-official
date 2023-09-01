@@ -748,21 +748,21 @@ paths:
         - name: meta-category
           in: query
           required: false
-          description: Filter by a given meta category. Mandatory if sub-category query parameter is used, otherwise optional.<br> * Meta-category (e.g. __food__) is part of a category (e.g. __ex:food.cafe__) and complies to the following structure - `ex:meta-category.sub-category`
+          description: "Filter by a given meta category. Mandatory if sub-category query parameter is used, otherwise optional.<br>* Meta-category (e.g. `food`) is part of a category (e.g. `ex:food.cafe`), which is composed of the following structure  `ex:meta-category.sub-category`"
           schema:
             type: string
           example: administration
         - name: sub-category
           in: query
           required: false
-          description: Filter by a given sub category. <br> * Sub-category (e.g. __cafe__) is part of a category (e.g. __ex:food.cafe__) and complies to the following structure - `ex:meta-category.sub-category`
+          description: "Filter by a given sub category.<br>* Sub-category (e.g.`cafe`) is part of a category (e.g. `ex:food.cafe`), which is composed of the following structure: `ex:meta-category.sub-category`"
           schema:
             type: string
           example: accounting
         - name: sort
           in: query
           required: false
-          description: Sort the transactions by the given attribute.
+          description: "Sort the transactions by the given attribute. If no value is given, `datetime.asc` is applied by default."
           schema:
             type: string
             enum:
@@ -2639,7 +2639,7 @@ paths:
         - name: meta-category
           in: query
           required: false
-          description: Filter by a given meta category. It is mandatory if a sub-category query parameter is used, otherwise optional. <br> * Meta-category (e.g. __food__) is part of a category (e.g. __ex:food.cafe__) and complies to the following structure - `ex:meta-category.sub-category`
+          description: "Filter by a given meta category. It is mandatory if a sub-category query parameter is used, otherwise optional.<br>* Meta-category (e.g. `food`) is part of a category (e.g. `ex:food.cafe`), which is composed of the following structure  `ex:meta-category.sub-category`"
           schema:
             type: string
           examples:
@@ -2650,7 +2650,7 @@ paths:
         - name: sub-category
           in: query
           required: false
-          description: Filter by a given sub category. <br> * Sub-category (e.g. __cafe__) is part of a category (e.g. __ex:food.cafe__) and complies to the following structure - `ex:meta-category.sub-category`
+          description: "Filter by a given sub category.<br>* Sub-category (e.g.`cafe`) is part of a category (e.g. `ex:food.cafe`), which is composed of the following structure: `ex:meta-category.sub-category`"
           schema:
             type: string
           examples:
@@ -2699,7 +2699,7 @@ paths:
       security:
         - BearerAuth: [ ]
       summary: Get footprints of an account per meta-category for one month
-      description: Returns the CO2 footprints of an account grouped by meta-categories (e.g. food) or categories (e.g. ex:food.cafe) for one specific month.
+      description: Returns the CO2 footprints of an account grouped by meta-categories (e.g. `food`) or categories (e.g. `ex:food.cafe`) for one specific month.
       tags:
         - "Statistic API"
       parameters:
@@ -2720,7 +2720,7 @@ paths:
         - name: meta-category
           in: query
           required: false
-          description: Filter by a given meta category. If **no** `meta-category` is given, the transactions will be grouped by meta-categories. Otherwise, the transactions will be grouped by the **categories** of the given `meta-category`. <br> * Meta-category (e.g. __food__) is part of a category (e.g. __ex:food.cafe__) and complies to the following structure - `ex:meta-category.sub-category`
+          description: "Filter by a given meta category. If **no** `meta-category` is given, the transactions will be grouped by meta-categories. Otherwise, the transactions will be grouped by the **categories** of the given `meta-category`.<br>* Meta-category (e.g. `food`) is part of a category (e.g. `ex:food.cafe`), which is composed of the following structure  `ex:meta-category.sub-category`"
           schema:
             type: string
           examples:
@@ -4051,7 +4051,7 @@ components:
       properties:
         meta_category:
           type: string
-          description: The meta-category of the footprint. Will always be returned if no filter for meta-category has been applied.
+          description: "The meta-category of the footprint. Will always be returned if no filter for meta-category has been applied.<br>* Meta-category (e.g. `food`) is part of a category (e.g. `ex:food.cafe`), which is composed of the following structure  `ex:meta-category.sub-category`"
           example: administration
         category:
           type: string
