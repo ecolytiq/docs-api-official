@@ -574,6 +574,7 @@ paths:
               examples:
                 Response:
                   $ref: '#/components/examples/Transaction-Response-Example-202-Accepted'
+
         '400':
           description: |
             Bad Request. Size of Transactions is invalid.
@@ -728,14 +729,14 @@ paths:
         - name: meta-category
           in: query
           required: false
-          description: Filter by a given meta category. Mandatory if sub-category query parameter is used, otherwise optional.
+          description: Filter by a given meta category. Mandatory if sub-category query parameter is used, otherwise optional.<br> * Meta-category (e.g. __food__) is part of a category (e.g. __ex:food.cafe__) and complies to the following structure - `ex:meta-category.sub-category`
           schema:
             type: string
           example: administration
         - name: sub-category
           in: query
           required: false
-          description: Filter by a given sub category.
+          description: Filter by a given sub category. <br> * Sub-category (e.g. __cafe__) is part of a category (e.g. __ex:food.cafe__) and complies to the following structure - `ex:meta-category.sub-category`
           schema:
             type: string
           example: accounting
@@ -2619,7 +2620,7 @@ paths:
         - name: meta-category
           in: query
           required: false
-          description: Filter by a given meta category. It is mandatory if a sub-category query parameter is used, otherwise optional.
+          description: Filter by a given meta category. It is mandatory if a sub-category query parameter is used, otherwise optional. <br> * Meta-category (e.g. __food__) is part of a category (e.g. __ex:food.cafe__) and complies to the following structure - `ex:meta-category.sub-category`
           schema:
             type: string
           examples:
@@ -2630,7 +2631,7 @@ paths:
         - name: sub-category
           in: query
           required: false
-          description: Filter by a given sub category.
+          description: Filter by a given sub category. <br> * Sub-category (e.g. __cafe__) is part of a category (e.g. __ex:food.cafe__) and complies to the following structure - `ex:meta-category.sub-category`
           schema:
             type: string
           examples:
@@ -2700,7 +2701,7 @@ paths:
         - name: meta-category
           in: query
           required: false
-          description: Filter by a given meta category. If **no** `meta-category` is given, the transactions will be grouped by meta-categories. Otherwise, the transactions will be grouped by the **categories** of the given `meta-category`.
+          description: Filter by a given meta category. If **no** `meta-category` is given, the transactions will be grouped by meta-categories. Otherwise, the transactions will be grouped by the **categories** of the given `meta-category`. <br> * Meta-category (e.g. __food__) is part of a category (e.g. __ex:food.cafe__) and complies to the following structure - `ex:meta-category.sub-category`
           schema:
             type: string
           examples:
@@ -2844,126 +2845,82 @@ components:
       value:
         categories:
           - transaction_count: 12
-            co2_footprint_in_g:
-              value: 78262
-              unit: g
+            co2_footprint_in_g: 78262
             meta_category: administration
           - transaction_count: 15
-            co2_footprint_in_g:
-              value: 38663
-              unit: g
+            co2_footprint_in_g: 38663
             meta_category: businesstravel
           - transaction_count: 3
-            co2_footprint_in_g:
-              value: 65723
-              unit: g
+            co2_footprint_in_g: 65723
             meta_category: equipment
           - transaction_count: 8
-            co2_footprint_in_g:
-              value: 13605
-              unit: g
+            co2_footprint_in_g: 13605
             meta_category: general
           - transaction_count: 13
-            co2_footprint_in_g:
-              value: 27030
-              unit: g
+            co2_footprint_in_g: 27030
             meta_category: material
           - transaction_count: 10
-            co2_footprint_in_g:
-              value: 79746
-              unit: g
+            co2_footprint_in_g: 79746
             meta_category: personnel
           - transaction_count: 32
-            co2_footprint_in_g:
-              value: 47389
-              unit: g
+            co2_footprint_in_g: 47389
             meta_category: utilities
 
     GetCo2ByCategory_Retail_MetaExample:
       value:
         categories:
           - transaction_count: 7
-            co2_footprint_in_g:
-              value: 56132
-              unit: g
+            co2_footprint_in_g: 56132
             meta_category: food
           - transaction_count: 5
-            co2_footprint_in_g:
-              value: 17864
-              unit: g
+            co2_footprint_in_g: 17864
             meta_category: general
           - transaction_count: 11
-            co2_footprint_in_g:
-              value: 127532
-              unit: g
+            co2_footprint_in_g: 127532
             meta_category: living
           - transaction_count: 15
-            co2_footprint_in_g:
-              value: 87214
-              unit: g
+            co2_footprint_in_g: 87214
             meta_category: misc
           - transaction_count: 3
-            co2_footprint_in_g:
-              value: 9967
-              unit: g
+            co2_footprint_in_g: 9967
             meta_category: shopping
           - transaction_count: 11
-            co2_footprint_in_g:
-              value: 10242
-              unit: g
+            co2_footprint_in_g: 10242
             meta_category: transport
 
     GetCo2ByCategory_Commercial_SubExample:
       value:
         categories:
           - transaction_count: 3
-            co2_footprint_in_g:
-              value: 78262
-              unit: g
+            co2_footprint_in_g: 78262
             category: "ex:general.miscellaneous"
           - transaction_count: 6
-            co2_footprint_in_g:
-              value: 38663
-              unit: g
+            co2_footprint_in_g: 38663
             category: "ex:general.recreational"
           - transaction_count: 0
-            co2_footprint_in_g:
-              value: 0
-              unit: g
+            co2_footprint_in_g: 0
             category: "ex:general.wholesale"
 
     GetCo2ByCategory_Retail_SubExample:
       value:
         categories:
           - transaction_count: 4
-            co2_footprint_in_g:
-              value: 38425
-              unit: g
+            co2_footprint_in_g: 38425
             category: "ex:food.cafe"
           - transaction_count: 4
-            co2_footprint_in_g:
-              value: 25421
-              unit: g
+            co2_footprint_in_g: 25421
             category: "ex:food.groceries"
           - transaction_count: 7
-            co2_footprint_in_g:
-              value: 52147
-              unit: g
+            co2_footprint_in_g: 52147
             category: "ex:food.alcohol"
           - transaction_count: 3
-            co2_footprint_in_g:
-              value: 17234
-              unit: g
+            co2_footprint_in_g: 17234
             category: "ex:food.beverages"
           - transaction_count: 6
-            co2_footprint_in_g:
-              value: 41017
-              unit: g
+            co2_footprint_in_g: 41017
             category: "ex:food.catering"
           - transaction_count: 2
-            co2_footprint_in_g:
-              value: 13007
-              unit: g
+            co2_footprint_in_g: 13007
             category: "ex:food.corner"
 
 
@@ -2971,68 +2928,44 @@ components:
       value:
         categories:
           - transaction_count: 0
-            co2_footprint_in_g:
-              value: 0
-              unit: g
+            co2_footprint_in_g: 0
             meta_category: food
           - transaction_count: 0
-            co2_footprint_in_g:
-              value: 0
-              unit: g
+            co2_footprint_in_g: 0
             meta_category: general
           - transaction_count: 0
-            co2_footprint_in_g:
-              value: 0
-              unit: g
+            co2_footprint_in_g: 0
             meta_category: living
           - transaction_count: 0
-            co2_footprint_in_g:
-              value: 0
-              unit: g
+            co2_footprint_in_g: 0
             meta_category: misc
           - transaction_count: 0
-            co2_footprint_in_g:
-              value: 0
-              unit: g
+            co2_footprint_in_g: 0
             meta_category: shopping
           - transaction_count: 0
-            co2_footprint_in_g:
-              value: 0
-              unit: g
+            co2_footprint_in_g: 0
             meta_category: transport
 
     GetCo2ByCategory_NotExists_SubExample:
       value:
         categories:
           - transaction_count: 0
-            co2_footprint_in_g:
-              value: 0
-              unit: g
+            co2_footprint_in_g: 0
             category: "ex:food.cafe"
           - transaction_count: 0
-            co2_footprint_in_g:
-              value: 0
-              unit: g
+            co2_footprint_in_g: 0
             category: "ex:food.groceries"
           - transaction_count: 0
-            co2_footprint_in_g:
-              value: 0
-              unit: g
+            co2_footprint_in_g: 0
             category: "ex:food.alcohol"
           - transaction_count: 0
-            co2_footprint_in_g:
-              value: 0
-              unit: g
+            co2_footprint_in_g: 0
             category: "ex:food.beverages"
           - transaction_count: 0
-            co2_footprint_in_g:
-              value: 0
-              unit: g
+            co2_footprint_in_g: 0
             category: "ex:food.catering"
           - transaction_count: 0
-            co2_footprint_in_g:
-              value: 0
-              unit: g
+            co2_footprint_in_g: 0
             category: "ex:food.corner"
 
     CO2ModelListExample:
@@ -3353,6 +3286,7 @@ components:
         request_id: 6bf3202ade4a7411
         error_code: "rate.limit.exceeded"
         error_description: "Rate limit exceeded. Try again later."
+
     LanguageCodeListExample:
       value:
         request_id: 6bf3202ade4a7411
@@ -4105,7 +4039,7 @@ components:
           description: The number of transactions in that category.
           example: 12
         co2_footprint_in_g:
-          $ref: '#/components/schemas/CO2Footprint'
+          $ref: '#/components/schemas/CO2FootprintInG'
 
     FullAddress:
       description: |
@@ -5176,14 +5110,14 @@ components:
           $ref: '#/components/schemas/CO2FootprintInG'
 
     GetTransactionsForMonthResponse:
-        type: object
-        required:
-          - transactions
-        properties:
-          transactions:
-            type: array
-            items:
-              $ref: "#/components/schemas/TransactionDetailResult"
+      type: object
+      required:
+        - transactions
+      properties:
+        transactions:
+          type: array
+          items:
+            $ref: "#/components/schemas/TransactionDetailResult"
 
     TransactionError:
       description: "holds information about invalid transactions"

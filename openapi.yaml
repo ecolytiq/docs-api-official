@@ -574,6 +574,7 @@ paths:
               examples:
                 Response:
                   $ref: '#/components/examples/Transaction-Response-Example-202-Accepted'
+
         '400':
           description: |
             Bad Request. Size of Transactions is invalid.
@@ -728,14 +729,14 @@ paths:
         - name: meta-category
           in: query
           required: false
-          description: Filter by a given meta category. Mandatory if sub-category query parameter is used, otherwise optional.
+          description: Filter by a given meta category. Mandatory if sub-category query parameter is used, otherwise optional.<br> * Meta-category (e.g. __food__) is part of a category (e.g. __ex:food.cafe__) and complies to the following structure - `ex:meta-category.sub-category`
           schema:
             type: string
           example: administration
         - name: sub-category
           in: query
           required: false
-          description: Filter by a given sub category.
+          description: Filter by a given sub category. <br> * Sub-category (e.g. __cafe__) is part of a category (e.g. __ex:food.cafe__) and complies to the following structure - `ex:meta-category.sub-category`
           schema:
             type: string
           example: accounting
@@ -2619,7 +2620,7 @@ paths:
         - name: meta-category
           in: query
           required: false
-          description: Filter by a given meta category. It is mandatory if a sub-category query parameter is used, otherwise optional.
+          description: Filter by a given meta category. It is mandatory if a sub-category query parameter is used, otherwise optional. <br> * Meta-category (e.g. __food__) is part of a category (e.g. __ex:food.cafe__) and complies to the following structure - `ex:meta-category.sub-category`
           schema:
             type: string
           examples:
@@ -2630,7 +2631,7 @@ paths:
         - name: sub-category
           in: query
           required: false
-          description: Filter by a given sub category.
+          description: Filter by a given sub category. <br> * Sub-category (e.g. __cafe__) is part of a category (e.g. __ex:food.cafe__) and complies to the following structure - `ex:meta-category.sub-category`
           schema:
             type: string
           examples:
@@ -2700,7 +2701,7 @@ paths:
         - name: meta-category
           in: query
           required: false
-          description: Filter by a given meta category. If **no** `meta-category` is given, the transactions will be grouped by meta-categories. Otherwise, the transactions will be grouped by the **categories** of the given `meta-category`.
+          description: Filter by a given meta category. If **no** `meta-category` is given, the transactions will be grouped by meta-categories. Otherwise, the transactions will be grouped by the **categories** of the given `meta-category`. <br> * Meta-category (e.g. __food__) is part of a category (e.g. __ex:food.cafe__) and complies to the following structure - `ex:meta-category.sub-category`
           schema:
             type: string
           examples:
@@ -3285,6 +3286,7 @@ components:
         request_id: 6bf3202ade4a7411
         error_code: "rate.limit.exceeded"
         error_description: "Rate limit exceeded. Try again later."
+
     LanguageCodeListExample:
       value:
         request_id: 6bf3202ade4a7411
@@ -5108,14 +5110,14 @@ components:
           $ref: '#/components/schemas/CO2FootprintInG'
 
     GetTransactionsForMonthResponse:
-        type: object
-        required:
-          - transactions
-        properties:
-          transactions:
-            type: array
-            items:
-              $ref: "#/components/schemas/TransactionDetailResult"
+      type: object
+      required:
+        - transactions
+      properties:
+        transactions:
+          type: array
+          items:
+            $ref: "#/components/schemas/TransactionDetailResult"
 
     TransactionError:
       description: "holds information about invalid transactions"
