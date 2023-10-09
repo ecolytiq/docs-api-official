@@ -240,11 +240,8 @@ tags:
   - name: Statistic API
     description: |
       Use these endpoints to get aggregated footprint data about accounts, businesses, or sub-accounts.
-  - name: Feedback API1
-    description: |
-      Use this endpoint to provide various types of feedback. 
 
-  - name: Feedback API2
+  - name: Feedback API
     description: |
       Use these endpoints to provide various types of feedback. 
 
@@ -2748,10 +2745,10 @@ paths:
       security:
         - BearerAuth: [ ]
       description: >-
-        Use this endpoint to send us various types of feedback about Insights, Application features, Calculation results, etc.
+        Use this endpoint to send us various types of feedback about Insights, Application features, Calculation results, etc. by using pre-defined questions and answers.
       summary: Provide feedback
       tags:
-        - Feedback API1
+        - Feedback API
       requestBody:
         required: true
         content:
@@ -2759,18 +2756,12 @@ paths:
             schema:
               $ref: '#/components/schemas/FeedbackRequest'
             examples:
-              Freetext question and freetext answer:
-                $ref: '#/components/examples/FeedbackRequestFreetextToFreetextExample'
-              Freetext question and binary answer:
-                $ref: '#/components/examples/FeedbackRequestFreetextToBinaryExample'
-              Freetext question and numerical answer:
-                $ref: '#/components/examples/FeedbackRequestFreetextToNumericalExample'
-              Question ID and answer ID:
-                $ref: '#/components/examples/FeedbackRequestIdToIdExample'
+              Answer ID with freetext:
+                $ref: '#/components/examples/FeedbackRequestIdFreetextExample'
 
       responses:
         '200':
-          description: Confirmation that feedback is received
+          description: Confirmation that feedback is received.
           headers:
             X-RateLimit-Limit:
               $ref: '#/components/headers/X-RateLimit-Limit'
@@ -2783,11 +2774,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/FeedbackResult'
               examples:
-                Feedback with freetext question:
-                  $ref: '#/components/examples/FeedbackFreetextQuestionResponseExample'
-                Feedback with question ID:
-                  $ref: '#/components/examples/FeedbackQuestionIdResponseExample'
-
+                Answer with freetext:
+                  $ref: '#/components/examples/FeedbackAnswerFreetext200Example'
         '400':
           description: Bad Request. Request parameter is not valid.
           content:
@@ -2795,12 +2783,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/ApiError'
               examples:
-                Invalid numeric rating:
-                  $ref: '#/components/examples/FeedbackInvalidNumericRatingExample'
+                Invalid reference:
+                  $ref: '#/components/examples/FeedbackInvalidReference400Example'
 
         '401':
-          description: |
-            Unauthorized. Access Token is invalid or expired.
+          description: Unauthorized. Access Token is invalid or expired.
           headers:
             X-RateLimit-Limit:
               $ref: '#/components/headers/X-RateLimit-Limit'
@@ -2819,23 +2806,6 @@ paths:
                 Transaction ID not found:
                   $ref: '#/components/examples/FeedbackTransactionIdNotFoundExample'
 
-        '429':
-          description: |
-            Rate Limit exceeded.
-          headers:
-            X-RateLimit-Limit:
-              $ref: '#/components/headers/X-RateLimit-Limit'
-            X-RateLimit-Remaining:
-              $ref: '#/components/headers/X-RateLimit-Remaining'
-            X-RateLimit-Reset:
-              $ref: '#/components/headers/X-RateLimit-Reset'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-              examples:
-                Exceeded rate limit:
-                  $ref: '#/components/examples/RateLimit-Example'
 
   /feedback/v1/custom-feedback:
     post:
@@ -2846,7 +2816,7 @@ paths:
         Use this endpoint to send us custom feedback.
       summary: Provide custom feedback
       tags:
-        - Feedback API2
+        - Feedback API
       requestBody:
         required: true
         content:
@@ -2858,12 +2828,10 @@ paths:
                 $ref: '#/components/examples/CustomFeedbackRequestFreetextToFreetextExample'
               Freetext question and binary answer:
                 $ref: '#/components/examples/CustomFeedbackRequestFreetextToBinaryExample'
-              Freetext question and numerical answer:
-                $ref: '#/components/examples/CustomFeedbackRequestFreetextToNumericalExample'
 
       responses:
         '200':
-          description: Confirmation that feedback is received
+          description: Confirmation that feedback is received.
           headers:
             X-RateLimit-Limit:
               $ref: '#/components/headers/X-RateLimit-Limit'
@@ -2892,8 +2860,7 @@ paths:
                   $ref: '#/components/examples/FeedbackInvalidNumericRatingExample'
 
         '401':
-          description: |
-            Unauthorized. Access Token is invalid or expired.
+          description: Unauthorized. Access Token is invalid or expired.
           headers:
             X-RateLimit-Limit:
               $ref: '#/components/headers/X-RateLimit-Limit'
@@ -2912,99 +2879,7 @@ paths:
                 Transaction ID not found:
                   $ref: '#/components/examples/FeedbackTransactionIdNotFoundExample'
 
-        '429':
-          description: |
-            Rate Limit exceeded.
-          headers:
-            X-RateLimit-Limit:
-              $ref: '#/components/headers/X-RateLimit-Limit'
-            X-RateLimit-Remaining:
-              $ref: '#/components/headers/X-RateLimit-Remaining'
-            X-RateLimit-Reset:
-              $ref: '#/components/headers/X-RateLimit-Reset'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-              examples:
-                Example:
-                  $ref: '#/components/examples/RateLimit-Example'
 
-  /feedback/v1/feedback2:
-    post:
-      operationId: postFeedback2
-      security:
-        - BearerAuth: [ ]
-      description: >-
-        Use this endpoint to send us various types of feedback about Insights, Application features, Calculation results, etc by using pre-defined questions and answers.
-      summary: Provide feedback2
-      tags:
-        - Feedback API2
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/FeedbackRequest2'
-            examples:
-              Answer ID with freetext:
-                $ref: '#/components/examples/FeedbackRequestIdFreetextExample2'
-
-      responses:
-        '200':
-          description: Confirmation that feedback is received
-          headers:
-            X-RateLimit-Limit:
-              $ref: '#/components/headers/X-RateLimit-Limit'
-            X-RateLimit-Remaining:
-              $ref: '#/components/headers/X-RateLimit-Remaining'
-            X-RateLimit-Reset:
-              $ref: '#/components/headers/X-RateLimit-Reset'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FeedbackResult2'
-              examples:
-                Answer with freetext:
-                  $ref: '#/components/examples/FeedbackAnswerFreetext200Example2'
-        '401':
-          description: |
-            Unauthorized. Access Token is invalid or expired.
-          headers:
-            X-RateLimit-Limit:
-              $ref: '#/components/headers/X-RateLimit-Limit'
-            X-RateLimit-Remaining:
-              $ref: '#/components/headers/X-RateLimit-Remaining'
-            X-RateLimit-Reset:
-              $ref: '#/components/headers/X-RateLimit-Reset'
-
-        '404':
-          description: Not found.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-              examples:
-                Transaction ID not found:
-                  $ref: '#/components/examples/FeedbackTransactionIdNotFoundExample'
-
-        '429':
-          description: |
-            Rate Limit exceeded.
-          headers:
-            X-RateLimit-Limit:
-              $ref: '#/components/headers/X-RateLimit-Limit'
-            X-RateLimit-Remaining:
-              $ref: '#/components/headers/X-RateLimit-Remaining'
-            X-RateLimit-Reset:
-              $ref: '#/components/headers/X-RateLimit-Reset'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-              examples:
-                Example:
-                  $ref: '#/components/examples/RateLimit-Example'
 
 
 components:
@@ -3095,7 +2970,7 @@ components:
       bearerFormat: JWT
 
   examples:
-    FeedbackAnswerFreetext200Example2:
+    FeedbackAnswerFreetext200Example:
       value:
         request_id: 48fe4786-58d5-4f14-a885-cf0b0b415694
         account_id: 6e69561c-5d89-40c5-a211-b0c15f19de23
@@ -3105,7 +2980,7 @@ components:
           answer_id: 9q6nfrzd-dxdf-roel-omee-gsjh2ah8fu7b
           freetext: I don't understand it.
 
-    FeedbackRequestIdFreetextExample2:
+    FeedbackRequestIdFreetextExample:
       value:
         account_id: 38fe606a-c3bb-4fdd-b73d-3cb14ff926c9
         reference:
@@ -3132,13 +3007,6 @@ components:
         answer:
           freetext: No, it's all good.
 
-    CustomFeedbackRequestFreetextToNumericalExample:
-      value:
-        - account_id: 38fe606a-c3bb-4fdd-b73d-3cb14ff926c9
-          insight_id: e68ce869-0e7d-4488-a111-2c0a0a29feb6
-          question: How useful do you find this insight on a scale 0 (i.e. lowest) to 10 (i.e. highest)?
-          answer:
-            numerical_rating: 9
 
     CustomFeedbackRequestFreetextToBinaryExample:
       value:
@@ -3167,6 +3035,12 @@ components:
         request_id: 65135a17e8e8b94b982811e89e37ac71
         error_code: Invalid request
         error_description: "Numeric rating: 20 is not in between 0 to 10."
+
+    FeedbackInvalidReference400Example:
+      value:
+        request_id: d224af3c-ee70-467b-bb34-07c7758baeac
+        error_code: Invalid request
+        error_description: "Only one of transaction_id: 2988ae98-fa0e-4d1f-827c-21b62dff9de7 or insight_id: eab4cd59-a20a-4215-834e-5dda55c4a9ad should be provided."
 
     FeedbackQuestionIdResponseExample:
       value:
@@ -4431,46 +4305,10 @@ components:
 
   schemas:
 
-    FeedbackAnswer:
-      type: object
-      description: Holds information about feedback answer. One of `freetext`, `answer_id`, `binary_rating`, or `numerical_rating` must be provided. Optionally, `freetext` can be provided together with `answer_id`, `binary_rating`, or `numerical_rating`.
-      properties:
-        freetext:
-          type: string
-          description: Free text input.
-          example: I would like to see more insights.
-        answer_id:
-          type: string
-          description: ID of an answer must be provided only if a `question_id` is given.
-          example: 38fe606a-c3bb-4fdd-b73d-3cb14ff926c9
-        binary_rating:
-          type: string
-          enum: [ POSITIVE, NEGATIVE ]
-          description: Possible values are `POSITIVE`, `NEGATIVE`.
-        numerical_rating:
-          type: integer
-          description: |
-            Numerical rating scale ranges from `0` to `10` where zero means the `lowest` and ten means the `highest`. If a different range is used in a question, please adapt the answer to `[0, 10]` before submitting the feedback. 
-            
-            E.g. if your scale range is `[0, 5]` and user selects `3`, then submit `6` because of '3×(10/5)=6'.
-          example: 7
-
-    FeedbackQuestion:
-      type: object
-      description: Holds information about feedback question. One of `freetext` or `question_id` must be provided.
-      properties:
-        freetext:
-          type: string
-          description: Free text input.
-          example: Would you like to provide additional feedback?
-        question_id:
-          type: string
-          description: ID of a question.
-          example: 640fc80b-7f08-4d7c-9754-dbb1a9ca960a
 
     CustomFeedbackAnswer:
       type: object
-      description: Holds information about feedback answer. One of `freetext`, `binary_rating`, or `numerical_rating` must be provided. Optionally, `freetext` can be provided together with `binary_rating` or `numerical_rating`.
+      description: Holds information about feedback answer. One of `freetext` or `binary_rating` must be provided. Optionally, `freetext` can be provided together with `binary_rating`.
       properties:
         freetext:
           type: string
@@ -4480,13 +4318,7 @@ components:
           type: string
           enum: [ POSITIVE, NEGATIVE ]
           description: Possible values are `POSITIVE`, `NEGATIVE`.
-        numerical_rating:
-          type: integer
-          description: |
-            Numerical rating scale ranges from `0` to `10` where zero means the `lowest` and ten means the `highest`. If a different range is used in a question, please adapt the answer to [0, 10] before submitting the feedback. 
 
-            E.g. if your scale range is `[0, 5]` and user selects `3`, then submit `6` because of '3×(10/5)=6'.
-          example: 7
 
     FeedbackReference:
       type: object
@@ -4501,7 +4333,7 @@ components:
           description: ID of a valid insight.
           example: b292fef0-45eb-4e8c-a70c-2f4ae736f8bc
 
-    FeedbackResult2:
+    FeedbackResult:
       type: object
       description: Holds information about successfully saved feedback.
       required:
@@ -4530,7 +4362,7 @@ components:
             freetext:
               type: string
 
-    FeedbackRequest2:
+    FeedbackRequest:
       type: object
       description: Holds information about user feedback.
       required:
@@ -4606,62 +4438,7 @@ components:
         answer:
           $ref: '#/components/schemas/CustomFeedbackAnswer'
 
-    FeedbackResult:
-      type: object
-      description: Holds information about successfully saved feedback.
-      required:
-        - request_id
-        - account_id
-        - question
-        - answer
-      properties:
-        request_id:
-          $ref: '#/components/schemas/RequestId'
-        account_id:
-          type: string
-        reference:
-          type: object
-          properties:
-            transaction_id:
-              type: string
-            insight_id:
-              type: string
-        question:
-          type: object
-          properties:
-            freetext:
-              type: string
-            question_id:
-              type: string
-        answer:
-          type: object
-          properties:
-            freetext:
-              type: string
-            answer_id:
-              type: string
-            binary_rating:
-              type: string
-              enum: [ POSITIVE, NEGATIVE ]
-            numerical_rating:
-              type: integer
 
-    FeedbackRequest:
-      type: object
-      description: Holds information about user feedback.
-      required:
-        - account_id
-        - question
-        - answer
-      properties:
-        account_id:
-          $ref: '#/components/schemas/AccountId'
-        reference:
-          $ref: '#/components/schemas/FeedbackReference'
-        question:
-          $ref: '#/components/schemas/FeedbackQuestion'
-        answer:
-          $ref: '#/components/schemas/FeedbackAnswer'
 
     CategoryCO2Footprint:
       type: object
