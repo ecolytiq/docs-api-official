@@ -3,7 +3,7 @@ openapi: 3.0.3
 info:
   description: |
     APIs of the ecolytiq SaaS
-  version: v3 - 2023-10-06
+  version: v3 - 2023-10-10
   title: ecolytiq SaaS
   contact:
     email: support@ecolytiq.com
@@ -243,7 +243,7 @@ tags:
 
   - name: Feedback API
     description: |
-      Use these endpoints to provide various types of feedback. 
+      Use these endpoints to submit various types of feedback from a user.
 
 
 
@@ -2739,14 +2739,14 @@ paths:
                 Unknown CO2 model:
                   $ref: '#/components/examples/NotFoundGetAverageFootprints-Example'
 
-  /feedback/v1/feedback:
+  /feedback/v1/structured-feedback:
     post:
-      operationId: postFeedback
+      operationId: postStructuredFeedback
       security:
         - BearerAuth: [ ]
       description: >-
-        Use this endpoint to send us various types of feedback about Insights, Application features, Calculation results, etc. by using pre-defined questions and answers.
-      summary: Provide feedback
+        Use this endpoint to send us structured feedback about insights, application features, footprint calculation results, etc. by using predefined questions and answers. This is the preferred way of submitting feedback.
+      summary: Submit structured feedback
       tags:
         - Feedback API
       requestBody:
@@ -2756,26 +2756,13 @@ paths:
             schema:
               $ref: '#/components/schemas/FeedbackRequest'
             examples:
-              Answer ID with freetext:
+              Answer ID with free text:
                 $ref: '#/components/examples/FeedbackRequestIdFreetextExample'
 
       responses:
-        '200':
-          description: Confirmation that feedback is received.
-          headers:
-            X-RateLimit-Limit:
-              $ref: '#/components/headers/X-RateLimit-Limit'
-            X-RateLimit-Remaining:
-              $ref: '#/components/headers/X-RateLimit-Remaining'
-            X-RateLimit-Reset:
-              $ref: '#/components/headers/X-RateLimit-Reset'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FeedbackResult'
-              examples:
-                Answer with freetext:
-                  $ref: '#/components/examples/FeedbackAnswerFreetext200Example'
+        '201':
+          description: The feedback is saved.
+
         '400':
           description: Bad Request. Request parameter is not valid.
           content:
@@ -2788,13 +2775,6 @@ paths:
 
         '401':
           description: Unauthorized. Access Token is invalid or expired.
-          headers:
-            X-RateLimit-Limit:
-              $ref: '#/components/headers/X-RateLimit-Limit'
-            X-RateLimit-Remaining:
-              $ref: '#/components/headers/X-RateLimit-Remaining'
-            X-RateLimit-Reset:
-              $ref: '#/components/headers/X-RateLimit-Reset'
 
         '404':
           description: Not found.
@@ -2807,14 +2787,14 @@ paths:
                   $ref: '#/components/examples/FeedbackTransactionIdNotFoundExample'
 
 
-  /feedback/v1/custom-feedback:
+  /feedback/v1/unstructured-feedback:
     post:
-      operationId: postCustomFeedback
+      operationId: postUnstructuredFeedback
       security:
         - BearerAuth: [ ]
       description: >-
-        Use this endpoint to send us custom feedback.
-      summary: Provide custom feedback
+        Use this endpoint to send us unstructured feedback, e.g. open questions or custom questions and answers. If possible, rather send structured feedback, since this is much easier to analyze.
+      summary: Submit unstructured feedback
       tags:
         - Feedback API
       requestBody:
@@ -2824,30 +2804,14 @@ paths:
             schema:
               $ref: '#/components/schemas/CustomFeedbackRequest'
             examples:
-              Freetext question and freetext answer:
+              Free text question and free text answer:
                 $ref: '#/components/examples/CustomFeedbackRequestFreetextToFreetextExample'
-              Freetext question and binary answer:
+              Free text question and binary answer:
                 $ref: '#/components/examples/CustomFeedbackRequestFreetextToBinaryExample'
 
       responses:
-        '200':
-          description: Confirmation that feedback is received.
-          headers:
-            X-RateLimit-Limit:
-              $ref: '#/components/headers/X-RateLimit-Limit'
-            X-RateLimit-Remaining:
-              $ref: '#/components/headers/X-RateLimit-Remaining'
-            X-RateLimit-Reset:
-              $ref: '#/components/headers/X-RateLimit-Reset'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CustomFeedbackResult'
-              examples:
-                Freetext answer:
-                  $ref: '#/components/examples/CustomFeedbackFreetext200Example'
-                Binary answer:
-                  $ref: '#/components/examples/CustomFeedbackBinary200Example'
+        '201':
+          description: The feedback is saved.
 
         '400':
           description: Bad Request. Request parameter is not valid.
@@ -2856,18 +2820,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/ApiError'
               examples:
-                Invalid numeric rating:
-                  $ref: '#/components/examples/FeedbackInvalidNumericRatingExample'
+                Invalid reference:
+                  $ref: '#/components/examples/FeedbackInvalidReference400Example'
 
         '401':
           description: Unauthorized. Access Token is invalid or expired.
-          headers:
-            X-RateLimit-Limit:
-              $ref: '#/components/headers/X-RateLimit-Limit'
-            X-RateLimit-Remaining:
-              $ref: '#/components/headers/X-RateLimit-Remaining'
-            X-RateLimit-Reset:
-              $ref: '#/components/headers/X-RateLimit-Reset'
 
         '404':
           description: Not found.
@@ -2975,19 +2932,19 @@ components:
         request_id: 48fe4786-58d5-4f14-a885-cf0b0b415694
         account_id: 6e69561c-5d89-40c5-a211-b0c15f19de23
         reference:
-          insight_id: e68ce869-0e7d-4488-a111-2c0a0a29feb6
+          insight_id: 66028aaf-5da0-41db-9bb7-fb7fffe4db1b
         answer:
           answer_id: 9q6nfrzd-dxdf-roel-omee-gsjh2ah8fu7b
-          freetext: I don't understand it.
+          free_text: I don't understand it.
 
     FeedbackRequestIdFreetextExample:
       value:
         account_id: 38fe606a-c3bb-4fdd-b73d-3cb14ff926c9
         reference:
-          insight_id: e68ce869-0e7d-4488-a111-2c0a0a29feb6
+          insight_id: 66028aaf-5da0-41db-9bb7-fb7fffe4db1b
         answer:
           answer_id: vj2181v5-5dht-cjss-hc15-68joh4c5ldau
-          freetext: I don't understand it.
+          free_text: It is too abstract for me. Could you add some examples, to make it more comprehensible?
 
     CustomFeedbackBinary200Example:
       value:
@@ -3005,7 +2962,7 @@ components:
           transaction_id: 7302f594-d8c8-492e-9a6d-2a20a321e097
         question: Would you like to provide additional feedback?
         answer:
-          freetext: No, it's all good.
+          free_text: Why is this footprint so much higher compared to a similar return flight I bought two months ago?
 
 
     CustomFeedbackRequestFreetextToBinaryExample:
@@ -3022,7 +2979,7 @@ components:
             transaction_id: 3a10fdc6-52a9-4331-bb36-b8ba5121736e
           question: Would you like to provide additional feedback?
           answer:
-            freetext: No, it's all good.
+            free_text: Why is this footprint so much higher compared to a similar return flight I bought two months ago?
 
     FeedbackTransactionIdNotFoundExample:
       value:
@@ -3030,11 +2987,6 @@ components:
         error_code: not.found
         error_description: "No transaction is found with ID: 3a10fdc6-52a9-4331-bb36-b8ba5121736e"
 
-    FeedbackInvalidNumericRatingExample:
-      value:
-        request_id: 65135a17e8e8b94b982811e89e37ac71
-        error_code: Invalid request
-        error_description: "Numeric rating: 20 is not in between 0 to 10."
 
     FeedbackInvalidReference400Example:
       value:
@@ -3046,7 +2998,7 @@ components:
       value:
         request_id: 48fe4786-58d5-4f14-a885-cf0b0b415694
         reference:
-          insight_id: e68ce869-0e7d-4488-a111-2c0a0a29feb6
+          insight_id: 66028aaf-5da0-41db-9bb7-fb7fffe4db1b
         account_id: 6e69561c-5d89-40c5-a211-b0c15f19de23
         question:
           question_id: c7f70enc-cpyi-kl0y-opwu-vkh5b8l6hwf4
@@ -3060,33 +3012,24 @@ components:
         reference:
           transaction_id: 3a10fdc6-52a9-4331-bb36-b8ba5121736e
         question:
-          freetext: Would you like to provide additional feedback?
+          free_text: Would you like to provide additional feedback?
         answer:
-          freetext: No, it's all good.
+          free_text: Why is this footprint so much higher compared to a similar return flight I bought two months ago?
 
     FeedbackRequestIdToIdExample:
       value:
         - account_id: 38fe606a-c3bb-4fdd-b73d-3cb14ff926c9
-          insight_id: e68ce869-0e7d-4488-a111-2c0a0a29feb6
+          insight_id: 66028aaf-5da0-41db-9bb7-fb7fffe4db1b
           question:
             question_id: c7f70enc-cpyi-kl0y-opwu-vkh5b8l6hwf4
           answer:
             answer_id: 9q6nfrzd-dxdf-roel-omee-gsjh2ah8fu7b
 
-    FeedbackRequestFreetextToNumericalExample:
-      value:
-        - account_id: 38fe606a-c3bb-4fdd-b73d-3cb14ff926c9
-          insight_id: e68ce869-0e7d-4488-a111-2c0a0a29feb6
-          question:
-            freetext: How useful do you find this insight on a scale 0 (i.e. lowest) to 10 (i.e. highest)?
-          answer:
-            numerical_rating: 9
-
     FeedbackRequestFreetextToBinaryExample:
       value:
         - account_id: 38fe606a-c3bb-4fdd-b73d-3cb14ff926c9
           question:
-            freetext: Would you recommend this application to your friends?
+            free_text: Would you recommend this application to your friends?
           answer:
             binary_rating: POSITIVE
 
@@ -3096,9 +3039,9 @@ components:
           reference:
             transaction_id: 3a10fdc6-52a9-4331-bb36-b8ba5121736e
           question:
-            freetext: Would you like to provide additional feedback?
+            free_text: Would you like to provide additional feedback?
           answer:
-            freetext: No, it's all good.
+            free_text: Why is this footprint so much higher compared to a similar return flight I bought two months ago?
 
     GetCo2ByCategory_Commercial_MetaExample:
       value:
@@ -4308,63 +4251,36 @@ components:
 
     CustomFeedbackAnswer:
       type: object
-      description: Holds information about feedback answer. One of `freetext` or `binary_rating` must be provided. Optionally, `freetext` can be provided together with `binary_rating`.
+      description: Holds information about the feedback answer. At least one of the fields must be provided. If `binary_rating` is given, `free_text` can be used to share additional information about the binary rating.
       properties:
-        freetext:
+        free_text:
           type: string
-          description: Free text input.
-          example: I would like to see more insights.
+          description: Free text answer, that was submitted by the user.
+          example: It is too abstract for me. Could you add some examples, to make it more comprehensible?
         binary_rating:
           type: string
           enum: [ POSITIVE, NEGATIVE ]
-          description: Possible values are `POSITIVE`, `NEGATIVE`.
+          description: |
+            A binary answer option, that can be used e.g. for yes/no, agree/disagree, or like/don't like type of questions.
 
 
     FeedbackReference:
       type: object
-      description: Holds information about feedback reference. Either `none` or only one of `transaction_id` or `insight_id` must be provided.
+      description: Holds information about what this feedback is referring to. Only one of the fields must be provided. For general feedback about the service, you can omit the complete `reference` object.
       properties:
         transaction_id:
           type: string
-          description: ID of a valid transaction.
+          description: ID of a transaction as returned by the transaction API.
           example: 928c11b4-afc1-49ae-b0ee-a30d31dd8d5e
         insight_id:
           type: string
-          description: ID of a valid insight.
-          example: b292fef0-45eb-4e8c-a70c-2f4ae736f8bc
+          description: ID of an insight as returned by the content API.
+          example: 66028aaf-5da0-41db-9bb7-fb7fffe4db1b
 
-    FeedbackResult:
-      type: object
-      description: Holds information about successfully saved feedback.
-      required:
-        - request_id
-        - account_id
-        - answer
-      properties:
-        request_id:
-          $ref: '#/components/schemas/RequestId'
-        account_id:
-          type: string
-        reference:
-          type: object
-          properties:
-            transaction_id:
-              type: string
-            insight_id:
-              type: string
-        answer:
-          type: object
-          required:
-            - answer_id
-          properties:
-            answer_id:
-              type: string
-            freetext:
-              type: string
 
     FeedbackRequest:
       type: object
-      description: Holds information about user feedback.
+      description: Holds information about structured user feedback.
       required:
         - account_id
         - answer
@@ -4375,53 +4291,22 @@ components:
           $ref: '#/components/schemas/FeedbackReference'
         answer:
           type: object
+          description: Holds information about the feedback answer.
           required:
             - answer_id
           properties:
             answer_id:
               type: string
-              description: ID of an answer.
+              description: ID of a predefined answer to the questions and answers shared by ecolytiq.
               example: 38fe606a-c3bb-4fdd-b73d-3cb14ff926c9
-            freetext:
+            free_text:
               type: string
-              description: Freetext user input.
+              description: Free text answer, that was submitted by the user. Can be used to share additional information about the predefined answer referred by the `answer_id`.
 
-    CustomFeedbackResult:
-      type: object
-      description: Holds information about successfully saved feedback.
-      required:
-        - request_id
-        - account_id
-        - question
-        - answer
-      properties:
-        request_id:
-          $ref: '#/components/schemas/RequestId'
-        account_id:
-          type: string
-        reference:
-          type: object
-          properties:
-            transaction_id:
-              type: string
-            insight_id:
-              type: string
-        question:
-          type: string
-        answer:
-          type: object
-          properties:
-            freetext:
-              type: string
-            binary_rating:
-              type: string
-              enum: [ POSITIVE, NEGATIVE ]
-            numerical_rating:
-              type: integer
 
     CustomFeedbackRequest:
       type: object
-      description: Holds information about user feedback.
+      description: Holds information about unstructured user feedback.
       required:
         - account_id
         - question
@@ -4433,7 +4318,7 @@ components:
           $ref: '#/components/schemas/FeedbackReference'
         question:
           type: string
-          description: Freetext question.
+          description: Free text question.
           example: Would you like to provide additional feedback?
         answer:
           $ref: '#/components/schemas/CustomFeedbackAnswer'
@@ -4751,32 +4636,6 @@ components:
         currency_code:
           type: string
           description: ISO 4217 currency code. See Info API to get a list of supported/enabled currency codes.
-
-    FiveStarRating:
-      type: object
-      description: 5-Star rating system. Present, if rating_system is `five_star`
-      required:
-        - 1_star
-        - 2_star
-        - 3_star
-        - 4_star
-        - 5_star
-      properties:
-        1_star:
-          description: total number of 1-star rating
-          type: integer
-        2_star:
-          description: total number of 2-star rating
-          type: integer
-        3_star:
-          description: total number of 3-star rating
-          type: integer
-        4_star:
-          description: total number of 4-star rating
-          type: integer
-        5_star:
-          description: total number of 5-star rating
-          type: integer
 
 
     CO2ModelResponse:
