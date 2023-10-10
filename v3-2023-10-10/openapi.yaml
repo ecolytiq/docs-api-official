@@ -2754,10 +2754,10 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/FeedbackRequest'
+              $ref: '#/components/schemas/StructuredFeedbackRequest'
             examples:
               Answer ID with free text:
-                $ref: '#/components/examples/FeedbackRequestIdFreetextExample'
+                $ref: '#/components/examples/StructuredFeedbackRequestIdFreetextExample'
 
       responses:
         '201':
@@ -2802,12 +2802,12 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CustomFeedbackRequest'
+              $ref: '#/components/schemas/UnstructuredFeedbackRequest'
             examples:
               Free text question and free text answer:
-                $ref: '#/components/examples/CustomFeedbackRequestFreetextToFreetextExample'
+                $ref: '#/components/examples/UnstructuredFeedbackRequestFreetextToFreetextExample'
               Free text question and binary answer:
-                $ref: '#/components/examples/CustomFeedbackRequestFreetextToBinaryExample'
+                $ref: '#/components/examples/UnstructuredFeedbackRequestFreetextToBinaryExample'
 
       responses:
         '201':
@@ -2927,52 +2927,23 @@ components:
       bearerFormat: JWT
 
   examples:
-    FeedbackAnswerFreetext200Example:
-      value:
-        request_id: 48fe4786-58d5-4f14-a885-cf0b0b415694
-        account_id: 6e69561c-5d89-40c5-a211-b0c15f19de23
-        reference:
-          insight_id: 66028aaf-5da0-41db-9bb7-fb7fffe4db1b
-        answer:
-          answer_id: 9q6nfrzd-dxdf-roel-omee-gsjh2ah8fu7b
-          free_text: I don't understand it.
-
-    FeedbackRequestIdFreetextExample:
+    StructuredFeedbackRequestIdFreetextExample:
       value:
         account_id: 38fe606a-c3bb-4fdd-b73d-3cb14ff926c9
         reference:
           insight_id: 66028aaf-5da0-41db-9bb7-fb7fffe4db1b
         answer:
-          answer_id: vj2181v5-5dht-cjss-hc15-68joh4c5ldau
+          answer_id: fd91e306-5e3c-4fe2-81a2-0fe22717ed21
           free_text: It is too abstract for me. Could you add some examples, to make it more comprehensible?
 
-    CustomFeedbackBinary200Example:
-      value:
-        request_id: 48fe4786-58d5-4f14-a885-cf0b0b415694
-        account_id: 6e69561c-5d89-40c5-a211-b0c15f19de23
-        question: Would you recommend this application to your friends?
-        answer:
-          binary_rating: POSITIVE
-
-    CustomFeedbackFreetext200Example:
-      value:
-        request_id: 48fe4786-58d5-4f14-a885-cf0b0b415694
-        account_id: 6e69561c-5d89-40c5-a211-b0c15f19de23
-        reference:
-          transaction_id: 7302f594-d8c8-492e-9a6d-2a20a321e097
-        question: Would you like to provide additional feedback?
-        answer:
-          free_text: Why is this footprint so much higher compared to a similar return flight I bought two months ago?
-
-
-    CustomFeedbackRequestFreetextToBinaryExample:
+    UnstructuredFeedbackRequestFreetextToBinaryExample:
       value:
         - account_id: 38fe606a-c3bb-4fdd-b73d-3cb14ff926c9
           question: Would you recommend this application to your friends?
           answer:
             binary_rating: POSITIVE
 
-    CustomFeedbackRequestFreetextToFreetextExample:
+    UnstructuredFeedbackRequestFreetextToFreetextExample:
       value:
         - account_id: 38fe606a-c3bb-4fdd-b73d-3cb14ff926c9
           reference:
@@ -2987,43 +2958,11 @@ components:
         error_code: not.found
         error_description: "No transaction is found with ID: 3a10fdc6-52a9-4331-bb36-b8ba5121736e"
 
-
     FeedbackInvalidReference400Example:
       value:
         request_id: d224af3c-ee70-467b-bb34-07c7758baeac
         error_code: Invalid request
         error_description: "Only one of transaction_id: 2988ae98-fa0e-4d1f-827c-21b62dff9de7 or insight_id: eab4cd59-a20a-4215-834e-5dda55c4a9ad should be provided."
-
-    FeedbackQuestionIdResponseExample:
-      value:
-        request_id: 48fe4786-58d5-4f14-a885-cf0b0b415694
-        reference:
-          insight_id: 66028aaf-5da0-41db-9bb7-fb7fffe4db1b
-        account_id: 6e69561c-5d89-40c5-a211-b0c15f19de23
-        question:
-          question_id: c7f70enc-cpyi-kl0y-opwu-vkh5b8l6hwf4
-        answer:
-          answer_id: 9q6nfrzd-dxdf-roel-omee-gsjh2ah8fu7b
-
-    FeedbackFreetextQuestionResponseExample:
-      value:
-        request_id: 48fe4786-58d5-4f14-a885-cf0b0b415694
-        account_id: 6e69561c-5d89-40c5-a211-b0c15f19de23
-        reference:
-          transaction_id: 3a10fdc6-52a9-4331-bb36-b8ba5121736e
-        question:
-          free_text: Would you like to provide additional feedback?
-        answer:
-          free_text: Why is this footprint so much higher compared to a similar return flight I bought two months ago?
-
-    FeedbackRequestIdToIdExample:
-      value:
-        - account_id: 38fe606a-c3bb-4fdd-b73d-3cb14ff926c9
-          insight_id: 66028aaf-5da0-41db-9bb7-fb7fffe4db1b
-          question:
-            question_id: c7f70enc-cpyi-kl0y-opwu-vkh5b8l6hwf4
-          answer:
-            answer_id: 9q6nfrzd-dxdf-roel-omee-gsjh2ah8fu7b
 
     FeedbackRequestFreetextToBinaryExample:
       value:
@@ -3224,6 +3163,7 @@ components:
             description: CO2 model of the United States of America.
             currency: USD
             enabled: false
+
     CategorySystemListExample:
       value:
         request_id: 6bf3202ade4a7411
@@ -3240,6 +3180,7 @@ components:
           - code: ECOLYTIQ_V2
             description: ecolytiq EEIO
             enabled: true
+
     CategoryListExample:
       value:
         request_id: 6bf3202ade4a7411
@@ -3256,26 +3197,7 @@ components:
           - category: ex:general
             system: ECOLYTIQ_V2
             description: General
-    CurrencyCodeListExample:
-      value:
-        request_id: 6bf3202ade4a7411
-        results:
-          - code: EUR
-            description: Euro
-            decimal_places: 2
-            enabled: true
-          - code: GBP
-            description: Pound sterling
-            decimal_places: 2
-            enabled: false
-          - code: JPY
-            description: Japanese yen
-            decimal_places: 0
-            enabled: false
-          - code: USD
-            description: United States dollar
-            decimal_places: 2
-            enabled: true
+
     ComparableResponseExample:
       value:
         request_id: 6bf3202ade4a7411
@@ -3317,6 +3239,7 @@ components:
         request_id: afb21a0fa3446220
         results: [ ]
         errors: [ ]
+
     RefinementsUnansweredResponseExample:
       value:
         request_id: ce359f490283d703
@@ -3334,6 +3257,7 @@ components:
             answer_id: null
             input: null
         errors: [ ]
+
     RefinementsAnsweredResponseExample:
       value:
         request_id: ce9904cad20e303d
@@ -3351,7 +3275,6 @@ components:
             answer_id: a8c60936-c821-48c6-8975-9f209423d9d9
             input: null
         errors: [ ]
-
 
     RefinementsAnswerFlightsRequestExample:
       value:
@@ -3375,7 +3298,6 @@ components:
               value: 2120016
               unit: g
         errors: [ ]
-
 
     InsightsResponseExample:
       value:
@@ -3466,94 +3388,80 @@ components:
               - language_code: en
                 text: "The footprint of online shopping in our calculation is based on two aspects.\r\n\r\n1. Value for general consumption / \u20AC\r\n2. Value for delivery / \u20AC (Amazon)\r\n\r\n1. In purchasing an item online we need to regard the amount of CO\u00B2 that was necessary for the production, as referred to in our category 'general consumption'.\r\n\r\n2. On top of this general consumption value we have the process of delivering the package to your doorstep. We use Amazon data for this, as they are the major representative for deliveries.\r\n\r\nGenerally speaking, an online delivery can be more sustainable than a purchase in person. In our calculation for online shopping the value is higher than in general consumption. However, if you take your car to drive to the store and buy the same product, you are likely to have a larger footprint for the added fuel and car use."
         errors: [ ]
+
     BadRequestRefinements-Example:
       value:
         timestamp: "2022-12-02T15:40:48.413+00:00"
         status: 400
         error: "Bad Request"
         path: "/transactions/v1/refinements"
+
     BadRequest-Example:
       value:
         request_id: 6bf3202ade4a7411
         error_code: "invalid.request"
         error_description: "Size of transaction list must be between 1 and 500. But is null."
+
     BadRequestGetAggregatedCo2ByMonth-Example:
       value:
         request_id: 6bf3202ade4a5642
         error_code: "Invalid request"
         error_description: "The sub-category may not be blank!"
+
     MetaCategoryMayNotBlank-Example:
       value:
         request_id: 6bf320ashe4a7563
         error_code: "Invalid request"
         error_description: "The meta-category may not be blank!"
+
     DateRangeTooLarge-Example:
       value:
         request_id: 6bf320ashe4a7563
         error_code: "Invalid request"
         error_description: "The date range may not exceed 100 years."
+
     NotFoundGetAggregatedCo2ByMonth-Meta-Sub-Example:
       value:
         request_id: 3f52479xae4a7411
         error_code: "not.found"
         error_description: "The combination of meta-category: 'shopping' and sub-category: 'clothe' not found."
+
     NotFoundGetAggregatedCo2ByMonth-Meta-Example:
       value:
         request_id: 3f52479xae4a7411
         error_code: "not.found"
         error_description: "The meta-category: 'shoppings' not found."
+
     BadRequestGetAggregatedCo2ByMonth-Sub-Without-Meta-Example:
       value:
         request_id: 3f52479xae4a7411
         error_code: "Invalid Request"
         error_description: "Given sub-category: 'taxi', meta-category may not be blank!"
+
     MetaForSystemNotFoundExample:
       value:
         request_id: 7ujr49ae4a14236
         error_code: "NOT_FOUND"
         error_description: "meta-category 'material' for system 'ECOLYTIQ_V2' not found."
+
     MetaNotFoundExample:
       value:
         request_id: 7ujr49ae4a14236
         error_code: "NOT_FOUND"
         error_description: "meta-category 'foods' for system 'ECOLYTIQ_V2' not found."
-    NotFound-Example:
-      value:
-        request_id: 6bf3202ade4a7411
-        error_code: "not.found"
-        error_description: "Resource not found."
+
     RateLimit-Example:
       value:
         request_id: 6bf3202ade4a7411
         error_code: "rate.limit.exceeded"
         error_description: "Rate limit exceeded. Try again later."
+
     AccessDenied403:
       value:
         request_id: 1754sadf6721547
         error_code: "PERMISSION_DENIED"
         error_description: "Access denied"
-    LanguageCodeListExample:
-      value:
-        request_id: 6bf3202ade4a7411
-        results:
-          - code: de
-            description: German
-            insights: true
-            explanations: true
-            comparables: true
-            questions: false
-          - code: en
-            description: English
-            insights: true
-            explanations: true
-            comparables: true
-            questions: false
-          - code: en-US
-            description: English as used in the United States
-            insights: true
-            explanations: true
-            comparables: false
-            questions: false
+
     Transaction-Request-Example-Retail:
       value:
         transactions:
@@ -3802,6 +3710,7 @@ components:
               value: 96.23
               currency_code: EUR
             co2_footprint_in_g: 47389
+
     GetMetaCategoryTransactionsExample:
       value:
         transactions:
@@ -3865,6 +3774,7 @@ components:
               value: 38.04
               currency_code: EUR
             co2_footprint_in_g: 79746
+
     GetSubCategoryTransactionsExample:
       value:
         transactions:
@@ -3898,6 +3808,7 @@ components:
               value: 3513.03
               currency_code: EUR
             co2_footprint_in_g: 65723
+
     GetTransactionsEmptyResultExample:
       value:
         transactions: [ ]
@@ -3913,6 +3824,7 @@ components:
             category:
               system: "ECOLYTIQ_V2"
               value: "ex:food.groceries"
+
     Transaction-Category-Update-Request-Example-02:
       value:
         async: true
@@ -4030,6 +3942,7 @@ components:
           - account_id: 1c974398-4d2b-44fa-b292-64a46c0e6577
             answer_id: 8948045b-d163-4d03-b9ec-3d5237a4550a
             input: "3"
+
     Profile-Answer-Response-Example:
       value:
         request_id: 55edea99d812cf0f
@@ -4057,8 +3970,6 @@ components:
     Delete-Account-Response-Example:
       value:
         request_id: 520a7db858397ada
-
-
 
     ActionByCarbonRequestExample:
       value:
@@ -4278,7 +4189,7 @@ components:
           example: 66028aaf-5da0-41db-9bb7-fb7fffe4db1b
 
 
-    FeedbackRequest:
+    StructuredFeedbackRequest:
       type: object
       description: Holds information about structured user feedback.
       required:
@@ -4298,13 +4209,13 @@ components:
             answer_id:
               type: string
               description: ID of a predefined answer to the questions and answers shared by ecolytiq.
-              example: 38fe606a-c3bb-4fdd-b73d-3cb14ff926c9
+              example: 0db5d357-6be7-4728-9f3b-80d3fcd815ce
             free_text:
               type: string
               description: Free text answer, that was submitted by the user. Can be used to share additional information about the predefined answer referred by the `answer_id`.
 
 
-    CustomFeedbackRequest:
+    UnstructuredFeedbackRequest:
       type: object
       description: Holds information about unstructured user feedback.
       required:
