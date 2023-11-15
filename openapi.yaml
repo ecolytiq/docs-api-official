@@ -229,6 +229,11 @@ tags:
   - name: Account API
     description: |
       Should the necessity arise to remove all data of a specific end customer from the ecolytiq platform this can be done using the account API.
+  - name: Onboarding API
+    description: |
+      The onboarding API gives you the possibility to create new client credentials, that can then be used to access the different APIs. In most cases this is not needed, since the client credentials will be created by ecolytiq and handed over to you. 
+      > #### Note
+      > This API is only available if contractually agreed on.
   - name: onPrem API
     description: |
       In some cases the ecolytiq Sustainability-as-a-Service&reg; platform is not used as Software as a Service (SaaS) solution but hosted on customers' own premises or inside their own cloud instance.
@@ -2140,6 +2145,39 @@ paths:
               $ref: '#/components/headers/X-RateLimit-Remaining'
             X-RateLimit-Reset:
               $ref: '#/components/headers/X-RateLimit-Reset'
+
+  /onboarding/v1/clients:
+    post:
+      operationId: postClient
+      security:
+        - BasicAuth: [ ]
+      description: Use this endpoint to create a new client and automatically issue an access token for that client.
+
+
+        This endpoint is protected with basic auth. Use the `client_id` as username and the `client_secret` as password.
+      summary: Create a new client
+      tags:
+        - Onboarding API
+      responses:
+        '201':
+          description: The client was successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClientCreatedResponse'
+        '401':
+          description: Unauthorized. Invalid or expired client credentials.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiValidationError'
+              examples:
+                Unauthorized:
+                  value:
+                    timestamp: 2023-04-25T12:11:15.795+00:00
+                    status: 401
+                    error: Unauthorized
+                    path: /client/v1/clients
 
   /on-prem/v1/content-ratings:
     post:
@@ -5856,23 +5894,41 @@ components:
         access_token:
           type: string
           example: eyJhbGciOiJSUzI1NiIsInR5cCI6IkpX ...
-          description: OAuth 2.0 Access Token
+          description: OAuth 2.0 access token.
         scope:
           type: string
           example: all
-          description: Scope of the Access Token
+          description: Scope of the access token.
         expires_in:
           type: integer
           example: 3599
-          description: Lifetime of the Access Token in sec.
+          description: Lifetime of the access token in seconds.
         token_type:
           type: string
           example: bearer
-          description: Token Type - always bearer
+          description: Token type - always bearer.
         jti:
           type: string
-          example: bc415e82-b262-475a-8f03-6c9028bb5991
-          description: JWT ID. Can be used to invalidate the Access Token
+          example: cY7kSbRynvmUVJqLCzBgjtHv9dQ
+          description: JWT ID. Can be used to invalidate the access token.
+
+    ClientCreatedResponse:
+      type: object
+      required:
+        - client_id
+        - client_secret
+        - token
+      properties:
+        client_id:
+          type: string
+          example: ZxknbU3Q274ayukUaNkqi5lRgb1ubirGjbbB
+          description: Client ID of the newly created client. Can be used to generate new access tokens.
+        client_secret:
+          type: string
+          example: ayeqcClZmzAM3qdMFU51OZkl8XiFglk5ybMlFmCsqASwNbXK
+          description: Client secret of the newly created client. Can be used to generate new access tokens.
+        token:
+          $ref: '#/components/schemas/AuthResponse'
 
     GetAverageFootprintsResponse:
       type: object
