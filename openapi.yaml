@@ -2177,7 +2177,7 @@ paths:
                     timestamp: 2023-04-25T12:11:15.795+00:00
                     status: 401
                     error: Unauthorized
-                    path: /client/v1/clients
+                    path: /onboarding/v1/clients
 
   /on-prem/v1/content-ratings:
     post:
