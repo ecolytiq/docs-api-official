@@ -3,7 +3,7 @@ openapi: 3.0.3
 info:
   description: |
     APIs of the ecolytiq SaaS
-  version: v3 - 2023-12-04
+  version: v3-2023-12-04
   title: ecolytiq SaaS
   contact:
     email: support@ecolytiq.com
@@ -2853,7 +2853,7 @@ paths:
               $ref: '#/components/schemas/StructuredFeedbackRequest'
             examples:
               Answer ID with free text:
-                $ref: '#/components/examples/StructuredFeedbackRequestExample'
+                $ref: '#/components/examples/StructuredFeedbackRequestIdFreetextExample'
 
       responses:
         '201':
