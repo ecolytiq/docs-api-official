@@ -3,7 +3,7 @@ openapi: 3.0.3
 info:
   description: |
     APIs of the ecolytiq SaaS
-  version: v3 - 2023-10-06
+  version: v3 - 2023-12-04
   title: ecolytiq SaaS
   contact:
     email: support@ecolytiq.com
@@ -252,7 +252,9 @@ tags:
   - name: Statistic API
     description: |
       Use these endpoints to get aggregated footprint data about accounts, businesses, or sub-accounts.
-
+  - name: Feedback API
+    description: |
+      Use these endpoints to submit various types of feedback from a user.
 
 security:
   - BearerAuth: [ ]
@@ -2832,6 +2834,100 @@ paths:
                 Unknown CO2 model:
                   $ref: '#/components/examples/NotFoundGetAverageFootprints-Example'
 
+
+  /feedback/v1/structured-feedback:
+    post:
+      operationId: postStructuredFeedback
+      security:
+        - BearerAuth: [ ]
+      description: >-
+        Use this endpoint to send us structured feedback about insights, application features, footprint calculation results, etc. by using predefined questions and answers. This is the preferred way of submitting feedback.
+      summary: Submit structured feedback
+      tags:
+        - Feedback API
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StructuredFeedbackRequest'
+            examples:
+              Answer ID with free text:
+                $ref: '#/components/examples/StructuredFeedbackRequestExample'
+
+      responses:
+        '201':
+          description: The feedback is saved.
+
+        '400':
+          description: Bad Request. Request parameter is not valid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+
+        '401':
+          description: Unauthorized. Access Token is invalid or expired.
+
+        '404':
+          description: Not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              examples:
+                Answer ID not found:
+                  $ref: '#/components/examples/FeedbackAnswerIdNotFound404Example'
+
+  /feedback/v1/unstructured-feedback:
+    post:
+      operationId: postUnstructuredFeedback
+      security:
+        - BearerAuth: [ ]
+      description: >-
+        Use this endpoint to send us unstructured feedback, e.g. open questions or custom questions and answers. If possible, rather send structured feedback, since this is much easier to analyze.
+      summary: Submit unstructured feedback
+      tags:
+        - Feedback API
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UnstructuredFeedbackRequest'
+            examples:
+              Free text question and free text answer:
+                $ref: '#/components/examples/UnstructuredFeedbackRequestFreetextToFreetextExample'
+              Free text question and binary answer:
+                $ref: '#/components/examples/UnstructuredFeedbackRequestFreetextToBinaryExample'
+
+      responses:
+        '201':
+          description: The feedback is saved.
+
+        '400':
+          description: Bad Request. Request parameter is not valid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              examples:
+                Invalid reference:
+                  $ref: '#/components/examples/FeedbackInvalidReference400Example'
+
+        '401':
+          description: Unauthorized. Access Token is invalid or expired.
+
+        '422':
+          description: Unprocessable entity.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              examples:
+                Transaction ID not found:
+                  $ref: '#/components/examples/FeedbackTransactionIdNotFound404Example'
+
 components:
   parameters:
     languageCodes:
@@ -4162,6 +4258,55 @@ components:
         error_code: "NOT_FOUND"
         error_description: "No averages found for model AB"
 
+    StructuredFeedbackRequestIdFreetextExample:
+      value:
+        account_id: 38fe606a-c3bb-4fdd-b73d-3cb14ff926c9
+        reference:
+          insight_id: 66028aaf-5da0-41db-9bb7-fb7fffe4db1b
+        answer:
+          answer_id: fd91e306-5e3c-4fe2-81a2-0fe22717ed21
+          free_text: It is too abstract for me. Could you add some examples, to make it more comprehensible?
+
+    FeedbackAnswerIdNotFound404Example:
+      value:
+        request_id: 0ace338d-38dd-4af2-a9e0-3be40a67ad22
+        error_code: NOT_FOUND
+        error_description: "No answer is found with ID: b8bdcc26-a228-4fbd-806d-570dc4df6e00."
+
+    FeedbackTransactionIdNotFound404Example:
+      value:
+        request_id: 5fb15e06-1a9c-42aa-8eb7-7542be0a1fdd
+        error_code: NOT_FOUND
+        error_description: "No transaction is found with ID: 3a10fdc6-52a9-4331-bb36-b8ba5121736e"
+
+    FeedbackInsightIdNotFound404Example:
+      value:
+        request_id: 0ace338d-38dd-4af2-a9e0-3be40a67ad22
+        error_code: NOT_FOUND
+        error_description: "No insight is found with ID: b8bdcc26-a228-4fbd-806d-570dc4df6e00."
+
+    FeedbackInvalidReference400Example:
+      value:
+        request_id: d224af3c-ee70-467b-bb34-07c7758baeac
+        error_code: INVALID_REQUEST
+        error_description: "Only one of transaction_id: 2988ae98-fa0e-4d1f-827c-21b62dff9de7 or insight_id: eab4cd59-a20a-4215-834e-5dda55c4a9ad should be provided."
+
+    UnstructuredFeedbackRequestFreetextToBinaryExample:
+      value:
+        - account_id: 38fe606a-c3bb-4fdd-b73d-3cb14ff926c9
+          question: Would you recommend this application to your friends?
+          answer:
+            binary_rating: POSITIVE
+
+    UnstructuredFeedbackRequestFreetextToFreetextExample:
+      value:
+        - account_id: 38fe606a-c3bb-4fdd-b73d-3cb14ff926c9
+          reference:
+            transaction_id: 3a10fdc6-52a9-4331-bb36-b8ba5121736e
+          question: Would you like to provide additional feedback?
+          answer:
+            free_text: Why is this footprint so much higher compared to a similar return flight I bought two months ago?
+
 
   schemas:
 
@@ -5108,6 +5253,7 @@ components:
 
     CO2FootprintInG:
       type: integer
+      format: int64
       example: 132123
       description: CO2 footprint in grams.
 
@@ -5891,3 +6037,75 @@ components:
           minimum: 0
           example: 27462842
           description: Yearly national average CO2 footprint in grams of the given CO2 model and industry of the account. Only returned for commercial banking and if an account ID has been specified.
+
+    StructuredFeedbackRequest:
+      type: object
+      description: Holds information about structured user feedback.
+      required:
+        - account_id
+        - answer
+      properties:
+        account_id:
+          $ref: '#/components/schemas/AccountId'
+        reference:
+          $ref: '#/components/schemas/FeedbackReference'
+        answer:
+          type: object
+          description: Holds information about the feedback answer.
+          required:
+            - answer_id
+          properties:
+            answer_id:
+              type: string
+              description: ID of a predefined answer to the questions and answers shared by ecolytiq.
+              example: 0db5d357-6be7-4728-9f3b-80d3fcd815ce
+            free_text:
+              type: string
+              description: Free text answer, that was submitted by the user. Can be used to share additional information about the predefined answer referred by the `answer_id`.
+
+    FeedbackReference:
+      type: object
+      description: Holds information about what this feedback is referring to. Only one of the fields must be provided. For general feedback about the service, you can omit the complete `reference` object.
+      properties:
+        transaction_id:
+          type: string
+          description: ID of a transaction as returned by the transaction API.
+          example: 928c11b4-afc1-49ae-b0ee-a30d31dd8d5e
+        insight_id:
+          type: string
+          description: ID of an insight as returned by the content API.
+          example: 66028aaf-5da0-41db-9bb7-fb7fffe4db1b
+
+    UnstructuredFeedbackRequest:
+      type: object
+      description: Holds information about unstructured user feedback.
+      required:
+        - account_id
+        - question
+        - answer
+      properties:
+        account_id:
+          $ref: '#/components/schemas/AccountId'
+        reference:
+          $ref: '#/components/schemas/FeedbackReference'
+        question:
+          type: string
+          description: Free text question.
+          example: Would you like to provide additional feedback?
+        answer:
+          $ref: '#/components/schemas/CustomFeedbackAnswer'
+
+    CustomFeedbackAnswer:
+      type: object
+      description: Holds information about the feedback answer. At least one of the fields must be provided. If `binary_rating` is given, `free_text` can be used to share additional information about the binary rating.
+      properties:
+        free_text:
+          type: string
+          description: Free text answer, that was submitted by the user.
+          example: It is too abstract for me. Could you add some examples, to make it more comprehensible?
+        binary_rating:
+          type: string
+          enum: [ POSITIVE, NEGATIVE ]
+          description: |
+            A binary answer option, that can be used e.g. for yes/no, agree/disagree, or like/don't like type of questions.
+
