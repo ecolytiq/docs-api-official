@@ -229,18 +229,7 @@ tags:
   - name: Account API
     description: |
       Should the necessity arise to remove all data of a specific end customer from the ecolytiq platform this can be done using the account API.
-  - name: onPrem API
-    description: |
-      In some cases the ecolytiq Sustainability-as-a-Service&reg; platform is not used as Software as a Service (SaaS) solution but hosted on customers' own premises or inside their own cloud instance.
-      If the customers wish they can use a rating system for content delivered by the ecolytiq platform.
-      We recommend regularly submitting the content ratings back to ecolytiq so that we can improve the content quality.
 
-
-      > #### Please Note 
-      >
-      > This endpoint must be called on the ecolytiq SaaS platform which is accessible over the public internet. 
-      > Is may be necessary to obtain a special pair of `client_id` and `client_secret` credentials for the SaaS platform to use this endpoint.
-      > No PII is transmitted via this endpoint.
   - name: "Action API"
     description: |
       Use these endpoints for handling carbon footprint impact orders.
@@ -2143,90 +2132,6 @@ paths:
             X-RateLimit-Reset:
               $ref: '#/components/headers/X-RateLimit-Reset'
 
-  /on-prem/v1/content-ratings:
-    post:
-      operationId: postOnPremContentRatings
-      security:
-        - BearerAuth: [ ]
-      description: >-
-        Use this endpoint to send us feedback about the content.         
-        
-        
-        Currently, only the "five star" rating system is supported.
-        To send feedback about a content piece please send the accumulated number of *all* ratings for each rating category also when updating.
-      summary: Send us Feedback about Content Rating
-      tags:
-        - onPrem API
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ContentRatingRequest'
-            examples:
-              Example:
-                $ref: '#/components/examples/Content-Rating-Request-Example'
-      responses:
-        '200':
-          description: Confirmation that the request has been processed
-          headers:
-            X-RateLimit-Limit:
-              $ref: '#/components/headers/X-RateLimit-Limit'
-            X-RateLimit-Remaining:
-              $ref: '#/components/headers/X-RateLimit-Remaining'
-            X-RateLimit-Reset:
-              $ref: '#/components/headers/X-RateLimit-Reset'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ContentRatingResponse'
-              examples:
-                Example:
-                  $ref: '#/components/examples/Content-Rating-Response-Example'
-        '400':
-          description: |
-            Bad Request.
-          headers:
-            X-RateLimit-Limit:
-              $ref: '#/components/headers/X-RateLimit-Limit'
-            X-RateLimit-Remaining:
-              $ref: '#/components/headers/X-RateLimit-Remaining'
-            X-RateLimit-Reset:
-              $ref: '#/components/headers/X-RateLimit-Reset'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-              examples:
-                Example:
-                  $ref: '#/components/examples/BadRequest-Example'
-        '401':
-          description: |
-            Unauthorized. Access Token is invalid or expired.
-          headers:
-            X-RateLimit-Limit:
-              $ref: '#/components/headers/X-RateLimit-Limit'
-            X-RateLimit-Remaining:
-              $ref: '#/components/headers/X-RateLimit-Remaining'
-            X-RateLimit-Reset:
-              $ref: '#/components/headers/X-RateLimit-Reset'
-        '429':
-          description: |
-            Rate Limit exceeded.
-          headers:
-            X-RateLimit-Limit:
-              $ref: '#/components/headers/X-RateLimit-Limit'
-            X-RateLimit-Remaining:
-              $ref: '#/components/headers/X-RateLimit-Remaining'
-            X-RateLimit-Reset:
-              $ref: '#/components/headers/X-RateLimit-Reset'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-              examples:
-                Example:
-                  $ref: '#/components/examples/RateLimit-Example'
 
   /action/v1/projects:
     get:
@@ -2865,19 +2770,25 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiError'
+              examples:
+                Invalid reference:
+                  $ref: '#/components/examples/FeedbackInvalidReference400Example'
 
         '401':
           description: Unauthorized. Access Token is invalid or expired.
 
-        '404':
-          description: Not found.
+        '422':
+          description: Unprocessable entity.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiError'
               examples:
+                Transaction ID not found:
+                  $ref: '#/components/examples/FeedbackTransactionIdNotFound422Example'
                 Answer ID not found:
-                  $ref: '#/components/examples/FeedbackAnswerIdNotFound404Example'
+                  $ref: '#/components/examples/FeedbackAnswerIdNotFound422Example'
+
 
   /feedback/v1/unstructured-feedback:
     post:
@@ -2926,7 +2837,7 @@ paths:
                 $ref: '#/components/schemas/ApiError'
               examples:
                 Transaction ID not found:
-                  $ref: '#/components/examples/FeedbackTransactionIdNotFound404Example'
+                  $ref: '#/components/examples/FeedbackTransactionIdNotFound422Example'
 
 components:
   parameters:
@@ -3230,26 +3141,7 @@ components:
           - category: ex:general
             system: ECOLYTIQ_V2
             description: General
-    CurrencyCodeListExample:
-      value:
-        request_id: 6bf3202ade4a7411
-        results:
-          - code: EUR
-            description: Euro
-            decimal_places: 2
-            enabled: true
-          - code: GBP
-            description: Pound sterling
-            decimal_places: 2
-            enabled: false
-          - code: JPY
-            description: Japanese yen
-            decimal_places: 0
-            enabled: false
-          - code: USD
-            description: United States dollar
-            decimal_places: 2
-            enabled: true
+
     ComparableResponseExample:
       value:
         request_id: 6bf3202ade4a7411
@@ -3491,11 +3383,6 @@ components:
         request_id: 7ujr49ae4a14236
         error_code: "NOT_FOUND"
         error_description: "meta-category 'foods' for system 'ECOLYTIQ_V2' not found."
-    NotFound-Example:
-      value:
-        request_id: 6bf3202ade4a7411
-        error_code: "not.found"
-        error_description: "Resource not found."
     RateLimit-Example:
       value:
         request_id: 6bf3202ade4a7411
@@ -3506,28 +3393,6 @@ components:
         request_id: 1754sadf6721547
         error_code: "PERMISSION_DENIED"
         error_description: "Access denied"
-    LanguageCodeListExample:
-      value:
-        request_id: 6bf3202ade4a7411
-        results:
-          - code: de
-            description: German
-            insights: true
-            explanations: true
-            comparables: true
-            questions: false
-          - code: en
-            description: English
-            insights: true
-            explanations: true
-            comparables: true
-            questions: false
-          - code: en-US
-            description: English as used in the United States
-            insights: true
-            explanations: true
-            comparables: false
-            questions: false
     Transaction-Request-Example-Retail:
       value:
         transactions:
@@ -4032,47 +3897,6 @@ components:
       value:
         request_id: 520a7db858397ada
 
-
-    Content-Rating-Request-Example:
-      value:
-        snapshot_time: "2022-05-15T10:12:00Z"
-        ratings:
-          - content_id: 71b24bdd-8aa4-4b8d-893b-4e74b05a1c98
-            rating_system: five_star
-            five_star:
-              1_star: 122
-              2_star: 24
-              3_star: 301
-              4_star: 255
-              5_star: 1001
-          - content_id: fbc78d6b-122b-4ae3-8b5b-50f45230a39f
-            rating_system: five_star
-            five_star:
-              1_star: 22
-              2_star: 242
-              3_star: 31
-              4_star: 1255
-              5_star: 11
-          - content_id: 45678d6b-432b-6bc3-8b5b-50f45230a8a5
-            rating_system: five_star
-            five_star:
-              1_star: 2
-              2_star: 4
-              3_star: 31
-              4_star: 5
-              5_star: 11
-
-    Content-Rating-Response-Example:
-      value:
-        request_id: "6bf3202ade4a7411"
-        results:
-          - content_id: 71b24bdd-8aa4-4b8d-893b-4e74b05a1c98
-          - content_id: fbc78d6b-122b-4ae3-8b5b-50f45230a39f
-        errors:
-          - content_id: 45678d6b-432b-6bc3-8b5b-50f45230a8a5
-            error_code: not.found
-            error_description: Resource not found
-
     ActionByCarbonRequestExample:
       value:
         orders:
@@ -4267,22 +4091,32 @@ components:
           answer_id: fd91e306-5e3c-4fe2-81a2-0fe22717ed21
           free_text: It is too abstract for me. Could you add some examples, to make it more comprehensible?
 
-    FeedbackAnswerIdNotFound404Example:
+    FeedbackRequestFreetextToFreetextExample:
+      value:
+        - account_id: 38fe606a-c3bb-4fdd-b73d-3cb14ff926c9
+          reference:
+            transaction_id: 3a10fdc6-52a9-4331-bb36-b8ba5121736e
+          question:
+            free_text: Would you like to provide additional feedback?
+          answer:
+            free_text: Why is this footprint so much higher compared to a similar return flight I bought two months ago?
+
+    FeedbackAnswerIdNotFound422Example:
       value:
         request_id: 0ace338d-38dd-4af2-a9e0-3be40a67ad22
-        error_code: NOT_FOUND
+        error_code: UNPROCESSABLE_ENTITY
         error_description: "No answer is found with ID: b8bdcc26-a228-4fbd-806d-570dc4df6e00."
 
-    FeedbackTransactionIdNotFound404Example:
+    FeedbackTransactionIdNotFound422Example:
       value:
         request_id: 5fb15e06-1a9c-42aa-8eb7-7542be0a1fdd
-        error_code: NOT_FOUND
+        error_code: UNPROCESSABLE_ENTITY
         error_description: "No transaction is found with ID: 3a10fdc6-52a9-4331-bb36-b8ba5121736e"
 
-    FeedbackInsightIdNotFound404Example:
+    FeedbackInsightIdNotFound422Example:
       value:
         request_id: 0ace338d-38dd-4af2-a9e0-3be40a67ad22
-        error_code: NOT_FOUND
+        error_code: UNPROCESSABLE_ENTITY
         error_description: "No insight is found with ID: b8bdcc26-a228-4fbd-806d-570dc4df6e00."
 
     FeedbackInvalidReference400Example:
@@ -4338,44 +4172,6 @@ components:
           maximum: 100
           description: The percentage breakdown of a month's footprint for a given category (precise to 3 decimal places).
           example: 24.236
-
-    FullAddress:
-      description: |
-        holds address information
-      type: object
-      required:
-        - street
-        - street_no
-        - postal_code
-        - city
-        - country_code
-      properties:
-        street:
-          description: Name of the street
-          type: string
-          maxLength: 100
-        street_no:
-          description: Street No. Can be also a range
-          type: string
-        postal_code:
-          description: Postal code
-          type: string
-          maxLength: 12
-        city:
-          description: Name of the City
-          type: string
-          maxLength: 180
-        country_code:
-          description: ISO 3166 Alpha-2 country code.
-          type: string
-          minLength: 2
-          maxLength: 2
-      example:
-        street: Second Street
-        street_no: 42
-        postal_code: 11223
-        city: Berlin
-        country_code: DE
 
     MoneyCalculationRequest:
       type: object
@@ -4658,104 +4454,6 @@ components:
           type: string
           description: ISO 4217 currency code. See Info API to get a list of supported/enabled currency codes.
 
-    ContentRatingResponse:
-      type: object
-      required:
-        - request_id
-        - results
-        - errors
-      properties:
-        request_id:
-          $ref: '#/components/schemas/RequestId'
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/ContentRatingResult'
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/ContentRatingError'
-
-    ContentRatingResult:
-      type: object
-      required:
-        - content_id
-      properties:
-        content_id:
-          type: string
-
-    ContentRatingError:
-      type: object
-      required:
-        - content_id
-        - error_code
-        - error_description
-      properties:
-        content_id:
-          type: string
-        error_code:
-          type: string
-        error_description:
-          type: string
-
-    ContentRatingRequest:
-      type: object
-      required:
-        - snapshot_time
-        - ratings
-      properties:
-        snapshot_time:
-          description: Time of snapshot
-          type: string
-          format: date-time
-        ratings:
-          description: list of ratings
-          type: array
-          items:
-            $ref: '#/components/schemas/ContentRating'
-
-    ContentRating:
-      type: object
-      required:
-        - content_id
-        - rating_system
-      properties:
-        content_id:
-          description: ID of content
-          type: string
-        rating_system:
-          description: Type of the used rating system.
-          type: string
-          enum: [ five_star ]
-        five_star:
-          $ref: '#/components/schemas/FiveStarRating'
-
-    FiveStarRating:
-      type: object
-      description: 5-Star rating system. Present, if rating_system is `five_star`
-      required:
-        - 1_star
-        - 2_star
-        - 3_star
-        - 4_star
-        - 5_star
-      properties:
-        1_star:
-          description: total number of 1-star rating
-          type: integer
-        2_star:
-          description: total number of 2-star rating
-          type: integer
-        3_star:
-          description: total number of 3-star rating
-          type: integer
-        4_star:
-          description: total number of 4-star rating
-          type: integer
-        5_star:
-          description: total number of 5-star rating
-          type: integer
-
 
     CO2ModelResponse:
       type: object
@@ -4849,19 +4547,6 @@ components:
           type: string
           description: Description of the category
 
-    CurrencyListResponse:
-      type: object
-      required:
-        - request_id
-        - results
-      properties:
-        request_id:
-          $ref: '#/components/schemas/RequestId'
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/Currency'
-
     Currency:
       type: object
       required:
@@ -4882,19 +4567,6 @@ components:
         enabled:
           type: boolean
           description: True, if the currency is enabled.
-
-    LanguageCodeListResponse:
-      type: object
-      required:
-        - request_id
-        - results
-      properties:
-        request_id:
-          $ref: '#/components/schemas/RequestId'
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/LanguageCode'
 
     LanguageCode:
       type: object
@@ -5157,14 +4829,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/TranslatedComparable'
-
-    ListOfFeedbackLoopsResponse:
-      type: object
-      properties:
-        loops:
-          type: array
-          items:
-            $ref: '#/components/schemas/FeedbackLoops'
 
     FeedbackLoops:
       type: object
@@ -5454,12 +5118,6 @@ components:
       type: string
       maxLength: 64
       example: 12760c06-b928-4ddb-911b-01d1e3e4eb28
-
-    Datetime:
-      description: identifies a bank account / user.
-      type: string
-      format: date-time
-      example: 1c974398-4d2b-44fa-b292-64a46c0e6577
 
     Transaction:
       description: "holds information about bank transactions"
@@ -5796,24 +5454,6 @@ components:
           type: string
         description:
           type: string
-
-    TransactionBulkAnswerResponse:
-      type: object
-      required:
-        - request_id
-        - results
-        - errors
-      properties:
-        request_id:
-          type: string
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/TransactionBulkAnswerResult'
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/TransactionBulkAnswerError'
 
     TransactionBulkAnswerResult:
       type: object
