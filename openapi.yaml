@@ -2788,6 +2788,8 @@ paths:
                   $ref: '#/components/examples/FeedbackTransactionIdNotFound422Example'
                 Answer ID not found:
                   $ref: '#/components/examples/FeedbackAnswerIdNotFound422Example'
+                Invalid Reference provided:
+                  $ref: '#/components/examples/FeedbackInvalidReference422Example'
 
 
   /feedback/v1/unstructured-feedback:
@@ -4118,6 +4120,12 @@ components:
         request_id: 0ace338d-38dd-4af2-a9e0-3be40a67ad22
         error_code: UNPROCESSABLE_ENTITY
         error_description: "No insight is found with ID: b8bdcc26-a228-4fbd-806d-570dc4df6e00."
+
+    FeedbackInvalidReference422Example:
+      value:
+        request_id: 0ace338d-38dd-4af2-a9e0-3be40a67ad22
+        error_code: UNPROCESSABLE_ENTITY
+        error_description: "The provided reference is not correct for answer_id: b8bdcc26-a228-4fbd-806d-570dc4df6e00."
 
     FeedbackInvalidReference400Example:
       value:
