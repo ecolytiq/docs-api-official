@@ -2071,6 +2071,7 @@ paths:
         This includes
         * Transaction data
         * Profile data
+        * Feedback data, both structured and unstructured
 
         > #### Warning 
         >
