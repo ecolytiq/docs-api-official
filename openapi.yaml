@@ -4151,8 +4151,7 @@ components:
         - account_id: 38fe606a-c3bb-4fdd-b73d-3cb14ff926c9
           reference:
             transaction_id: 3a10fdc6-52a9-4331-bb36-b8ba5121736e
-          question:
-            free_text: Would you like to provide additional feedback?
+          question: Would you like to provide additional feedback?
           answer:
             free_text: Why is this footprint so much higher compared to a similar return flight I bought two months ago?
 
