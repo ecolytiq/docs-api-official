@@ -3,7 +3,7 @@ openapi: 3.0.3
 info:
   description: |
     APIs of the ecolytiq SaaS
-  version: v3-2023-12-07
+  version: v3-2024-02-07
   title: ecolytiq SaaS
   contact:
     email: support@ecolytiq.com
@@ -2522,6 +2522,19 @@ paths:
           schema:
             type: string
           example: aecdcc5f-e128-4814-93c3-57a4382675e5
+        - name: "sub_account_ids"
+          in: "query"
+          description: Provides aggregated CO2 footprints for the given sub_account_ids that can be provided by commercial banking users.
+          required: false
+          style: form
+          explode: false
+          schema:
+            type: array
+            items:
+              type: string
+          example:
+            - 817811d6-7eee-4882-8274-7788b56be515
+            - 6e50be2f-5f72-48e9-b55e-d10f1b77cb13
         - name: from
           in: query
           required: false
@@ -4146,15 +4159,6 @@ components:
           answer_id: fd91e306-5e3c-4fe2-81a2-0fe22717ed21
           free_text: It is too abstract for me. Could you add some examples, to make it more comprehensible?
 
-    FeedbackRequestFreetextToFreetextExample:
-      value:
-        - account_id: 38fe606a-c3bb-4fdd-b73d-3cb14ff926c9
-          reference:
-            transaction_id: 3a10fdc6-52a9-4331-bb36-b8ba5121736e
-          question: Would you like to provide additional feedback?
-          answer:
-            free_text: Why is this footprint so much higher compared to a similar return flight I bought two months ago?
-
     FeedbackAnswerIdNotFound422Example:
       value:
         request_id: 0ace338d-38dd-4af2-a9e0-3be40a67ad22
@@ -4187,19 +4191,19 @@ components:
 
     UnstructuredFeedbackRequestFreetextToBinaryExample:
       value:
-        - account_id: 38fe606a-c3bb-4fdd-b73d-3cb14ff926c9
-          question: Would you recommend this application to your friends?
-          answer:
-            binary_rating: POSITIVE
+        account_id: 38fe606a-c3bb-4fdd-b73d-3cb14ff926c9
+        question: Would you recommend this application to your friends?
+        answer:
+          binary_rating: POSITIVE
 
     UnstructuredFeedbackRequestFreetextToFreetextExample:
       value:
-        - account_id: 38fe606a-c3bb-4fdd-b73d-3cb14ff926c9
-          reference:
-            transaction_id: 3a10fdc6-52a9-4331-bb36-b8ba5121736e
-          question: Would you like to provide additional feedback?
-          answer:
-            free_text: Why is this footprint so much higher compared to a similar return flight I bought two months ago?
+        account_id: 38fe606a-c3bb-4fdd-b73d-3cb14ff926c9
+        reference:
+          transaction_id: 3a10fdc6-52a9-4331-bb36-b8ba5121736e
+        question: Would you like to provide additional feedback?
+        answer:
+          free_text: Why is this footprint so much higher compared to a similar return flight I bought two months ago?
 
 
   schemas:
