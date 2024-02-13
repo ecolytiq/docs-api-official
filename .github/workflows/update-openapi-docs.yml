@@ -1,6 +1,9 @@
 name: Fetch OpenAPI Specification from Gateway and Build Docs
 
 on:
+  push:
+    branches:
+      - refactor-api-docs-generation
   workflow_dispatch:
   repository_dispatch:
     types: [trigger-build]
