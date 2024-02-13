@@ -13,7 +13,7 @@ permissions:
   pull-requests: write
 
 jobs:
-  prepare-and-build:
+  build-and-update-docs:  # More descriptive name for the job
     runs-on: ubuntu-latest
 
     steps:
@@ -22,23 +22,17 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Fetch openapi.yaml from the gateway repo
-        uses: actions/checkout@v4
-        with:
-          repository: ecolytiq/gateway
-          ref: main
-          token: ${{ secrets.CI_ACTIONS_PAT }}
-          path: gateway
-
-      - name: Setup variables
-        id: vars
+      - name: Download openapi.yaml file
         run: |
-          DATE_TIME="$(date +'%Y%m%d-%H%M%S')"
-          echo "::set-output name=branch::update-openapi-${DATE_TIME}"
-          echo "::set-output name=datetime::${DATE_TIME}"
+          curl -H "Authorization: token ${{ secrets.CI_ACTIONS_PAT }}" \
+               -H "Accept: application/vnd.github.v3.raw" \
+               -L "https://api.github.com/repos/ecolytiq/gateway/contents/src/main/resources/openapi.yaml?ref=main" \
+               -o openapi.yaml
 
-      - name: Copy openapi.yaml to the root directory of docs-api-official
-        run: cp gateway/src/main/resources/openapi.yaml ./openapi.yaml
+      - name: Setup variables using Environment Files
+        run: |
+          echo "BRANCH_NAME=update-openapi-$(date +'%Y%m%d-%H%M%S')" >> $GITHUB_ENV
+          echo "DATE_TIME=$(date +'%Y%m%d-%H%M%S')" >> $GITHUB_ENV
 
       - name: Execute build.sh script
         run: bash build.sh
@@ -48,11 +42,11 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           commit-message: "Update OpenAPI spec and build output"
-          title: "Auto-update OpenAPI documentation [${{ steps.vars.outputs.datetime }}]"
+          title: "Auto-update OpenAPI documentation [${{ env.DATE_TIME }}]"
           body: |
             This PR updates the OpenAPI documentation.
             
-            Preview: [https://htmlpreview.github.io/?https://github.com/ecolytiq/docs-api-official/blob/${{ steps.vars.outputs.branch }}/index.html](https://htmlpreview.github.io/?https://github.com/ecolytiq/docs-api-official/blob/${{ steps.vars.outputs.branch }}/index.html)
-          branch: ${{ steps.vars.outputs.branch }}
+            Preview: [https://htmlpreview.github.io/?https://github.com/ecolytiq/docs-api-official/blob/${{ env.BRANCH_NAME }}/index.html](https://htmlpreview.github.io/?https://github.com/ecolytiq/docs-api-official/blob/${{ env.BRANCH_NAME }}/index.html)
+          branch: ${{ env.BRANCH_NAME }}
           delete-branch: true
           signoff: false
