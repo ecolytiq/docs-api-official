@@ -31,13 +31,8 @@ jobs:
 
       - name: Setup variables using Environment Files
         run: |
-          # For the branch name
-          BRANCH_DATETIME="$(date +'%Y-%m-%d_%H-%M-%S')"
-          echo "BRANCH_DATETIME=$BRANCH_DATETIME" >> $GITHUB_ENV
-          
-          BRANCH_NAME="update-openapi-${{ env.BRANCH_DATETIME }}"
+          BRANCH_NAME="update-openapi-$(date +'%Y-%m-%d_%H-%M-%S')"
           echo "BRANCH_NAME=$BRANCH_NAME" >> $GITHUB_ENV
-          
           
           # For the title, a more readable format
           TITLE_DATETIME="$(date +'%Y-%m-%d %H:%M:%S')"
