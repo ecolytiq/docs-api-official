@@ -31,8 +31,17 @@ jobs:
 
       - name: Setup variables using Environment Files
         run: |
-          echo "BRANCH_NAME=update-openapi-$(date +'%Y%m%d-%H%M%S')" >> $GITHUB_ENV
-          echo "DATE_TIME=$(date +'%Y%m%d-%H%M%S')" >> $GITHUB_ENV
+          # For the branch name
+          BRANCH_DATETIME="$(date +'%Y-%m-%d_%H-%M-%S')"
+          echo "BRANCH_DATETIME=$BRANCH_DATETIME" >> $GITHUB_ENV
+          
+          BRANCH_NAME="update-openapi-${{ env.BRANCH_DATETIME }}"
+          echo "BRANCH_NAME=$BRANCH_NAME" >> $GITHUB_ENV
+          
+          
+          # For the title, a more readable format
+          TITLE_DATETIME="$(date +'%Y-%m-%d %H:%M:%S')"
+          echo "TITLE_DATETIME=$TITLE_DATETIME" >> $GITHUB_ENV
 
       - name: Execute build.sh script
         run: bash build.sh
@@ -41,10 +50,14 @@ jobs:
         uses: peter-evans/create-pull-request@v6
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          commit-message: "Update OpenAPI spec and build output"
-          title: "Auto-update OpenAPI documentation [${{ env.DATE_TIME }}]"
+          commit-message: "Update API spec and build output"
+          title: "Update API documentation [${{ env.TITLE_DATETIME }}]"
           body: |
-            This PR updates the OpenAPI documentation.
+            This PR updates
+            - the OpenAPI documentation `./openapi.yaml` is copied from the gateway repositories main branch
+            - the redoc generated documentation is generated to `./index.html`
+            - the postman collection is generated to `./ecolytiq-api.postman_collection.json`
+            
             
             Preview: [https://htmlpreview.github.io/?https://github.com/ecolytiq/docs-api-official/blob/${{ env.BRANCH_NAME }}/index.html](https://htmlpreview.github.io/?https://github.com/ecolytiq/docs-api-official/blob/${{ env.BRANCH_NAME }}/index.html)
           branch: ${{ env.BRANCH_NAME }}
