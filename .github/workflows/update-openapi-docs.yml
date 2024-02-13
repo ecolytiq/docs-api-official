@@ -13,7 +13,7 @@ permissions:
   pull-requests: write
 
 jobs:
-  build-and-update-docs:  # More descriptive name for the job
+  build-and-update-docs:
     runs-on: ubuntu-latest
 
     steps:
@@ -53,7 +53,6 @@ jobs:
             - the redoc generated documentation is generated to `./index.html`
             - the postman collection is generated to `./ecolytiq-api.postman_collection.json`
             
-            Preview: [https://raw.githack.com/ecolytiq/docs-api-official/${{env.BRANCH_NAME}}/index.html](https://raw.githack.com/ecolytiq/docs-api-official/update-openapi-2024-02-13_15-05-58/index.html)
+            Preview: [https://raw.githack.com/ecolytiq/docs-api-official/${{env.BRANCH_NAME}}/index.html](https://raw.githack.com/ecolytiq/docs-api-official/${{env.BRANCH_NAME}}/index.html)
           branch: ${{ env.BRANCH_NAME }}
-          delete-branch: true
           signoff: false
