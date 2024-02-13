@@ -1,0 +1,55 @@
+name: Fetch OpenAPI Specification from Gateway and Build Docs
+
+on:
+  workflow_dispatch:
+  repository_dispatch:
+    types: [trigger-build]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  prepare-and-build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout docs-api-official repo
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Fetch openapi.yaml from the gateway repo
+        uses: actions/checkout@v4
+        with:
+          repository: ecolytiq/gateway
+          ref: main
+          token: ${{ secrets.CI_ACTIONS_PAT }}
+          path: gateway
+
+      - name: Setup variables
+        id: vars
+        run: |
+          DATE_TIME="$(date +'%Y%m%d-%H%M%S')"
+          echo "::set-output name=branch::update-openapi-${DATE_TIME}"
+          echo "::set-output name=datetime::${DATE_TIME}"
+
+      - name: Copy openapi.yaml to the root directory of docs-api-official
+        run: cp gateway/src/main/resources/openapi.yaml ./openapi.yaml
+
+      - name: Execute build.sh script
+        run: bash build.sh
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "Update OpenAPI spec and build output"
+          title: "Auto-update OpenAPI documentation [${{ steps.vars.outputs.datetime }}]"
+          body: |
+            This PR updates the OpenAPI documentation.
+            
+            Preview: [https://htmlpreview.github.io/?https://github.com/ecolytiq/docs-api-official/blob/${{ steps.vars.outputs.branch }}/index.html](https://htmlpreview.github.io/?https://github.com/ecolytiq/docs-api-official/blob/${{ steps.vars.outputs.branch }}/index.html)
+          branch: ${{ steps.vars.outputs.branch }}
+          delete-branch: true
+          signoff: false
