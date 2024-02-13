@@ -5,8 +5,8 @@ on:
     branches:
       - refactor-api-docs-generation
   workflow_dispatch:
-#  repository_dispatch:
-#    types: [trigger-build]
+  repository_dispatch:
+    types: [trigger-build]
 
 permissions:
   contents: write
