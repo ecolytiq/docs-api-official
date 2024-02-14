@@ -22,7 +22,7 @@ jobs:
         run: |
           curl -H "Authorization: token ${{ secrets.CI_ACTIONS_PAT }}" \
                -H "Accept: application/vnd.github.v3.raw" \
-               -L "https://api.github.com/repos/ecolytiq/gateway/contents/src/add-api-docs-build-trigger/resources/openapi.yaml?ref=main" \
+               -L "https://api.github.com/repos/ecolytiq/gateway/contents/src/main/resources/openapi.yaml?ref=add-api-docs-build-trigger" \
                -o openapi.yaml
 
       - name: Setup variables using Environment Files
