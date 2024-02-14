@@ -1,0 +1,53 @@
+name: Fetch OpenAPI Specification from Gateway and Build Docs
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  build-and-update-docs:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout docs-api-official repo
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Download openapi.yaml file
+        run: |
+          curl -H "Authorization: token ${{ secrets.CI_ACTIONS_PAT }}" \
+               -H "Accept: application/vnd.github.v3.raw" \
+               -L "https://api.github.com/repos/ecolytiq/gateway/contents/src/main/resources/openapi.yaml?ref=main" \
+               -o openapi.yaml
+
+      - name: Setup variables using Environment Files
+        run: |
+          BRANCH_NAME="update-openapi-$(date +'%Y-%m-%d_%H-%M-%S')"
+          echo "BRANCH_NAME=$BRANCH_NAME" >> $GITHUB_ENV
+          
+          # For the title, a more readable format
+          TITLE_DATETIME="$(date +'%Y-%m-%d %H:%M:%S')"
+          echo "TITLE_DATETIME=$TITLE_DATETIME" >> $GITHUB_ENV
+
+      - name: Execute build.sh script
+        run: bash build.sh
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "Update API spec and build output"
+          title: "Update API documentation [${{ env.TITLE_DATETIME }}]"
+          body: |
+            This PR updates
+            - the OpenAPI documentation `./openapi.yaml` is copied from the gateway repositories main branch
+            - the redoc generated documentation is generated to `./index.html`
+            - the postman collection is generated to `./ecolytiq-api.postman_collection.json`
+            
+            Preview: [https://raw.githack.com/ecolytiq/docs-api-official/${{env.BRANCH_NAME}}/index.html](https://raw.githack.com/ecolytiq/docs-api-official/${{env.BRANCH_NAME}}/index.html)
+          branch: ${{ env.BRANCH_NAME }}
+          signoff: false
