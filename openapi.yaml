@@ -3,7 +3,8 @@ openapi: 3.0.3
 info:
   description: |
     APIs of the ecolytiq SaaS
-  version: v3-2023-12-07
+    Check if this trigger workflow and PR creation in docs-api-official v8 ⚠️
+  version: v3-2024-02-12
   title: ecolytiq SaaS
   contact:
     email: support@ecolytiq.com
@@ -140,7 +141,6 @@ tags:
       | 404 - Not Found                    | The requested resource doesn't exist.                                                            |
       | 409 - Conflict                     | The request conflicts with another request (perhaps due to using the same idempotent key).       |
       | 422 - Unprocessable Entity         | Unprocessable Entity                                                                             |
-      | 429 - Too Many Requests            | Too many requests hit the API too quickly. We recommend an exponential backoff of your requests. |
       | 500, 502, 503, 504 - Server Errors | Something went wrong on ecolytiq's end.                                                          |
       
       ## ecolytiq Error Code Summary
@@ -150,18 +150,6 @@ tags:
       | Error Code       | Description                                                            | API                       |
       |------------------|------------------------------------------------------------------------|---------------------------|
       | NOT_FOUND        | Central entity type in request, or anything related to it, is missing. | [Get Insights by IDs](#operation/getContentInsights) <br/> [Get Insights (for a Given Category)](#operation/getContentInsightsRandom) |
-  - name: Rate Limit
-    description: |
-      In each response, you find Rate Limit Information fields like `X-RateLimit-Limit`, `X-RateLimit-Remaining`, and `X-RateLimit-Reset`.
-      
-      ## Rate Limit Headers
-      | Header                | Description                                                         |
-      |-----------------------|---------------------------------------------------------------------|
-      | X-RateLimit-Limit     | Number of requests for the specific endpoint                        |
-      | X-RateLimit-Remaining | Number of remaining requests for the specific endpoint               |
-      | X-RateLimit-Reset     | Date-Time, when X-RateLimit-Remaining is reset to X-RateLimit-Limit |
-
-      At the moment we do not use rate limits. However, we reserve the right to use them. This will be announced.
   - name: Postman
     description: |
       ## Import Request Collection and Environment
@@ -234,6 +222,13 @@ tags:
       However, a specific end customer may have chosen to live a meat-reduced, meat-free, vegetarian, or vegan diet.
       Hence the average shopping basket will give an inaccurate CO<sub>2</sub> footprint for them.
       To improve the footprint calculation it is possible to store additional information about an end customer and improve the calculation accuracy in turn.
+      
+      The main entities of the profiling API are:
+      - **Questions** that can be asked to the end customer to gather information about their behavior.
+      - **Answers** are predefined choices to answer the questions.
+      - If a user answered a question, we call that process and the resulting question-answer pair **Refinement**. It refines our knowledge about the user.
+      - Account specific **Insights** as described in the [Content API](#tag/Content-API) can be retrieved via the profiling API.
+
   - name: Account API
     description: |
       Should the necessity arise to remove all data of a specific end customer from the ecolytiq platform this can be done using the account API.
@@ -313,13 +308,6 @@ paths:
         '200':
           description: |
             List of supported and enabled CO<sub>2</sub> models.
-          headers:
-            X-RateLimit-Limit:
-              $ref: '#/components/headers/X-RateLimit-Limit'
-            X-RateLimit-Remaining:
-              $ref: '#/components/headers/X-RateLimit-Remaining'
-            X-RateLimit-Reset:
-              $ref: '#/components/headers/X-RateLimit-Reset'
           content:
             application/json:
               schema:
@@ -330,30 +318,6 @@ paths:
         '401':
           description: |
             Unauthorized. Access Token is invalid or expired.
-          headers:
-            X-RateLimit-Limit:
-              $ref: '#/components/headers/X-RateLimit-Limit'
-            X-RateLimit-Remaining:
-              $ref: '#/components/headers/X-RateLimit-Remaining'
-            X-RateLimit-Reset:
-              $ref: '#/components/headers/X-RateLimit-Reset'
-        '429':
-          description: |
-            Rate Limit exceeded.
-          headers:
-            X-RateLimit-Limit:
-              $ref: '#/components/headers/X-RateLimit-Limit'
-            X-RateLimit-Remaining:
-              $ref: '#/components/headers/X-RateLimit-Remaining'
-            X-RateLimit-Reset:
-              $ref: '#/components/headers/X-RateLimit-Reset'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-              examples:
-                Ratelimit:
-                  $ref: '#/components/examples/RateLimit-Example'
 
   /info/v1/category-systems:
     get:
@@ -370,13 +334,6 @@ paths:
         '200':
           description: |
             List of supported and enabled category systems.
-          headers:
-            X-RateLimit-Limit:
-              $ref: '#/components/headers/X-RateLimit-Limit'
-            X-RateLimit-Remaining:
-              $ref: '#/components/headers/X-RateLimit-Remaining'
-            X-RateLimit-Reset:
-              $ref: '#/components/headers/X-RateLimit-Reset'
           content:
             application/json:
               schema:
@@ -387,30 +344,6 @@ paths:
         '401':
           description: |
             Unauthorized. Access Token is invalid or expired.
-          headers:
-            X-RateLimit-Limit:
-              $ref: '#/components/headers/X-RateLimit-Limit'
-            X-RateLimit-Remaining:
-              $ref: '#/components/headers/X-RateLimit-Remaining'
-            X-RateLimit-Reset:
-              $ref: '#/components/headers/X-RateLimit-Reset'
-        '429':
-          description: |
-            Rate Limit exceeded.
-          headers:
-            X-RateLimit-Limit:
-              $ref: '#/components/headers/X-RateLimit-Limit'
-            X-RateLimit-Remaining:
-              $ref: '#/components/headers/X-RateLimit-Remaining'
-            X-RateLimit-Reset:
-              $ref: '#/components/headers/X-RateLimit-Reset'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-              examples:
-                Ratelimit:
-                  $ref: '#/components/examples/RateLimit-Example'
 
   /info/v1/categories:
     get:
@@ -435,13 +368,6 @@ paths:
         '200':
           description: |
             List of categories
-          headers:
-            X-RateLimit-Limit:
-              $ref: '#/components/headers/X-RateLimit-Limit'
-            X-RateLimit-Remaining:
-              $ref: '#/components/headers/X-RateLimit-Remaining'
-            X-RateLimit-Reset:
-              $ref: '#/components/headers/X-RateLimit-Reset'
           content:
             application/json:
               schema:
@@ -452,30 +378,6 @@ paths:
         '401':
           description: |
             Unauthorized. Access Token is invalid or expired.
-          headers:
-            X-RateLimit-Limit:
-              $ref: '#/components/headers/X-RateLimit-Limit'
-            X-RateLimit-Remaining:
-              $ref: '#/components/headers/X-RateLimit-Remaining'
-            X-RateLimit-Reset:
-              $ref: '#/components/headers/X-RateLimit-Reset'
-        '429':
-          description: |
-            Rate Limit exceeded.
-          headers:
-            X-RateLimit-Limit:
-              $ref: '#/components/headers/X-RateLimit-Limit'
-            X-RateLimit-Remaining:
-              $ref: '#/components/headers/X-RateLimit-Remaining'
-            X-RateLimit-Reset:
-              $ref: '#/components/headers/X-RateLimit-Reset'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-              examples:
-                Ratelimit:
-                  $ref: '#/components/examples/RateLimit-Example'
 
   /transactions/v1/transactions:
     post:
@@ -537,13 +439,6 @@ paths:
         '200':
           description: |
             Result of Transaction processing.
-          headers:
-            X-RateLimit-Limit:
-              $ref: '#/components/headers/X-RateLimit-Limit'
-            X-RateLimit-Remaining:
-              $ref: '#/components/headers/X-RateLimit-Remaining'
-            X-RateLimit-Reset:
-              $ref: '#/components/headers/X-RateLimit-Reset'
           content:
             application/json:
               schema:
@@ -559,13 +454,6 @@ paths:
         '202':
           description: |
             Result of Transaction processing.
-          headers:
-            X-RateLimit-Limit:
-              $ref: '#/components/headers/X-RateLimit-Limit'
-            X-RateLimit-Remaining:
-              $ref: '#/components/headers/X-RateLimit-Remaining'
-            X-RateLimit-Reset:
-              $ref: '#/components/headers/X-RateLimit-Reset'
           content:
             application/json:
               schema:
@@ -577,13 +465,6 @@ paths:
         '400':
           description: |
             Bad Request. Size of Transactions is invalid.
-          headers:
-            X-RateLimit-Limit:
-              $ref: '#/components/headers/X-RateLimit-Limit'
-            X-RateLimit-Remaining:
-              $ref: '#/components/headers/X-RateLimit-Remaining'
-            X-RateLimit-Reset:
-              $ref: '#/components/headers/X-RateLimit-Reset'
           content:
             application/json:
               schema:
@@ -597,24 +478,10 @@ paths:
         '401':
           description: |
             Unauthorized. Access Token is invalid or expired.
-          headers:
-            X-RateLimit-Limit:
-              $ref: '#/components/headers/X-RateLimit-Limit'
-            X-RateLimit-Remaining:
-              $ref: '#/components/headers/X-RateLimit-Remaining'
-            X-RateLimit-Reset:
-              $ref: '#/components/headers/X-RateLimit-Reset'
 
         '403':
           description: |
             Forbidden. An existing transaction cannot be overwritten with a different account.
-          headers:
-            X-RateLimit-Limit:
-              $ref: '#/components/headers/X-RateLimit-Limit'
-            X-RateLimit-Remaining:
-              $ref: '#/components/headers/X-RateLimit-Remaining'
-            X-RateLimit-Reset:
-              $ref: '#/components/headers/X-RateLimit-Reset'
           content:
             application/json:
               schema:
@@ -622,24 +489,6 @@ paths:
               examples:
                 Response:
                   $ref: '#/components/examples/AccessDenied403'
-
-        '429':
-          description: |
-            Rate Limit exceeded.
-          headers:
-            X-RateLimit-Limit:
-              $ref: '#/components/headers/X-RateLimit-Limit'
-            X-RateLimit-Remaining:
-              $ref: '#/components/headers/X-RateLimit-Remaining'
-            X-RateLimit-Reset:
-              $ref: '#/components/headers/X-RateLimit-Reset'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-              examples:
-                BadRequest-Example:
-                  $ref: '#/components/examples/RateLimit-Example'
 
     get:
       operationId: getTransactionsTransactions
@@ -664,26 +513,12 @@ paths:
       responses:
         '200':
           description: List of requested Transactions
-          headers:
-            X-RateLimit-Limit:
-              $ref: '#/components/headers/X-RateLimit-Limit'
-            X-RateLimit-Remaining:
-              $ref: '#/components/headers/X-RateLimit-Remaining'
-            X-RateLimit-Reset:
-              $ref: '#/components/headers/X-RateLimit-Reset'
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/TransactionResponse'
         '400':
           description: Bad Request
-          headers:
-            X-RateLimit-Limit:
-              $ref: '#/components/headers/X-RateLimit-Limit'
-            X-RateLimit-Remaining:
-              $ref: '#/components/headers/X-RateLimit-Remaining'
-            X-RateLimit-Reset:
-              $ref: '#/components/headers/X-RateLimit-Reset'
           content:
             application/json:
               schema:
@@ -696,30 +531,6 @@ paths:
         '401':
           description: |
             Unauthorized. Access Token is invalid or expired.
-          headers:
-            X-RateLimit-Limit:
-              $ref: '#/components/headers/X-RateLimit-Limit'
-            X-RateLimit-Remaining:
-              $ref: '#/components/headers/X-RateLimit-Remaining'
-            X-RateLimit-Reset:
-              $ref: '#/components/headers/X-RateLimit-Reset'
-        '429':
-          description: |
-            Rate Limit exceeded.
-          headers:
-            X-RateLimit-Limit:
-              $ref: '#/components/headers/X-RateLimit-Limit'
-            X-RateLimit-Remaining:
-              $ref: '#/components/headers/X-RateLimit-Remaining'
-            X-RateLimit-Reset:
-              $ref: '#/components/headers/X-RateLimit-Reset'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-              examples:
-                BadRequest-Example:
-                  $ref: '#/components/examples/RateLimit-Example'
 
   /transactions/v1/accounts/{account_id}/months/{month}/transactions:
     get:
@@ -844,13 +655,6 @@ paths:
         '200':
           description: |
             Result of Transaction Category Update.
-          headers:
-            X-RateLimit-Limit:
-              $ref: '#/components/headers/X-RateLimit-Limit'
-            X-RateLimit-Remaining:
-              $ref: '#/components/headers/X-RateLimit-Remaining'
-            X-RateLimit-Reset:
-              $ref: '#/components/headers/X-RateLimit-Reset'
           content:
             application/json:
               schema:
@@ -861,13 +665,6 @@ paths:
         '202':
           description: |
             Result of Transaction processing.
-          headers:
-            X-RateLimit-Limit:
-              $ref: '#/components/headers/X-RateLimit-Limit'
-            X-RateLimit-Remaining:
-              $ref: '#/components/headers/X-RateLimit-Remaining'
-            X-RateLimit-Reset:
-              $ref: '#/components/headers/X-RateLimit-Reset'
           content:
             application/json:
               schema:
@@ -878,13 +675,6 @@ paths:
         '400':
           description: |
             Bad Request. Size of Transactions is invalid.
-          headers:
-            X-RateLimit-Limit:
-              $ref: '#/components/headers/X-RateLimit-Limit'
-            X-RateLimit-Remaining:
-              $ref: '#/components/headers/X-RateLimit-Remaining'
-            X-RateLimit-Reset:
-              $ref: '#/components/headers/X-RateLimit-Reset'
           content:
             application/json:
               schema:
@@ -893,35 +683,10 @@ paths:
                 BadRequest-Example:
                   value:
                     $ref: '#/components/examples/BadRequestExample/value'
-                    path: /transaction/v1/update-category
+                    path: /transactions/v1/update-category
         '401':
           description: |
             Unauthorized. Access Token is invalid or expired.
-          headers:
-            X-RateLimit-Limit:
-              $ref: '#/components/headers/X-RateLimit-Limit'
-            X-RateLimit-Remaining:
-              $ref: '#/components/headers/X-RateLimit-Remaining'
-            X-RateLimit-Reset:
-              $ref: '#/components/headers/X-RateLimit-Reset'
-        '429':
-          description: |
-            Rate Limit exceeded.
-          headers:
-            X-RateLimit-Limit:
-              $ref: '#/components/headers/X-RateLimit-Limit'
-            X-RateLimit-Remaining:
-              $ref: '#/components/headers/X-RateLimit-Remaining'
-            X-RateLimit-Reset:
-              $ref: '#/components/headers/X-RateLimit-Reset'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-              examples:
-                BadRequest-Example:
-                  $ref: '#/components/examples/RateLimit-Example'
-
 
   /transactions/v1/refinements:
     get:
@@ -963,13 +728,6 @@ paths:
       responses:
         '200':
           description: A list of transaction ids and their corresponding question ids. If the question is already answered the field `answer_id` is set. Otherwise, it is `null`.
-          headers:
-            X-RateLimit-Limit:
-              $ref: '#/components/headers/X-RateLimit-Limit'
-            X-RateLimit-Remaining:
-              $ref: '#/components/headers/X-RateLimit-Remaining'
-            X-RateLimit-Reset:
-              $ref: '#/components/headers/X-RateLimit-Reset'
           content:
             application/json:
               schema:
@@ -983,13 +741,6 @@ paths:
                   $ref: "#/components/examples/RefinementsUnavailableResponseExample"
         '400':
           description: Bad Request
-          headers:
-            X-RateLimit-Limit:
-              $ref: '#/components/headers/X-RateLimit-Limit'
-            X-RateLimit-Remaining:
-              $ref: '#/components/headers/X-RateLimit-Remaining'
-            X-RateLimit-Reset:
-              $ref: '#/components/headers/X-RateLimit-Reset'
           content:
             application/json:
               schema:
@@ -1000,30 +751,6 @@ paths:
         '401':
           description: |
             Unauthorized. Access Token is invalid or expired.
-          headers:
-            X-RateLimit-Limit:
-              $ref: '#/components/headers/X-RateLimit-Limit'
-            X-RateLimit-Remaining:
-              $ref: '#/components/headers/X-RateLimit-Remaining'
-            X-RateLimit-Reset:
-              $ref: '#/components/headers/X-RateLimit-Reset'
-        '429':
-          description: |
-            Rate Limit exceeded.
-          headers:
-            X-RateLimit-Limit:
-              $ref: '#/components/headers/X-RateLimit-Limit'
-            X-RateLimit-Remaining:
-              $ref: '#/components/headers/X-RateLimit-Remaining'
-            X-RateLimit-Reset:
-              $ref: '#/components/headers/X-RateLimit-Reset'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-              examples:
-                BadRequest-Example:
-                  $ref: '#/components/examples/RateLimit-Example'
     post:
       operationId: postTransactionsRefinements
       security:
@@ -1052,13 +779,6 @@ paths:
       responses:
         '200':
           description: Confirmation that answer is saved
-          headers:
-            X-RateLimit-Limit:
-              $ref: '#/components/headers/X-RateLimit-Limit'
-            X-RateLimit-Remaining:
-              $ref: '#/components/headers/X-RateLimit-Remaining'
-            X-RateLimit-Reset:
-              $ref: '#/components/headers/X-RateLimit-Reset'
           content:
             application/json:
               schema:
@@ -1069,13 +789,6 @@ paths:
         '400':
           description: |
             Bad Request. Size of Transactions is invalid.
-          headers:
-            X-RateLimit-Limit:
-              $ref: '#/components/headers/X-RateLimit-Limit'
-            X-RateLimit-Remaining:
-              $ref: '#/components/headers/X-RateLimit-Remaining'
-            X-RateLimit-Reset:
-              $ref: '#/components/headers/X-RateLimit-Reset'
           content:
             application/json:
               schema:
@@ -1088,31 +801,7 @@ paths:
         '401':
           description: |
             Unauthorized. Access Token is invalid or expired.
-          headers:
-            X-RateLimit-Limit:
-              $ref: '#/components/headers/X-RateLimit-Limit'
-            X-RateLimit-Remaining:
-              $ref: '#/components/headers/X-RateLimit-Remaining'
-            X-RateLimit-Reset:
-              $ref: '#/components/headers/X-RateLimit-Reset'
 
-        '429':
-          description: |
-            Rate Limit exceeded.
-          headers:
-            X-RateLimit-Limit:
-              $ref: '#/components/headers/X-RateLimit-Limit'
-            X-RateLimit-Remaining:
-              $ref: '#/components/headers/X-RateLimit-Remaining'
-            X-RateLimit-Reset:
-              $ref: '#/components/headers/X-RateLimit-Reset'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-              examples:
-                BadRequest-Example:
-                  $ref: '#/components/examples/RateLimit-Example'
 
   /transactions/v1/questions:
     get:
@@ -1160,13 +849,6 @@ paths:
         - $ref: '#/components/parameters/languageCodes'
       responses:
         '200':
-          headers:
-            X-RateLimit-Limit:
-              $ref: '#/components/headers/X-RateLimit-Limit'
-            X-RateLimit-Remaining:
-              $ref: '#/components/headers/X-RateLimit-Remaining'
-            X-RateLimit-Reset:
-              $ref: '#/components/headers/X-RateLimit-Reset'
           description: A list of Questions
           content:
             application/json:
@@ -1175,30 +857,6 @@ paths:
         '401':
           description: |
             Unauthorized. Access Token is invalid or expired.
-          headers:
-            X-RateLimit-Limit:
-              $ref: '#/components/headers/X-RateLimit-Limit'
-            X-RateLimit-Remaining:
-              $ref: '#/components/headers/X-RateLimit-Remaining'
-            X-RateLimit-Reset:
-              $ref: '#/components/headers/X-RateLimit-Reset'
-        '429':
-          description: |
-            Rate Limit exceeded.
-          headers:
-            X-RateLimit-Limit:
-              $ref: '#/components/headers/X-RateLimit-Limit'
-            X-RateLimit-Remaining:
-              $ref: '#/components/headers/X-RateLimit-Remaining'
-            X-RateLimit-Reset:
-              $ref: '#/components/headers/X-RateLimit-Reset'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-              examples:
-                BadRequest-Example:
-                  $ref: '#/components/examples/RateLimit-Example'
 
   /content/v1/comparables:
     get:
@@ -1240,13 +898,6 @@ paths:
         - $ref: "#/components/parameters/languageCodes"
       responses:
         '200':
-          headers:
-            X-RateLimit-Limit:
-              $ref: '#/components/headers/X-RateLimit-Limit'
-            X-RateLimit-Remaining:
-              $ref: '#/components/headers/X-RateLimit-Remaining'
-            X-RateLimit-Reset:
-              $ref: '#/components/headers/X-RateLimit-Reset'
           description: A list of Comparables
           content:
             application/json:
@@ -1257,13 +908,6 @@ paths:
                   $ref: '#/components/examples/ComparableResponseExample'
         '400':
           description: Bad Request
-          headers:
-            X-RateLimit-Limit:
-              $ref: '#/components/headers/X-RateLimit-Limit'
-            X-RateLimit-Remaining:
-              $ref: '#/components/headers/X-RateLimit-Remaining'
-            X-RateLimit-Reset:
-              $ref: '#/components/headers/X-RateLimit-Reset'
           content:
             application/json:
               schema:
@@ -1277,30 +921,6 @@ paths:
         '401':
           description: |
             Unauthorized. Access Token is invalid or expired.
-          headers:
-            X-RateLimit-Limit:
-              $ref: '#/components/headers/X-RateLimit-Limit'
-            X-RateLimit-Remaining:
-              $ref: '#/components/headers/X-RateLimit-Remaining'
-            X-RateLimit-Reset:
-              $ref: '#/components/headers/X-RateLimit-Reset'
-        '429':
-          description: |
-            Rate Limit exceeded.
-          headers:
-            X-RateLimit-Limit:
-              $ref: '#/components/headers/X-RateLimit-Limit'
-            X-RateLimit-Remaining:
-              $ref: '#/components/headers/X-RateLimit-Remaining'
-            X-RateLimit-Reset:
-              $ref: '#/components/headers/X-RateLimit-Reset'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-              examples:
-                Example:
-                  $ref: '#/components/examples/RateLimit-Example'
 
   /content/v1/comparables/random:
     get:
@@ -1335,13 +955,6 @@ paths:
         - $ref: "#/components/parameters/languageCodes"
       responses:
         '200':
-          headers:
-            X-RateLimit-Limit:
-              $ref: '#/components/headers/X-RateLimit-Limit'
-            X-RateLimit-Remaining:
-              $ref: '#/components/headers/X-RateLimit-Remaining'
-            X-RateLimit-Reset:
-              $ref: '#/components/headers/X-RateLimit-Reset'
           description: A list of comparables
           content:
             application/json:
@@ -1353,13 +966,6 @@ paths:
         '400':
           description: |
             Bad Request.
-          headers:
-            X-RateLimit-Limit:
-              $ref: '#/components/headers/X-RateLimit-Limit'
-            X-RateLimit-Remaining:
-              $ref: '#/components/headers/X-RateLimit-Remaining'
-            X-RateLimit-Reset:
-              $ref: '#/components/headers/X-RateLimit-Reset'
           content:
             application/json:
               schema:
@@ -1372,30 +978,6 @@ paths:
         '401':
           description: |
             Unauthorized. Access Token is invalid or expired.
-          headers:
-            X-RateLimit-Limit:
-              $ref: '#/components/headers/X-RateLimit-Limit'
-            X-RateLimit-Remaining:
-              $ref: '#/components/headers/X-RateLimit-Remaining'
-            X-RateLimit-Reset:
-              $ref: '#/components/headers/X-RateLimit-Reset'
-        '429':
-          description: |
-            Rate Limit exceeded.
-          headers:
-            X-RateLimit-Limit:
-              $ref: '#/components/headers/X-RateLimit-Limit'
-            X-RateLimit-Remaining:
-              $ref: '#/components/headers/X-RateLimit-Remaining'
-            X-RateLimit-Reset:
-              $ref: '#/components/headers/X-RateLimit-Reset'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-              examples:
-                Example:
-                  $ref: '#/components/examples/RateLimit-Example'
 
   /content/v1/insights:
     get:
@@ -1423,13 +1005,6 @@ paths:
         - $ref: "#/components/parameters/languageCodesOptional"
       responses:
         '200':
-          headers:
-            X-RateLimit-Limit:
-              $ref: '#/components/headers/X-RateLimit-Limit'
-            X-RateLimit-Remaining:
-              $ref: '#/components/headers/X-RateLimit-Remaining'
-            X-RateLimit-Reset:
-              $ref: '#/components/headers/X-RateLimit-Reset'
           description: A list of insights
           content:
             application/json:
@@ -1445,30 +1020,6 @@ paths:
         '401':
           description: |
             Unauthorized. Access Token is invalid or expired.
-          headers:
-            X-RateLimit-Limit:
-              $ref: '#/components/headers/X-RateLimit-Limit'
-            X-RateLimit-Remaining:
-              $ref: '#/components/headers/X-RateLimit-Remaining'
-            X-RateLimit-Reset:
-              $ref: '#/components/headers/X-RateLimit-Reset'
-        '429':
-          description: |
-            Rate Limit exceeded.
-          headers:
-            X-RateLimit-Limit:
-              $ref: '#/components/headers/X-RateLimit-Limit'
-            X-RateLimit-Remaining:
-              $ref: '#/components/headers/X-RateLimit-Remaining'
-            X-RateLimit-Reset:
-              $ref: '#/components/headers/X-RateLimit-Reset'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-              examples:
-                Example:
-                  $ref: '#/components/examples/RateLimit-Example'
 
   /content/v1/contextual-insights:
     get:
@@ -1495,13 +1046,6 @@ paths:
         - $ref: "#/components/parameters/languageCodes"
       responses:
         '200':
-          headers:
-            X-RateLimit-Limit:
-              $ref: '#/components/headers/X-RateLimit-Limit'
-            X-RateLimit-Remaining:
-              $ref: '#/components/headers/X-RateLimit-Remaining'
-            X-RateLimit-Reset:
-              $ref: '#/components/headers/X-RateLimit-Reset'
           description: A list of insights
           content:
             application/json:
@@ -1513,30 +1057,6 @@ paths:
         '401':
           description: |
             Unauthorized. Access Token is invalid or expired.
-          headers:
-            X-RateLimit-Limit:
-              $ref: '#/components/headers/X-RateLimit-Limit'
-            X-RateLimit-Remaining:
-              $ref: '#/components/headers/X-RateLimit-Remaining'
-            X-RateLimit-Reset:
-              $ref: '#/components/headers/X-RateLimit-Reset'
-        '429':
-          description: |
-            Rate Limit exceeded.
-          headers:
-            X-RateLimit-Limit:
-              $ref: '#/components/headers/X-RateLimit-Limit'
-            X-RateLimit-Remaining:
-              $ref: '#/components/headers/X-RateLimit-Remaining'
-            X-RateLimit-Reset:
-              $ref: '#/components/headers/X-RateLimit-Reset'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-              examples:
-                Example:
-                  $ref: '#/components/examples/RateLimit-Example'
 
 
   /content/v1/insights/random:
@@ -1558,13 +1078,6 @@ paths:
         - $ref: "#/components/parameters/languageCodesOptional"
       responses:
         '200':
-          headers:
-            X-RateLimit-Limit:
-              $ref: '#/components/headers/X-RateLimit-Limit'
-            X-RateLimit-Remaining:
-              $ref: '#/components/headers/X-RateLimit-Remaining'
-            X-RateLimit-Reset:
-              $ref: '#/components/headers/X-RateLimit-Reset'
           description: A list of insights
           content:
             application/json:
@@ -1582,13 +1095,6 @@ paths:
         '400':
           description: |
             Bad Request.
-          headers:
-            X-RateLimit-Limit:
-              $ref: '#/components/headers/X-RateLimit-Limit'
-            X-RateLimit-Remaining:
-              $ref: '#/components/headers/X-RateLimit-Remaining'
-            X-RateLimit-Reset:
-              $ref: '#/components/headers/X-RateLimit-Reset'
           content:
             application/json:
               schema:
@@ -1602,30 +1108,6 @@ paths:
         '401':
           description: |
             Unauthorized. Access Token is invalid or expired.
-          headers:
-            X-RateLimit-Limit:
-              $ref: '#/components/headers/X-RateLimit-Limit'
-            X-RateLimit-Remaining:
-              $ref: '#/components/headers/X-RateLimit-Remaining'
-            X-RateLimit-Reset:
-              $ref: '#/components/headers/X-RateLimit-Reset'
-        '429':
-          description: |
-            Rate Limit exceeded.
-          headers:
-            X-RateLimit-Limit:
-              $ref: '#/components/headers/X-RateLimit-Limit'
-            X-RateLimit-Remaining:
-              $ref: '#/components/headers/X-RateLimit-Remaining'
-            X-RateLimit-Reset:
-              $ref: '#/components/headers/X-RateLimit-Reset'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-              examples:
-                Example:
-                  $ref: '#/components/examples/RateLimit-Example'
 
   /profiling/v1/insights:
     get:
@@ -1659,13 +1141,6 @@ paths:
         - $ref: "#/components/parameters/categories"
       responses:
         '200':
-          headers:
-            X-RateLimit-Limit:
-              $ref: '#/components/headers/X-RateLimit-Limit'
-            X-RateLimit-Remaining:
-              $ref: '#/components/headers/X-RateLimit-Remaining'
-            X-RateLimit-Reset:
-              $ref: '#/components/headers/X-RateLimit-Reset'
           description: Returns a list of content ids for the given accounts
           content:
             application/json:
@@ -1676,13 +1151,6 @@ paths:
                   $ref: '#/components/examples/InsightsProfilingResponseExample'
         '400':
           description: Bad Request.
-          headers:
-            X-RateLimit-Limit:
-              $ref: '#/components/headers/X-RateLimit-Limit'
-            X-RateLimit-Remaining:
-              $ref: '#/components/headers/X-RateLimit-Remaining'
-            X-RateLimit-Reset:
-              $ref: '#/components/headers/X-RateLimit-Reset'
           content:
             application/json:
               schema:
@@ -1695,30 +1163,6 @@ paths:
         '401':
           description: |
             Unauthorized. Access Token is invalid or expired.
-          headers:
-            X-RateLimit-Limit:
-              $ref: '#/components/headers/X-RateLimit-Limit'
-            X-RateLimit-Remaining:
-              $ref: '#/components/headers/X-RateLimit-Remaining'
-            X-RateLimit-Reset:
-              $ref: '#/components/headers/X-RateLimit-Reset'
-        '429':
-          description: |
-            Rate Limit exceeded.
-          headers:
-            X-RateLimit-Limit:
-              $ref: '#/components/headers/X-RateLimit-Limit'
-            X-RateLimit-Remaining:
-              $ref: '#/components/headers/X-RateLimit-Remaining'
-            X-RateLimit-Reset:
-              $ref: '#/components/headers/X-RateLimit-Reset'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-              examples:
-                Example:
-                  $ref: '#/components/examples/RateLimit-Example'
 
   /profiling/v1/contextual-insights:
     get:
@@ -1749,13 +1193,6 @@ paths:
           example: a083e879-b37c-4307-9407-a9825d82800b
       responses:
         '200':
-          headers:
-            X-RateLimit-Limit:
-              $ref: '#/components/headers/X-RateLimit-Limit'
-            X-RateLimit-Remaining:
-              $ref: '#/components/headers/X-RateLimit-Remaining'
-            X-RateLimit-Reset:
-              $ref: '#/components/headers/X-RateLimit-Reset'
           description: Returns a list of content ids for the given accounts
           content:
             application/json:
@@ -1767,13 +1204,6 @@ paths:
         '400':
           description: |
             Bad Request.
-          headers:
-            X-RateLimit-Limit:
-              $ref: '#/components/headers/X-RateLimit-Limit'
-            X-RateLimit-Remaining:
-              $ref: '#/components/headers/X-RateLimit-Remaining'
-            X-RateLimit-Reset:
-              $ref: '#/components/headers/X-RateLimit-Reset'
           content:
             application/json:
               schema:
@@ -1786,30 +1216,6 @@ paths:
         '401':
           description: |
             Unauthorized. Access Token is invalid or expired.
-          headers:
-            X-RateLimit-Limit:
-              $ref: '#/components/headers/X-RateLimit-Limit'
-            X-RateLimit-Remaining:
-              $ref: '#/components/headers/X-RateLimit-Remaining'
-            X-RateLimit-Reset:
-              $ref: '#/components/headers/X-RateLimit-Reset'
-        '429':
-          description: |
-            Rate Limit exceeded.
-          headers:
-            X-RateLimit-Limit:
-              $ref: '#/components/headers/X-RateLimit-Limit'
-            X-RateLimit-Remaining:
-              $ref: '#/components/headers/X-RateLimit-Remaining'
-            X-RateLimit-Reset:
-              $ref: '#/components/headers/X-RateLimit-Reset'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-              examples:
-                Example:
-                  $ref: '#/components/examples/RateLimit-Example'
   /content/v1/explanations:
     get:
       operationId: getContentExplanations
@@ -1835,13 +1241,6 @@ paths:
         - $ref: "#/components/parameters/languageCodes"
       responses:
         '200':
-          headers:
-            X-RateLimit-Limit:
-              $ref: '#/components/headers/X-RateLimit-Limit'
-            X-RateLimit-Remaining:
-              $ref: '#/components/headers/X-RateLimit-Remaining'
-            X-RateLimit-Reset:
-              $ref: '#/components/headers/X-RateLimit-Reset'
           description: A list of explanations
           content:
             application/json:
@@ -1853,30 +1252,6 @@ paths:
         '401':
           description: |
             Unauthorized. Access Token is invalid or expired.
-          headers:
-            X-RateLimit-Limit:
-              $ref: '#/components/headers/X-RateLimit-Limit'
-            X-RateLimit-Remaining:
-              $ref: '#/components/headers/X-RateLimit-Remaining'
-            X-RateLimit-Reset:
-              $ref: '#/components/headers/X-RateLimit-Reset'
-        '429':
-          description: |
-            Rate Limit exceeded.
-          headers:
-            X-RateLimit-Limit:
-              $ref: '#/components/headers/X-RateLimit-Limit'
-            X-RateLimit-Remaining:
-              $ref: '#/components/headers/X-RateLimit-Remaining'
-            X-RateLimit-Reset:
-              $ref: '#/components/headers/X-RateLimit-Reset'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-              examples:
-                Example:
-                  $ref: '#/components/examples/RateLimit-Example'
 
   /content/v1/explanations/random:
     get:
@@ -1897,13 +1272,6 @@ paths:
         - $ref: "#/components/parameters/languageCodes"
       responses:
         '200':
-          headers:
-            X-RateLimit-Limit:
-              $ref: '#/components/headers/X-RateLimit-Limit'
-            X-RateLimit-Remaining:
-              $ref: '#/components/headers/X-RateLimit-Remaining'
-            X-RateLimit-Reset:
-              $ref: '#/components/headers/X-RateLimit-Reset'
           description: A list of explanations
           content:
             application/json:
@@ -1915,13 +1283,6 @@ paths:
         '400':
           description: |
             Bad Request.
-          headers:
-            X-RateLimit-Limit:
-              $ref: '#/components/headers/X-RateLimit-Limit'
-            X-RateLimit-Remaining:
-              $ref: '#/components/headers/X-RateLimit-Remaining'
-            X-RateLimit-Reset:
-              $ref: '#/components/headers/X-RateLimit-Reset'
           content:
             application/json:
               schema:
@@ -1935,30 +1296,6 @@ paths:
         '401':
           description: |
             Unauthorized. Access Token is invalid or expired.
-          headers:
-            X-RateLimit-Limit:
-              $ref: '#/components/headers/X-RateLimit-Limit'
-            X-RateLimit-Remaining:
-              $ref: '#/components/headers/X-RateLimit-Remaining'
-            X-RateLimit-Reset:
-              $ref: '#/components/headers/X-RateLimit-Reset'
-        '429':
-          description: |
-            Rate Limit exceeded.
-          headers:
-            X-RateLimit-Limit:
-              $ref: '#/components/headers/X-RateLimit-Limit'
-            X-RateLimit-Remaining:
-              $ref: '#/components/headers/X-RateLimit-Remaining'
-            X-RateLimit-Reset:
-              $ref: '#/components/headers/X-RateLimit-Reset'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-              examples:
-                Example:
-                  $ref: '#/components/examples/RateLimit-Example'
 
   /profiling/v1/questions:
     get:
@@ -2003,13 +1340,6 @@ paths:
         - $ref: "#/components/parameters/languageCodes"
       responses:
         '200':
-          headers:
-            X-RateLimit-Limit:
-              $ref: '#/components/headers/X-RateLimit-Limit'
-            X-RateLimit-Remaining:
-              $ref: '#/components/headers/X-RateLimit-Remaining'
-            X-RateLimit-Reset:
-              $ref: '#/components/headers/X-RateLimit-Reset'
           description: A list of profiling questions.
           content:
             application/json:
@@ -2021,25 +1351,18 @@ paths:
         '401':
           description: |
             Unauthorized. Access Token is invalid or expired.
-          headers:
-            X-RateLimit-Limit:
-              $ref: '#/components/headers/X-RateLimit-Limit'
-            X-RateLimit-Remaining:
-              $ref: '#/components/headers/X-RateLimit-Remaining'
-            X-RateLimit-Reset:
-              $ref: '#/components/headers/X-RateLimit-Reset'
 
   /profiling/v1/answer:
     post:
-      operationId: postProfilingAnswer
+      operationId: postProfileRefinements
       security:
         - BearerAuth: [ ]
       description: >-
-        Save Answer for a given Question. 
+        Store profile refinements. 
 
-        In the case of pre-defined answers only the `answer_id` and the `account_id` are necessary.
-        If the answer is "free text" the `input` must be submitted as well.
-      summary: Save Answer for a given Question
+        In the case of pre-defined choices to answer a question, providing only the `answer_id` and the `account_id` is sufficient.
+        For "free text" answers the `input` must be submitted as well.
+      summary: Store profile refinements
       tags:
         - Profiling API
       requestBody:
@@ -2054,13 +1377,6 @@ paths:
       responses:
         '200':
           description: Confirmation that answer is saved
-          headers:
-            X-RateLimit-Limit:
-              $ref: '#/components/headers/X-RateLimit-Limit'
-            X-RateLimit-Remaining:
-              $ref: '#/components/headers/X-RateLimit-Remaining'
-            X-RateLimit-Reset:
-              $ref: '#/components/headers/X-RateLimit-Reset'
           content:
             application/json:
               schema:
@@ -2071,13 +1387,37 @@ paths:
         '401':
           description: |
             Unauthorized. Access Token is invalid or expired.
-          headers:
-            X-RateLimit-Limit:
-              $ref: '#/components/headers/X-RateLimit-Limit'
-            X-RateLimit-Remaining:
-              $ref: '#/components/headers/X-RateLimit-Remaining'
-            X-RateLimit-Reset:
-              $ref: '#/components/headers/X-RateLimit-Reset'
+
+  /profiling/v1/accounts/{account_id}/refinements:
+    get:
+      operationId: getProfileRefinementsForAccount
+      summary: "Retrieve refinements for account"
+      description: |
+        Retrieve the latest profile refinements for the specified account. 
+        The result includes only questions that have been answered by the account. 
+        
+        Use cases:
+          - The main use case is to prefill selected answers in the user interface so that users can review & update their answer to a question.
+      tags:
+        - Profiling API
+      parameters:
+        - $ref: '#/components/parameters/accountIdPath'
+      responses:
+        '200':
+          description: "A list of profile refinements for an account."
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProfileRefinementsResponse'
+              examples:
+                Get list of latest refinements for account:
+                  $ref: '#/components/examples/ProfileRefinementsForAccountResponseExample'
+                Account did not answer questions yet or does not exist:
+                  $ref: '#/components/examples/ProfileRefinementsForAccountEmptyResponseExample'
+        '401':
+          description: |
+            Unauthorized. Access Token is invalid or expired.
+
 
   /account/v1/delete-accounts:
     post:
@@ -2113,13 +1453,6 @@ paths:
       responses:
         '200':
           description: Confirmation that the request has been processed
-          headers:
-            X-RateLimit-Limit:
-              $ref: '#/components/headers/X-RateLimit-Limit'
-            X-RateLimit-Remaining:
-              $ref: '#/components/headers/X-RateLimit-Remaining'
-            X-RateLimit-Reset:
-              $ref: '#/components/headers/X-RateLimit-Reset'
           content:
             application/json:
               schema:
@@ -2129,13 +1462,6 @@ paths:
                   $ref: "#/components/examples/Delete-Account-Response-Example"
         '202':
           description: Confirmation that the request can be handled
-          headers:
-            X-RateLimit-Limit:
-              $ref: '#/components/headers/X-RateLimit-Limit'
-            X-RateLimit-Remaining:
-              $ref: '#/components/headers/X-RateLimit-Remaining'
-            X-RateLimit-Reset:
-              $ref: '#/components/headers/X-RateLimit-Reset'
           content:
             application/json:
               schema:
@@ -2143,13 +1469,6 @@ paths:
         '401':
           description: |
             Unauthorized. Access Token is invalid or expired.
-          headers:
-            X-RateLimit-Limit:
-              $ref: '#/components/headers/X-RateLimit-Limit'
-            X-RateLimit-Remaining:
-              $ref: '#/components/headers/X-RateLimit-Remaining'
-            X-RateLimit-Reset:
-              $ref: '#/components/headers/X-RateLimit-Reset'
 
 
   /action/v1/projects:
@@ -2178,13 +1497,6 @@ paths:
       responses:
         '200':
           description: A List of climate projects
-          headers:
-            X-RateLimit-Limit:
-              $ref: '#/components/headers/X-RateLimit-Limit'
-            X-RateLimit-Remaining:
-              $ref: '#/components/headers/X-RateLimit-Remaining'
-            X-RateLimit-Reset:
-              $ref: '#/components/headers/X-RateLimit-Reset'
           content:
             application/json:
               schema:
@@ -2195,13 +1507,6 @@ paths:
         '400':
           description: |
             Bad Request.
-          headers:
-            X-RateLimit-Limit:
-              $ref: '#/components/headers/X-RateLimit-Limit'
-            X-RateLimit-Remaining:
-              $ref: '#/components/headers/X-RateLimit-Remaining'
-            X-RateLimit-Reset:
-              $ref: '#/components/headers/X-RateLimit-Reset'
           content:
             application/json:
               schema:
@@ -2214,30 +1519,6 @@ paths:
         '401':
           description: |
             Unauthorized. Access Token is invalid or expired.
-          headers:
-            X-RateLimit-Limit:
-              $ref: '#/components/headers/X-RateLimit-Limit'
-            X-RateLimit-Remaining:
-              $ref: '#/components/headers/X-RateLimit-Remaining'
-            X-RateLimit-Reset:
-              $ref: '#/components/headers/X-RateLimit-Reset'
-        '429':
-          description: |
-            Rate Limit exceeded.
-          headers:
-            X-RateLimit-Limit:
-              $ref: '#/components/headers/X-RateLimit-Limit'
-            X-RateLimit-Remaining:
-              $ref: '#/components/headers/X-RateLimit-Remaining'
-            X-RateLimit-Reset:
-              $ref: '#/components/headers/X-RateLimit-Reset'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-              examples:
-                Example:
-                  $ref: '#/components/examples/RateLimit-Example'
 
   /reporting/v1/orders:
     get:
@@ -2275,13 +1556,6 @@ paths:
       responses:
         '200':
           description: An Order Report
-          headers:
-            X-RateLimit-Limit:
-              $ref: '#/components/headers/X-RateLimit-Limit'
-            X-RateLimit-Remaining:
-              $ref: '#/components/headers/X-RateLimit-Remaining'
-            X-RateLimit-Reset:
-              $ref: '#/components/headers/X-RateLimit-Reset'
           content:
             application/json:
               schema:
@@ -2292,13 +1566,6 @@ paths:
         '400':
           description: |
             Bad Request.
-          headers:
-            X-RateLimit-Limit:
-              $ref: '#/components/headers/X-RateLimit-Limit'
-            X-RateLimit-Remaining:
-              $ref: '#/components/headers/X-RateLimit-Remaining'
-            X-RateLimit-Reset:
-              $ref: '#/components/headers/X-RateLimit-Reset'
           content:
             application/json:
               schema:
@@ -2313,30 +1580,6 @@ paths:
         '401':
           description: |
             Unauthorized. Access Token is invalid or expired.
-          headers:
-            X-RateLimit-Limit:
-              $ref: '#/components/headers/X-RateLimit-Limit'
-            X-RateLimit-Remaining:
-              $ref: '#/components/headers/X-RateLimit-Remaining'
-            X-RateLimit-Reset:
-              $ref: '#/components/headers/X-RateLimit-Reset'
-        '429':
-          description: |
-            Rate Limit exceeded.
-          headers:
-            X-RateLimit-Limit:
-              $ref: '#/components/headers/X-RateLimit-Limit'
-            X-RateLimit-Remaining:
-              $ref: '#/components/headers/X-RateLimit-Remaining'
-            X-RateLimit-Reset:
-              $ref: '#/components/headers/X-RateLimit-Reset'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-              examples:
-                Example:
-                  $ref: '#/components/examples/RateLimit-Example'
 
   /action/v1/order/carbon:
     post:
@@ -2360,13 +1603,6 @@ paths:
       responses:
         '200':
           description: A List of orders
-          headers:
-            X-RateLimit-Limit:
-              $ref: '#/components/headers/X-RateLimit-Limit'
-            X-RateLimit-Remaining:
-              $ref: '#/components/headers/X-RateLimit-Remaining'
-            X-RateLimit-Reset:
-              $ref: '#/components/headers/X-RateLimit-Reset'
           content:
             application/json:
               schema:
@@ -2377,13 +1613,6 @@ paths:
         '400':
           description: |
             Bad Request.
-          headers:
-            X-RateLimit-Limit:
-              $ref: '#/components/headers/X-RateLimit-Limit'
-            X-RateLimit-Remaining:
-              $ref: '#/components/headers/X-RateLimit-Remaining'
-            X-RateLimit-Reset:
-              $ref: '#/components/headers/X-RateLimit-Reset'
           content:
             application/json:
               schema:
@@ -2396,30 +1625,6 @@ paths:
         '401':
           description: |
             Unauthorized. Access Token is invalid or expired.
-          headers:
-            X-RateLimit-Limit:
-              $ref: '#/components/headers/X-RateLimit-Limit'
-            X-RateLimit-Remaining:
-              $ref: '#/components/headers/X-RateLimit-Remaining'
-            X-RateLimit-Reset:
-              $ref: '#/components/headers/X-RateLimit-Reset'
-        '429':
-          description: |
-            Rate Limit exceeded.
-          headers:
-            X-RateLimit-Limit:
-              $ref: '#/components/headers/X-RateLimit-Limit'
-            X-RateLimit-Remaining:
-              $ref: '#/components/headers/X-RateLimit-Remaining'
-            X-RateLimit-Reset:
-              $ref: '#/components/headers/X-RateLimit-Reset'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-              examples:
-                Example:
-                  $ref: '#/components/examples/RateLimit-Example'
 
   /action/v1/order/amount:
     post:
@@ -2443,13 +1648,6 @@ paths:
       responses:
         '200':
           description: A List of orders
-          headers:
-            X-RateLimit-Limit:
-              $ref: '#/components/headers/X-RateLimit-Limit'
-            X-RateLimit-Remaining:
-              $ref: '#/components/headers/X-RateLimit-Remaining'
-            X-RateLimit-Reset:
-              $ref: '#/components/headers/X-RateLimit-Reset'
           content:
             application/json:
               schema:
@@ -2461,13 +1659,6 @@ paths:
         '400':
           description: |
             Bad Request.
-          headers:
-            X-RateLimit-Limit:
-              $ref: '#/components/headers/X-RateLimit-Limit'
-            X-RateLimit-Remaining:
-              $ref: '#/components/headers/X-RateLimit-Remaining'
-            X-RateLimit-Reset:
-              $ref: '#/components/headers/X-RateLimit-Reset'
           content:
             application/json:
               schema:
@@ -2480,30 +1671,6 @@ paths:
         '401':
           description: |
             Unauthorized. Access Token is invalid or expired.
-          headers:
-            X-RateLimit-Limit:
-              $ref: '#/components/headers/X-RateLimit-Limit'
-            X-RateLimit-Remaining:
-              $ref: '#/components/headers/X-RateLimit-Remaining'
-            X-RateLimit-Reset:
-              $ref: '#/components/headers/X-RateLimit-Reset'
-        '429':
-          description: |
-            Rate Limit exceeded.
-          headers:
-            X-RateLimit-Limit:
-              $ref: '#/components/headers/X-RateLimit-Limit'
-            X-RateLimit-Remaining:
-              $ref: '#/components/headers/X-RateLimit-Remaining'
-            X-RateLimit-Reset:
-              $ref: '#/components/headers/X-RateLimit-Reset'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-              examples:
-                Example:
-                  $ref: '#/components/examples/RateLimit-Example'
 
   /statistic/v1/accounts/{account_id}/footprints:
     get:
@@ -2522,6 +1689,19 @@ paths:
           schema:
             type: string
           example: aecdcc5f-e128-4814-93c3-57a4382675e5
+        - name: "sub_account_ids"
+          in: "query"
+          description: Provides aggregated CO2 footprints for the given sub_account_ids that can be provided by commercial banking users.
+          required: false
+          style: form
+          explode: false
+          schema:
+            type: array
+            items:
+              type: string
+          example:
+            - 817811d6-7eee-4882-8274-7788b56be515
+            - 6e50be2f-5f72-48e9-b55e-d10f1b77cb13
         - name: from
           in: query
           required: false
@@ -2920,23 +2100,15 @@ components:
         minimum: 1
         maximum: 10
         example: 2
-
-
-
-  headers:
-    X-RateLimit-Limit:
-      schema:
-        type: integer
-      description: Request limit per hour.
-    X-RateLimit-Remaining:
-      schema:
-        type: integer
-      description: The number of requests left for the time window.
-    X-RateLimit-Reset:
+    accountIdPath:
+      name: account_id
+      in: path
+      required: true
+      description: "The ID of the user or bank account."
       schema:
         type: string
-        format: date-time
-      description: The UTC date/time at which the current rate limit window resets.
+        example: "aecdcc5f-e128-4814-93c3-57a4382675e5"
+        maxLength: 64
 
   securitySchemes:
     BasicAuth:
@@ -3263,6 +2435,18 @@ components:
               unit: g
         errors: [ ]
 
+    ProfileRefinementsForAccountResponseExample:
+      value:
+        refinements:
+          - question_id: "6b988e5a-5540-42d5-a0a7-d24ff054c2f9"
+            answer_id: "9d1d0a2b-597b-4608-8371-9af6e178c969"
+            input: "12"
+          - question_id: "4f8d7bdf-6906-4680-a1d8-b05468b3e530"
+            answer_id: "0d1d0a2b-597b-4608-8371-9af6e178c969"
+
+    ProfileRefinementsForAccountEmptyResponseExample:
+      value:
+        refinements: []
 
     InsightsResponseExample:
       value:
@@ -3438,11 +2622,6 @@ components:
         request_id: 7ujr49ae4a14236
         error_code: "NOT_FOUND"
         error_description: "meta-category 'foods' for system 'ECOLYTIQ_V2' not found."
-    RateLimit-Example:
-      value:
-        request_id: 6bf3202ade4a7411
-        error_code: "rate.limit.exceeded"
-        error_description: "Rate limit exceeded. Try again later."
     AccessDenied403:
       value:
         request_id: 1754sadf6721547
@@ -4146,15 +3325,6 @@ components:
           answer_id: fd91e306-5e3c-4fe2-81a2-0fe22717ed21
           free_text: It is too abstract for me. Could you add some examples, to make it more comprehensible?
 
-    FeedbackRequestFreetextToFreetextExample:
-      value:
-        - account_id: 38fe606a-c3bb-4fdd-b73d-3cb14ff926c9
-          reference:
-            transaction_id: 3a10fdc6-52a9-4331-bb36-b8ba5121736e
-          question: Would you like to provide additional feedback?
-          answer:
-            free_text: Why is this footprint so much higher compared to a similar return flight I bought two months ago?
-
     FeedbackAnswerIdNotFound422Example:
       value:
         request_id: 0ace338d-38dd-4af2-a9e0-3be40a67ad22
@@ -4187,19 +3357,19 @@ components:
 
     UnstructuredFeedbackRequestFreetextToBinaryExample:
       value:
-        - account_id: 38fe606a-c3bb-4fdd-b73d-3cb14ff926c9
-          question: Would you recommend this application to your friends?
-          answer:
-            binary_rating: POSITIVE
+        account_id: 38fe606a-c3bb-4fdd-b73d-3cb14ff926c9
+        question: Would you recommend this application to your friends?
+        answer:
+          binary_rating: POSITIVE
 
     UnstructuredFeedbackRequestFreetextToFreetextExample:
       value:
-        - account_id: 38fe606a-c3bb-4fdd-b73d-3cb14ff926c9
-          reference:
-            transaction_id: 3a10fdc6-52a9-4331-bb36-b8ba5121736e
-          question: Would you like to provide additional feedback?
-          answer:
-            free_text: Why is this footprint so much higher compared to a similar return flight I bought two months ago?
+        account_id: 38fe606a-c3bb-4fdd-b73d-3cb14ff926c9
+        reference:
+          transaction_id: 3a10fdc6-52a9-4331-bb36-b8ba5121736e
+        question: Would you like to provide additional feedback?
+        answer:
+          free_text: Why is this footprint so much higher compared to a similar return flight I bought two months ago?
 
 
   schemas:
@@ -5417,6 +4587,36 @@ components:
           items:
             $ref: '#/components/schemas/Translation'
 
+    ProfileRefinementsResponse:
+      type: object
+      required:
+        - refinements
+      properties:
+        refinements:
+          type: array
+          description: "A list of profile refinements."
+          items:
+            $ref: '#/components/schemas/ProfileRefinementResponseItem'
+
+    ProfileRefinementResponseItem:
+      type: object
+      required:
+        - question_id
+        - answer_id
+      properties:
+        question_id:
+          type: string
+          example: "6b988e5a-5540-42d5-a0a7-d24ff054c2f9"
+          description: "The ID of the question that was answered."
+        answer_id:
+          type: string
+          example: "9d1d0a2b-597b-4608-8371-9af6e178c969"
+          description: "The ID of the answer that was given."
+        input:
+          type: string
+          example: "12"
+          description: "Additional user input that answers the question, e.g. for the question \"How many vehicles are in your fleet?\""
+
     BulkAnswerResponse:
       type: object
       required:
@@ -5808,4 +5008,3 @@ components:
           enum: [ POSITIVE, NEGATIVE ]
           description: |
             A binary answer option, that can be used e.g. for yes/no, agree/disagree, or like/don't like type of questions.
-
