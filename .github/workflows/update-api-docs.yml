@@ -2,6 +2,9 @@ name: Fetch OpenAPI Specification from Gateway and Build Docs
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - refactor-api-docs-generation
 
 permissions:
   contents: write
