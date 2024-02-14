@@ -1,12 +1,7 @@
 name: Fetch OpenAPI Specification from Gateway and Build Docs
 
 on:
-  push:
-    branches:
-      - refactor-api-docs-generation
   workflow_dispatch:
-  repository_dispatch:
-    types: [trigger-build]
 
 permissions:
   contents: write
@@ -22,11 +17,12 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
+      # TODO before merge: Change branch from add-api-docs-build-trigger to main
       - name: Download openapi.yaml file
         run: |
           curl -H "Authorization: token ${{ secrets.CI_ACTIONS_PAT }}" \
                -H "Accept: application/vnd.github.v3.raw" \
-               -L "https://api.github.com/repos/ecolytiq/gateway/contents/src/main/resources/openapi.yaml?ref=main" \
+               -L "https://api.github.com/repos/ecolytiq/gateway/contents/src/add-api-docs-build-trigger/resources/openapi.yaml?ref=main" \
                -o openapi.yaml
 
       - name: Setup variables using Environment Files
