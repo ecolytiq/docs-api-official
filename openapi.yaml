@@ -11,7 +11,7 @@ info:
     url: https://ecolytiq.com
   termsOfService: https://ecolytiq.com/imprint
   x-logo:
-    url: "https://developer.ecolytiq.com/assets/logo.png"
+    url: "static/logo.png"
     backgroundColor: "#132a38"
     altText: "ecolytiq GmbH"
 servers:
