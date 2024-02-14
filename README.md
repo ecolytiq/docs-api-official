@@ -21,7 +21,7 @@ For more details, about the automated creation of PRs check out [the Github acti
 2. Install `Node.js` https://nodejs.org/en and make sure `npx` is added to your PATH. \
    (The version used while writing this was `18.15.0`)
 
-### Update and Build 
+### Build Api Docs
 
 To run and build the docs locally, execute the following command in the root directory of `docs-api-official`:
 
@@ -29,7 +29,7 @@ To run and build the docs locally, execute the following command in the root dir
 ./build.sh
 ```
 
-### Postman Collection from OpenAPI 
+### Build Postman Collection from OpenAPI 
 
 INFO: This step is included in the `build.sh` script and is not needed to be executed additionally.
 
