@@ -22,7 +22,12 @@ For more details, about the automated creation of PRs check out [the Github acti
    (The version used while writing this was `18.15.0`)
 
 ### Update and Build 
-See [Confluence](https://ecolytiq.atlassian.net/wiki/spaces/EC/pages/4528275659/API+Documentation#Changing-API-Docs).
+
+To run and build the docs locally, execute the following command in the root directory of `docs-api-official`:
+
+```console
+./build.sh
+```
 
 ### Postman Collection from OpenAPI 
 
