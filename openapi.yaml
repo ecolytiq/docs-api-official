@@ -2,7 +2,7 @@ openapi: 3.0.3
 
 info:
   description: |
-    Hallo 👋 This is an updated description.
+    APIs of the ecolytiq SaaS
   version: v3-2023-12-07
   title: ecolytiq SaaS
   contact:
