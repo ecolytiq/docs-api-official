@@ -3,7 +3,7 @@ openapi: 3.0.3
 info:
   description: |
     APIs of the ecolytiq SaaS
-  version: v3-2024-02-12
+  version: v3-2024-02-14
   title: ecolytiq SaaS
   contact:
     email: support@ecolytiq.com
@@ -124,6 +124,13 @@ tags:
       Mapping the account identifier to the end customer account **must be handled on the customer client application side**.
 
 
+
+  - name: Changelog
+    description: |
+      ### 2024-02-14
+        - Added [Retrieve refinements for account](#tag/Profiling-API/operation/getProfileRefinementsForAccount) endpoint to retrieve profile refinement information for a given account.
+        - Added query parameter `sub_account_ids` to [Get total or monthly footprints over time](#tag/Statistic-API/operation/getFootprintsOverTime). This enables user to aggregate CO2 footprints for a subset of their sub_account_ids. 
+      
 
   - name: Authentication
   - name: Errors
