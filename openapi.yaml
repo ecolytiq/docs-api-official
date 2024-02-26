@@ -3,7 +3,7 @@ openapi: 3.0.3
 info:
   description: |
     APIs of the ecolytiq SaaS
-  version: v3-2024-02-14
+  version: v3-2024-02-26
   title: ecolytiq SaaS
   contact:
     email: support@ecolytiq.com
@@ -127,10 +127,13 @@ tags:
 
   - name: Changelog
     description: |
-      ### 2024-02-14
-        - Added [Retrieve refinements for account](#tag/Profiling-API/operation/getProfileRefinementsForAccount) endpoint to retrieve profile refinement information for a given account.
-        - Added query parameter `sub_account_ids` to [Get total or monthly footprints over time](#tag/Statistic-API/operation/getFootprintsOverTime). This enables user to aggregate CO2 footprints for a subset of their sub_account_ids. 
+      ### 2024-02-26
+      * Added query parameter `sub_account_ids` to [Get transactions per category for one month](#tag/Transaction-API/operation/getTransactionsForMonth). This enables users to filter transactions by sub_account_ids.
       
+      ### 2024-02-14
+      * Added [Retrieve refinements for account](#tag/Profiling-API/operation/getProfileRefinementsForAccount) endpoint to retrieve profile refinement information for a given account.
+      * Added query parameter `sub_account_ids` to [Get total or monthly footprints over time](#tag/Statistic-API/operation/getFootprintsOverTime). This enables user to aggregate CO2 footprints for a subset of their sub_account_ids. 
+
 
   - name: Authentication
   - name: Errors
@@ -153,9 +156,10 @@ tags:
       ecolytiq errors are used when a request is targeting multiple entities, and the request was unable to be finished fully successful. 
       In this case, the response will contain both successful results and errors. The error codes used for this type of error are the following. 
       
-      | Error Code       | Description                                                            | API                       |
-      |------------------|------------------------------------------------------------------------|---------------------------|
-      | NOT_FOUND        | Central entity type in request, or anything related to it, is missing. | [Get Insights by IDs](#operation/getContentInsights) <br/> [Get Insights (for a Given Category)](#operation/getContentInsightsRandom) |
+      | Error Code             | Description                                                                       | API                       |
+      |------------------------|-----------------------------------------------------------------------------------|---------------------------|
+      | NOT_FOUND              | Central entity type in request, or anything related to it, is missing.            | [Get Insights by IDs](#operation/getContentInsights) <br/> [Get Insights (for a Given Category)](#operation/getContentInsightsRandom) |
+      | CURRENCY_NOT_SUPPORTED | We can't process the transaction because we do not support the provided currency. | [Process transactions](#operation/postTransactionsTransactions)
   - name: Postman
     description: |
       ## Import Request Collection and Environment
@@ -456,6 +460,8 @@ paths:
                   $ref: '#/components/examples/Transaction-Response-Example-200-Commercial'
                 Response with Merchant:
                   $ref: '#/components/examples/Transaction-Response-Example-200-With-Merchant'
+                Transaction currency is not supported:
+                  $ref: '#/components/examples/TransactionResponseCurrencyNotSupportedExample'
 
         '202':
           description: |
@@ -553,6 +559,19 @@ paths:
           schema:
             type: string
           example: aecdcc5f-e128-4814-93c3-57a4382675e5
+        - name: sub_account_ids
+          in: query
+          description: Filter by the given `sub_account_ids` that can be provided by commercial banking users.
+          required: false
+          style: form
+          explode: false
+          schema:
+            type: array
+            items:
+              type: string
+          example:
+            - r56w78ae-909b-26eb-a2cd-99e3b60ebgw3
+            - 2qwe61r4-t3d9-300e-95f6-b9bcf4010987
         - name: month
           in: path
           required: true
@@ -2743,6 +2762,15 @@ components:
               currency_code: "EUR"
             co2_model: "DE"
             datetime: "2022-09-05T11:18:34Z"
+
+    TransactionResponseCurrencyNotSupportedExample:
+      value:
+        request_id: "1d2dd5f3b23d3870"
+        results: []
+        errors:
+          - transaction_id: "62c12ecc-17d7-469f-9ecc-b08e00eb8c24"
+            error_code: "CURRENCY_NOT_SUPPORTED"
+            error_description: "Currency SGD is not supported."
 
     Transaction-Response-Example-200-Retail:
       value:
