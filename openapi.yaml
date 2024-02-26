@@ -153,9 +153,10 @@ tags:
       ecolytiq errors are used when a request is targeting multiple entities, and the request was unable to be finished fully successful. 
       In this case, the response will contain both successful results and errors. The error codes used for this type of error are the following. 
       
-      | Error Code       | Description                                                            | API                       |
-      |------------------|------------------------------------------------------------------------|---------------------------|
-      | NOT_FOUND        | Central entity type in request, or anything related to it, is missing. | [Get Insights by IDs](#operation/getContentInsights) <br/> [Get Insights (for a Given Category)](#operation/getContentInsightsRandom) |
+      | Error Code             | Description                                                                       | API                       |
+      |------------------------|-----------------------------------------------------------------------------------|---------------------------|
+      | NOT_FOUND              | Central entity type in request, or anything related to it, is missing.            | [Get Insights by IDs](#operation/getContentInsights) <br/> [Get Insights (for a Given Category)](#operation/getContentInsightsRandom) |
+      | CURRENCY_NOT_SUPPORTED | We can't process the transaction because we do not support the provided currency. | [Process transactions](#operation/postTransactionsTransactions)
   - name: Postman
     description: |
       ## Import Request Collection and Environment
@@ -456,6 +457,8 @@ paths:
                   $ref: '#/components/examples/Transaction-Response-Example-200-Commercial'
                 Response with Merchant:
                   $ref: '#/components/examples/Transaction-Response-Example-200-With-Merchant'
+                Transaction currency is not supported:
+                  $ref: '#/components/examples/TransactionResponseCurrencyNotSupportedExample'
 
         '202':
           description: |
@@ -2743,6 +2746,15 @@ components:
               currency_code: "EUR"
             co2_model: "DE"
             datetime: "2022-09-05T11:18:34Z"
+
+    TransactionResponseCurrencyNotSupportedExample:
+      value:
+        request_id: "1d2dd5f3b23d3870"
+        results: []
+        errors:
+          - transaction_id: "62c12ecc-17d7-469f-9ecc-b08e00eb8c24"
+            error_code: "CURRENCY_NOT_SUPPORTED"
+            error_description: "Currency SGD is not supported."
 
     Transaction-Response-Example-200-Retail:
       value:
