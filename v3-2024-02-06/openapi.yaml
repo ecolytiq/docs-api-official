@@ -34,7 +34,7 @@ tags:
 
 paths:
 
-  /transactions/v1/vop/transaction:
+  /vop/v1/transactions:
     post:
       operationId: postVopTransaction
       summary: Process a VOP transaction
@@ -42,12 +42,11 @@ paths:
         This endpoint accepts transactions from VOP and processes them to compute their CO<sub>2</sub> amount. For a successful processing of a transaction, the following attributes are required. <br>
         <br><b>Required attributes:</b><br>
         1. <b>Transaction.VipTransactionId:</b> Unique transaction identifier assigned by Visa.<br>
-        2. <b>Transaction.TransactionAmount:</b> Transaction amount.<br>
-        3. <b>Transaction.CurrencyCodeNumeric:</b> Transaction currency code according to this(url) specification.<br>
-        4. <b>Transaction.MerchantCategoryCode:</b> Transaction MCC category code.<br>
-        5. <b>Transaction.TimeStampYYMMDD:</b> Transaction timestamp in ... format.<br>
-        6. <b>Transaction.MerchantCountryCode:</b> Transaction merchant's country code according to this(url) specification.<br>
-        
+        2. <b>Transaction.BillingAmount:</b> Transaction amount.<br>
+        3. <b>Transaction.BillingCurrencyCode:</b> Transaction currency code <br>
+        4. <b>Transaction.MerchantCategoryCode:</b> Transaction MCC category code according to this (url) specification.<br>
+        5. <b>Transaction.MerchantCountryCode:</b> Transaction merchant's country code according to this (url) specification.<br>
+        6. <b>Transaction.TimeStampYYMMDD:</b> Transaction timestamp in `YYYY-MM-DD HH:MM:SS` format.<br>
         <br><b>Optional attributes:</b><br>
         1. <b>Transaction.VisaMerchantName:</b> Transaction merchant's name.<br>
       tags:
@@ -153,18 +152,18 @@ components:
         messageElementsCollection:
           - key: "Transaction.VipTransactionId"
             value: "3423432423424"
-          - key: "Transaction.TransactionAmount"
+          - key: "Transaction.BillingAmount"
             value: "1005"
-          - key: "Transaction.CurrencyCodeNumeric"
+          - key: "Transaction.BillingCurrencyCode"
             value: "840"
           - key: "Transaction.MerchantCategoryCode"
             value: "1101"
+          - key: "Transaction.MerchantCountryCode"
+            value: "840"
           - key: "Transaction.TimeStampYYMMDD"
             value: "2019-07-10T01:00:50"
           - key: "Transaction.VisaMerchantName"
             value: "A Merchant"
-          - key: "Transaction.MerchantCountryCode"
-            value: "840"
 
 
     MessageElementsCollectionExample:
@@ -172,14 +171,16 @@ components:
         messageElement:
           - key: "Transaction.VipTransactionId"
             value: "3423432423424"
-          - key: "Transaction.TransactionAmount"
+          - key: "Transaction.BillingAmount"
             value: "1005"
-          - key: "Transaction.CurrencyCodeNumeric"
+          - key: "Transaction.BillingCurrencyCode"
             value: "840"
           - key: "Transaction.MerchantCategoryCode"
             value: "1101"
+          - key: "Transaction.MerchantCountryCode"
+            value: "840"
           - key: "Transaction.TimeStampYYMMDD"
             value: "2019-07-10T01:00:50"
           - key: "Transaction.VisaMerchantName"
             value: "A Merchant"
-
+            
