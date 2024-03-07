@@ -3,7 +3,7 @@ openapi: 3.0.3
 info:
   description: |
     APIs of the ecolytiq SaaS
-  version: v3-2024-02-26
+  version: v3-2024-03-05
   title: ecolytiq SaaS
   contact:
     email: support@ecolytiq.com
@@ -127,6 +127,9 @@ tags:
 
   - name: Changelog
     description: |
+      ### 2024-03-05
+        - Modified descriptions of `account_id` and `sub_account_id` to prevent misinterpretation.
+
       ### 2024-02-26
       * Added query parameter `sub_account_ids` to [Get transactions per category for one month](#tag/Transaction-API/operation/getTransactionsForMonth). This enables users to filter transactions by sub_account_ids.
       
@@ -253,7 +256,7 @@ tags:
       > They are not meant to initiate the actual flow of payments between the customer and the provider or ecolytiq!
   - name: Statistic API
     description: |
-      Use these endpoints to get aggregated footprint data about accounts, businesses, or sub-accounts.
+      Use these endpoints to get aggregated footprint data about businesses, users or sub-accounts.
   - name: Feedback API
     description: |
       Use these endpoints to submit various types of feedback from a user.
@@ -555,7 +558,7 @@ paths:
         - name: account_id
           in: path
           required: true
-          description: The ID of the user/bank account.
+          description: The ID of the account holder/user.
           schema:
             type: string
           example: aecdcc5f-e128-4814-93c3-57a4382675e5
@@ -1710,7 +1713,7 @@ paths:
         - name: account_id
           in: path
           required: true
-          description: The ID of the user/bank account. If the `account_id` doesn't exist, an empty list will be returned.
+          description: The ID of the account holder/user. If the `account_id` doesn't exist, an empty list will be returned.
           schema:
             type: string
           example: aecdcc5f-e128-4814-93c3-57a4382675e5
@@ -1839,7 +1842,7 @@ paths:
         - name: account_id
           in: path
           required: true
-          description: The ID of the user/bank account. If the `account_id` doesn't exist, the categories with **0** (zero) `transaction_count` will be returned.
+          description: The ID of the account holder/user. If the `account_id` doesn't exist, the categories with **0** (zero) `transaction_count` will be returned.
           schema:
             type: string
           example: aecdcc5f-e128-4814-93c3-57a4382675e5
@@ -1926,7 +1929,7 @@ paths:
         - name: account_id
           in: query
           required: false
-          description: This parameter is only applicable for commercial banking. Specify the ID of the user/bank account to get statistics on the industry average footprint for that model.
+          description: This parameter is only applicable for commercial banking. Specify the ID of the account holder/user to get statistics on the industry average footprint for that model.
           schema:
             type: string
           example: aecdcc5f-e128-4814-93c3-57a4382675e5
@@ -2129,7 +2132,7 @@ components:
       name: account_id
       in: path
       required: true
-      description: "The ID of the user or bank account."
+      description: "The ID of the account holder/user."
       schema:
         type: string
         example: "aecdcc5f-e128-4814-93c3-57a4382675e5"
@@ -4000,7 +4003,7 @@ components:
       properties:
         account_id:
           type: string
-          description: ID of the account.
+          description: The ID of the account holder/user.
         content_ids:
           type: array
           description: List of content IDs. Use the "Get Insights by IDs" endpoint to fetch the insight(s).
@@ -4366,19 +4369,19 @@ components:
       example: 74263e87-93cb-46be-a132-9cd260716f07
 
     AccountId:
-      description: identifies a bank account / user.
+      description: The ID of the account holder/user. Do not use IDs of sub-accounts, cards or products.
       type: string
       maxLength: 64
       example: 1c974398-4d2b-44fa-b292-64a46c0e6577
 
     BusinessId:
-      description: identifies the business of a commercial banking user. Mandatory for commercial banking.
+      description: The ID of the business of a commercial banking user. Mandatory for commercial banking.
       type: string
       maxLength: 64
       example: e36a9e67-3202-4dfa-883a-838d966e14f3
 
     SubAccountId:
-      description: identifies the business of a commercial banking user. Can only be used for commercial banking.
+      description: The ID of the sub-account, card or product of a commercial banking user. Can only be used for commercial banking.
       type: string
       maxLength: 64
       example: 12760c06-b928-4ddb-911b-01d1e3e4eb28
