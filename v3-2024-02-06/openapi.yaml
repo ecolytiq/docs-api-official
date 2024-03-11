@@ -43,9 +43,9 @@ paths:
         <br><b>Required attributes:</b><br>
         1. <b>Transaction.VipTransactionId:</b> Unique transaction identifier assigned by Visa.<br>
         2. <b>Transaction.BillingAmount:</b> Transaction amount.<br>
-        3. <b>Transaction.BillingCurrencyCode:</b> Transaction currency code <br>
-        4. <b>Transaction.MerchantCategoryCode:</b> Transaction MCC category code according to this (url) specification.<br>
-        5. <b>Transaction.MerchantCountryCode:</b> Transaction merchant's country code according to this (url) specification.<br>
+        3. <b>Transaction.BillingCurrencyCode:</b> Transaction currency as ISO numerical code.<br>
+        4. <b>Transaction.MerchantCategoryCode:</b> Transaction MCC category code.<br>
+        5. <b>Transaction.MerchantCountryCode:</b> Transaction merchant's country as ISO numerical code.</a>.<br>
         6. <b>Transaction.TimeStampYYMMDD:</b> Transaction timestamp in `YYYY-MM-DD HH:MM:SS` format.<br>
         <br><b>Optional attributes:</b><br>
         1. <b>Transaction.VisaMerchantName:</b> Transaction merchant's name.<br>
@@ -56,22 +56,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              required:
-                - externalUserId
-                - messageElementsCollection
-              properties:
-                externalUserId:
-                  type: string
-                  description: Unique user ID assigned by VOP client during enrollment.
-                  example: a083e879-b37c-4307-9407-a9825d82800b
-                messageElementsCollection:
-                  type: array
-                  minItems: 6
-                  items:
-                    $ref: '#/components/schemas/messageElement'
-                  example:
-                    $ref: '#/components/examples/MessageElementsCollectionExample'
+              $ref: '#/components/schemas/VopTransactionRequest'
             examples:
               Example request:
                 $ref: '#/components/examples/Vop-Transaction-Request-Example'
@@ -88,11 +73,8 @@ paths:
                   $ref: '#/components/examples/Vop-Transaction-Response-Success'
                 Response for Failed Transaction - missing attribute:
                   $ref: '#/components/examples/Vop-Transaction-Response-Failure-Missing-Attribute'
-                Response for Failed Transaction - invalid format:
-                  $ref: '#/components/examples/Vop-Transaction-Response-Failure-Invalid-Format'
-                Response for Failed Transaction - transaction exists:
-                  $ref: '#/components/examples/Vop-Transaction-Response-Failure-Transaction-Exists'
-
+                Response for Failed Transaction - internal error:
+                  $ref: '#/components/examples/Vop-Transaction-Response-Failure-Internal-Error'
 
 components:
 
@@ -102,13 +84,39 @@ components:
       properties:
         status_code:
           type: string
-          example: "0"
         error_msg:
           type: string
-          example: ""
 
-    messageElement:
+    VopTransactionRequest:
+      type: object
+      required:
+        - externalUserId
+        - messageElementsCollection
+      properties:
+        externalUserId:
+          type: string
+          description: Unique user ID assigned by VOP client during enrollment.
+          example: a083e879-b37c-4307-9407-a9825d82800b
+        messageElementsCollection:
+          $ref: '#/components/schemas/MessageElementCollection'
+
+
+    MessageElementCollection:
+      type: object
+      required:
+        - messageElement
+      properties:
+        messageElement:
+          $ref: '#/components/schemas/MessageElement'
+
+    MessageElement:
       description: Holds information about VOP Transaction
+      type: array
+      minItems: 6
+      items:
+        $ref: '#/components/schemas/MessageElementItem'
+
+    MessageElementItem:
       type: object
       required:
         - key
@@ -124,22 +132,15 @@ components:
 
   examples:
 
-    Vop-Transaction-Response-Failure-Transaction-Exists:
-      value:
-        status_code: "100"
-        error_msg: "ALREADY_EXISTS. Transaction already exists with id {Transaction.VipTransactionId}."
-
-
     Vop-Transaction-Response-Failure-Missing-Attribute:
       value:
         status_code: "100"
-        error_msg: "BAD_REQUEST. Attribute: Transaction.VipTransactionId is missing."
+        error_msg: "BAD_REQUEST. Attribute: Transaction.VipTransactionId must not be blank."
 
-    Vop-Transaction-Response-Failure-Invalid-Format:
+    Vop-Transaction-Response-Failure-Internal-Error:
       value:
         status_code: "100"
-        error_msg: "INVALID_FORMAT. Attribute: Transaction.TimeStampYYMMDD is invalid."
-
+        error_msg: "INTERNAL. An internal error occurred."
 
     Vop-Transaction-Response-Success:
       value:
@@ -183,4 +184,3 @@ components:
             value: "2019-07-10T01:00:50"
           - key: "Transaction.VisaMerchantName"
             value: "A Merchant"
-            
