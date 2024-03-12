@@ -465,6 +465,10 @@ paths:
                   $ref: '#/components/examples/Transaction-Response-Example-200-With-Merchant'
                 Transaction currency is not supported:
                   $ref: '#/components/examples/TransactionResponseCurrencyNotSupportedExample'
+                Model not found:
+                  $ref: '#/components/examples/TransactionResponseModelNotFoundExample'
+                Carbon intensity factor not found:
+                  $ref: '#/components/examples/TransactionResponseCifNotFoundExample'
 
         '202':
           description: |
@@ -2775,6 +2779,24 @@ components:
             error_code: "CURRENCY_NOT_SUPPORTED"
             error_description: "Currency SGD is not supported."
 
+    TransactionResponseModelNotFoundExample:
+      value:
+        request_id: "1d2dd5f3b23d3870"
+        results: []
+        errors:
+          - transaction_id: "62c12ecc-17d7-469f-9ecc-b08e00eb8c24"
+            error_code: "not.found"
+            error_description: "Model DE not found!"
+
+    TransactionResponseCifNotFoundExample:
+      value:
+        request_id: "1d2dd5f3b23d3870"
+        results: []
+        errors:
+          - transaction_id: "62c12ecc-17d7-469f-9ecc-b08e00eb8c24"
+            error_code: "not.found"
+            error_description: "Carbon intensity factor for model DE and category ex:living.energy not found!"
+
     Transaction-Response-Example-200-Retail:
       value:
         request_id: "1d2dd5f3b23d3870"
@@ -3814,56 +3836,6 @@ components:
           type: string
           description: Description of the category
 
-    Currency:
-      type: object
-      required:
-        - code
-        - description
-        - decimal_places
-        - enabled
-      properties:
-        code:
-          type: string
-          description: Unique currency code. (ISO 4217)
-        description:
-          type: string
-          description: Description of the currency
-        decimal_places:
-          type: integer
-          description: Number of decimal places of the currency
-        enabled:
-          type: boolean
-          description: True, if the currency is enabled.
-
-    LanguageCode:
-      type: object
-      required:
-        - code
-        - description
-        - insights
-        - explanations
-        - comparables
-        - questions
-      properties:
-        code:
-          type: string
-          description: Unique language code.
-        description:
-          type: string
-          description: Description of the currency
-        insights:
-          type: boolean
-          description: True, if translations of insights are available
-        explanations:
-          type: boolean
-          description: True, if translations of explanations are available
-        comparables:
-          type: boolean
-          description: True, if translations of comparables are available
-        questions:
-          type: boolean
-          description: True, if translations of questions are available
-
     RequestId:
       type: string
       example: "6bf3202ade4a7411"
@@ -4265,7 +4237,6 @@ components:
           items:
             $ref: '#/components/schemas/TransactionError'
 
-
     TransactionRefinementResponse:
       description: "holds information about transactions"
       type: object
@@ -4461,7 +4432,7 @@ components:
           minimum: -999999999999999.999
         currency_code:
           type: string
-          description: Money currency of the transaction. Format according to ISO 4217 currency code. Query Info API to get a list of supported/enabled currency codes.
+          description: Money currency of the transaction. Format according to ISO 4217 currency code.
           example: EUR
 
     Merchant:
