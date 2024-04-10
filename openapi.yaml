@@ -2071,7 +2071,7 @@ components:
     subAccountIdsForStatisticApi:
       name: sub_account_ids
       in: query
-      description: Provides aggregated CO2 footprints for the given sub_account_ids that can be provided by commercial banking users.
+      description: Provides aggregated CO2 footprints for the given `sub_account_ids` that can be provided by commercial banking users.
       required: false
       style: form
       explode: false
