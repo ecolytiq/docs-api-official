@@ -128,7 +128,7 @@ tags:
   - name: Changelog
     description: |
       ### 2024-04-08
-      * Added query parameter `sub_account_ids` to [Get footprints of an account per meta-category for one month](#tag/Statistic-API/operation/getFootprintsForMonth). This enables users to aggregate CO2 footprints for a subset of their sub_account_ids. 
+      * Added query parameter `sub_account_ids` to [Get footprints of an account per meta-category for one month](#tag/Statistic-API/operation/getFootprintsForMonth). This enables users to aggregate CO2 footprints for a subset of their sub account IDs. 
 
       ### 2024-03-05
         - Modified descriptions of `account_id` and `sub_account_id` to prevent misinterpretation.
