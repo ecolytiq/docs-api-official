@@ -127,8 +127,16 @@ tags:
 
   - name: Changelog
     description: |
+      ### 2024-04-10
+      * Added new error code description for `INCOMPATIBLE` in [ecolytiq Error Code Summary](#tag/Errors/ecolytiq-Error-Code-Summary)
+      * Added new error examples for [Get Comparables for a Given CO2 Footprint](#operation/getContentComparables)
+      * Added new error examples for [Get Random Comparables for a Given CO2 Footprint](#operation/getContentComparablesRandom)
+      
+      ### 2024-04-08
+      * Added query parameter `sub_account_ids` to [Get footprints of an account per meta-category for one month](#tag/Statistic-API/operation/getFootprintsForMonth). This enables users to aggregate CO2 footprints for a subset of their sub account IDs. 
+
       ### 2024-03-05
-        - Modified descriptions of `account_id` and `sub_account_id` to prevent misinterpretation.
+      * Modified descriptions of `account_id` and `sub_account_id` to prevent misinterpretation.
 
       ### 2024-02-26
       * Added query parameter `sub_account_ids` to [Get transactions per category for one month](#tag/Transaction-API/operation/getTransactionsForMonth). This enables users to filter transactions by sub_account_ids.
@@ -161,7 +169,8 @@ tags:
       
       | Error Code             | Description                                                                       | API                       |
       |------------------------|-----------------------------------------------------------------------------------|---------------------------|
-      | NOT_FOUND              | Central entity type in request, or anything related to it, is missing.            | [Get Insights by IDs](#operation/getContentInsights) <br/> [Get Insights (for a Given Category)](#operation/getContentInsightsRandom) |
+      | NOT_FOUND              | Central entity type in request, or anything related to it, is missing.            | [Get Insights by IDs](#operation/getContentInsights) <br/> [Get Insights (for a Given Category)](#operation/getContentInsightsRandom) <br/> [Get Comparables for a Given CO2 Footprint](#operation/getContentComparables) <br/> [Get Random Comparables for a Given CO2 Footprint](#operation/getContentComparablesRandom) |
+      | INCOMPATIBLE           | Central entity type in request, or anything related to it, is not compatible with parameters in the request. | [Get Comparables for a Given CO2 Footprint](#operation/getContentComparables) |
       | CURRENCY_NOT_SUPPORTED | We can't process the transaction because we do not support the provided currency. | [Process transactions](#operation/postTransactionsTransactions)
   - name: Postman
     description: |
@@ -465,6 +474,10 @@ paths:
                   $ref: '#/components/examples/Transaction-Response-Example-200-With-Merchant'
                 Transaction currency is not supported:
                   $ref: '#/components/examples/TransactionResponseCurrencyNotSupportedExample'
+                Model not found:
+                  $ref: '#/components/examples/TransactionResponseModelNotFoundExample'
+                Carbon intensity factor not found:
+                  $ref: '#/components/examples/TransactionResponseCifNotFoundExample'
 
         '202':
           description: |
@@ -562,19 +575,7 @@ paths:
           schema:
             type: string
           example: aecdcc5f-e128-4814-93c3-57a4382675e5
-        - name: sub_account_ids
-          in: query
-          description: Filter by the given `sub_account_ids` that can be provided by commercial banking users.
-          required: false
-          style: form
-          explode: false
-          schema:
-            type: array
-            items:
-              type: string
-          example:
-            - r56w78ae-909b-26eb-a2cd-99e3b60ebgw3
-            - 2qwe61r4-t3d9-300e-95f6-b9bcf4010987
+        - $ref: "#/components/parameters/subAccountIdsForTransactionApi"
         - name: month
           in: path
           required: true
@@ -932,8 +933,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/ComparableResponse'
               examples:
-                Example:
+                Get comparables:
                   $ref: '#/components/examples/ComparableResponseExample'
+                Error - Requested comparable does not exist:
+                  $ref: '#/components/examples/ComparableErrorResponseComparableNotFoundExample'
+                Error - Requested language does not exist:
+                  $ref: '#/components/examples/CommonErrorResponseTranslationNotFoundExample'
+                Error - Requested comparable is incompatible with given co2 footprint:
+                  $ref: '#/components/examples/ComparableErrorResponseCo2FootprintIncompatibleExample'
         '400':
           description: Bad Request
           content:
@@ -989,8 +996,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/ComparableResponse'
               examples:
-                Example:
+                Get random comparables:
                   $ref: '#/components/examples/ComparableResponseExample'
+                Error - Requested language does not exist:
+                  $ref: '#/components/examples/CommonErrorResponseTranslationNotFoundExample'
+                Error - Filter category does not exist:
+                  $ref: '#/components/examples/ComparableErrorResponseCategoryNotFoundExample'
+                Error - No comparables fit the requested filter:
+                  $ref: '#/components/examples/ComparableErrorResponseAnyComparablesNotFoundExample'
         '400':
           description: |
             Bad Request.
@@ -1044,7 +1057,7 @@ paths:
                 Error - Requested insight does not exist:
                   $ref: '#/components/examples/InsightErrorResponseInsightNotFoundExample'
                 Error - Requested language does not exist:
-                  $ref: '#/components/examples/InsightErrorResponseTranslationNotFoundExample'
+                  $ref: '#/components/examples/CommonErrorResponseTranslationNotFoundExample'
         '401':
           description: |
             Unauthorized. Access Token is invalid or expired.
@@ -1115,7 +1128,7 @@ paths:
                 Get random insights:
                   $ref: '#/components/examples/InsightsResponseExample'
                 Error - Requested language does not exist:
-                  $ref: '#/components/examples/InsightErrorResponseTranslationNotFoundExample'
+                  $ref: '#/components/examples/CommonErrorResponseTranslationNotFoundExample'
                 Error - Filter category does not exist:
                   $ref: '#/components/examples/InsightErrorResponseCategoryNotFoundExample'
                 Error - No insights fit the requested filter:
@@ -1717,19 +1730,7 @@ paths:
           schema:
             type: string
           example: aecdcc5f-e128-4814-93c3-57a4382675e5
-        - name: "sub_account_ids"
-          in: "query"
-          description: Provides aggregated CO2 footprints for the given sub_account_ids that can be provided by commercial banking users.
-          required: false
-          style: form
-          explode: false
-          schema:
-            type: array
-            items:
-              type: string
-          example:
-            - 817811d6-7eee-4882-8274-7788b56be515
-            - 6e50be2f-5f72-48e9-b55e-d10f1b77cb13
+        - $ref: "#/components/parameters/subAccountIdsForStatisticApi"
         - name: from
           in: query
           required: false
@@ -1853,6 +1854,7 @@ paths:
           schema:
             type: string
           example: "2023-08"
+        - $ref: "#/components/parameters/subAccountIdsForStatisticApi"
         - name: meta-category
           in: query
           required: false
@@ -2070,6 +2072,34 @@ paths:
 
 components:
   parameters:
+    subAccountIdsForTransactionApi:
+      name: sub_account_ids
+      in: query
+      description: Filter by the given `sub_account_ids` that can be provided by commercial banking users.
+      required: false
+      style: form
+      explode: false
+      schema:
+        type: array
+        items:
+          type: string
+      example:
+        - r56w78ae-909b-26eb-a2cd-99e3b60ebgw3
+        - 2qwe61r4-t3d9-300e-95f6-b9bcf4010987
+    subAccountIdsForStatisticApi:
+      name: sub_account_ids
+      in: query
+      description: Provides aggregated CO2 footprints for the given `sub_account_ids` that can be provided by commercial banking users.
+      required: false
+      style: form
+      explode: false
+      schema:
+        type: array
+        items:
+          type: string
+      example:
+        - 817811d6-7eee-4882-8274-7788b56be515
+        - 6e50be2f-5f72-48e9-b55e-d10f1b77cb13
     languageCodes:
       name: "language_codes"
       in: "query"
@@ -2508,6 +2538,15 @@ components:
                 text: "Want to save up some energy and money while you drive? Here are some tips: pay attention to the correct tire pressure, don't carry unnecessary weight in the car, shift gears early, and don't drive too fast."
         errors: [ ]
 
+    CommonErrorResponseTranslationNotFoundExample:
+      value:
+        request_id: 6bf3202ade4a7411
+        results: [ ]
+        errors:
+          - id: 06462ed4-32e7-46b0-8920-31e982ba22c0
+            code: NOT_FOUND
+            message: "No translation for language it found."
+
     InsightErrorResponseInsightNotFoundExample:
       value:
         request_id: 6bf3202ade4a7411
@@ -2516,15 +2555,6 @@ components:
           - id: 06462ed4-32e7-46b0-8920-31e982ba22c0
             code: NOT_FOUND
             message: "Insight does not exist."
-
-    InsightErrorResponseTranslationNotFoundExample:
-      value:
-        request_id: 6bf3202ade4a7411
-        results: [ ]
-        errors:
-          - id: 06462ed4-32e7-46b0-8920-31e982ba22c0
-            code: NOT_FOUND
-            message: "No translation for language it found."
 
     InsightErrorResponseCategoryNotFoundExample:
       value:
@@ -2541,6 +2571,40 @@ components:
         errors:
           - code: NOT_FOUND
             message: "Unable to find any insight that fits your request."
+
+    ComparableErrorResponseComparableNotFoundExample:
+      value:
+        request_id: 6bf3202ade4a7411
+        results: [ ]
+        errors:
+          - id: 06462ed4-32e7-46b0-8920-31e982ba22c0
+            code: NOT_FOUND
+            message: "Comparable does not exist."
+
+    ComparableErrorResponseCo2FootprintIncompatibleExample:
+      value:
+        request_id: 6bf3202ade4a7411
+        results: [ ]
+        errors:
+          - id: 06462ed4-32e7-46b0-8920-31e982ba22c0
+            code: INCOMPATIBLE
+            message: "Comparable is incompatible with given co2 footprint of 50000 grams."
+
+    ComparableErrorResponseCategoryNotFoundExample:
+      value:
+        request_id: 6bf3202ade4a7411
+        results: [ ]
+        errors:
+          - code: NOT_FOUND
+            message: "Category ex:misc.unknown for system ECOLYTIQ_V2 does not have any comparables, or does not exist."
+
+    ComparableErrorResponseAnyComparablesNotFoundExample:
+      value:
+        request_id: 6bf3202ade4a7411
+        results: [ ]
+        errors:
+          - code: NOT_FOUND
+            message: "Unable to find any comparables that fits your request."
 
     ContextualInsightsResponseExample:
       value:
@@ -2774,6 +2838,24 @@ components:
           - transaction_id: "62c12ecc-17d7-469f-9ecc-b08e00eb8c24"
             error_code: "CURRENCY_NOT_SUPPORTED"
             error_description: "Currency SGD is not supported."
+
+    TransactionResponseModelNotFoundExample:
+      value:
+        request_id: "1d2dd5f3b23d3870"
+        results: []
+        errors:
+          - transaction_id: "62c12ecc-17d7-469f-9ecc-b08e00eb8c24"
+            error_code: "not.found"
+            error_description: "Model DE not found!"
+
+    TransactionResponseCifNotFoundExample:
+      value:
+        request_id: "1d2dd5f3b23d3870"
+        results: []
+        errors:
+          - transaction_id: "62c12ecc-17d7-469f-9ecc-b08e00eb8c24"
+            error_code: "not.found"
+            error_description: "Carbon intensity factor for model DE and category ex:living.energy not found!"
 
     Transaction-Response-Example-200-Retail:
       value:
@@ -3751,7 +3833,7 @@ components:
         currency:
           type: string
           description: |
-            Currency of the model. The model can be applied only if the amount of the transaction is in the same currency. If another currency is used, the amount is internally converted to the model's currency.
+            Base currency of the model. Other currencies are converted to this currency first.
         enabled:
           type: boolean
           description: True, if the CO2 model is enabled.
@@ -3813,56 +3895,6 @@ components:
         description:
           type: string
           description: Description of the category
-
-    Currency:
-      type: object
-      required:
-        - code
-        - description
-        - decimal_places
-        - enabled
-      properties:
-        code:
-          type: string
-          description: Unique currency code. (ISO 4217)
-        description:
-          type: string
-          description: Description of the currency
-        decimal_places:
-          type: integer
-          description: Number of decimal places of the currency
-        enabled:
-          type: boolean
-          description: True, if the currency is enabled.
-
-    LanguageCode:
-      type: object
-      required:
-        - code
-        - description
-        - insights
-        - explanations
-        - comparables
-        - questions
-      properties:
-        code:
-          type: string
-          description: Unique language code.
-        description:
-          type: string
-          description: Description of the currency
-        insights:
-          type: boolean
-          description: True, if translations of insights are available
-        explanations:
-          type: boolean
-          description: True, if translations of explanations are available
-        comparables:
-          type: boolean
-          description: True, if translations of comparables are available
-        questions:
-          type: boolean
-          description: True, if translations of questions are available
 
     RequestId:
       type: string
@@ -4265,7 +4297,6 @@ components:
           items:
             $ref: '#/components/schemas/TransactionError'
 
-
     TransactionRefinementResponse:
       description: "holds information about transactions"
       type: object
@@ -4461,7 +4492,7 @@ components:
           minimum: -999999999999999.999
         currency_code:
           type: string
-          description: Money currency of the transaction. Format according to ISO 4217 currency code. Query Info API to get a list of supported/enabled currency codes.
+          description: Money currency of the transaction. Format according to ISO 4217 currency code.
           example: EUR
 
     Merchant:
