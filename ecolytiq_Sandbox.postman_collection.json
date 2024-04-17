@@ -7,7 +7,7 @@
     },
     {
       "name": "Changelog",
-      "description": "### 2024-04-08\n* Added query parameter `sub_account_ids` to [Get footprints of an account per meta-category for one month](#tag/Statistic-API/operation/getFootprintsForMonth). This enables users to aggregate CO2 footprints for a subset of their sub account IDs. \n\n### 2024-03-05\n  - Modified descriptions of `account_id` and `sub_account_id` to prevent misinterpretation.\n\n### 2024-02-26\n* Added query parameter `sub_account_ids` to [Get transactions per category for one month](#tag/Transaction-API/operation/getTransactionsForMonth). This enables users to filter transactions by sub_account_ids.\n\n### 2024-02-14\n* Added [Retrieve refinements for account](#tag/Profiling-API/operation/getProfileRefinementsForAccount) endpoint to retrieve profile refinement information for a given account.\n* Added query parameter `sub_account_ids` to [Get total or monthly footprints over time](#tag/Statistic-API/operation/getFootprintsOverTime). This enables user to aggregate CO2 footprints for a subset of their sub_account_ids. \n",
+      "description": "### 2024-04-15\n* Added new error examples for [Get Explanations by ID](#operation/getContentExplanations)\n* Added new error examples for [Get Explanations (for given categories)](#operation/getContentExplanationsRandom) \n\n### 2024-04-10\n* Added new error code description for `INCOMPATIBLE` in [ecolytiq Error Code Summary](#tag/Errors/ecolytiq-Error-Code-Summary)\n* Added new error examples for [Get Comparables for a Given CO2 Footprint](#operation/getContentComparables)\n* Added new error examples for [Get Random Comparables for a Given CO2 Footprint](#operation/getContentComparablesRandom)\n\n### 2024-04-08\n* Added query parameter `sub_account_ids` to [Get footprints of an account per meta-category for one month](#tag/Statistic-API/operation/getFootprintsForMonth). This enables users to aggregate CO2 footprints for a subset of their sub account IDs. \n\n### 2024-03-05\n* Modified descriptions of `account_id` and `sub_account_id` to prevent misinterpretation.\n\n### 2024-02-26\n* Added query parameter `sub_account_ids` to [Get transactions per category for one month](#tag/Transaction-API/operation/getTransactionsForMonth). This enables users to filter transactions by sub_account_ids.\n\n### 2024-02-14\n* Added [Retrieve refinements for account](#tag/Profiling-API/operation/getProfileRefinementsForAccount) endpoint to retrieve profile refinement information for a given account.\n* Added query parameter `sub_account_ids` to [Get total or monthly footprints over time](#tag/Statistic-API/operation/getFootprintsOverTime). This enables user to aggregate CO2 footprints for a subset of their sub_account_ids. \n",
       "item": []
     },
     {
@@ -15,7 +15,7 @@
       "description": "",
       "item": [
         {
-          "id": "563d569e-0ab6-473e-99a0-36930ce6c73f",
+          "id": "03312aa3-f40d-4972-a29b-f8834ccc211b",
           "name": "Request Access Token",
           "request": {
             "name": "Request Access Token",
@@ -86,7 +86,7 @@
           },
           "response": [
             {
-              "id": "2e4313fb-98b4-40e7-a9c3-d220280bc3a5",
+              "id": "eb4a672c-9648-4446-912c-d1e4a4913435",
               "name": "AccessToken and Lifetime\n",
               "originalRequest": {
                 "url": {
@@ -156,7 +156,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "1cfbc957-6724-433f-b827-20a1d3356b76",
+              "id": "0b14f0ae-457c-4d20-99e4-1fb180055658",
               "name": "Unauthorized. Invalid or expired Client Credentials\n",
               "originalRequest": {
                 "url": {
@@ -251,7 +251,7 @@
     },
     {
       "name": "Errors",
-      "description": "## HTTP Status Code Summary\n| Status Code                        | Description                                                                                      |\n|------------------------------------|--------------------------------------------------------------------------------------------------|\n| 200 - OK                           | Everything worked as expected.                                                                   |\n| 201 - Created                      | Everything worked as expected. Resource created.                                                 |\n| 204 - No Content                   | Everything worked as expected.                                                                   |\n| 400 - Bad Request                  | The request was unacceptable, often due to missing a required parameter.                         |\n| 401 - Unauthorized                 | No valid Access Token provided.                                                                  |\n| 403 - Forbidden                    | The API key doesn't have permissions to perform the request.                                     |\n| 404 - Not Found                    | The requested resource doesn't exist.                                                            |\n| 409 - Conflict                     | The request conflicts with another request (perhaps due to using the same idempotent key).       |\n| 422 - Unprocessable Entity         | Unprocessable Entity                                                                             |\n| 500, 502, 503, 504 - Server Errors | Something went wrong on ecolytiq's end.                                                          |\n\n## ecolytiq Error Code Summary\necolytiq errors are used when a request is targeting multiple entities, and the request was unable to be finished fully successful. \nIn this case, the response will contain both successful results and errors. The error codes used for this type of error are the following. \n\n| Error Code             | Description                                                                       | API                       |\n|------------------------|-----------------------------------------------------------------------------------|---------------------------|\n| NOT_FOUND              | Central entity type in request, or anything related to it, is missing.            | [Get Insights by IDs](#operation/getContentInsights) <br/> [Get Insights (for a Given Category)](#operation/getContentInsightsRandom) |\n| CURRENCY_NOT_SUPPORTED | We can't process the transaction because we do not support the provided currency. | [Process transactions](#operation/postTransactionsTransactions)\n",
+      "description": "## HTTP Status Code Summary\n| Status Code                        | Description                                                                                      |\n|------------------------------------|--------------------------------------------------------------------------------------------------|\n| 200 - OK                           | Everything worked as expected.                                                                   |\n| 201 - Created                      | Everything worked as expected. Resource created.                                                 |\n| 204 - No Content                   | Everything worked as expected.                                                                   |\n| 400 - Bad Request                  | The request was unacceptable, often due to missing a required parameter.                         |\n| 401 - Unauthorized                 | No valid Access Token provided.                                                                  |\n| 403 - Forbidden                    | The API key doesn't have permissions to perform the request.                                     |\n| 404 - Not Found                    | The requested resource doesn't exist.                                                            |\n| 409 - Conflict                     | The request conflicts with another request (perhaps due to using the same idempotent key).       |\n| 422 - Unprocessable Entity         | Unprocessable Entity                                                                             |\n| 500, 502, 503, 504 - Server Errors | Something went wrong on ecolytiq's end.                                                          |\n\n## ecolytiq Error Code Summary\necolytiq errors are used when a request is targeting multiple entities, and the request was unable to be finished fully successful. \nIn this case, the response will contain both successful results and errors. The error codes used for this type of error are the following. \n\n| Error Code             | Description                                                                       | API                       |\n|------------------------|-----------------------------------------------------------------------------------|---------------------------|\n| NOT_FOUND              | Central entity type in request, or anything related to it, is missing.            | [Get Insights by IDs](#operation/getContentInsights) <br/> [Get Insights (for a Given Category)](#operation/getContentInsightsRandom) <br/> [Get Comparables for a Given CO2 Footprint](#operation/getContentComparables) <br/> [Get Random Comparables for a Given CO2 Footprint](#operation/getContentComparablesRandom) <br/> [Get Explanations by ID](#operation/getContentExplanations) <br/> [Get Explanations (for given categories)](#operation/getContentExplanationsRandom) |\n| INCOMPATIBLE           | Central entity type in request, or anything related to it, is not compatible with parameters in the request. | [Get Comparables for a Given CO2 Footprint](#operation/getContentComparables) |\n| CURRENCY_NOT_SUPPORTED | We can't process the transaction because we do not support the provided currency. | [Process transactions](#operation/postTransactionsTransactions)\n",
       "item": []
     },
     {
@@ -259,7 +259,7 @@
       "description": "The info API can be used to obtain information about the ecolytiq platform configuration and available features. \nIt offers a simple and reliable method to verify, \n\n* Which [country models for CO<sub>2</sub>](#operation/getInfoCo2models) footprint calculation are available and accessible to the requestor,\n\n* Which [categorization systems](#operation/getInfoCategorySystems) for transactions are available and accessible for transaction enrichment,\n\n* For some categorization systems, which [categories](#operation/getInfoCategories) are available\n",
       "item": [
         {
-          "id": "ecd6c2c4-fa9f-4b82-ae37-dcf9a1153cc2",
+          "id": "6411315b-95e1-4489-b4a4-caab5e1154cd",
           "name": "List of CO2 models",
           "request": {
             "name": "List of CO2 models",
@@ -299,7 +299,7 @@
           },
           "response": [
             {
-              "id": "3331dd17-94a8-48de-904c-b7c56abb99d9",
+              "id": "07c31d01-d3db-4578-83c3-62e35c14b4d0",
               "name": "List of supported and enabled CO<sub>2</sub> models.\n",
               "originalRequest": {
                 "url": {
@@ -344,7 +344,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "aa5435b0-9e13-4306-80e0-f51430d6e6c9",
+              "id": "c2c9dc7f-aa54-47aa-9a26-2351ef842428",
               "name": "Unauthorized. Access Token is invalid or expired.\n",
               "originalRequest": {
                 "url": {
@@ -385,7 +385,7 @@
           }
         },
         {
-          "id": "9862ed2b-25cd-4b09-901e-dc7753d337f4",
+          "id": "818e42d2-c5ab-490c-92cb-38107757fca4",
           "name": "List of category systems",
           "request": {
             "name": "List of category systems",
@@ -425,7 +425,7 @@
           },
           "response": [
             {
-              "id": "4d574cac-363f-4f0b-b310-5f0b2914015c",
+              "id": "6d75c331-f8f4-4294-bfa0-10ef7a1cf279",
               "name": "List of supported and enabled category systems.\n",
               "originalRequest": {
                 "url": {
@@ -470,7 +470,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "0ed20c31-af70-46e6-909b-78d12cebb077",
+              "id": "d42251aa-40a4-4c9b-8f52-1fce9bf482b3",
               "name": "Unauthorized. Access Token is invalid or expired.\n",
               "originalRequest": {
                 "url": {
@@ -511,7 +511,7 @@
           }
         },
         {
-          "id": "2919c18d-4190-42d0-8322-16b86e7d1b5b",
+          "id": "5294eef1-193e-403f-a1eb-7f5511947efb",
           "name": "List of categories",
           "request": {
             "name": "List of categories",
@@ -536,7 +536,7 @@
                     "type": "text/plain"
                   },
                   "key": "model",
-                  "value": "ullamco adipisicing ea do"
+                  "value": "labore culpa sint in magna"
                 }
               ],
               "variable": []
@@ -561,7 +561,7 @@
           },
           "response": [
             {
-              "id": "f0ff773a-0505-43bb-8f5c-6b4b3d4e89d2",
+              "id": "6d0ab039-edce-4063-8911-7c63a62bfe11",
               "name": "List of categories\n",
               "originalRequest": {
                 "url": {
@@ -581,7 +581,7 @@
                         "type": "text/plain"
                       },
                       "key": "model",
-                      "value": "ullamco adipisicing ea do"
+                      "value": "labore culpa sint in magna"
                     }
                   ],
                   "variable": []
@@ -616,7 +616,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "24b047f9-bc47-4282-af49-1c4222fdd0c4",
+              "id": "f96d688f-acee-4388-9ea3-961ec8fcad69",
               "name": "Unauthorized. Access Token is invalid or expired.\n",
               "originalRequest": {
                 "url": {
@@ -636,7 +636,7 @@
                         "type": "text/plain"
                       },
                       "key": "model",
-                      "value": "ullamco adipisicing ea do"
+                      "value": "labore culpa sint in magna"
                     }
                   ],
                   "variable": []
@@ -673,7 +673,7 @@
       "description": "The transaction API is used to process financial transactions by the ecolytiq Sustainability-as-a-Service&reg; platform.\n\nIt is possible to send transactions for enrichment and receive the calculated CO<sub>2</sub> footprint based on a combination of the transaction amount and transaction category. \n\nFor some types of transactions, this may, however, be insufficient as the amount of money spent does not directly correlate to the CO<sub>2</sub> (equivalent) emissions of the purchased goods and services.\nFor example, airline ticket prices are becoming increasingly expensive the closer the date of travel is. But the amount of CO<sub>2</sub> emissions is independent of whether the ticket was bought last minute or a year in advance. \nIn such cases, the transaction data can be refined by answering specific transaction-related questions, like the duration of the flight, which will in turn allow for a much more accurate calculation of the CO<sub>2</sub> emissions.\n",
       "item": [
         {
-          "id": "76220b38-e703-4609-928f-2173793f9a89",
+          "id": "b1b9161c-99d3-4556-8aa7-4cfa62e6e380",
           "name": "Process transactions",
           "request": {
             "name": "Process transactions",
@@ -726,7 +726,7 @@
           },
           "response": [
             {
-              "id": "f91949d7-b340-4a15-a4a4-e258a7e32a3f",
+              "id": "11a8adb8-bce2-47ad-80db-4769a6c3ae4e",
               "name": "Result of Transaction processing.\n",
               "originalRequest": {
                 "url": {
@@ -784,7 +784,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "92839973-3e6e-4522-9beb-c38121de6c5c",
+              "id": "2afb39f9-1331-47a0-8ea2-6398e7dc1101",
               "name": "Result of Transaction processing.\n",
               "originalRequest": {
                 "url": {
@@ -842,7 +842,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "281893b8-a24c-4977-bcae-78e907534fa6",
+              "id": "cf650a9b-32a2-425d-b3e4-a9433ed10ce5",
               "name": "Bad Request. Size of Transactions is invalid.\n",
               "originalRequest": {
                 "url": {
@@ -900,7 +900,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "335aa4b4-5a87-44d6-99f1-6e51ba6a685a",
+              "id": "2e2d8a6e-0ac5-40da-b8ba-328520712495",
               "name": "Unauthorized. Access Token is invalid or expired.\n",
               "originalRequest": {
                 "url": {
@@ -948,7 +948,7 @@
               "_postman_previewlanguage": "text"
             },
             {
-              "id": "2eaa4dee-05a9-4cb0-8504-9d4a4dae402a",
+              "id": "0c334be7-b722-4656-a667-e5a21f69c107",
               "name": "Forbidden. An existing transaction cannot be overwritten with a different account.\n",
               "originalRequest": {
                 "url": {
@@ -1012,7 +1012,7 @@
           }
         },
         {
-          "id": "3f0424b9-c94f-412c-a507-a7f2610d6817",
+          "id": "54d90863-0b07-431c-9c49-a77bd1d022c7",
           "name": "Get Transactions by IDs",
           "request": {
             "name": "Get Transactions by IDs",
@@ -1062,7 +1062,7 @@
           },
           "response": [
             {
-              "id": "49830827-76ee-4acf-8de3-5c966387b67c",
+              "id": "5434ee25-46e9-4a24-a755-c7ed5f97a6ab",
               "name": "List of requested Transactions",
               "originalRequest": {
                 "url": {
@@ -1112,12 +1112,12 @@
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"request_id\": \"6bf3202ade4a7411\",\n  \"results\": [\n    {\n      \"transaction_id\": \"74263e87-93cb-46be-a132-9cd260716f07\",\n      \"category\": {\n        \"value\": \"dolor ips\",\n        \"system\": \"dolore magna id Lorem\"\n      },\n      \"co2_footprint\": {\n        \"value\": 10,\n        \"unit\": \"g\"\n      }\n    },\n    {\n      \"transaction_id\": \"74263e87-93cb-46be-a132-9cd260716f07\",\n      \"category\": {\n        \"value\": \"officia si\",\n        \"system\": \"proident\"\n      },\n      \"co2_footprint\": {\n        \"value\": 10,\n        \"unit\": \"g\"\n      }\n    }\n  ],\n  \"errors\": [\n    {\n      \"transaction_id\": \"74263e87-93cb-46be-a132-9cd260716f07\",\n      \"error_code\": \"laboris sint cillum Duis\",\n      \"error_description\": \"dolore reprehenderit commodo aute\"\n    },\n    {\n      \"transaction_id\": \"74263e87-93cb-46be-a132-9cd260716f07\",\n      \"error_code\": \"velit officia et commodo dolore\",\n      \"error_description\": \"sint dolore\"\n    }\n  ]\n}",
+              "body": "{\n  \"request_id\": \"6bf3202ade4a7411\",\n  \"results\": [\n    {\n      \"transaction_id\": \"74263e87-93cb-46be-a132-9cd260716f07\",\n      \"category\": {\n        \"value\": \"sed ut nulla\",\n        \"system\": \"et sit\"\n      },\n      \"co2_footprint\": {\n        \"value\": 10,\n        \"unit\": \"g\"\n      }\n    },\n    {\n      \"transaction_id\": \"74263e87-93cb-46be-a132-9cd260716f07\",\n      \"category\": {\n        \"value\": \"sed proident\",\n        \"system\": \"dolore amet ut\"\n      },\n      \"co2_footprint\": {\n        \"value\": 10,\n        \"unit\": \"g\"\n      }\n    }\n  ],\n  \"errors\": [\n    {\n      \"transaction_id\": \"74263e87-93cb-46be-a132-9cd260716f07\",\n      \"error_code\": \"anim incididunt\",\n      \"error_description\": \"dolore sed\"\n    },\n    {\n      \"transaction_id\": \"74263e87-93cb-46be-a132-9cd260716f07\",\n      \"error_code\": \"aute aliqua do\",\n      \"error_description\": \"eu\"\n    }\n  ]\n}",
               "cookie": [],
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "0bf751ae-d215-4648-9df2-71a2e72ba6ab",
+              "id": "c50e2fe5-8b3d-42da-a390-8409792b19e2",
               "name": "Bad Request",
               "originalRequest": {
                 "url": {
@@ -1172,7 +1172,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "df27f43f-c35e-4441-a273-8a460fdc171a",
+              "id": "7e1bb437-806a-40bd-b141-c0384bc1769f",
               "name": "Unauthorized. Access Token is invalid or expired.\n",
               "originalRequest": {
                 "url": {
@@ -1223,7 +1223,7 @@
           }
         },
         {
-          "id": "300eaaea-b352-433d-9b16-d03230befde4",
+          "id": "b8eff91f-aef1-4b1e-aa50-62f42c409b72",
           "name": "Get transactions per category for one month",
           "request": {
             "name": "Get transactions per category for one month",
@@ -1318,7 +1318,7 @@
           },
           "response": [
             {
-              "id": "dde1b99b-7189-4cc6-a0c9-a2f033602ef8",
+              "id": "61229bbc-f8be-4d49-8e73-43538f153814",
               "name": "Transactions for the given account and month.",
               "originalRequest": {
                 "url": {
@@ -1413,7 +1413,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "7f4d7877-b83f-49b3-a37b-c95a8205faea",
+              "id": "d3e83bfc-781d-4125-8dd8-6c8fbf228918",
               "name": "Bad Request",
               "originalRequest": {
                 "url": {
@@ -1508,7 +1508,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "20abff13-0ab8-4452-b817-526c69a9412a",
+              "id": "4fddfab6-7423-4250-bcad-3d0fd06eebdf",
               "name": "Unauthorized. Access Token is invalid or expired.",
               "originalRequest": {
                 "url": {
@@ -1593,7 +1593,7 @@
               "_postman_previewlanguage": "text"
             },
             {
-              "id": "ea647ba5-9446-4fdc-8c89-d1a85e27d06b",
+              "id": "a4d977ad-4457-40fa-9b48-f5db94640bd2",
               "name": "Not found.",
               "originalRequest": {
                 "url": {
@@ -1694,7 +1694,7 @@
           }
         },
         {
-          "id": "b3947231-5ba2-4977-9aac-74f6f55ed21d",
+          "id": "369c0853-10a5-42c6-9741-cc3c2a84876d",
           "name": "Update Category",
           "request": {
             "name": "Update Category",
@@ -1747,7 +1747,7 @@
           },
           "response": [
             {
-              "id": "f62d2e71-c00c-4de5-b41b-56ce77d9f7c4",
+              "id": "3561a88e-c8ba-4d02-b7ae-8a4b7cdd9afe",
               "name": "Result of Transaction Category Update.\n",
               "originalRequest": {
                 "url": {
@@ -1805,7 +1805,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "da3c06f8-81c7-489d-8fe5-8b0812d1d19c",
+              "id": "083f3196-6485-42f9-9906-093f448947c3",
               "name": "Result of Transaction processing.\n",
               "originalRequest": {
                 "url": {
@@ -1863,7 +1863,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "1899c8ed-1a72-41b8-a1b1-b7d7be8eac8c",
+              "id": "d8961533-1dd2-44a5-9e4f-434b8cd67ee4",
               "name": "Bad Request. Size of Transactions is invalid.\n",
               "originalRequest": {
                 "url": {
@@ -1921,7 +1921,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "bd864524-c998-4e7c-ab93-b02eac7ec3b8",
+              "id": "107a4fbe-2ccb-4556-a2fd-d2fbb8ec88da",
               "name": "Unauthorized. Access Token is invalid or expired.\n",
               "originalRequest": {
                 "url": {
@@ -1975,7 +1975,7 @@
           }
         },
         {
-          "id": "e3781887-de54-4d69-b96c-e20eab655cf3",
+          "id": "b3a09d09-3930-4d96-9246-99f6423b22a3",
           "name": "Get Available Questions for Refinement of Specific Transactions",
           "request": {
             "name": "Get Available Questions for Refinement of Specific Transactions",
@@ -2025,7 +2025,7 @@
           },
           "response": [
             {
-              "id": "659fa40d-402f-46c2-833f-21d0ee0c4b89",
+              "id": "5c74462b-067d-4bb5-928f-6ad344359133",
               "name": "A list of transaction ids and their corresponding question ids. If the question is already answered the field `answer_id` is set. Otherwise, it is `null`.",
               "originalRequest": {
                 "url": {
@@ -2080,7 +2080,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "486241e0-b0a7-49c8-a870-02634609d71f",
+              "id": "4adfae65-6fd6-4e82-9dbc-99c611585b1a",
               "name": "Bad Request",
               "originalRequest": {
                 "url": {
@@ -2135,7 +2135,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "bf66e311-6f93-4305-a665-0af648f5cbad",
+              "id": "6461ae59-7a36-44c3-ab57-89b6531e798f",
               "name": "Unauthorized. Access Token is invalid or expired.\n",
               "originalRequest": {
                 "url": {
@@ -2186,7 +2186,7 @@
           }
         },
         {
-          "id": "c33bf4e3-1637-48a9-843d-2ccf07bbf5a7",
+          "id": "abeb0304-2674-4e48-a11d-55e2eb1f1faf",
           "name": "Provide Answers for Transaction Refinement",
           "request": {
             "name": "Provide Answers for Transaction Refinement",
@@ -2239,7 +2239,7 @@
           },
           "response": [
             {
-              "id": "f2a724a3-d513-44bd-8950-c8654b691a2e",
+              "id": "0767e41c-9478-4333-bbef-259795895c79",
               "name": "Confirmation that answer is saved",
               "originalRequest": {
                 "url": {
@@ -2297,7 +2297,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "f93ee439-8739-42e4-8988-7726ff7da007",
+              "id": "e0f25dec-7df9-43f8-9cad-e158ec7a5b58",
               "name": "Bad Request. Size of Transactions is invalid.\n",
               "originalRequest": {
                 "url": {
@@ -2355,7 +2355,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "25882a3c-b628-4f98-993a-e6f188b8b4ab",
+              "id": "625d5342-66eb-4a8e-b994-276791e75449",
               "name": "Unauthorized. Access Token is invalid or expired.\n",
               "originalRequest": {
                 "url": {
@@ -2409,7 +2409,7 @@
           }
         },
         {
-          "id": "0ca16392-a450-46f1-8be8-77389065afc4",
+          "id": "16293bab-0eee-4395-9e59-649cd0528370",
           "name": "Get Questions and Answers for Transaction Refinement",
           "request": {
             "name": "Get Questions and Answers for Transaction Refinement",
@@ -2468,7 +2468,7 @@
           },
           "response": [
             {
-              "id": "097a3ff5-3c3d-4cf8-bff0-4d8340ff8d1b",
+              "id": "463d1955-bb05-4dff-aed2-571fcfdf1703",
               "name": "A list of Questions",
               "originalRequest": {
                 "url": {
@@ -2527,12 +2527,12 @@
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"request_id\": \"6bf3202ade4a7411\",\n  \"results\": [\n    {\n      \"id\": \"dolor do dolore non nisi\",\n      \"type\": \"INPUT\",\n      \"categories\": [\n        \"sint ex in \",\n        \"Lorem laboris ex commodo qui\"\n      ],\n      \"text\": [\n        {\n          \"language\": \"tempor officia dolor quis cupidatat\",\n          \"text\": \"laboris veniam\"\n        },\n        {\n          \"language\": \"exercitation dolor labore esse\",\n          \"text\": \"Ut adipisicing\"\n        }\n      ],\n      \"selectable\": [\n        {\n          \"id\": \"in\",\n          \"text\": [\n            {\n              \"language\": \"magna dolor cupidatat\",\n              \"text\": \"ad incididunt in esse\"\n            },\n            {\n              \"language\": \"non Duis consequat\",\n              \"text\": \"ea elit exercitation u\"\n            }\n          ]\n        },\n        {\n          \"id\": \"est laboris\",\n          \"text\": [\n            {\n              \"language\": \"est laboris amet ea ad\",\n              \"text\": \"ut sunt exercitation culpa\"\n            },\n            {\n              \"language\": \"fugiat i\",\n              \"text\": \"qui id anim\"\n            }\n          ]\n        }\n      ],\n      \"input\": {\n        \"id\": \"consectetur mollit\",\n        \"datatype\": \"INTEGER\",\n        \"validation\": [\n          {\n            \"name\": \"LESS\",\n            \"condition\": \"in in sint\"\n          },\n          {\n            \"name\": \"GREATER\",\n            \"condition\": \"ipsum Except\"\n          }\n        ]\n      }\n    },\n    {\n      \"id\": \"sed adipisicin\",\n      \"type\": \"INPUT\",\n      \"categories\": [\n        \"Excepteur nulla\",\n        \"cillum\"\n      ],\n      \"text\": [\n        {\n          \"language\": \"proident ad\",\n          \"text\": \"irure incididunt Lorem\"\n        },\n        {\n          \"language\": \"officia lab\",\n          \"text\": \"ipsum\"\n        }\n      ],\n      \"selectable\": [\n        {\n          \"id\": \"magna\",\n          \"text\": [\n            {\n              \"language\": \"nulla ex\",\n              \"text\": \"deserunt fugiat non labore\"\n            },\n            {\n              \"language\": \"mollit officia ipsum aliquip\",\n              \"text\": \"cillum culpa eiusmod\"\n            }\n          ]\n        },\n        {\n          \"id\": \"ad Excepteur aliquip consequat anim\",\n          \"text\": [\n            {\n              \"language\": \"irure\",\n              \"text\": \"pariatur id\"\n            },\n            {\n              \"language\": \"in\",\n              \"text\": \"ut esse\"\n            }\n          ]\n        }\n      ],\n      \"input\": {\n        \"id\": \"culpa ut ut\",\n        \"datatype\": \"INTEGER\",\n        \"validation\": [\n          {\n            \"name\": \"LESS\",\n            \"condition\": \"aliqua qui\"\n          },\n          {\n            \"name\": \"MIN_LENGTH\",\n            \"condition\": \"cillum velit dolore sed ex\"\n          }\n        ]\n      }\n    }\n  ],\n  \"errors\": [\n    {\n      \"code\": \"do veniam culpa sit\",\n      \"description\": \"cillum in\",\n      \"id\": \"in d\"\n    },\n    {\n      \"code\": \"sit\",\n      \"description\": \"exercita\",\n      \"id\": \"anim dolore mollit\"\n    }\n  ]\n}",
+              "body": "{\n  \"request_id\": \"6bf3202ade4a7411\",\n  \"results\": [\n    {\n      \"id\": \"eu irure\",\n      \"type\": \"INPUT\",\n      \"categories\": [\n        \"sit dolore irure ad\",\n        \"commodo in irure consectetur\"\n      ],\n      \"text\": [\n        {\n          \"language\": \"anim nostrud aute\",\n          \"text\": \"Duis ut pariatur\"\n        },\n        {\n          \"language\": \"amet cupidatat\",\n          \"text\": \"non in\"\n        }\n      ],\n      \"selectable\": [\n        {\n          \"id\": \"laborum et exercitation dolor\",\n          \"text\": [\n            {\n              \"language\": \"id Lorem ea\",\n              \"text\": \"aliquip magna\"\n            },\n            {\n              \"language\": \"in ut\",\n              \"text\": \"commodo cillum ex\"\n            }\n          ]\n        },\n        {\n          \"id\": \"culpa consequat dolore mollit\",\n          \"text\": [\n            {\n              \"language\": \"pariatur officia nulla ipsum sunt\",\n              \"text\": \"id Duis\"\n            },\n            {\n              \"language\": \"ullamco adipisicing\",\n              \"text\": \"sint anim quis\"\n            }\n          ]\n        }\n      ],\n      \"input\": {\n        \"id\": \"ut esse mollit non\",\n        \"datatype\": \"NUMBER\",\n        \"validation\": [\n          {\n            \"name\": \"LESS\",\n            \"condition\": \"nulla ea fugiat\"\n          },\n          {\n            \"name\": \"LESS\",\n            \"condition\": \"id dolore nostrud ex et\"\n          }\n        ]\n      }\n    },\n    {\n      \"id\": \"quis ut\",\n      \"type\": \"INPUT\",\n      \"categories\": [\n        \"elit anim dolor\",\n        \"laboris tempor dolore\"\n      ],\n      \"text\": [\n        {\n          \"language\": \"sit aliqua nostrud\",\n          \"text\": \"sit occaecat\"\n        },\n        {\n          \"language\": \"eu anim\",\n          \"text\": \"irure fugiat\"\n        }\n      ],\n      \"selectable\": [\n        {\n          \"id\": \"ipsum anim eu culpa quis\",\n          \"text\": [\n            {\n              \"language\": \"voluptate\",\n              \"text\": \"qui sit\"\n            },\n            {\n              \"language\": \"cu\",\n              \"text\": \"aute velit sit\"\n            }\n          ]\n        },\n        {\n          \"id\": \"anim minim ea nostrud dolor\",\n          \"text\": [\n            {\n              \"language\": \"ut Lorem occaecat\",\n              \"text\": \"est officia sit occaecat\"\n            },\n            {\n              \"language\": \"Duis quis\",\n              \"text\": \"occaecat nis\"\n            }\n          ]\n        }\n      ],\n      \"input\": {\n        \"id\": \"pariatur enim ut Excepteur nisi\",\n        \"datatype\": \"STRING\",\n        \"validation\": [\n          {\n            \"name\": \"LESS\",\n            \"condition\": \"elit deserunt et\"\n          },\n          {\n            \"name\": \"LESS\",\n            \"condition\": \"aute officia nulla dolore elit\"\n          }\n        ]\n      }\n    }\n  ],\n  \"errors\": [\n    {\n      \"code\": \"nisi eu\",\n      \"description\": \"officia qui\",\n      \"id\": \"eu\"\n    },\n    {\n      \"code\": \"ut proident\",\n      \"description\": \"quis proident\",\n      \"id\": \"n\"\n    }\n  ]\n}",
               "cookie": [],
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "8e9803c7-1ce5-4b7d-9213-53d2e516d645",
+              "id": "362cb4a8-5afe-442f-a0ab-899d79182385",
               "name": "Unauthorized. Access Token is invalid or expired.\n",
               "originalRequest": {
                 "url": {
@@ -2598,7 +2598,7 @@
       "description": "The ecolytiq Sustainability-as-a-Service&reg; platform offers a variety of product features that go beyond pure calculation of the CO<sub>2</sub> footprint related to a financial transaction.\nThere are \n\n* Comparables: Small information pieces that put a given CO<sub>2</sub> footprint into perspective by comparing it to something easily comprehensible, like a distance driven by a car.\n  As the name suggests a Comparable is a concrete example of what a certain CO<sub>2</sub> footprint means.  \n  It can be used to create awareness on the end customer's side on how much of an impact a certain financial transaction has.\n\n* Insights: Information pieces with tips and tricks on how a customer can reduce their personal CO<sub>2</sub> emissions\n\n* Explanations: Information pieces detailing how the ecolytiq calculation method works.\n\nThose content pieces can be retrieved via the content API in various languages.\n",
       "item": [
         {
-          "id": "4a88ce46-f857-4f4c-be96-65310b5063c8",
+          "id": "ed076ec4-d6bd-4f1b-b52a-bcee95eb041e",
           "name": "Get Comparables for a Given CO2 Footprint",
           "request": {
             "name": "Get Comparables for a Given CO2 Footprint",
@@ -2666,7 +2666,7 @@
           },
           "response": [
             {
-              "id": "eb3310ee-7043-4356-885e-5f02b679da96",
+              "id": "fb3493a6-7329-4374-8ad2-bcc5ff964d5e",
               "name": "A list of Comparables",
               "originalRequest": {
                 "url": {
@@ -2739,7 +2739,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "8372193c-f435-436d-ae2f-902ea4bd9f74",
+              "id": "b6cb5328-2fa0-4cd6-9d86-b72bacfe6cb0",
               "name": "Bad Request",
               "originalRequest": {
                 "url": {
@@ -2812,7 +2812,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "d4bb4d42-58f9-4125-b559-0ea124abddd8",
+              "id": "1f06ea19-6207-4b4e-9659-7777449bf19a",
               "name": "Unauthorized. Access Token is invalid or expired.\n",
               "originalRequest": {
                 "url": {
@@ -2881,7 +2881,7 @@
           }
         },
         {
-          "id": "74b885aa-e267-46bd-96c1-f51c5ad06748",
+          "id": "706cff1d-37a8-4c4c-bcf0-37c949fe8511",
           "name": "Get Random Comparables for a Given CO2 Footprint",
           "request": {
             "name": "Get Random Comparables for a Given CO2 Footprint",
@@ -2959,7 +2959,7 @@
           },
           "response": [
             {
-              "id": "ae878753-1ed0-444c-85d6-b0b98c9f113f",
+              "id": "d6d65133-9ed3-4b48-bb73-6d9ee9aa87e8",
               "name": "A list of comparables",
               "originalRequest": {
                 "url": {
@@ -3042,7 +3042,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "4a3494b7-11b3-4ff9-bf33-cd39f660fa4d",
+              "id": "cc456038-03db-40c6-abca-f9f9156f77f3",
               "name": "Bad Request.\n",
               "originalRequest": {
                 "url": {
@@ -3125,7 +3125,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "a8dec9e0-3892-46bc-8733-262e7be6b562",
+              "id": "a397cfed-7337-4a38-861f-d066b33339bf",
               "name": "Unauthorized. Access Token is invalid or expired.\n",
               "originalRequest": {
                 "url": {
@@ -3204,7 +3204,7 @@
           }
         },
         {
-          "id": "adc26b63-e1e8-454a-9072-0d5e7e123818",
+          "id": "87f90bcc-5627-4853-bdcb-43fdd46b7f5c",
           "name": "Get Insights by IDs",
           "request": {
             "name": "Get Insights by IDs",
@@ -3263,7 +3263,7 @@
           },
           "response": [
             {
-              "id": "14b79c00-e2de-4f1e-bd5d-1fa60a6ec671",
+              "id": "abff667d-00f3-4221-8f8c-5e0c7285f570",
               "name": "A list of insights",
               "originalRequest": {
                 "url": {
@@ -3327,7 +3327,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "4a4f99ac-d67b-4658-b219-f3265263323f",
+              "id": "cb13ddbb-5423-4aa5-928d-681deb356e82",
               "name": "Unauthorized. Access Token is invalid or expired.\n",
               "originalRequest": {
                 "url": {
@@ -3387,7 +3387,7 @@
           }
         },
         {
-          "id": "e0bf0ade-2024-4003-b27a-93a536c17b94",
+          "id": "62a82e49-fd97-40d3-a1f1-08130e209737",
           "name": "Get Contextual Insights by IDs.",
           "request": {
             "name": "Get Contextual Insights by IDs.",
@@ -3446,7 +3446,7 @@
           },
           "response": [
             {
-              "id": "39259966-83e8-4bde-a63a-47ea9f2d3036",
+              "id": "c00634c9-eb7d-4614-af90-657a73e3b59c",
               "name": "A list of insights",
               "originalRequest": {
                 "url": {
@@ -3510,7 +3510,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "46bc3fda-1306-48f5-aded-3cffd41f4320",
+              "id": "08c9a796-aa96-441b-976b-9d60fbb1afa1",
               "name": "Unauthorized. Access Token is invalid or expired.\n",
               "originalRequest": {
                 "url": {
@@ -3570,7 +3570,7 @@
           }
         },
         {
-          "id": "087d08d0-4347-4dbb-b12e-5232359924df",
+          "id": "acaa600f-d1a0-43a4-b308-f3b3645c3ffe",
           "name": "Get Insights (for a Given Category)",
           "request": {
             "name": "Get Insights (for a Given Category)",
@@ -3639,7 +3639,7 @@
           },
           "response": [
             {
-              "id": "5f1f458c-18c9-46a8-9ad7-dd765a0cd6e1",
+              "id": "f35fa152-efe2-478f-a9d0-f63aa778657d",
               "name": "A list of insights",
               "originalRequest": {
                 "url": {
@@ -3713,7 +3713,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "9383b83a-082a-4ec1-a297-d8ba8b32e900",
+              "id": "95f11b38-ac56-4249-99a1-fafd8b62a45c",
               "name": "Bad Request.\n",
               "originalRequest": {
                 "url": {
@@ -3787,7 +3787,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "89a8c527-5287-41d2-b2c2-c89b963fcfa6",
+              "id": "4e994eda-e3b4-4e10-b0cf-d4c41571ccbe",
               "name": "Unauthorized. Access Token is invalid or expired.\n",
               "originalRequest": {
                 "url": {
@@ -3857,7 +3857,7 @@
           }
         },
         {
-          "id": "8a425171-ca69-4e9b-9c3f-7855770945ba",
+          "id": "adeee399-9e29-49b6-81d5-e29c75f58080",
           "name": "Get Explanations by ID",
           "request": {
             "name": "Get Explanations by ID",
@@ -3916,7 +3916,7 @@
           },
           "response": [
             {
-              "id": "9b58028e-5b80-47ba-9e9d-328cc1472de7",
+              "id": "f21e866a-b479-4eb8-9d2a-7036dec9ef9c",
               "name": "A list of explanations",
               "originalRequest": {
                 "url": {
@@ -3980,7 +3980,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "b9a596d7-0524-4695-a611-de43af710b27",
+              "id": "e6b64e89-f7d5-4a1c-81fa-b4fa25a79c11",
               "name": "Unauthorized. Access Token is invalid or expired.\n",
               "originalRequest": {
                 "url": {
@@ -4040,7 +4040,7 @@
           }
         },
         {
-          "id": "797623e7-f8f4-488e-8a33-1a5bc4f8de63",
+          "id": "65960554-8c43-4387-987c-0e2dd0e91131",
           "name": "Get Explanations (for given categories)",
           "request": {
             "name": "Get Explanations (for given categories)",
@@ -4109,7 +4109,7 @@
           },
           "response": [
             {
-              "id": "2536280c-13e0-41ce-96c0-365c02ff053e",
+              "id": "2b4375ab-44e8-4b9b-8862-92cbfdf01da0",
               "name": "A list of explanations",
               "originalRequest": {
                 "url": {
@@ -4183,7 +4183,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "031c47c8-9968-4bf2-9459-8ef9d78c7a19",
+              "id": "032a8695-007a-41f5-97e7-84868e59ff6f",
               "name": "Bad Request.\n",
               "originalRequest": {
                 "url": {
@@ -4257,7 +4257,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "65dce074-f642-452b-b91e-1c0c3e60ea50",
+              "id": "14d71eeb-89d3-4cb2-957e-fd02bb86dd11",
               "name": "Unauthorized. Access Token is invalid or expired.\n",
               "originalRequest": {
                 "url": {
@@ -4333,7 +4333,7 @@
       "description": "In the most basic way the ecolytiq Sustainability-as-a-Service&reg; platform is used to calculate the CO<sub>2</sub> footprint related to a \"spending transaction\" by taking into account the amount of money spent and the category of the transaction.\nThis gives an estimate of the footprint based on average consumer behavior. \nFor example, the average grocery basket is still plenty of meat.\nHowever, a specific end customer may have chosen to live a meat-reduced, meat-free, vegetarian, or vegan diet.\nHence the average shopping basket will give an inaccurate CO<sub>2</sub> footprint for them.\nTo improve the footprint calculation it is possible to store additional information about an end customer and improve the calculation accuracy in turn.\n\nThe main entities of the profiling API are:\n- **Questions** that can be asked to the end customer to gather information about their behavior.\n- **Answers** are predefined choices to answer the questions.\n- If a user answered a question, we call that process and the resulting question-answer pair **Refinement**. It refines our knowledge about the user.\n- Account specific **Insights** as described in the [Content API](#tag/Content-API) can be retrieved via the profiling API.\n",
       "item": [
         {
-          "id": "76d81357-6a66-4bba-a5ae-fa50142a33fd",
+          "id": "face78e7-ea5c-49da-af00-2a74d825c675",
           "name": "Get Insights (for accounts)",
           "request": {
             "name": "Get Insights (for accounts)",
@@ -4392,7 +4392,7 @@
           },
           "response": [
             {
-              "id": "c0219913-bb7d-43f4-b26c-742ed7c8f234",
+              "id": "7df9dd9a-5641-4b57-b4a5-f04b5ccb38fa",
               "name": "Returns a list of content ids for the given accounts",
               "originalRequest": {
                 "url": {
@@ -4456,7 +4456,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "f2d83cac-509e-428d-a2f9-acf50210bc45",
+              "id": "9a797dee-6271-439f-bf64-9f1868868892",
               "name": "Bad Request.",
               "originalRequest": {
                 "url": {
@@ -4520,7 +4520,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "41e53382-3790-4d79-a077-27e93dcf6988",
+              "id": "b8a54056-b3ca-4ad8-9a29-247b5312b43a",
               "name": "Unauthorized. Access Token is invalid or expired.\n",
               "originalRequest": {
                 "url": {
@@ -4580,7 +4580,7 @@
           }
         },
         {
-          "id": "a556b9ee-c1cf-4461-8a32-97b58d7924a1",
+          "id": "800c8fad-2145-4f10-95e2-3e33e48f1e97",
           "name": "Get Contextual Insights (for accounts)",
           "request": {
             "name": "Get Contextual Insights (for accounts)",
@@ -4630,7 +4630,7 @@
           },
           "response": [
             {
-              "id": "23d3040a-7e30-4cf1-918f-cbe8b5b7f57c",
+              "id": "12d6596c-cfff-4e90-8bcb-8385407b86af",
               "name": "Returns a list of content ids for the given accounts",
               "originalRequest": {
                 "url": {
@@ -4685,7 +4685,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "b5b0c3d9-19e6-41d8-bf38-ac3d3febae23",
+              "id": "d0ba94a4-7869-47bf-93b6-4590e5a2196e",
               "name": "Bad Request.\n",
               "originalRequest": {
                 "url": {
@@ -4740,7 +4740,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "700cbd6d-1e9f-4e29-bafb-aa1444e317aa",
+              "id": "d31421f9-a335-4d74-aeb7-1d655989a15f",
               "name": "Unauthorized. Access Token is invalid or expired.\n",
               "originalRequest": {
                 "url": {
@@ -4791,7 +4791,7 @@
           }
         },
         {
-          "id": "faa773c5-f401-4c5f-a109-dd58f291c7a2",
+          "id": "24670ed2-bae8-4482-a14b-2febc2844760",
           "name": "Get Questions and Answers for Profiling",
           "request": {
             "name": "Get Questions and Answers for Profiling",
@@ -4850,7 +4850,7 @@
           },
           "response": [
             {
-              "id": "fd8378a7-98fe-438c-8f89-4bc481099f78",
+              "id": "5098c1ad-8beb-436c-a506-35b91809aae4",
               "name": "A list of profiling questions.",
               "originalRequest": {
                 "url": {
@@ -4914,7 +4914,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "04b5f84a-ca66-49f5-b5a5-8a378573c4f5",
+              "id": "18597f41-b6f1-4165-9df3-08cd8d897486",
               "name": "Unauthorized. Access Token is invalid or expired.\n",
               "originalRequest": {
                 "url": {
@@ -4974,7 +4974,7 @@
           }
         },
         {
-          "id": "07f9c8ac-308c-4789-bbf3-4a1a807377a8",
+          "id": "21300a9c-83e6-4f74-91a9-3bf79647b738",
           "name": "Store profile refinements",
           "request": {
             "name": "Store profile refinements",
@@ -5027,7 +5027,7 @@
           },
           "response": [
             {
-              "id": "cc7d5685-bf07-48d3-9c57-41036037a4f1",
+              "id": "4e34d479-b78b-4c4b-87ef-6fc39dc744bf",
               "name": "Confirmation that answer is saved",
               "originalRequest": {
                 "url": {
@@ -5085,7 +5085,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "9e4732d6-ab25-4b9f-b8c9-922566220f05",
+              "id": "14ad9bcb-5c09-419b-a8d1-1ef9e18418aa",
               "name": "Unauthorized. Access Token is invalid or expired.\n",
               "originalRequest": {
                 "url": {
@@ -5139,7 +5139,7 @@
           }
         },
         {
-          "id": "a202d60d-ec21-48b6-a4b9-92e9a8e39a30",
+          "id": "3a19ff9a-fd95-416e-9917-c6063236747e",
           "name": "Retrieve refinements for account",
           "request": {
             "name": "Retrieve refinements for account",
@@ -5180,7 +5180,7 @@
           },
           "response": [
             {
-              "id": "3ae29c54-b81e-42ec-bac3-0ed07bcbd967",
+              "id": "c6b522d6-72ab-4fe9-a80f-1b3f148a4376",
               "name": "A list of profile refinements for an account.",
               "originalRequest": {
                 "url": {
@@ -5227,7 +5227,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "ae95a82a-61eb-4d34-b867-091f6b16505a",
+              "id": "f764041e-f15c-4f7d-a9ab-115252cd9cc4",
               "name": "Unauthorized. Access Token is invalid or expired.\n",
               "originalRequest": {
                 "url": {
@@ -5276,7 +5276,7 @@
       "description": "Should the necessity arise to remove all data of a specific end customer from the ecolytiq platform this can be done using the account API.\n",
       "item": [
         {
-          "id": "395ca166-6196-4026-9cca-0701f8442d07",
+          "id": "d842b931-c486-4291-a706-90be124db8d3",
           "name": "Delete all data of the given accounts",
           "request": {
             "name": "Delete all data of the given accounts",
@@ -5329,7 +5329,7 @@
           },
           "response": [
             {
-              "id": "1c98783b-0b2e-403e-87e1-cd7e4d8635a7",
+              "id": "e545cc83-28e0-4b81-bdc8-9fa0095f7113",
               "name": "Confirmation that the request has been processed",
               "originalRequest": {
                 "url": {
@@ -5387,7 +5387,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "94507d04-effd-4ec3-8eb6-3ac7b955eb38",
+              "id": "1f2dbbd0-d9a7-488d-8647-1ce291468245",
               "name": "Confirmation that the request can be handled",
               "originalRequest": {
                 "url": {
@@ -5445,7 +5445,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "64261b90-6f76-4c24-8f8d-a1c8408f3c68",
+              "id": "c2902afa-29f3-425c-bf67-93f2f996dc72",
               "name": "Unauthorized. Access Token is invalid or expired.\n",
               "originalRequest": {
                 "url": {
@@ -5505,7 +5505,7 @@
       "description": "Use these endpoints for handling carbon footprint impact orders.\n\n> #### Note:\n> \n> These endpoints are only meant for handling the data about carbon footprint impact orders between a Customer (e.g., bank) and a carbon project provider through ecolytiq.\n> They are not meant to initiate the actual flow of payments between the customer and the provider or ecolytiq!\n",
       "item": [
         {
-          "id": "6479438d-ea77-4927-9eb5-bf5d1dc8c6ed",
+          "id": "f793fd04-c30b-49b1-874c-7b4de0dabab5",
           "name": "Get climate projects",
           "request": {
             "name": "Get climate projects",
@@ -5555,7 +5555,7 @@
           },
           "response": [
             {
-              "id": "6a87d95d-c733-447a-ac58-4e405182d972",
+              "id": "e57c2668-f7cb-4542-8f89-89632e55ebf1",
               "name": "A List of climate projects",
               "originalRequest": {
                 "url": {
@@ -5610,7 +5610,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "848c1730-80b7-4405-b210-014fec242118",
+              "id": "c83d8a87-9888-4083-836b-936865b588a8",
               "name": "Bad Request.\n",
               "originalRequest": {
                 "url": {
@@ -5665,7 +5665,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "1d141399-e8cd-4583-8bbb-99ef284dd581",
+              "id": "252f4ce2-f496-43b8-94bd-bd580b3ade5f",
               "name": "Unauthorized. Access Token is invalid or expired.\n",
               "originalRequest": {
                 "url": {
@@ -5716,7 +5716,7 @@
           }
         },
         {
-          "id": "a3243a79-fbeb-49fe-b1f8-9848c9c978b8",
+          "id": "63139360-ce27-4c85-9494-a6aec9ebdca5",
           "name": "Get Order Report",
           "request": {
             "name": "Get Order Report",
@@ -5775,7 +5775,7 @@
           },
           "response": [
             {
-              "id": "22766a16-9aaf-4701-a4e7-b9701675af21",
+              "id": "d441ee37-cab9-4a54-9b3d-e9918c19ab0e",
               "name": "An Order Report",
               "originalRequest": {
                 "url": {
@@ -5839,7 +5839,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "8afaf1fe-ab32-45c9-a556-bc08a09e3b7c",
+              "id": "fc5f4115-c362-40a9-bb71-337aacffb10a",
               "name": "Bad Request.\n",
               "originalRequest": {
                 "url": {
@@ -5903,7 +5903,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "f2ee2bd6-ba55-4d8d-ab11-5f438ec6de2a",
+              "id": "00289212-5e9e-4261-b612-840ac14c7264",
               "name": "Unauthorized. Access Token is invalid or expired.\n",
               "originalRequest": {
                 "url": {
@@ -5963,7 +5963,7 @@
           }
         },
         {
-          "id": "f6c3ca5e-2604-4af6-840e-9f77853651b7",
+          "id": "1d2cf08b-269b-415c-82f1-8836a852996c",
           "name": "Money calculation for CO2 impact",
           "request": {
             "name": "Money calculation for CO2 impact",
@@ -6017,7 +6017,7 @@
           },
           "response": [
             {
-              "id": "0ff141a8-3ee9-44c6-ba79-19c546d71400",
+              "id": "db003166-9d44-4f52-ac32-8886ba10a0a5",
               "name": "A List of orders",
               "originalRequest": {
                 "url": {
@@ -6076,7 +6076,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "918e5522-6b95-4323-b029-830fc1ef8226",
+              "id": "b1da1123-3caf-461e-9eb8-394a2e0cea28",
               "name": "Bad Request.\n",
               "originalRequest": {
                 "url": {
@@ -6135,7 +6135,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "51bccd5b-2b27-4146-8288-d3fa059acdc5",
+              "id": "85e55c8e-9c1c-4db1-b707-520245a7c8a6",
               "name": "Unauthorized. Access Token is invalid or expired.\n",
               "originalRequest": {
                 "url": {
@@ -6190,7 +6190,7 @@
           }
         },
         {
-          "id": "ec6de6a4-aec7-4ad7-8eb1-12f33fb32ac1",
+          "id": "1efd06ed-b0c7-4fca-94a4-a74d3a35ed64",
           "name": "CO2 impact calculation for money",
           "request": {
             "name": "CO2 impact calculation for money",
@@ -6244,7 +6244,7 @@
           },
           "response": [
             {
-              "id": "cdb67afa-c95b-4418-b437-191023563d6b",
+              "id": "2a1b7d75-e9df-4fc7-b9d9-305bccd0ab2c",
               "name": "A List of orders",
               "originalRequest": {
                 "url": {
@@ -6303,7 +6303,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "52a885da-8913-4007-bb67-d2d1f50b3004",
+              "id": "efe6c343-867b-47c0-b324-10911751fc84",
               "name": "Bad Request.\n",
               "originalRequest": {
                 "url": {
@@ -6362,7 +6362,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "1c567859-b532-4517-9e19-a1075bc10533",
+              "id": "ce06d3c7-c748-47ab-bbd2-d7e830306c94",
               "name": "Unauthorized. Access Token is invalid or expired.\n",
               "originalRequest": {
                 "url": {
@@ -6423,7 +6423,7 @@
       "description": "Use these endpoints to get aggregated footprint data about businesses, users or sub-accounts.\n",
       "item": [
         {
-          "id": "a8997d95-09fb-4c3f-b157-48cb5ba0b8a0",
+          "id": "6e987ca5-7339-4bd8-a2a9-c7d24a4339cf",
           "name": "Get total or monthly footprints over time",
           "request": {
             "name": "Get total or monthly footprints over time",
@@ -6527,7 +6527,7 @@
           },
           "response": [
             {
-              "id": "e2573d3a-3d5d-4f3d-9c7f-355484b7c3b1",
+              "id": "f121ed77-c160-4d78-b3ae-0aa025859966",
               "name": "Footprints for the given account.",
               "originalRequest": {
                 "url": {
@@ -6629,7 +6629,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "b0b141c2-4895-4b09-9d48-5af92eea2393",
+              "id": "8e0f4ef4-223d-4235-93fc-74cac931849f",
               "name": "Bad Request. Request parameter is not valid.",
               "originalRequest": {
                 "url": {
@@ -6731,7 +6731,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "eecd6c0e-05fb-4cfa-80b0-87dce51157b0",
+              "id": "a02a53a9-e21b-4348-8750-9daefd72fa48",
               "name": "Unauthorized. Access token is invalid or expired.",
               "originalRequest": {
                 "url": {
@@ -6823,7 +6823,7 @@
               "_postman_previewlanguage": "text"
             },
             {
-              "id": "71c67863-bb57-4628-9df7-73a2a32c69b5",
+              "id": "18139950-bf03-4846-9d9b-e0a6d73fca1c",
               "name": "Not found.",
               "originalRequest": {
                 "url": {
@@ -6931,7 +6931,7 @@
           }
         },
         {
-          "id": "e3165ed6-b6a6-4b1f-b2e2-3322a4f2209d",
+          "id": "ed17c840-214c-43ce-9195-d00735f5e70c",
           "name": "Get footprints of an account per meta-category for one month",
           "request": {
             "name": "Get footprints of an account per meta-category for one month",
@@ -7007,7 +7007,7 @@
           },
           "response": [
             {
-              "id": "19eada13-7131-4923-af31-d607d99ddd5a",
+              "id": "bbd5d682-0bca-422f-8ba8-4ad64f501acf",
               "name": "Footprints for the given account and month.",
               "originalRequest": {
                 "url": {
@@ -7075,7 +7075,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "fca554e7-8bc5-45f9-bff8-10a87700282a",
+              "id": "8b79c14f-4d30-4372-836d-422748e6e706",
               "name": "Bad Request. Request parameter are not valid.",
               "originalRequest": {
                 "url": {
@@ -7143,7 +7143,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "bc64e3c2-7895-46f3-9e00-8e293873c915",
+              "id": "01286dd9-e87e-483e-b6fb-ded94c963d48",
               "name": "Unauthorized. Access token is invalid or expired.",
               "originalRequest": {
                 "url": {
@@ -7201,7 +7201,7 @@
               "_postman_previewlanguage": "text"
             },
             {
-              "id": "fc8b1fa4-1616-4aff-9c46-789212246a3c",
+              "id": "9d9861ce-5661-467e-a5df-5055ae6bf7f3",
               "name": "Not found.",
               "originalRequest": {
                 "url": {
@@ -7275,7 +7275,7 @@
           }
         },
         {
-          "id": "081e3406-9d61-4ddf-beff-e1b23e7bf6d2",
+          "id": "11311afc-edd0-4cee-9182-8d6f12da5ed5",
           "name": "Get average footprints",
           "request": {
             "name": "Get average footprints",
@@ -7335,7 +7335,7 @@
           },
           "response": [
             {
-              "id": "2b1e8b0c-18ee-43d0-9f96-2572b568d584",
+              "id": "056ce332-e977-49d4-90c7-62e89d5b9c39",
               "name": "Average footprints.",
               "originalRequest": {
                 "url": {
@@ -7400,7 +7400,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "a5b98d04-e8c6-4961-91c0-99957e20597a",
+              "id": "59210f9b-1e17-41b1-9601-b872cc69278c",
               "name": "Bad Request. Request parameter is not valid.",
               "originalRequest": {
                 "url": {
@@ -7465,7 +7465,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "fc0a74cc-c726-4f9d-abeb-0354878e6ef5",
+              "id": "1cfdee91-d0f7-4d51-8e9e-b03e2670f472",
               "name": "Unauthorized. Access token is invalid or expired.",
               "originalRequest": {
                 "url": {
@@ -7520,7 +7520,7 @@
               "_postman_previewlanguage": "text"
             },
             {
-              "id": "364b831f-08b3-4a80-bd07-89c36a9412e1",
+              "id": "ab903afe-a0b4-4ecd-87d0-694585af2fa0",
               "name": "Not found.",
               "originalRequest": {
                 "url": {
@@ -7597,7 +7597,7 @@
       "description": "Use these endpoints to submit various types of feedback from a user.\n",
       "item": [
         {
-          "id": "de4ca845-878a-4831-b2a6-a9088a40585d",
+          "id": "c97efe59-efbc-4f78-8e00-44623c362cc0",
           "name": "Submit structured feedback",
           "request": {
             "name": "Submit structured feedback",
@@ -7650,7 +7650,7 @@
           },
           "response": [
             {
-              "id": "56c6b2ef-8136-434f-b5a2-8a8503e357da",
+              "id": "c6b7d641-d0d8-49b3-9f5d-77bff70b4b78",
               "name": "The feedback is saved.",
               "originalRequest": {
                 "url": {
@@ -7698,7 +7698,7 @@
               "_postman_previewlanguage": "text"
             },
             {
-              "id": "a66c5a6f-eb57-4144-b41d-ba8af976111c",
+              "id": "ea29afe4-7244-4d07-adb1-f4a74a117cf2",
               "name": "Bad Request. Request parameter is not valid.",
               "originalRequest": {
                 "url": {
@@ -7756,7 +7756,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "9daa78b8-f267-4e50-9b0b-a67644af9ada",
+              "id": "8d118372-b9df-4c7a-a404-98efebfbfcc2",
               "name": "Unauthorized. Access Token is invalid or expired.",
               "originalRequest": {
                 "url": {
@@ -7804,7 +7804,7 @@
               "_postman_previewlanguage": "text"
             },
             {
-              "id": "97042a17-bf87-4008-b8df-a98ca3c36feb",
+              "id": "4f2212f5-c6d7-4f23-9c64-7eefb8e5e3e7",
               "name": "Unprocessable entity.",
               "originalRequest": {
                 "url": {
@@ -7868,7 +7868,7 @@
           }
         },
         {
-          "id": "08f65214-6bfa-4043-8597-fb3d712fa944",
+          "id": "462baf94-7790-44b0-b6bd-52400774a770",
           "name": "Submit unstructured feedback",
           "request": {
             "name": "Submit unstructured feedback",
@@ -7921,7 +7921,7 @@
           },
           "response": [
             {
-              "id": "b718f0ce-a3e9-42ea-b99e-788ce9dee3f0",
+              "id": "14d865fa-f5ef-49bd-8e15-79912ced6b3f",
               "name": "The feedback is saved.",
               "originalRequest": {
                 "url": {
@@ -7969,7 +7969,7 @@
               "_postman_previewlanguage": "text"
             },
             {
-              "id": "c11a436e-574a-4f19-b6be-7a4fd58a44dd",
+              "id": "7adb43ee-c5e4-47ff-9c0a-8a9c49315e75",
               "name": "Bad Request. Request parameter is not valid.",
               "originalRequest": {
                 "url": {
@@ -8027,7 +8027,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "a7984847-e9db-43a8-90c1-660ae60753cd",
+              "id": "0da240ce-5612-448c-bf70-c8d86b232c65",
               "name": "Unauthorized. Access Token is invalid or expired.",
               "originalRequest": {
                 "url": {
@@ -8075,7 +8075,7 @@
               "_postman_previewlanguage": "text"
             },
             {
-              "id": "494abab1-8e3c-4bfc-9bf5-99223c17777a",
+              "id": "215fa5d6-5307-4907-b9c8-daa37b55bf01",
               "name": "Unprocessable entity.",
               "originalRequest": {
                 "url": {
@@ -8159,7 +8159,7 @@
     }
   ],
   "info": {
-    "_postman_id": "8debfb9d-109a-49ea-8206-9e9541b119a8",
+    "_postman_id": "f7e2fc5d-4073-4861-9672-3dcf388bb3dd",
     "name": "ecolytiq SaaS",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
     "description": {
