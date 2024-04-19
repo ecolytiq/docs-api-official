@@ -3,7 +3,7 @@ openapi: 3.0.3
 info:
   description: |
     APIs of the ecolytiq SaaS
-  version: v3-2024-03-05
+  version: v3-2024-04-18
   title: ecolytiq SaaS
   contact:
     email: support@ecolytiq.com
@@ -127,11 +127,26 @@ tags:
 
   - name: Changelog
     description: |
+      ### 2024-04-18
+      * Updated the behaviour of `meta-category` and `sub-category` filters in 
+      [Get transactions per category for one month](#tag/Transaction-API/operation/getTransactionsForMonth), 
+      [Get total or monthly footprints over time](#tag/Statistic-API/operation/getFootprintsOverTime), and 
+      [Get footprints of an account per meta-category for one month](#tag/Statistic-API/operation/getFootprintsForMonth) such that `misc` and `general` are accepted as the meta and sub categories of `ex:general` category. 
+      
+      ### 2024-04-15
+      * Added new error examples for [Get Explanations by ID](#operation/getContentExplanations)
+      * Added new error examples for [Get Explanations (for given categories)](#operation/getContentExplanationsRandom) 
+      
+      ### 2024-04-10
+      * Added new error code description for `INCOMPATIBLE` in [ecolytiq Error Code Summary](#tag/Errors/ecolytiq-Error-Code-Summary)
+      * Added new error examples for [Get Comparables for a Given CO2 Footprint](#operation/getContentComparables)
+      * Added new error examples for [Get Random Comparables for a Given CO2 Footprint](#operation/getContentComparablesRandom)
+      
       ### 2024-04-08
       * Added query parameter `sub_account_ids` to [Get footprints of an account per meta-category for one month](#tag/Statistic-API/operation/getFootprintsForMonth). This enables users to aggregate CO2 footprints for a subset of their sub account IDs. 
 
       ### 2024-03-05
-        - Modified descriptions of `account_id` and `sub_account_id` to prevent misinterpretation.
+      * Modified descriptions of `account_id` and `sub_account_id` to prevent misinterpretation.
 
       ### 2024-02-26
       * Added query parameter `sub_account_ids` to [Get transactions per category for one month](#tag/Transaction-API/operation/getTransactionsForMonth). This enables users to filter transactions by sub_account_ids.
@@ -164,7 +179,8 @@ tags:
       
       | Error Code             | Description                                                                       | API                       |
       |------------------------|-----------------------------------------------------------------------------------|---------------------------|
-      | NOT_FOUND              | Central entity type in request, or anything related to it, is missing.            | [Get Insights by IDs](#operation/getContentInsights) <br/> [Get Insights (for a Given Category)](#operation/getContentInsightsRandom) |
+      | NOT_FOUND              | Central entity type in request, or anything related to it, is missing.            | [Get Insights by IDs](#operation/getContentInsights) <br/> [Get Insights (for a Given Category)](#operation/getContentInsightsRandom) <br/> [Get Comparables for a Given CO2 Footprint](#operation/getContentComparables) <br/> [Get Random Comparables for a Given CO2 Footprint](#operation/getContentComparablesRandom) <br/> [Get Explanations by ID](#operation/getContentExplanations) <br/> [Get Explanations (for given categories)](#operation/getContentExplanationsRandom) |
+      | INCOMPATIBLE           | Central entity type in request, or anything related to it, is not compatible with parameters in the request. | [Get Comparables for a Given CO2 Footprint](#operation/getContentComparables) |
       | CURRENCY_NOT_SUPPORTED | We can't process the transaction because we do not support the provided currency. | [Process transactions](#operation/postTransactionsTransactions)
   - name: Postman
     description: |
@@ -578,20 +594,8 @@ paths:
             type: string
             pattern: '^\d{4}-\d{2}$'
           example: "2023-06"
-        - name: meta-category
-          in: query
-          required: false
-          description: "Filter by a given meta category. Mandatory if sub-category query parameter is used, otherwise optional.<br>* Meta-category (e.g. `food`) is part of a category (e.g. `ex:food.cafe`), which is composed of the following structure  `ex:meta-category.sub-category`"
-          schema:
-            type: string
-          example: administration
-        - name: sub-category
-          in: query
-          required: false
-          description: "Filter by a given sub category.<br>* Sub-category (e.g.`cafe`) is part of a category (e.g. `ex:food.cafe`), which is composed of the following structure: `ex:meta-category.sub-category`"
-          schema:
-            type: string
-          example: accounting
+        - $ref: "#/components/parameters/metaCategoryParameter"
+        - $ref: "#/components/parameters/subCategoryParameter"
         - name: sort
           in: query
           required: false
@@ -927,8 +931,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/ComparableResponse'
               examples:
-                Example:
+                Get comparables:
                   $ref: '#/components/examples/ComparableResponseExample'
+                Error - Requested comparable does not exist:
+                  $ref: '#/components/examples/ComparableErrorResponseComparableNotFoundExample'
+                Error - Requested language does not exist:
+                  $ref: '#/components/examples/CommonErrorResponseTranslationNotFoundExample'
+                Error - Requested comparable is incompatible with given co2 footprint:
+                  $ref: '#/components/examples/ComparableErrorResponseCo2FootprintIncompatibleExample'
         '400':
           description: Bad Request
           content:
@@ -984,8 +994,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/ComparableResponse'
               examples:
-                Example:
+                Get random comparables:
                   $ref: '#/components/examples/ComparableResponseExample'
+                Error - Requested language does not exist:
+                  $ref: '#/components/examples/CommonErrorResponseTranslationNotFoundExample'
+                Error - Filter category does not exist:
+                  $ref: '#/components/examples/ComparableErrorResponseCategoryNotFoundExample'
+                Error - No comparables fit the requested filter:
+                  $ref: '#/components/examples/ComparableErrorResponseAnyComparablesNotFoundExample'
         '400':
           description: |
             Bad Request.
@@ -1039,7 +1055,7 @@ paths:
                 Error - Requested insight does not exist:
                   $ref: '#/components/examples/InsightErrorResponseInsightNotFoundExample'
                 Error - Requested language does not exist:
-                  $ref: '#/components/examples/InsightErrorResponseTranslationNotFoundExample'
+                  $ref: '#/components/examples/CommonErrorResponseTranslationNotFoundExample'
         '401':
           description: |
             Unauthorized. Access Token is invalid or expired.
@@ -1110,7 +1126,7 @@ paths:
                 Get random insights:
                   $ref: '#/components/examples/InsightsResponseExample'
                 Error - Requested language does not exist:
-                  $ref: '#/components/examples/InsightErrorResponseTranslationNotFoundExample'
+                  $ref: '#/components/examples/CommonErrorResponseTranslationNotFoundExample'
                 Error - Filter category does not exist:
                   $ref: '#/components/examples/InsightErrorResponseCategoryNotFoundExample'
                 Error - No insights fit the requested filter:
@@ -1270,8 +1286,12 @@ paths:
               schema:
                 $ref: '#/components/schemas/ExplanationsResponse'
               examples:
-                Example:
+                Get explanations:
                   $ref: '#/components/examples/ExplanationResponseExample'
+                Error - Requested explanation does not exist:
+                  $ref: '#/components/examples/ExplanationErrorResponseExplanationNotFoundExample'
+                Error - Requested language does not exist:
+                  $ref: '#/components/examples/CommonErrorResponseTranslationNotFoundExample'
         '401':
           description: |
             Unauthorized. Access Token is invalid or expired.
@@ -1301,8 +1321,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/ExplanationsResponse'
               examples:
-                Example:
+                Get random explanations:
                   $ref: '#/components/examples/ExplanationResponseExample'
+                Error - Requested language does not exist:
+                  $ref: '#/components/examples/CommonErrorResponseTranslationNotFoundExample'
+                Error - Filter category does not exist:
+                  $ref: '#/components/examples/ExplanationErrorResponseCategoryNotFoundExample'
+                Error - No explanations fit the requested filter:
+                  $ref: '#/components/examples/ExplanationErrorResponseAnyExplanationsNotFoundExample'
         '400':
           description: |
             Bad Request.
@@ -1753,28 +1779,8 @@ paths:
               - TOTAL
               - MONTH
           example: MONTH
-        - name: meta-category
-          in: query
-          required: false
-          description: "Filter by a given meta category. It is mandatory if a sub-category query parameter is used, otherwise optional.<br>* Meta-category (e.g. `food`) is part of a category (e.g. `ex:food.cafe`), which is composed of the following structure  `ex:meta-category.sub-category`"
-          schema:
-            type: string
-          examples:
-            Retail Example:
-              value: "food"
-            Commercial Example:
-              value: "administration"
-        - name: sub-category
-          in: query
-          required: false
-          description: "Filter by a given sub category.<br>* Sub-category (e.g.`cafe`) is part of a category (e.g. `ex:food.cafe`), which is composed of the following structure: `ex:meta-category.sub-category`"
-          schema:
-            type: string
-          examples:
-            Retail Example:
-              value: "groceries"
-            Commercial Example:
-              value: "health"
+        - $ref: "#/components/parameters/metaCategoryParameter"
+        - $ref: "#/components/parameters/subCategoryParameter"
       responses:
         '200':
           description: Footprints for the given account.
@@ -1840,7 +1846,8 @@ paths:
         - name: meta-category
           in: query
           required: false
-          description: "Filter by a given meta category. If **no** `meta-category` is given, the transactions will be grouped by meta-categories. Otherwise, the transactions will be grouped by the **categories** of the given `meta-category`.<br>* Meta-category (e.g. `food`) is part of a category (e.g. `ex:food.cafe`), which is composed of the following structure  `ex:meta-category.sub-category`"
+          description: "Filter by a given meta category. If **no** `meta-category` is given, the transactions will be grouped by meta-categories. Otherwise, the transactions will be grouped by the **categories** of the given `meta-category`.<br>* Meta-category (e.g. `food`) is part of a category (e.g. `ex:food.cafe`), which is composed of the following structure `ex:meta-category.sub-category`.
+          <br>* Category `ex:general` is an exception and its meta-category is `misc`."
           schema:
             type: string
           examples:
@@ -2054,6 +2061,32 @@ paths:
 
 components:
   parameters:
+    subCategoryParameter:
+      name: sub-category
+      in: query
+      required: false
+      description: "Filter by a given sub category.<br>* Sub-category (e.g.`cafe`) is part of a category (e.g. `ex:food.cafe`), which is composed of the following structure: `ex:meta-category.sub-category`.
+      <br>* Category `ex:general` is an exception and its sub-category is `general`."
+      schema:
+        type: string
+      examples:
+        Retail Example:
+          value: "groceries"
+        Commercial Example:
+          value: "health"
+    metaCategoryParameter:
+      name: meta-category
+      in: query
+      required: false
+      description: "Filter by a given meta category. Mandatory if sub-category query parameter is used, otherwise optional.<br>* Meta-category (e.g. `food`) is part of a category (e.g. `ex:food.cafe`), which is composed of the following structure `ex:meta-category.sub-category`.
+          <br>* Category `ex:general` is an exception and its meta-category is `misc`."
+      schema:
+        type: string
+      examples:
+        Retail Example:
+          value: "food"
+        Commercial Example:
+          value: "administration"
     subAccountIdsForTransactionApi:
       name: sub_account_ids
       in: query
@@ -2486,7 +2519,7 @@ components:
 
     ProfileRefinementsForAccountEmptyResponseExample:
       value:
-        refinements: []
+        refinements: [ ]
 
     InsightsResponseExample:
       value:
@@ -2520,6 +2553,15 @@ components:
                 text: "Want to save up some energy and money while you drive? Here are some tips: pay attention to the correct tire pressure, don't carry unnecessary weight in the car, shift gears early, and don't drive too fast."
         errors: [ ]
 
+    CommonErrorResponseTranslationNotFoundExample:
+      value:
+        request_id: 6bf3202ade4a7411
+        results: [ ]
+        errors:
+          - id: 06462ed4-32e7-46b0-8920-31e982ba22c0
+            code: NOT_FOUND
+            message: "No translation for language it found."
+
     InsightErrorResponseInsightNotFoundExample:
       value:
         request_id: 6bf3202ade4a7411
@@ -2528,15 +2570,6 @@ components:
           - id: 06462ed4-32e7-46b0-8920-31e982ba22c0
             code: NOT_FOUND
             message: "Insight does not exist."
-
-    InsightErrorResponseTranslationNotFoundExample:
-      value:
-        request_id: 6bf3202ade4a7411
-        results: [ ]
-        errors:
-          - id: 06462ed4-32e7-46b0-8920-31e982ba22c0
-            code: NOT_FOUND
-            message: "No translation for language it found."
 
     InsightErrorResponseCategoryNotFoundExample:
       value:
@@ -2553,6 +2586,65 @@ components:
         errors:
           - code: NOT_FOUND
             message: "Unable to find any insight that fits your request."
+
+    ComparableErrorResponseComparableNotFoundExample:
+      value:
+        request_id: 6bf3202ade4a7411
+        results: [ ]
+        errors:
+          - id: 06462ed4-32e7-46b0-8920-31e982ba22c0
+            code: NOT_FOUND
+            message: "Comparable does not exist."
+
+    ComparableErrorResponseCo2FootprintIncompatibleExample:
+      value:
+        request_id: 6bf3202ade4a7411
+        results: [ ]
+        errors:
+          - id: 06462ed4-32e7-46b0-8920-31e982ba22c0
+            code: INCOMPATIBLE
+            message: "Comparable is incompatible with given co2 footprint of 50000 grams."
+
+    ComparableErrorResponseCategoryNotFoundExample:
+      value:
+        request_id: 6bf3202ade4a7411
+        results: [ ]
+        errors:
+          - code: NOT_FOUND
+            message: "Category ex:misc.unknown for system ECOLYTIQ_V2 does not have any comparables, or does not exist."
+
+    ComparableErrorResponseAnyComparablesNotFoundExample:
+      value:
+        request_id: 6bf3202ade4a7411
+        results: [ ]
+        errors:
+          - code: NOT_FOUND
+            message: "Unable to find any comparables that fits your request."
+
+    ExplanationErrorResponseExplanationNotFoundExample:
+      value:
+        request_id: 6bf3202ade4a7411
+        results: [ ]
+        errors:
+          - id: 06462ed4-32e7-46b0-8920-31e982ba22c0
+            code: NOT_FOUND
+            message: "Explanation does not exist."
+
+    ExplanationErrorResponseCategoryNotFoundExample:
+      value:
+        request_id: 6bf3202ade4a7411
+        results: [ ]
+        errors:
+          - code: NOT_FOUND
+            message: "Category ex:misc.unknown for system ECOLYTIQ_V2 does not have any explanations, or does not exist."
+
+    ExplanationErrorResponseAnyExplanationsNotFoundExample:
+      value:
+        request_id: 6bf3202ade4a7411
+        results: [ ]
+        errors:
+          - code: NOT_FOUND
+            message: "Unable to find any explanation that fits your request."
 
     ContextualInsightsResponseExample:
       value:
@@ -2781,7 +2873,7 @@ components:
     TransactionResponseCurrencyNotSupportedExample:
       value:
         request_id: "1d2dd5f3b23d3870"
-        results: []
+        results: [ ]
         errors:
           - transaction_id: "62c12ecc-17d7-469f-9ecc-b08e00eb8c24"
             error_code: "CURRENCY_NOT_SUPPORTED"
@@ -2790,7 +2882,7 @@ components:
     TransactionResponseModelNotFoundExample:
       value:
         request_id: "1d2dd5f3b23d3870"
-        results: []
+        results: [ ]
         errors:
           - transaction_id: "62c12ecc-17d7-469f-9ecc-b08e00eb8c24"
             error_code: "not.found"
@@ -2799,7 +2891,7 @@ components:
     TransactionResponseCifNotFoundExample:
       value:
         request_id: "1d2dd5f3b23d3870"
-        results: []
+        results: [ ]
         errors:
           - transaction_id: "62c12ecc-17d7-469f-9ecc-b08e00eb8c24"
             error_code: "not.found"
