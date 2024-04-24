@@ -1,0 +1,44 @@
+theme:
+  openapi:
+    theme:
+      colors:
+        primary:
+          main: "#132a38"
+        success:
+          main: rgba(28, 184, 65, 1)
+          light: "#81ec9a"
+          dark: "#083312"
+          contrastText: "#000"
+        text:
+          primary: "#132a38"
+          secondary: "#132a38"
+        http:
+          get: rgba(0, 200, 219, 1)
+          post: rgba(28, 184, 65, 1)
+          put: rgba(255, 187, 0, 1)
+          delete: rgba(254, 39, 35, 1)
+      typography:
+        fontSize: 14px
+        fontFamily: Circular, sans-serif
+        optimizeSpeed: true
+        smoothing: antialiased
+        headings:
+          fontFamily: Circular, sans-serif
+          fontWeight: bold
+        code:
+          fontWeight: '600'
+          color: "#96b935"
+          wrap: true
+        links:
+          color: "#96b935"
+      logo:
+        gutter: 20px
+      sidebar:
+        activeTextColor: "#e5fd66"
+        backgroundColor: "#132a38"
+        width: 300px
+        textColor: "#f0f0f1"
+      rightPanel:
+        backgroundColor: "#132a38"
+        textColor: "#f0f0f1"
+
