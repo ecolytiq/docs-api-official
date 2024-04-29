@@ -51,7 +51,9 @@ jobs:
           title: "Update API documentation [${{ env.TITLE_DATETIME }}]"
           body: |
             This PR updates
-            - the OpenAPI documentation `./openapi.yaml` is copied from the gateway repositories main branch
+            - the `./openapi.yaml` is copied from the gateway repositories main branch
+            - the `./openapi.yaml` is copied from the action repositories main branch
+            - `openapi-gateway.yaml` and `openapi-action.yaml` are merged into `./openapi.yaml`
             - the redoc generated documentation is generated to `./index.html`
             - the postman collection is generated to `./ecolytiq-api.postman_collection.json`
             
