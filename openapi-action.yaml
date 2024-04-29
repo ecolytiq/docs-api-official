@@ -1,0 +1,245 @@
+openapi: 3.0.3
+
+info:
+  version: v3-2024-04-18
+  title: ecolytiq SaaS
+tags:
+  - name: "Action API"
+    description: |
+      Use these endpoints for handling carbon footprint impact orders.
+
+      > #### Note:
+      > 
+      > These endpoints are only meant for handling the data about carbon footprint impact orders between a Customer (e.g., bank) and a carbon project provider through ecolytiq.
+      > They are not meant to initiate the actual flow of payments between the customer and the provider or ecolytiq!
+
+security:
+  - BearerAuth: [ ]
+
+paths:
+  /action/v2/projects:
+    get:
+      operationId: getActionProjects
+      security:
+        - BearerAuth: [ ]
+      description: >-
+        Use this endpoint to retrieve a list of climate projects.
+      summary: "Get climate projects"
+      tags:
+        - "Action API"
+      responses:
+        '200':
+          description: A List of climate projects.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClimateProjectsResponse'
+              examples:
+                Example:
+                  $ref: "#/components/examples/ActionProjectsExample"
+        '401':
+          description: Unauthorized. Access Token is invalid or expired.
+
+        '403':
+          description: Forbidden. Missing privileges to access projects.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ActionErrorResponse'
+              examples:
+                Response:
+                  $ref: '#/components/examples/ProjectsAccessDenied403'
+components:
+
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  examples:
+    ProjectsAccessDenied403:
+      value:
+        error_code: PERMISSION_DENIED
+        error_description: Missing privileges to access projects
+    ActionProjectsExample:
+      value:
+        projects:
+          - id: 5c406074-2fe9-4181-83d9-8dcae764a86b
+            country: US
+            registry_name: Puro.earth
+            classification: AVOIDANCE
+            images:
+              - image_url: https://example.com/image_01.jpg
+              - image_url: https://example.com/image_02.jpg
+            price_per_kg:
+              value: 0.025
+              currency_code: EUR
+            translations:
+              - language_code: en
+                title: CarbonCapture Direct Air Capture - Project Bison
+                description: CarbonCapture DAC machines that remove CO2 from the atmosphere. Project Bison will be the first mass-scale DAC deployment to use Class VI wells for CO2 storage, and the world's largest single DAC project.
+                description_long: |
+                  Project Bison was designed to permanently remove CO₂ via direct air capture systems in Wyoming, serving to meet the rapidly growing need for high-quality engineered carbon removal credits.
+
+                  The project has been developed to be rolled out over multiple phases through 2030. It consists of a partnership between CarbonCapture Inc., a US climate tech company that makes direct air capture (DAC) systems based on a groundbreaking modular open-systems architecture, and Frontier Carbon Solutions, a carbon storage developer. The partnership will deploy CarbonCapture’s DAC modules atop Frontier’s CO2 transportation and storage infrastructure in Wyoming to permanently remove 5 million tonnes of CO2 from the atmosphere annually by 2030.
+
+                  DAC refers to technology solutions that filter carbon dioxide directly out of the atmosphere. When air moves over certain materials, they selectively bind to CO2. CarbonCapture uses solid sorbent capture materials, themselves typically composed of common chemicals already in use in other applications. Once CO2 is captured from the atmosphere, heat is applied to release it, regenerating capture materials for another capture cycle. CarbonCapture uses only renewables or other zero-carbon resources to power its systems.
+                category: Direct Air Capture
+                sustainable_development_goals:
+                  - id: "15"
+                    description: Protect, restore and promote sustainable use of terrestrial ecosystems, sustainably manage forests, combat desertification, and halt and reverse land degradation and halt biodiversity loss.
+
+  schemas:
+
+    ClimateProjectsResponse:
+      type: object
+      required:
+        - projects
+      properties:
+        projects:
+          type: array
+          items:
+            $ref: '#/components/schemas/ClimateProjects'
+    ProjectImage:
+      type: object
+      required:
+        - image_url
+      properties:
+        image_url:
+          type: string
+          format: url
+          description: Url of the project image.
+          example: https://example.com/image_01.jpg
+
+    ClimateProjects:
+      type: object
+      required:
+        - id
+        - country
+        - price_per_kg
+        - translations
+      properties:
+        id:
+          type: string
+          description: The unique identifier of the project.
+          example: 5c406074-2fe9-4181-83d9-8dcae764a86b
+        country:
+          description: The country where the project is located. ISO 3166 Alpha-2 country code.
+          type: string
+          minLength: 2
+          maxLength: 2
+          example: US
+        registry_name:
+          type: string
+          description: The registry on which the project’s credits are registered.
+          example: Puro.earth
+        classification:
+          type: string
+          description: The classification of the project’s carbon impact, if applicable.
+          enum:
+            - AVOIDANCE
+            - REMOVAL
+            - TREE_PLANTING
+        images:
+          type: array
+          description: Images of the project.
+          items:
+            $ref: '#/components/schemas/ProjectImage'
+        price_per_kg:
+          $ref: '#/components/schemas/ActionPositiveAmount'
+        translations:
+          type: array
+          description: Translated content of the project.
+          items:
+            $ref: '#/components/schemas/ClimateProjectsTranslation'
+    SustainableDevelopmentGoal:
+      type: object
+      required:
+        - id
+        - description
+      properties:
+        id:
+          description: Sustainable Development Goal ID.
+          type: string
+          example: 15
+        description:
+          type: string
+          description: Description of the SDG.
+          example: Protect, restore and promote sustainable use of terrestrial ecosystems, sustainably manage forests, combat desertification, and halt and reverse land degradation and halt biodiversity loss.
+
+    ClimateProjectsTranslation:
+      type: object
+      required:
+        - language_code
+        - title
+        - description
+        - sustainable_development_goals
+      properties:
+        language_code:
+          type: string
+          description: ISO639-1 two-letter language code.
+          example: en
+        title:
+          type: string
+          description: The name of the project, as listed in its registry records.
+          example: CarbonCapture Direct Air Capture - Project Bison
+        description:
+          type: string
+          description: A concise description of the project.
+          example: CarbonCapture DAC machines that remove CO2 from the atmosphere. Project Bison will be the first mass-scale DAC deployment to use Class VI wells for CO2 storage, and the world's largest single DAC project.
+        description_long:
+          type: string
+          description: A detailed description of the project.
+          example: |
+            Project Bison was designed to permanently remove CO₂ via direct air capture systems in Wyoming, serving to meet the rapidly growing need for high-quality engineered carbon removal credits.
+            
+            The project has been developed to be rolled out over multiple phases through 2030. It consists of a partnership between CarbonCapture Inc., a US climate tech company that makes direct air capture (DAC) systems based on a groundbreaking modular open-systems architecture, and Frontier Carbon Solutions, a carbon storage developer. The partnership will deploy CarbonCapture’s DAC modules atop Frontier’s CO2 transportation and storage infrastructure in Wyoming to permanently remove 5 million tonnes of CO2 from the atmosphere annually by 2030.
+            
+            DAC refers to technology solutions that filter carbon dioxide directly out of the atmosphere. When air moves over certain materials, they selectively bind to CO2. CarbonCapture uses solid sorbent capture materials, themselves typically composed of common chemicals already in use in other applications. Once CO2 is captured from the atmosphere, heat is applied to release it, regenerating capture materials for another capture cycle. CarbonCapture uses only renewables or other zero-carbon resources to power its systems.
+        category:
+          type: string
+          description: The methodology or technology being applied in the project.
+          example: Direct Air Capture
+        sustainable_development_goals:
+          type: array
+          description: Lists the UN Sustainable Development Goals (SDGs) that the project claims an impact on. There are 17 goals, described in the [SDGs](https://sdgs.un.org/goals).
+          items:
+            $ref: '#/components/schemas/SustainableDevelopmentGoal'
+
+    ActionPositiveAmount:
+      description: Price per kg.
+      type: object
+      required:
+        - value
+        - currency_code
+      properties:
+        value:
+          description: Decimal fraction depends on currency and can be between 0 and 3.
+          type: number
+          maximum: 999999999999999.999
+          minimum: 0.01
+          example: 0.92
+        currency_code:
+          type: string
+          description: ISO 4217 currency code.
+          example: USD
+
+    ActionErrorResponse:
+      description: Error messages for API clients.
+      type: object
+      required:
+        - error_code
+        - error_description
+      properties:
+        error_code:
+          type: string
+          example: PERMISSION_DENIED
+          description: identifies the type of error. See all used codes in [ecolytiq Error Code Summary](#tag/Errors/ecolytiq-Error-Code-Summary)
+        error_description:
+          type: string
+          example: Missing privileges to access projects.
+          description: human readable error description
