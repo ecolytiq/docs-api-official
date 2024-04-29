@@ -17,12 +17,19 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Download openapi.yaml file
+      - name: Download openapi-gateway.yaml file
         run: |
           curl -H "Authorization: token ${{ secrets.CI_ACTIONS_PAT }}" \
                -H "Accept: application/vnd.github.v3.raw" \
                -L "https://api.github.com/repos/ecolytiq/gateway/contents/src/main/resources/openapi.yaml?ref=main" \
-               -o openapi.yaml
+               -o openapi-gateway.yaml
+
+      - name: Download openapi-action.yaml file
+        run: |
+          curl -H "Authorization: token ${{ secrets.CI_ACTIONS_PAT }}" \
+               -H "Accept: application/vnd.github.v3.raw" \
+               -L "https://api.github.com/repos/ecolytiq/offsetting/contents/src/main/resources/openapi.yaml?ref=main" \
+               -o openapi-action.yaml
 
       - name: Setup variables using Environment Files
         run: |
