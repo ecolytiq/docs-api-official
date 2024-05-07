@@ -218,11 +218,11 @@ components:
         - currency_code
       properties:
         value:
-          description: Decimal fraction depends on currency and can be between 0 and 3.
+          description: Decimal fraction can be between 0 and 10.
           type: number
-          maximum: 999999999999999.999
-          minimum: 0.01
-          example: 0.92
+          maximum: 99999.9999999999
+          minimum: 0.0000000001
+          example: 0.0225
         currency_code:
           type: string
           description: ISO 4217 currency code.

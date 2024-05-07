@@ -821,7 +821,6 @@ paths:
           description: |
             Unauthorized. Access Token is invalid or expired.
 
-
   /transactions/v1/questions:
     get:
       operationId: getTransactionsQuestions
@@ -1033,7 +1032,7 @@ paths:
               type: string
             example:
               - 06462ed4-32e7-46b0-8920-31e982ba22c0
-        - $ref: "#/components/parameters/languageCodesOptional"
+        - $ref: "#/components/parameters/languageCodes"
       responses:
         '200':
           description: A list of insights
@@ -1089,7 +1088,6 @@ paths:
           description: |
             Unauthorized. Access Token is invalid or expired.
 
-
   /content/v1/insights/random:
     get:
       operationId: getContentInsightsRandom
@@ -1106,7 +1104,7 @@ paths:
       parameters:
         - $ref: "#/components/parameters/categories"
         - $ref: "#/components/parameters/size"
-        - $ref: "#/components/parameters/languageCodesOptional"
+        - $ref: "#/components/parameters/languageCodes"
       responses:
         '200':
           description: A list of insights
@@ -1459,7 +1457,6 @@ paths:
           description: |
             Unauthorized. Access Token is invalid or expired.
 
-
   /account/v1/delete-accounts:
     post:
       operationId: postAccountDeleteAccounts
@@ -1689,7 +1686,6 @@ paths:
                 Meta-category for different system not found:
                   $ref: '#/components/examples/MetaForSystemNotFoundExample'
 
-
   /statistic/v1/footprints/averages:
     get:
       operationId: getAverageFootprints
@@ -1747,7 +1743,6 @@ paths:
                 Unknown CO2 model:
                   $ref: '#/components/examples/NotFoundGetAverageFootprints-Example'
 
-
   /feedback/v1/structured-feedback:
     post:
       operationId: postStructuredFeedback
@@ -1794,11 +1789,12 @@ paths:
               examples:
                 Transaction ID not found:
                   $ref: '#/components/examples/FeedbackTransactionIdNotFound422Example'
+                Insight ID not found:
+                  $ref: '#/components/examples/FeedbackInsightIdNotFound422Example'
                 Answer ID not found:
                   $ref: '#/components/examples/FeedbackAnswerIdNotFound422Example'
                 Invalid Reference provided:
                   $ref: '#/components/examples/FeedbackInvalidReference422Example'
-
 
   /feedback/v1/unstructured-feedback:
     post:
@@ -1900,6 +1896,7 @@ components:
       explode: false
       schema:
         type: array
+        minItems: 0
         items:
           type: string
       example:
@@ -1908,29 +1905,17 @@ components:
     languageCodes:
       name: "language_codes"
       in: "query"
-      description: ISO639-1 two-letter language code(s) to select output language(s) of the content piece(s).
+      description: ISO639-1 language code(s) to select the output language(s) of the content piece(s).
       required: false
       style: form
       explode: false
       schema:
         type: array
+        minItems: 0
         items:
           type: string
-        example:
-          - de
-          - en
-    languageCodesOptional:
-      name: "language_codes"
-      in: "query"
-      description: ISO639-1 two-letter language code(s) to select output language(s) of the content piece(s).
-        If the array is unset or empty all languages are included.
-      required: false
-      style: form
-      explode: false
-      schema:
-        type: array
-        items:
-          type: string
+          minLength: 2
+          maxLength: 10
         example:
           - de
           - en
@@ -1948,8 +1933,10 @@ components:
       explode: false
       schema:
         type: array
+        minItems: 0
         items:
           type: string
+          maxLength: 64
         example:
           - ex:food.groceries
           - ex:transport.localtransport
@@ -2245,16 +2232,16 @@ components:
         results:
           - transaction_id: 62c12ecc-17d7-469f-9ecc-b08e00eb8c90
             question_id: 9ce39d4f-cb36-4e93-b896-822156c9c159
-            answer_id: null
-            input: null
+            answer_id: 'null'
+            input: 'null'
           - transaction_id: 62c12ecc-17d7-469f-9ecc-b08e00eb8c90
             question_id: cf4bd26e-c1e6-40d5-8825-e12c0246a5d5
-            answer_id: null
-            input: null
+            answer_id: 'null'
+            input: 'null'
           - transaction_id: 62c12ecc-17d7-469f-9ecc-b08e00eb8c90
             question_id: a94bc4b7-2664-43d3-97ee-1556bc6674ab
-            answer_id: null
-            input: null
+            answer_id: 'null'
+            input: 'null'
         errors: [ ]
     RefinementsAnsweredResponseExample:
       value:
@@ -2263,15 +2250,15 @@ components:
           - transaction_id: 62c12ecc-17d7-469f-9ecc-b08e00eb8c90
             question_id: 9ce39d4f-cb36-4e93-b896-822156c9c159
             answer_id: 2f085fa7-aceb-4e35-9da5-cb39f8a46fca
-            input: null
+            input: 'null'
           - transaction_id: 62c12ecc-17d7-469f-9ecc-b08e00eb8c90
             question_id: cf4bd26e-c1e6-40d5-8825-e12c0246a5d5
             answer_id: 152a69f0-c6ff-4f7b-bfac-fe6e92773188
-            input: null
+            input: 'null'
           - transaction_id: 62c12ecc-17d7-469f-9ecc-b08e00eb8c90
             question_id: a94bc4b7-2664-43d3-97ee-1556bc6674ab
             answer_id: a8c60936-c821-48c6-8975-9f209423d9d9
-            input: null
+            input: 'null'
         errors: [ ]
 
 
@@ -2350,7 +2337,7 @@ components:
         errors:
           - id: 06462ed4-32e7-46b0-8920-31e982ba22c0
             code: NOT_FOUND
-            message: "No translation for language it found."
+            description: "No translation for language it found."
 
     InsightErrorResponseInsightNotFoundExample:
       value:
@@ -2359,7 +2346,7 @@ components:
         errors:
           - id: 06462ed4-32e7-46b0-8920-31e982ba22c0
             code: NOT_FOUND
-            message: "Insight does not exist."
+            description: "Insight does not exist."
 
     InsightErrorResponseCategoryNotFoundExample:
       value:
@@ -2367,7 +2354,7 @@ components:
         results: [ ]
         errors:
           - code: NOT_FOUND
-            message: "Category ex:misc.unknown for system ECOLYTIQ_V2 does not have any insights, or does not exist."
+            description: "Category ex:misc.unknown for system ECOLYTIQ_V2 does not have any insights, or does not exist."
 
     InsightErrorResponseAnyInsightsNotFoundExample:
       value:
@@ -2375,7 +2362,7 @@ components:
         results: [ ]
         errors:
           - code: NOT_FOUND
-            message: "Unable to find any insight that fits your request."
+            description: "Unable to find any insight that fits your request."
 
     ComparableErrorResponseComparableNotFoundExample:
       value:
@@ -2384,7 +2371,7 @@ components:
         errors:
           - id: 06462ed4-32e7-46b0-8920-31e982ba22c0
             code: NOT_FOUND
-            message: "Comparable does not exist."
+            description: "Comparable does not exist."
 
     ComparableErrorResponseCo2FootprintIncompatibleExample:
       value:
@@ -2393,7 +2380,7 @@ components:
         errors:
           - id: 06462ed4-32e7-46b0-8920-31e982ba22c0
             code: INCOMPATIBLE
-            message: "Comparable is incompatible with given co2 footprint of 50000 grams."
+            description: "Comparable is incompatible with given co2 footprint of 50000 grams."
 
     ComparableErrorResponseCategoryNotFoundExample:
       value:
@@ -2401,7 +2388,7 @@ components:
         results: [ ]
         errors:
           - code: NOT_FOUND
-            message: "Category ex:misc.unknown for system ECOLYTIQ_V2 does not have any comparables, or does not exist."
+            description: "Category ex:misc.unknown for system ECOLYTIQ_V2 does not have any comparables, or does not exist."
 
     ComparableErrorResponseAnyComparablesNotFoundExample:
       value:
@@ -2409,7 +2396,7 @@ components:
         results: [ ]
         errors:
           - code: NOT_FOUND
-            message: "Unable to find any comparables that fits your request."
+            description: "Unable to find any comparables that fits your request."
 
     ExplanationErrorResponseExplanationNotFoundExample:
       value:
@@ -2418,7 +2405,7 @@ components:
         errors:
           - id: 06462ed4-32e7-46b0-8920-31e982ba22c0
             code: NOT_FOUND
-            message: "Explanation does not exist."
+            description: "Explanation does not exist."
 
     ExplanationErrorResponseCategoryNotFoundExample:
       value:
@@ -2426,7 +2413,7 @@ components:
         results: [ ]
         errors:
           - code: NOT_FOUND
-            message: "Category ex:misc.unknown for system ECOLYTIQ_V2 does not have any explanations, or does not exist."
+            description: "Category ex:misc.unknown for system ECOLYTIQ_V2 does not have any explanations, or does not exist."
 
     ExplanationErrorResponseAnyExplanationsNotFoundExample:
       value:
@@ -2434,7 +2421,7 @@ components:
         results: [ ]
         errors:
           - code: NOT_FOUND
-            message: "Unable to find any explanation that fits your request."
+            description: "Unable to find any explanation that fits your request."
 
     ContextualInsightsResponseExample:
       value:
@@ -2761,7 +2748,7 @@ components:
               value: ex:administration.accounting
             merchant_name: Tech Innovations
             amount:
-              value: 270.25
+              value: -270.25
               currency_code: EUR
             co2_footprint_in_g: 23573
           - transaction_id: 3b862583-0399-4a5d-ba89-101590cb1f07
@@ -2771,7 +2758,7 @@ components:
               value: ex:businesstravel.hotel
             merchant_name: Wanderlust Travels
             amount:
-              value: 704.90
+              value: -704.90
               currency_code: EUR
             co2_footprint_in_g: 38663
           - transaction_id: 20289e8d-e596-4849-ad5e-a3eda9cc456a
@@ -2781,7 +2768,7 @@ components:
               value: ex:equipment.furniture
             merchant_name: MarketPlace Retail
             amount:
-              value: 396.65
+              value: -396.65
               currency_code: EUR
             co2_footprint_in_g: 65723
           - transaction_id: 52f22879-6856-4e39-86bd-ab4f9825397d
@@ -2791,7 +2778,7 @@ components:
               value: ex:general.recreational
             merchant_name: Active Life Center
             amount:
-              value: 341.23
+              value: -341.23
               currency_code: EUR
             co2_footprint_in_g: 13605
           - transaction_id: db165b73-beaa-4360-a526-3207190eca08
@@ -2801,7 +2788,7 @@ components:
               value: ex:material.metal
             merchant_name: Tech Innovations
             amount:
-              value: 5850.41
+              value: -5850.41
               currency_code: EUR
             co2_footprint_in_g: 27030
           - transaction_id: c4a10226-2432-4b91-b826-f7dcb2706891
@@ -2811,7 +2798,7 @@ components:
               value: ex:personnel.foodevents
             merchant_name: Starlight Cafe & Bakery
             amount:
-              value: 2068.31
+              value: -2068.31
               currency_code: EUR
             co2_footprint_in_g: 79746
           - transaction_id: a25467fe-e695-4db8-a9f9-1a03d2db1213
@@ -2821,7 +2808,7 @@ components:
               value: ex:utilities.water
             merchant_name: Everyday Essentials
             amount:
-              value: 96.23
+              value: -96.23
               currency_code: EUR
             co2_footprint_in_g: 47389
     GetMetaCategoryTransactionsExample:
@@ -2834,7 +2821,7 @@ components:
               value: ex:administration.accounting
             merchant_name: Tech Innovations
             amount:
-              value: 1024.45
+              value: -1024.45
               currency_code: EUR
             co2_footprint_in_g: 23573
           - transaction_id: 3b862583-0399-4a5d-ba89-101590cb1f07
@@ -2844,7 +2831,7 @@ components:
               value: ex:administration.constructionservices
             merchant_name: Tech Innovations
             amount:
-              value: 72.49
+              value: -72.49
               currency_code: EUR
             co2_footprint_in_g: 38663
           - transaction_id: 20289e8d-e596-4849-ad5e-a3eda9cc456a
@@ -2854,7 +2841,7 @@ components:
               value: ex:administration.financialintermediation
             merchant_name: Tech Innovations
             amount:
-              value: 77.72
+              value: -77.72
               currency_code: EUR
             co2_footprint_in_g: 65723
           - transaction_id: 52f22879-6856-4e39-86bd-ab4f9825397d
@@ -2864,7 +2851,7 @@ components:
               value: ex:administration.health
             merchant_name: Tech Innovations
             amount:
-              value: 5037.89
+              value: -5037.89
               currency_code: EUR
             co2_footprint_in_g: 13605
           - transaction_id: db165b73-beaa-4360-a526-3207190eca08
@@ -2874,7 +2861,7 @@ components:
               value: ex:administration.leasing
             merchant_name: Tech Innovations
             amount:
-              value: 3200.74
+              value: -3200.74
               currency_code: EUR
             co2_footprint_in_g: 27030
           - transaction_id: c4a10226-2432-4b91-b826-f7dcb2706891
@@ -2884,7 +2871,7 @@ components:
               value: ex:administration.legal
             merchant_name: Tech Innovations
             amount:
-              value: 38.04
+              value: -38.04
               currency_code: EUR
             co2_footprint_in_g: 79746
     GetSubCategoryTransactionsExample:
@@ -2897,7 +2884,7 @@ components:
               value: ex:administration.accounting
             merchant_name: Tech Innovations
             amount:
-              value: 760.06
+              value: -760.06
               currency_code: EUR
             co2_footprint_in_g: 23573
           - transaction_id: 3b862583-0399-4a5d-ba89-101590cb1f07
@@ -2907,7 +2894,7 @@ components:
               value: ex:administration.accounting
             merchant_name: Tech Innovations
             amount:
-              value: 735.30
+              value: -735.30
               currency_code: EUR
             co2_footprint_in_g: 38663
           - transaction_id: 20289e8d-e596-4849-ad5e-a3eda9cc456a
@@ -2917,7 +2904,7 @@ components:
               value: ex:administration.accounting
             merchant_name: Tech Innovations
             amount:
-              value: 3513.03
+              value: -3513.03
               currency_code: EUR
             co2_footprint_in_g: 65723
     GetTransactionsEmptyResultExample:
@@ -2961,7 +2948,6 @@ components:
               unit: g
               value: 748
           - transaction_id: fbc78d6b-122b-4ae3-8b5b-50f45230a39f
-            account_id: 10547323-5594-45a7-a58f-3b8618770b7c
             category:
               system: ECOLYTIQ_V2
               value: "ex:food.groceries"
@@ -3021,7 +3007,6 @@ components:
                     text: vegan
                   - language: en
                     text: vegan
-            input: null
           - id: 4f8d7bdf-6906-4680-a1d8-b05468b3e530
             categories: [ ]
             text:
@@ -3042,13 +3027,13 @@ components:
         answers:
           - account_id: 1c974398-4d2b-44fa-b292-64a46c0e6577
             answer_id: 9d1d0a2b-597b-4608-8371-9af6e178c969
-            input: null
+            input: 'null'
           - account_id: 1c974398-4d2b-44fa-b292-64a46c0e6577
             answer_id: d112a419-e04a-4c78-bddb-a0e08f4abce9
-            input: null
+            input: 'null'
           - account_id: 1c974398-4d2b-44fa-b292-64a46c0e6577
             answer_id: 1453033a-bfc7-466e-9c1e-5b89be22fcff
-            input: null
+            input: 'null'
           - account_id: 1c974398-4d2b-44fa-b292-64a46c0e6577
             answer_id: 8948045b-d163-4d03-b9ec-3d5237a4550a
             input: "3"
@@ -3085,7 +3070,6 @@ components:
         timestamp: 2023-04-25T12:34:56.78+00:00
         status: 400
         error: Bad Request
-        # path:
 
     GetTotalFootprintExample:
       value:
@@ -3223,14 +3207,18 @@ components:
       properties:
         meta_category:
           type: string
-          description: "The meta-category of the footprint. Will always be returned if no filter for meta-category has been applied.<br>* Meta-category (e.g. `food`) is part of a category (e.g. `ex:food.cafe`), which is composed of the following structure  `ex:meta-category.sub-category`"
+          maxLength: 64
+          description: The meta-category of the footprint. Will always be returned if no filter for meta-category has been applied.<br>* Meta-category (e.g. `food`) is part of a category (e.g. `ex:food.cafe`), which is composed of the following structure  `ex:meta-category.sub-category`
           example: administration
         category:
           type: string
           description: The category of the footprint. Will always be returned if the filter for meta-category has been applied.
           example: ex:administration.accounting
         transaction_count:
-          type: number
+          type: integer
+          format: int32
+          minimum: 0
+          maximum: 2147483647
           description: The number of transactions in that category.
           example: 12
         co2_footprint_in_g:
@@ -3266,14 +3254,18 @@ components:
       properties:
         code:
           type: string
-          description: Unique code of the co2 model.
+          maxLength: 32
+          description: Unique code of the CO2 model.
+          example: DE
         description:
           type: string
-          description: Description of the model
+          description: Description of the CO2 model.
         currency:
           type: string
-          description: |
-            Base currency of the model. Other currencies are converted to this currency first.
+          minLength: 3
+          maxLength: 3
+          description: ISO 4217 currency code describing the base currency of the CO2 model. Other currencies are converted to this currency first.
+          example: EUR
         enabled:
           type: boolean
           description: True, if the CO2 model is enabled.
@@ -3328,21 +3320,29 @@ components:
       properties:
         category:
           type: string
-          description: category name. Unique within the `system` context.
+          maxLength: 64
+          description: Category value. Unique within the `system` context.
+          example: ex:food.groceries
         system:
           type: string
-          description: category system
+          maxLength: 32
+          description: Category system
+          example: ECOLYTIQ_V2
         description:
           type: string
           description: Description of the category
 
     RequestId:
       type: string
+      maxLength: 64
+      description: Unique ID to identify the request.
       example: "6bf3202ade4a7411"
 
     Timestamp:
       type: string
-      example: "2023-04-25T12:34:56.789+00:00"
+      format: date-time
+      description: The time of the occurrence.
+      example: 2023-04-25T12:34:56.789+00:00
 
     QuestionResponse:
       type: object
@@ -3425,11 +3425,19 @@ components:
       properties:
         id:
           type: string
+          maxLength: 64
+          description: Unique ID to identify the insight.
+          example: 66028aaf-5da0-41db-9bb7-fb7fffe4db1b
         categories:
+          type: array
+          minItems: 1
+          description: List of the insight categories.
           items:
             $ref: '#/components/schemas/Category'
         content:
           type: array
+          minItems: 1
+          description: List of the insight translations.
           items:
             $ref: '#/components/schemas/TranslatedInsight'
 
@@ -3493,10 +3501,12 @@ components:
           $ref: '#/components/schemas/RequestId'
         results:
           type: array
+          description: List of explanations.
           items:
             $ref: '#/components/schemas/Explanation'
         errors:
           type: array
+          description: List of request errors.
           items:
             $ref: '#/components/schemas/ResourceError'
 
@@ -3509,11 +3519,19 @@ components:
       properties:
         id:
           type: string
+          maxLength: 64
+          description: Unique ID to identify the explanation.
+          example: addaaaa6-167d-43d4-9e35-175dca9816c3
         categories:
+          type: array
+          minItems: 1
+          description: List of the explanation categories.
           items:
             $ref: '#/components/schemas/Category'
         content:
           type: array
+          minItems: 1
+          description: List of the explanation translations.
           items:
             $ref: '#/components/schemas/TranslatedExplanation'
 
@@ -3528,10 +3546,12 @@ components:
           $ref: '#/components/schemas/RequestId'
         results:
           type: array
+          description: List of comparables.
           items:
             $ref: '#/components/schemas/Comparable'
         errors:
           type: array
+          description: List of request errors.
           items:
             $ref: '#/components/schemas/ResourceError'
 
@@ -3545,11 +3565,11 @@ components:
           type: string
           description: ID of the resource that caused the error, if present
         code:
-          description: identifies the type of error. See all used codes in [ecolytiq Error Code Summary](#tag/Errors/ecolytiq-Error-Code-Summary)
           type: string
+          description: Identifies the type of error. See all used codes in [ecolytiq Error Code Summary](#tag/Errors/ecolytiq-Error-Code-Summary)
         description:
-          description: human readable error description
           type: string
+          description: Human readable error description
 
     Comparable:
       type: object
@@ -3560,29 +3580,21 @@ components:
       properties:
         id:
           type: string
+          maxLength: 64
+          description: Unique ID to identify the comparable.
+          example: 12bb4050-b4db-42e5-924f-6fa4cc336e19
         categories:
+          type: array
+          minItems: 1
+          description: List of the comparable categories.
           items:
             $ref: '#/components/schemas/Category'
         content:
           type: array
+          minItems: 1
+          description: List of the comparable translations.
           items:
             $ref: '#/components/schemas/TranslatedComparable'
-
-    FeedbackLoops:
-      type: object
-      properties:
-        id:
-          type: string
-        name:
-          type: string
-        type:
-          $ref: '#/components/schemas/FeedbackLoopType'
-
-    FeedbackLoopType:
-      type: string
-      enum:
-        - PROFILE
-        - TRANSACTION
 
     ApiError:
       description: |
@@ -3597,8 +3609,12 @@ components:
           $ref: '#/components/schemas/RequestId'
         error_code:
           type: string
+          description: The error status code.
+          example: not.found
         error_description:
           type: string
+          description: The error description.
+          example: Category ex:food.groceries for system ECOLYTIQ_V2 not found.
 
     ApiValidationError:
       description: |
@@ -3613,11 +3629,20 @@ components:
         timestamp:
           $ref: "#/components/schemas/Timestamp"
         status:
-          type: number
+          type: integer
+          format: int32
+          minimum: 100
+          maximum: 599
+          description: The HTTP status code.
+          example: 400
         error:
           type: string
+          description: The HTTP status described.
+          example: Bad request
         path:
           type: string
+          description: The URL where the error occurred.
+          example: /content/v1/comparables
 
     ###########################
 
@@ -3656,8 +3681,10 @@ components:
     CO2FootprintInG:
       type: integer
       format: int64
-      example: 132123
+      minimum: 0
+      maximum: 9223372036854775807
       description: CO2 footprint in grams.
+      example: 132123
 
     GetFootprintsForMonthResponse:
       type: object
@@ -3666,6 +3693,7 @@ components:
       properties:
         categories:
           type: array
+          description: List of CO2 categories.
           items:
             $ref: '#/components/schemas/CategoryCO2Footprint'
 
@@ -3676,6 +3704,8 @@ components:
       properties:
         intervals:
           type: array
+          minItems: 0
+          description: List of monthly CO2 footprints
           items:
             $ref: "#/components/schemas/MonthlyCO2Footprint"
 
@@ -3686,13 +3716,17 @@ components:
       properties:
         year:
           type: integer
+          format: int32
+          minimum: 0
+          maximum: 2147483647
           description: The year of the interval. If not given the footprint refers to the whole interval.
           example: 2023
         month:
           type: integer
-          description: The month of the interval. If not given the footprint refers to the specified year.
+          format: int32
           minimum: 1
           maximum: 12
+          description: The month of the interval. If not given the footprint refers to the specified year.
           example: 1
         co2_footprint_in_g:
           $ref: '#/components/schemas/CO2FootprintInG'
@@ -3706,12 +3740,15 @@ components:
         - unit
       properties:
         value:
-          description: value of co2 footprint
-          type: number
+          type: integer
+          format: int64
+          minimum: 0
+          maximum: 9223372036854775807
+          description: Value of CO2 footprint
           example: 10
         unit:
-          description: unit of co2 footprint
           type: string
+          description: Unit of CO2 footprint
           enum:
             - g
             - kg
@@ -3729,10 +3766,14 @@ components:
           $ref: '#/components/schemas/RequestId'
         results:
           type: array
+          minItems: 0
+          description: List of successful transactions
           items:
             $ref: '#/components/schemas/TransactionResult'
         errors:
           type: array
+          minItems: 0
+          description: List of unsuccessful transactions
           items:
             $ref: '#/components/schemas/TransactionError'
 
@@ -3802,6 +3843,7 @@ components:
           $ref: '#/components/schemas/Category'
         merchant_name:
           type: string
+          maxLength: 2048
           description: Name of the merchant of the transaction.
           example: SwiftMart Electronics
         amount:
@@ -3839,21 +3881,21 @@ components:
       example: 74263e87-93cb-46be-a132-9cd260716f07
 
     AccountId:
-      description: The ID of the account holder/user. Do not use IDs of sub-accounts, cards or products.
       type: string
       maxLength: 64
+      description: The ID of the account holder/user. Do not use IDs of sub-accounts, cards or products.
       example: 1c974398-4d2b-44fa-b292-64a46c0e6577
 
     BusinessId:
-      description: The ID of the business of a commercial banking user. Mandatory for commercial banking.
       type: string
       maxLength: 64
+      description: The ID of the business of a commercial banking user. Mandatory for commercial banking.
       example: e36a9e67-3202-4dfa-883a-838d966e14f3
 
     SubAccountId:
-      description: The ID of the sub-account, card or product of a commercial banking user. Can only be used for commercial banking.
       type: string
       maxLength: 64
+      description: The ID of the sub-account, card or product of a commercial banking user. Can only be used for commercial banking.
       example: 12760c06-b928-4ddb-911b-01d1e3e4eb28
 
     Transaction:
@@ -3881,8 +3923,14 @@ components:
           $ref: '#/components/schemas/Category'
         co2_model:
           type: string
+          maxLength: 32
+          description: Unique code of the CO2 model.
+          example: DE
         datetime:
           type: string
+          format: date-time
+          description: The date and time when the transaction happened.
+          example: 2022-05-15T14:18:34Z
         merchant:
           $ref: '#/components/schemas/Merchant'
         description:
@@ -3911,11 +3959,15 @@ components:
         - system
       properties:
         value:
-          description: category value
           type: string
+          maxLength: 64
+          description: Category value
+          example: ex:food.groceries
         system:
-          description: category system
           type: string
+          maxLength: 32
+          description: Category system
+          example: ECOLYTIQ_V2
 
     Amount:
       description: Money amount of the transaction.
@@ -3929,9 +3981,10 @@ components:
           description: Money value of the transaction. Decimal fraction depends on currency and can be between 0 and 3.
           maximum: 0
           minimum: -999999999999999.999
+          example: -37.50
         currency_code:
           type: string
-          description: Money currency of the transaction. Format according to ISO 4217 currency code.
+          description: ISO 4217 currency code describing the currency of the transaction.
           example: EUR
 
     Merchant:
@@ -3942,14 +3995,16 @@ components:
         - name
       properties:
         name:
-          description: name of merchant
           type: string
           maxLength: 2048
+          description: Name of the merchant
+          example: SwiftMart Electronics
         web:
-          description: web url of merchant
           type: string
           format: url
           maxLength: 2048
+          description: Web URL of the merchant
+          example: https://www.swiftmart-electronics.com/
         address:
           $ref: '#/components/schemas/Address'
         gps:
@@ -3964,15 +4019,19 @@ components:
         - longitude
       properties:
         latitude:
-          description: latitude as decimal fractions (decimal places = 6) of a degree
           type: number
+          format: float
           minimum: -90
           maximum: 90
+          description: Latitude as decimal fractions (decimal places = 6) of a degree
+          example: 57.634800
         longitude:
-          description: longitude as decimal fractions (decimal places = 6) of a degree
           type: number
+          format: float
           minimum: -180
           maximum: 180
+          description: Longitude as decimal fractions (decimal places = 6) of a degree
+          example: 18.294840
 
     Address:
       description: |
@@ -3982,25 +4041,31 @@ components:
         - city
       properties:
         street:
-          description: Name of the street
           type: string
           maxLength: 100
+          description: Name of the street
+          example: Grunerstraße
         street_no:
-          description: Street No. Can be also a range
           type: string
+          maxLength: 40
+          description: Street number. Can be also a range
+          example: 20
         postal_code:
-          description: Postal code
           type: string
           maxLength: 12
+          description: Postal code
+          example: 10179
         city:
-          description: Name of the City
           type: string
           maxLength: 180
+          description: Name of the City
+          example: Berlin
         country_code:
-          description: ISO 3166 Alpha-2 country code.
           type: string
           minLength: 2
           maxLength: 2
+          description: ISO 3166 Alpha-2 country code.
+          example: DE
       example:
         street: Second Street
         street_no: 42
@@ -4222,37 +4287,6 @@ components:
         description:
           type: string
 
-    TransactionBulkAnswerResult:
-      type: object
-      required:
-        - transaction_id
-        - question_id
-        - answer_id
-      properties:
-        transaction_id:
-          type: string
-        question_id:
-          type: string
-        answer_id:
-          type: string
-
-    TransactionBulkAnswerError:
-      type: object
-      required:
-        - transaction_id
-        - answer_id
-        - code
-        - description
-      properties:
-        transaction_id:
-          type: string
-        answer_id:
-          type: string
-        code:
-          type: string
-        description:
-          type: string
-
     BulkAnswersRequest:
       type: object
       required:
@@ -4279,8 +4313,6 @@ components:
 
     TransactionBulkAnswersRequest:
       type: object
-      required:
-        - answers
       properties:
         transactions:
           type: array
@@ -4320,8 +4352,13 @@ components:
       properties:
         language_code:
           type: string
+          minLength: 2
+          maxLength: 10
+          description: ISO 639-1 language code to specify the output language of the content piece.
+          example: de
         text:
           type: string
+          description: Explanation content translated to given language
 
     TranslatedComparable:
       type: object
@@ -4331,8 +4368,13 @@ components:
       properties:
         language_code:
           type: string
+          minLength: 2
+          maxLength: 10
+          description: ISO 639-1 language code to specify the output language of the content piece.
+          example: de
         text:
           type: string
+          description: Comparable content translated to given language
 
     TranslatedContextualInsight:
       type: object
@@ -4354,10 +4396,17 @@ components:
       properties:
         language_code:
           type: string
+          minLength: 2
+          maxLength: 10
+          description: ISO 639-1 language code to specify the output language of the content piece.
+          example: de
         title:
           type: string
+          maxLength: 255
+          example: Pay attention to this tip when buying online!
         text:
           type: string
+          description: Insight content translated to given language
 
     DeleteAccountsRequest:
       type: object
@@ -4436,14 +4485,16 @@ components:
           type: integer
           format: int64
           minimum: 0
-          example: 11324583
+          maximum: 9223372036854775807
           description: Yearly national average CO2 footprint in grams of the given CO2 model.
+          example: 11324583
         industry_average_co2_footprint_in_g:
           type: integer
           format: int64
           minimum: 0
-          example: 27462842
+          maximum: 9223372036854775807
           description: Yearly national average CO2 footprint in grams of the given CO2 model and industry of the account. Only returned for commercial banking and if an account ID has been specified.
+          example: 27462842
 
     StructuredFeedbackRequest:
       type: object
@@ -4476,10 +4527,12 @@ components:
       properties:
         transaction_id:
           type: string
+          maxLength: 64
           description: ID of a transaction as returned by the transaction API.
           example: 928c11b4-afc1-49ae-b0ee-a30d31dd8d5e
         insight_id:
           type: string
+          maxLength: 64
           description: ID of an insight as returned by the content API.
           example: 66028aaf-5da0-41db-9bb7-fb7fffe4db1b
 
