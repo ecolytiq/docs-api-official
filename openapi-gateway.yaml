@@ -3,7 +3,7 @@ openapi: 3.0.3
 info:
   description: |
     APIs of the ecolytiq SaaS
-  version: v3-2024-04-25
+  version: v3
   title: ecolytiq SaaS
   contact:
     email: support@ecolytiq.com
@@ -127,6 +127,9 @@ tags:
 
   - name: Changelog
     description: |
+      ### 2024-05-29
+      * Added the purchased carbon credits amount into the [Get total or monthly footprints and carbon credits over time](#tag/Statistic-API/operation/getFootprintsOverTime).      
+      
       ### 2024-04-18
       * Updated the behaviour of `meta-category` and `sub-category` filters in 
       [Get transactions per category for one month](#tag/Transaction-API/operation/getTransactionsForMonth), 
@@ -143,7 +146,7 @@ tags:
       * Added new error examples for [Get Random Comparables for a Given CO2 Footprint](#operation/getContentComparablesRandom)
       
       ### 2024-04-08
-      * Added query parameter `sub_account_ids` to [Get footprints of an account per meta-category for one month](#tag/Statistic-API/operation/getFootprintsForMonth). This enables users to aggregate CO2 footprints for a subset of their sub account IDs. 
+      * Added query parameter `sub_account_ids` to [Get footprints of an account per meta-category for one month](#tag/Statistic-API/operation/getFootprintsForMonth). This enables users to aggregate CO<sub>2</sub> footprints for a subset of their sub account IDs. 
 
       ### 2024-03-05
       * Modified descriptions of `account_id` and `sub_account_id` to prevent misinterpretation.
@@ -153,7 +156,7 @@ tags:
       
       ### 2024-02-14
       * Added [Retrieve refinements for account](#tag/Profiling-API/operation/getProfileRefinementsForAccount) endpoint to retrieve profile refinement information for a given account.
-      * Added query parameter `sub_account_ids` to [Get total or monthly footprints over time](#tag/Statistic-API/operation/getFootprintsOverTime). This enables user to aggregate CO2 footprints for a subset of their sub_account_ids. 
+      * Added query parameter `sub_account_ids` to [Get total or monthly footprints over time](#tag/Statistic-API/operation/getFootprintsOverTime). This enables user to aggregate CO<sub>2</sub> footprints for a subset of their sub_account_ids. 
 
 
   - name: Authentication
@@ -179,9 +182,11 @@ tags:
       
       | Error Code             | Description                                                                       | API                       |
       |------------------------|-----------------------------------------------------------------------------------|---------------------------|
-      | NOT_FOUND              | Central entity type in request, or anything related to it, is missing.            | [Get Insights by IDs](#operation/getContentInsights) <br/> [Get Insights (for a Given Category)](#operation/getContentInsightsRandom) <br/> [Get Comparables for a Given CO2 Footprint](#operation/getContentComparables) <br/> [Get Random Comparables for a Given CO2 Footprint](#operation/getContentComparablesRandom) <br/> [Get Explanations by ID](#operation/getContentExplanations) <br/> [Get Explanations (for given categories)](#operation/getContentExplanationsRandom) |
+      | NOT_FOUND              | Central entity type in request, or anything related to it, is missing.            | [Get Insights by IDs](#operation/getContentInsights) <br/> [Get Insights (for a Given Category)](#operation/getContentInsightsRandom) <br/> [Get Comparables for a Given CO2 Footprint](#operation/getContentComparables) <br/> [Get Random Comparables for a Given CO<sub>2</sub> Footprint](#operation/getContentComparablesRandom) <br/> [Get Explanations by ID](#operation/getContentExplanations) <br/> [Get Explanations (for given categories)](#operation/getContentExplanationsRandom) |
       | INCOMPATIBLE           | Central entity type in request, or anything related to it, is not compatible with parameters in the request. | [Get Comparables for a Given CO2 Footprint](#operation/getContentComparables) |
-      | CURRENCY_NOT_SUPPORTED | We can't process the transaction because we do not support the provided currency. | [Process transactions](#operation/postTransactionsTransactions)
+      | CURRENCY_NOT_SUPPORTED | We can't process the transaction because we do not support the provided currency. | [Process transactions](#operation/postTransactionsTransactions) |
+      | INITIATE_PAYMENT_FAILURE | We could not initialize the stripe payment process. | [Purchase carbon credits](#operation/purchaseCarbonCredits) |
+
   - name: Postman
     description: |
       ## Import Request Collection and Environment
@@ -267,7 +272,7 @@ tags:
 
   - name: Statistic API
     description: |
-      Use these endpoints to get aggregated footprint data about businesses, users or sub-accounts.
+      Use these endpoints to get aggregated CO<sub>2</sub> footprint and credits data about businesses, users or sub-accounts.
   - name: Feedback API
     description: |
       Use these endpoints to submit various types of feedback from a user.
@@ -894,7 +899,7 @@ paths:
       parameters:
         - in: query
           name: co2_footprint
-          description: CO2 footprint in grams
+          description: CO<sub>2</sub> footprint in grams
           required: true
           schema:
             type: integer
@@ -967,7 +972,7 @@ paths:
       parameters:
         - in: query
           name: co2_footprint
-          description: CO2 footprint in grams
+          description: CO<sub>2</sub> footprint in grams
           required: true
           schema:
             type: integer
@@ -1513,8 +1518,8 @@ paths:
       operationId: getFootprintsOverTime
       security:
         - BearerAuth: [ ]
-      summary: Get total or monthly footprints over time
-      description: Returns an account's total or monthly CO2 footprints over time.
+      summary: Get total or monthly footprints and carbon credits over time
+      description: Returns an account's total or monthly CO<sub>2</sub> footprints and purchased carbon credits over time.
       tags:
         - "Statistic API"
       parameters:
@@ -1570,16 +1575,16 @@ paths:
         - $ref: "#/components/parameters/subCategoryParameter"
       responses:
         '200':
-          description: Footprints for the given account.
+          description: Footprints and carbon credits amount for the given account.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GetFootprintsOverTimeResponse'
+                $ref: '#/components/schemas/GetFootprintsAndCreditsOverTimeResponse'
               examples:
-                Get total footprint:
-                  $ref: '#/components/examples/GetTotalFootprintExample'
-                Get monthly footprint:
-                  $ref: '#/components/examples/GetMonthlyFootprintExample'
+                Get total footprint and credits:
+                  $ref: '#/components/examples/GetTotalFootprintAndCreditsExample'
+                Get monthly footprint and credits:
+                  $ref: '#/components/examples/GetMonthlyFootprintsAndCreditsExample'
         '400':
           description: Bad Request. Request parameter is not valid.
           content:
@@ -1611,7 +1616,7 @@ paths:
       security:
         - BearerAuth: [ ]
       summary: Get footprints of an account per meta-category for one month
-      description: Returns the CO2 footprints of an account grouped by meta-categories (e.g. `food`) or categories (e.g. `ex:food.cafe`) for one specific month.
+      description: Returns the CO<sub>2</sub> footprints of an account grouped by meta-categories (e.g. `food`) or categories (e.g. `ex:food.cafe`) for one specific month.
       tags:
         - "Statistic API"
       parameters:
@@ -1692,14 +1697,14 @@ paths:
       security:
         - BearerAuth: [ ]
       summary: Get average footprints
-      description: Returns national average CO2 footprint numbers.
+      description: Returns national average CO<sub>2</sub> footprint numbers.
       tags:
         - "Statistic API"
       parameters:
         - name: co2_model
           in: query
           required: true
-          description: Specify a CO2 model from the `GET /info/v1/co2models` endpoint to get statistics on the national average footprint for that model.
+          description: Specify a CO<sub>2</sub> model from the `GET /info/v1/co2models` endpoint to get statistics on the national average footprint for that model.
           schema:
             type: string
           example: DE
@@ -1890,7 +1895,7 @@ components:
     subAccountIdsForStatisticApi:
       name: sub_account_ids
       in: query
-      description: Provides aggregated CO2 footprints for the given `sub_account_ids` that can be provided by commercial banking users.
+      description: Provides aggregated CO<sub>2</sub> footprints for the given `sub_account_ids` that can be provided by commercial banking users.
       required: false
       style: form
       explode: false
@@ -2137,19 +2142,19 @@ components:
         request_id: 6bf3202ade4a7411
         results:
           - code: DE
-            description: CO2 model of Germany.
+            description: CO<sub>2</sub> model of Germany.
             currency: EUR
             enabled: true
           - code: FR
-            description: CO2 model of France.
+            description: CO<sub>2</sub> model of France.
             currency: EUR
             enabled: false
           - code: UK
-            description: CO2 model of the United Kingdom.
+            description: CO<sub>2</sub> model of the United Kingdom.
             currency: GBP
             enabled: true
           - code: US
-            description: CO2 model of the United States of America.
+            description: CO<sub>2</sub> model of the United States of America.
             currency: USD
             enabled: false
     CategorySystemListExample:
@@ -3071,53 +3076,67 @@ components:
         status: 400
         error: Bad Request
 
-    GetTotalFootprintExample:
+    GetTotalFootprintAndCreditsExample:
       value:
         intervals:
           - co2_footprint_in_g: 8793376
+            co2_credits_in_g: 412900
 
-    GetMonthlyFootprintExample:
+    GetMonthlyFootprintsAndCreditsExample:
       value:
         intervals:
           - year: 2022
             month: 7
             co2_footprint_in_g: 713850
+            co2_credits_in_g: 350000
           - year: 2022
             month: 8
             co2_footprint_in_g: 701468
+            co2_credits_in_g: 400637
           - year: 2022
             month: 9
             co2_footprint_in_g: 0
+            co2_credits_in_g: 120000
           - year: 2022
             month: 10
             co2_footprint_in_g: 753372
+            co2_credits_in_g: 0
           - year: 2022
             month: 11
             co2_footprint_in_g: 779746
+            co2_credits_in_g: 2364567
           - year: 2022
             month: 12
             co2_footprint_in_g: 798517
+            co2_credits_in_g: 0
           - year: 2023
             month: 1
             co2_footprint_in_g: 727030
+            co2_credits_in_g: 0
           - year: 2023
             month: 2
             co2_footprint_in_g: 713605
+            co2_credits_in_g: 0
           - year: 2023
             month: 3
             co2_footprint_in_g: 778262
+            co2_credits_in_g: 0
           - year: 2023
             month: 4
             co2_footprint_in_g: 682537
+            co2_credits_in_g: 420000
           - year: 2023
             month: 5
             co2_footprint_in_g: 0
+            co2_credits_in_g: 300000
           - year: 2023
             month: 6
             co2_footprint_in_g: 665723
+            co2_credits_in_g: 665723
           - year: 2023
             month: 7
             co2_footprint_in_g: 324000
+            co2_credits_in_g: 137053
 
     GetAverageFootprintsOnlyModelGivenExample:
       value:
@@ -3255,20 +3274,20 @@ components:
         code:
           type: string
           maxLength: 32
-          description: Unique code of the CO2 model.
+          description: Unique code of the CO<sub>2</sub> model.
           example: DE
         description:
           type: string
-          description: Description of the CO2 model.
+          description: Description of the CO<sub>2</sub> model.
         currency:
           type: string
           minLength: 3
           maxLength: 3
-          description: ISO 4217 currency code describing the base currency of the CO2 model. Other currencies are converted to this currency first.
+          description: ISO 4217 currency code describing the base currency of the CO<sub>2</sub> model. Other currencies are converted to this currency first.
           example: EUR
         enabled:
           type: boolean
-          description: True, if the CO2 model is enabled.
+          description: True, if the CO<sub>2</sub> model is enabled.
 
     CategorySystemListResponse:
       type: object
@@ -3683,8 +3702,16 @@ components:
       format: int64
       minimum: 0
       maximum: 9223372036854775807
-      description: CO2 footprint in grams.
+      description: CO<sub>2</sub> footprint in grams.
       example: 132123
+
+    CO2CreditsInG:
+      type: integer
+      format: int64
+      minimum: 0
+      maximum: 9223372036854775807
+      description: CO<sub>2</sub> credits in grams.
+      example: 54982
 
     GetFootprintsForMonthResponse:
       type: object
@@ -3693,11 +3720,11 @@ components:
       properties:
         categories:
           type: array
-          description: List of CO2 categories.
+          description: List of CO<sub>2</sub> categories.
           items:
             $ref: '#/components/schemas/CategoryCO2Footprint'
 
-    GetFootprintsOverTimeResponse:
+    GetFootprintsAndCreditsOverTimeResponse:
       type: object
       required:
         - intervals
@@ -3705,31 +3732,35 @@ components:
         intervals:
           type: array
           minItems: 0
-          description: List of monthly CO2 footprints
+          description: List of monthly CO<sub>2</sub> footprints and credits
           items:
-            $ref: "#/components/schemas/MonthlyCO2Footprint"
+            $ref: "#/components/schemas/MonthlyCO2FootprintAndCredits"
 
-    MonthlyCO2Footprint:
+    MonthlyCO2FootprintAndCredits:
       type: object
       required:
         - co2_footprint_in_g
+        - co2_credits_in_g
       properties:
         year:
           type: integer
           format: int32
           minimum: 0
           maximum: 2147483647
-          description: The year of the interval. If not given the footprint refers to the whole interval.
+          description: The year of the interval. If not given the result refers to the whole interval.
           example: 2023
         month:
           type: integer
           format: int32
           minimum: 1
           maximum: 12
-          description: The month of the interval. If not given the footprint refers to the specified year.
+          description: The month of the interval. If not given the result refers to the specified year.
           example: 1
         co2_footprint_in_g:
           $ref: '#/components/schemas/CO2FootprintInG'
+        co2_credits_in_g:
+          $ref: '#/components/schemas/CO2CreditsInG'
+
 
     CO2Footprint:
       description: |
@@ -3744,11 +3775,11 @@ components:
           format: int64
           minimum: 0
           maximum: 9223372036854775807
-          description: Value of CO2 footprint
+          description: Value of CO<sub>2</sub> footprint
           example: 10
         unit:
           type: string
-          description: Unit of CO2 footprint
+          description: Unit of CO<sub>2</sub> footprint
           enum:
             - g
             - kg
@@ -3924,7 +3955,7 @@ components:
         co2_model:
           type: string
           maxLength: 32
-          description: Unique code of the CO2 model.
+          description: Unique code of the CO<sub>2</sub> model.
           example: DE
         datetime:
           type: string
@@ -4319,6 +4350,17 @@ components:
           items:
             $ref: '#/components/schemas/TransactionAnswerRequest'
 
+    Translation:
+      type: object
+      required:
+        - language
+        - text
+      properties:
+        language:
+          type: string
+        text:
+          type: string
+
     TransactionAnswerRequest:
       type: object
       required:
@@ -4333,16 +4375,6 @@ components:
           type: string
           description: user input
 
-    Translation:
-      type: object
-      required:
-        - language
-        - text
-      properties:
-        language:
-          type: string
-        text:
-          type: string
 
     TranslatedExplanation:
       type: object
@@ -4486,14 +4518,14 @@ components:
           format: int64
           minimum: 0
           maximum: 9223372036854775807
-          description: Yearly national average CO2 footprint in grams of the given CO2 model.
+          description: Yearly national average CO<sub>2</sub> footprint in grams of the given CO<sub>2</sub> model.
           example: 11324583
         industry_average_co2_footprint_in_g:
           type: integer
           format: int64
           minimum: 0
           maximum: 9223372036854775807
-          description: Yearly national average CO2 footprint in grams of the given CO2 model and industry of the account. Only returned for commercial banking and if an account ID has been specified.
+          description: Yearly national average CO<sub>2</sub> footprint in grams of the given CO<sub>2</sub> model and industry of the account. Only returned for commercial banking and if an account ID has been specified.
           example: 27462842
 
     StructuredFeedbackRequest:

@@ -2,7 +2,7 @@ openapi: 3.0.3
 info:
   description: |
     APIs of the ecolytiq SaaS
-  version: v3-2024-05-07
+  version: v3-2024-06-17
   title: ecolytiq SaaS
   contact:
     email: support@ecolytiq.com
@@ -218,6 +218,13 @@ tags:
     x-displayName: General Information
   - name: Changelog
     description: >
+      ### 2024-05-29
+
+      * Added the purchased carbon credits amount into the [Get total or monthly
+      footprints and carbon credits over
+      time](#tag/Statistic-API/operation/getFootprintsOverTime).      
+
+
       ### 2024-04-18
 
       * Updated the behaviour of `meta-category` and `sub-category` filters in 
@@ -260,7 +267,8 @@ tags:
       * Added query parameter `sub_account_ids` to [Get footprints of an account
       per meta-category for one
       month](#tag/Statistic-API/operation/getFootprintsForMonth). This enables
-      users to aggregate CO2 footprints for a subset of their sub account IDs. 
+      users to aggregate CO<sub>2</sub> footprints for a subset of their sub
+      account IDs. 
 
 
       ### 2024-03-05
@@ -285,8 +293,8 @@ tags:
 
       * Added query parameter `sub_account_ids` to [Get total or monthly
       footprints over time](#tag/Statistic-API/operation/getFootprintsOverTime).
-      This enables user to aggregate CO2 footprints for a subset of their
-      sub_account_ids. 
+      This enables user to aggregate CO<sub>2</sub> footprints for a subset of
+      their sub_account_ids. 
     x-displayName: Changelog
   - name: Authentication
     x-displayName: Authentication
@@ -355,7 +363,7 @@ tags:
       IDs](#operation/getContentInsights) <br/> [Get Insights (for a Given
       Category)](#operation/getContentInsightsRandom) <br/> [Get Comparables for
       a Given CO2 Footprint](#operation/getContentComparables) <br/> [Get Random
-      Comparables for a Given CO2
+      Comparables for a Given CO<sub>2</sub>
       Footprint](#operation/getContentComparablesRandom) <br/> [Get Explanations
       by ID](#operation/getContentExplanations) <br/> [Get Explanations (for
       given categories)](#operation/getContentExplanationsRandom) |
@@ -366,7 +374,10 @@ tags:
 
       | CURRENCY_NOT_SUPPORTED | We can't process the transaction because we do
       not support the provided currency. | [Process
-      transactions](#operation/postTransactionsTransactions)
+      transactions](#operation/postTransactionsTransactions) |
+
+      | INITIATE_PAYMENT_FAILURE | We could not initialize the stripe payment
+      process. | [Purchase carbon credits](#operation/purchaseCarbonCredits) |
     x-displayName: Errors
   - name: Postman
     description: >
@@ -532,8 +543,8 @@ tags:
     x-displayName: Account API
   - name: Statistic API
     description: >
-      Use these endpoints to get aggregated footprint data about businesses,
-      users or sub-accounts.
+      Use these endpoints to get aggregated CO<sub>2</sub> footprint and credits
+      data about businesses, users or sub-accounts.
     x-displayName: Statistic API
   - name: Feedback API
     description: |
@@ -541,19 +552,9 @@ tags:
     x-displayName: Feedback API
   - name: Action API
     description: >
-      Use these endpoints for handling carbon footprint impact orders.
-
-
-      > #### Note:
-
-      > 
-
-      > These endpoints are only meant for handling the data about carbon
-      footprint impact orders between a Customer (e.g., bank) and a carbon
-      project provider through ecolytiq.
-
-      > They are not meant to initiate the actual flow of payments between the
-      customer and the provider or ecolytiq!
+      This API facilitates direct actions towards environmental improvement
+      through ecoAction.  It currently supports the purchase of carbon credits,
+      allowing users to actively contribute to carbon retirement.
     x-displayName: Action API
 paths:
   /oauth/token:
@@ -1306,7 +1307,7 @@ paths:
       parameters:
         - in: query
           name: co2_footprint
-          description: CO2 footprint in grams
+          description: CO<sub>2</sub> footprint in grams
           required: true
           schema:
             type: integer
@@ -1388,7 +1389,7 @@ paths:
       parameters:
         - in: query
           name: co2_footprint
-          description: CO2 footprint in grams
+          description: CO<sub>2</sub> footprint in grams
           required: true
           schema:
             type: integer
@@ -1988,8 +1989,10 @@ paths:
       operationId: getFootprintsOverTime
       security:
         - BearerAuth: []
-      summary: Get total or monthly footprints over time
-      description: Returns an account's total or monthly CO2 footprints over time.
+      summary: Get total or monthly footprints and carbon credits over time
+      description: >-
+        Returns an account's total or monthly CO<sub>2</sub> footprints and
+        purchased carbon credits over time.
       tags:
         - Statistic API
       parameters:
@@ -2063,16 +2066,16 @@ paths:
         - $ref: '#/components/parameters/subCategoryParameter'
       responses:
         '200':
-          description: Footprints for the given account.
+          description: Footprints and carbon credits amount for the given account.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GetFootprintsOverTimeResponse'
+                $ref: '#/components/schemas/GetFootprintsAndCreditsOverTimeResponse'
               examples:
-                Get total footprint:
-                  $ref: '#/components/examples/GetTotalFootprintExample'
-                Get monthly footprint:
-                  $ref: '#/components/examples/GetMonthlyFootprintExample'
+                Get total footprint and credits:
+                  $ref: '#/components/examples/GetTotalFootprintAndCreditsExample'
+                Get monthly footprint and credits:
+                  $ref: '#/components/examples/GetMonthlyFootprintsAndCreditsExample'
         '400':
           description: Bad Request. Request parameter is not valid.
           content:
@@ -2107,9 +2110,9 @@ paths:
         - BearerAuth: []
       summary: Get footprints of an account per meta-category for one month
       description: >-
-        Returns the CO2 footprints of an account grouped by meta-categories
-        (e.g. `food`) or categories (e.g. `ex:food.cafe`) for one specific
-        month.
+        Returns the CO<sub>2</sub> footprints of an account grouped by
+        meta-categories (e.g. `food`) or categories (e.g. `ex:food.cafe`) for
+        one specific month.
       tags:
         - Statistic API
       parameters:
@@ -2200,7 +2203,7 @@ paths:
       security:
         - BearerAuth: []
       summary: Get average footprints
-      description: Returns national average CO2 footprint numbers.
+      description: Returns national average CO<sub>2</sub> footprint numbers.
       tags:
         - Statistic API
       parameters:
@@ -2208,8 +2211,9 @@ paths:
           in: query
           required: true
           description: >-
-            Specify a CO2 model from the `GET /info/v1/co2models` endpoint to
-            get statistics on the national average footprint for that model.
+            Specify a CO<sub>2</sub> model from the `GET /info/v1/co2models`
+            endpoint to get statistics on the national average footprint for
+            that model.
           schema:
             type: string
           example: DE
@@ -2359,36 +2363,85 @@ paths:
                 Transaction ID not found:
                   $ref: >-
                     #/components/examples/FeedbackTransactionIdNotFound422Example
-  /action/v2/projects:
+  /action/v2/carbon-credits/projects:
     get:
-      operationId: getActionProjects
+      operationId: getCarbonCreditProjects
       security:
         - BearerAuth: []
-      description: Use this endpoint to retrieve a list of climate projects.
-      summary: Get climate projects
+      description: >-
+        Use this endpoint to retrieve a list of projects to purchase carbon
+        credits from.
+      summary: Get carbon credit projects
       tags:
         - Action API
       responses:
         '200':
-          description: A List of climate projects.
+          description: A List of projects to purchase carbon credits from.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ClimateProjectsResponse'
+                $ref: '#/components/schemas/CarbonCreditProjectsResponse'
               examples:
-                Example:
-                  $ref: '#/components/examples/ActionProjectsExample'
+                Get carbon credit projects:
+                  $ref: '#/components/examples/CarbonCreditProjectsResponseExample'
         '401':
           description: Unauthorized. Access Token is invalid or expired.
         '403':
-          description: Forbidden. Missing privileges to access projects.
+          $ref: '#/components/responses/ActionAccessDeniedResponse'
+  /action/v2/carbon-credits/projects/{projectId}/order:
+    post:
+      operationId: purchaseCarbonCredits
+      security:
+        - BearerAuth: []
+      tags:
+        - Action API
+      summary: Purchase carbon credits
+      description: >
+        This endpoint enables the user to order carbon credits from the
+        specified project. It provides a unique link for completing payment
+        through Stripe's secure checkout.  The total price is commercially
+        rounded to two decimal places.
+      parameters:
+        - in: path
+          name: projectId
+          required: true
+          schema:
+            type: string
+          description: >-
+            The unique identifier of the project from which carbon credits are
+            purchased.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PurchaseCarbonCreditsRequest'
+            examples:
+              Purchase carbon credits request:
+                $ref: '#/components/examples/PurchaseCarbonCreditsRequestExample'
+      responses:
+        '201':
+          description: Checkout session created successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PurchaseCarbonCreditsResponse'
+              examples:
+                Purchase carbon credits response:
+                  $ref: '#/components/examples/PurchaseCarbonCreditsResponseExample'
+        '401':
+          description: Unauthorized. Access Token is invalid or expired.
+        '403':
+          $ref: '#/components/responses/ActionAccessDeniedResponse'
+        '404':
+          description: Not found. The specified project does not exist.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ActionErrorResponse'
               examples:
-                Response:
-                  $ref: '#/components/examples/ProjectsAccessDenied403'
+                Project not found:
+                  $ref: '#/components/examples/CarbonCreditProjectNotFoundExample'
 components:
   parameters:
     subCategoryParameter:
@@ -2444,8 +2497,8 @@ components:
       name: sub_account_ids
       in: query
       description: >-
-        Provides aggregated CO2 footprints for the given `sub_account_ids` that
-        can be provided by commercial banking users.
+        Provides aggregated CO<sub>2</sub> footprints for the given
+        `sub_account_ids` that can be provided by commercial banking users.
       required: false
       style: form
       explode: false
@@ -2685,19 +2738,19 @@ components:
         request_id: 6bf3202ade4a7411
         results:
           - code: DE
-            description: CO2 model of Germany.
+            description: CO<sub>2</sub> model of Germany.
             currency: EUR
             enabled: true
           - code: FR
-            description: CO2 model of France.
+            description: CO<sub>2</sub> model of France.
             currency: EUR
             enabled: false
           - code: UK
-            description: CO2 model of the United Kingdom.
+            description: CO<sub>2</sub> model of the United Kingdom.
             currency: GBP
             enabled: true
           - code: US
-            description: CO2 model of the United States of America.
+            description: CO<sub>2</sub> model of the United States of America.
             currency: USD
             enabled: false
     CategorySystemListExample:
@@ -3608,52 +3661,66 @@ components:
         timestamp: '2023-04-25T12:34:56.78+00:00'
         status: 400
         error: Bad Request
-    GetTotalFootprintExample:
+    GetTotalFootprintAndCreditsExample:
       value:
         intervals:
           - co2_footprint_in_g: 8793376
-    GetMonthlyFootprintExample:
+            co2_credits_in_g: 412900
+    GetMonthlyFootprintsAndCreditsExample:
       value:
         intervals:
           - year: 2022
             month: 7
             co2_footprint_in_g: 713850
+            co2_credits_in_g: 350000
           - year: 2022
             month: 8
             co2_footprint_in_g: 701468
+            co2_credits_in_g: 400637
           - year: 2022
             month: 9
             co2_footprint_in_g: 0
+            co2_credits_in_g: 120000
           - year: 2022
             month: 10
             co2_footprint_in_g: 753372
+            co2_credits_in_g: 0
           - year: 2022
             month: 11
             co2_footprint_in_g: 779746
+            co2_credits_in_g: 2364567
           - year: 2022
             month: 12
             co2_footprint_in_g: 798517
+            co2_credits_in_g: 0
           - year: 2023
             month: 1
             co2_footprint_in_g: 727030
+            co2_credits_in_g: 0
           - year: 2023
             month: 2
             co2_footprint_in_g: 713605
+            co2_credits_in_g: 0
           - year: 2023
             month: 3
             co2_footprint_in_g: 778262
+            co2_credits_in_g: 0
           - year: 2023
             month: 4
             co2_footprint_in_g: 682537
+            co2_credits_in_g: 420000
           - year: 2023
             month: 5
             co2_footprint_in_g: 0
+            co2_credits_in_g: 300000
           - year: 2023
             month: 6
             co2_footprint_in_g: 665723
+            co2_credits_in_g: 665723
           - year: 2023
             month: 7
             co2_footprint_in_g: 324000
+            co2_credits_in_g: 137053
     GetAverageFootprintsOnlyModelGivenExample:
       value:
         national_average_co2_footprint_in_g: 11324583
@@ -3726,11 +3793,24 @@ components:
           free_text: >-
             Why is this footprint so much higher compared to a similar return
             flight I bought two months ago?
-    ProjectsAccessDenied403:
+    CarbonCreditProjectNotFoundExample:
       value:
-        error_code: PERMISSION_DENIED
-        error_description: Missing privileges to access projects
-    ActionProjectsExample:
+        error_code: NOT_FOUND
+        error_description: The requested project does not exist.
+    PurchaseCarbonCreditsRequestExample:
+      value:
+        account_id: 1c974398-4d2b-44fa-b292-64a46c0e6577
+        co2_amount_in_g: 2250
+        attribution_month: 2023-06
+    PurchaseCarbonCreditsResponseExample:
+      value:
+        checkout_url: https://checkout.stripe.com/c/pay/cs_test_a11YYufWQzNY63zpQ
+        order_id: 0df68eda-a491-4dda-9758-ed4b7b05f42c
+    ActionAccessDenied403:
+      value:
+        error_code: FORBIDDEN
+        error_description: Missing privileges to access ecoAction.
+    CarbonCreditProjectsResponseExample:
       value:
         projects:
           - id: 5c406074-2fe9-4181-83d9-8dcae764a86b
@@ -3851,22 +3931,23 @@ components:
         code:
           type: string
           maxLength: 32
-          description: Unique code of the CO2 model.
+          description: Unique code of the CO<sub>2</sub> model.
           example: DE
         description:
           type: string
-          description: Description of the CO2 model.
+          description: Description of the CO<sub>2</sub> model.
         currency:
           type: string
           minLength: 3
           maxLength: 3
           description: >-
-            ISO 4217 currency code describing the base currency of the CO2
-            model. Other currencies are converted to this currency first.
+            ISO 4217 currency code describing the base currency of the
+            CO<sub>2</sub> model. Other currencies are converted to this
+            currency first.
           example: EUR
         enabled:
           type: boolean
-          description: True, if the CO2 model is enabled.
+          description: True, if the CO<sub>2</sub> model is enabled.
     CategorySystemListResponse:
       type: object
       required:
@@ -4259,8 +4340,15 @@ components:
       format: int64
       minimum: 0
       maximum: 9223372036854776000
-      description: CO2 footprint in grams.
+      description: CO<sub>2</sub> footprint in grams.
       example: 132123
+    CO2CreditsInG:
+      type: integer
+      format: int64
+      minimum: 0
+      maximum: 9223372036854776000
+      description: CO<sub>2</sub> credits in grams.
+      example: 54982
     GetFootprintsForMonthResponse:
       type: object
       required:
@@ -4268,10 +4356,10 @@ components:
       properties:
         categories:
           type: array
-          description: List of CO2 categories.
+          description: List of CO<sub>2</sub> categories.
           items:
             $ref: '#/components/schemas/CategoryCO2Footprint'
-    GetFootprintsOverTimeResponse:
+    GetFootprintsAndCreditsOverTimeResponse:
       type: object
       required:
         - intervals
@@ -4279,13 +4367,14 @@ components:
         intervals:
           type: array
           minItems: 0
-          description: List of monthly CO2 footprints
+          description: List of monthly CO<sub>2</sub> footprints and credits
           items:
-            $ref: '#/components/schemas/MonthlyCO2Footprint'
-    MonthlyCO2Footprint:
+            $ref: '#/components/schemas/MonthlyCO2FootprintAndCredits'
+    MonthlyCO2FootprintAndCredits:
       type: object
       required:
         - co2_footprint_in_g
+        - co2_credits_in_g
       properties:
         year:
           type: integer
@@ -4293,7 +4382,7 @@ components:
           minimum: 0
           maximum: 2147483647
           description: >-
-            The year of the interval. If not given the footprint refers to the
+            The year of the interval. If not given the result refers to the
             whole interval.
           example: 2023
         month:
@@ -4302,11 +4391,13 @@ components:
           minimum: 1
           maximum: 12
           description: >-
-            The month of the interval. If not given the footprint refers to the
+            The month of the interval. If not given the result refers to the
             specified year.
           example: 1
         co2_footprint_in_g:
           $ref: '#/components/schemas/CO2FootprintInG'
+        co2_credits_in_g:
+          $ref: '#/components/schemas/CO2CreditsInG'
     CO2Footprint:
       description: |
         CO2Footprint object
@@ -4320,11 +4411,11 @@ components:
           format: int64
           minimum: 0
           maximum: 9223372036854776000
-          description: Value of CO2 footprint
+          description: Value of CO<sub>2</sub> footprint
           example: 10
         unit:
           type: string
-          description: Unit of CO2 footprint
+          description: Unit of CO<sub>2</sub> footprint
           enum:
             - g
             - kg
@@ -4496,7 +4587,7 @@ components:
         co2_model:
           type: string
           maxLength: 32
-          description: Unique code of the CO2 model.
+          description: Unique code of the CO<sub>2</sub> model.
           example: DE
         datetime:
           type: string
@@ -4873,6 +4964,16 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/TransactionAnswerRequest'
+    Translation:
+      type: object
+      required:
+        - language
+        - text
+      properties:
+        language:
+          type: string
+        text:
+          type: string
     TransactionAnswerRequest:
       type: object
       required:
@@ -4886,16 +4987,6 @@ components:
         input:
           type: string
           description: user input
-    Translation:
-      type: object
-      required:
-        - language
-        - text
-      properties:
-        language:
-          type: string
-        text:
-          type: string
     TranslatedExplanation:
       type: object
       required:
@@ -5039,8 +5130,8 @@ components:
           minimum: 0
           maximum: 9223372036854776000
           description: >-
-            Yearly national average CO2 footprint in grams of the given CO2
-            model.
+            Yearly national average CO<sub>2</sub> footprint in grams of the
+            given CO<sub>2</sub> model.
           example: 11324583
         industry_average_co2_footprint_in_g:
           type: integer
@@ -5048,9 +5139,10 @@ components:
           minimum: 0
           maximum: 9223372036854776000
           description: >-
-            Yearly national average CO2 footprint in grams of the given CO2
-            model and industry of the account. Only returned for commercial
-            banking and if an account ID has been specified.
+            Yearly national average CO<sub>2</sub> footprint in grams of the
+            given CO<sub>2</sub> model and industry of the account. Only
+            returned for commercial banking and if an account ID has been
+            specified.
           example: 27462842
     StructuredFeedbackRequest:
       type: object
@@ -5137,7 +5229,49 @@ components:
           description: >
             A binary answer option, that can be used e.g. for yes/no,
             agree/disagree, or like/don't like type of questions.
-    ClimateProjectsResponse:
+    PurchaseCarbonCreditsRequest:
+      type: object
+      required:
+        - account_id
+        - co2_amount_in_g
+      properties:
+        account_id:
+          description: The ID of the account holder/user to attribute the purchase to.
+          type: string
+          maxLength: 64
+          example: 1c974398-4d2b-44fa-b292-64a46c0e6577
+        co2_amount_in_g:
+          type: integer
+          format: int64
+          description: The amount of CO₂ to retire.
+          minimum: 1000
+          maximum: 10000000
+          example: 2250
+        attribution_month:
+          description: >
+            The month in which the CO₂ will be offset statistically. 
+
+            Month should be formatted as `YYYY-MM` according to ISO 8601.
+
+            If absent, the current month, depending on the bank's default
+            timezone, will be used.
+          type: string
+          pattern: ^\d{4}-\d{2}$
+          example: 2023-06
+    PurchaseCarbonCreditsResponse:
+      type: object
+      required:
+        - checkout_url
+        - order_id
+      properties:
+        checkout_url:
+          type: string
+          format: uri
+          description: The URL to redirect the user to Stripe's checkout UI.
+        order_id:
+          type: string
+          description: Order identifier for the created purchase.
+    CarbonCreditProjectsResponse:
       type: object
       required:
         - projects
@@ -5145,8 +5279,8 @@ components:
         projects:
           type: array
           items:
-            $ref: '#/components/schemas/ClimateProjects'
-    ProjectImage:
+            $ref: '#/components/schemas/CarbonCreditProject'
+    CarbonCreditProjectImage:
       type: object
       required:
         - image_url
@@ -5156,7 +5290,7 @@ components:
           format: url
           description: Url of the project image.
           example: https://example.com/image_01.jpg
-    ClimateProjects:
+    CarbonCreditProject:
       type: object
       required:
         - id
@@ -5191,14 +5325,14 @@ components:
           type: array
           description: Images of the project.
           items:
-            $ref: '#/components/schemas/ProjectImage'
+            $ref: '#/components/schemas/CarbonCreditProjectImage'
         price_per_kg:
           $ref: '#/components/schemas/ActionPositiveAmount'
         translations:
           type: array
           description: Translated content of the project.
           items:
-            $ref: '#/components/schemas/ClimateProjectsTranslation'
+            $ref: '#/components/schemas/CarbonCreditProjectTranslation'
     SustainableDevelopmentGoal:
       type: object
       required:
@@ -5216,7 +5350,7 @@ components:
             Protect, restore and promote sustainable use of terrestrial
             ecosystems, sustainably manage forests, combat desertification, and
             halt and reverse land degradation and halt biodiversity loss.
-    ClimateProjectsTranslation:
+    CarbonCreditProjectTranslation:
       type: object
       required:
         - language_code
@@ -5306,7 +5440,7 @@ components:
       properties:
         error_code:
           type: string
-          example: PERMISSION_DENIED
+          example: FORBIDDEN
           description: >-
             identifies the type of error. See all used codes in [ecolytiq Error
             Code Summary](#tag/Errors/ecolytiq-Error-Code-Summary)
@@ -5314,3 +5448,13 @@ components:
           type: string
           example: Missing privileges to access projects.
           description: human readable error description
+  responses:
+    ActionAccessDeniedResponse:
+      description: Forbidden. No access to ecoAction granted.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ActionErrorResponse'
+          examples:
+            Access denied:
+              $ref: '#/components/examples/ActionAccessDenied403'
