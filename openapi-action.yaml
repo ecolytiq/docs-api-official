@@ -1,54 +1,96 @@
 openapi: 3.0.3
 
 info:
-  version: v3-2024-04-18
+  version: v3
   title: ecolytiq SaaS
-tags:
-  - name: "Action API"
-    description: |
-      Use these endpoints for handling carbon footprint impact orders.
 
-      > #### Note:
-      > 
-      > These endpoints are only meant for handling the data about carbon footprint impact orders between a Customer (e.g., bank) and a carbon project provider through ecolytiq.
-      > They are not meant to initiate the actual flow of payments between the customer and the provider or ecolytiq!
+tags:
+  - name: Action API
+    description: >
+      This API facilitates direct actions towards environmental improvement through ecoAction. 
+      It currently supports the purchase of carbon credits, allowing users to actively contribute to carbon retirement.
 
 security:
   - BearerAuth: [ ]
 
 paths:
-  /action/v2/projects:
+  /action/v2/carbon-credits/projects:
     get:
-      operationId: getActionProjects
+      operationId: getCarbonCreditProjects
       security:
         - BearerAuth: [ ]
       description: >-
-        Use this endpoint to retrieve a list of climate projects.
-      summary: "Get climate projects"
+        Use this endpoint to retrieve a list of projects to purchase carbon credits from.
+      summary: "Get carbon credit projects"
       tags:
-        - "Action API"
+        - Action API
       responses:
         '200':
-          description: A List of climate projects.
+          description: A List of projects to purchase carbon credits from.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ClimateProjectsResponse'
+                $ref: '#/components/schemas/CarbonCreditProjectsResponse'
               examples:
-                Example:
-                  $ref: "#/components/examples/ActionProjectsExample"
+                Get carbon credit projects:
+                  $ref: "#/components/examples/CarbonCreditProjectsResponseExample"
         '401':
           description: Unauthorized. Access Token is invalid or expired.
-
         '403':
-          description: Forbidden. Missing privileges to access projects.
+          $ref: '#/components/responses/ActionAccessDeniedResponse'
+
+  /action/v2/carbon-credits/projects/{projectId}/order:
+    post:
+      operationId: purchaseCarbonCredits
+      security:
+        - BearerAuth: [ ]
+      tags:
+        - Action API
+      summary: "Purchase carbon credits"
+      description: >
+        This endpoint enables the user to order carbon credits from the specified project.
+        It provides a unique link for completing payment through Stripe's secure checkout. 
+        The total price is commercially rounded to two decimal places.
+      parameters:
+        - in: path
+          name: projectId
+          required: true
+          schema:
+            type: string
+          description: The unique identifier of the project from which carbon credits are purchased.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PurchaseCarbonCreditsRequest'
+            examples:
+              Purchase carbon credits request:
+                $ref: '#/components/examples/PurchaseCarbonCreditsRequestExample'
+      responses:
+        '201':
+          description: Checkout session created successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PurchaseCarbonCreditsResponse'
+              examples:
+                Purchase carbon credits response:
+                  $ref: '#/components/examples/PurchaseCarbonCreditsResponseExample'
+        '401':
+          description: Unauthorized. Access Token is invalid or expired.
+        '403':
+          $ref: '#/components/responses/ActionAccessDeniedResponse'
+        '404':
+          description: Not found. The specified project does not exist.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ActionErrorResponse'
               examples:
-                Response:
-                  $ref: '#/components/examples/ProjectsAccessDenied403'
+                Project not found:
+                  $ref: '#/components/examples/CarbonCreditProjectNotFoundExample'
+
 components:
 
   securitySchemes:
@@ -61,11 +103,28 @@ components:
       bearerFormat: JWT
 
   examples:
-    ProjectsAccessDenied403:
+    CarbonCreditProjectNotFoundExample:
       value:
-        error_code: PERMISSION_DENIED
-        error_description: Missing privileges to access projects
-    ActionProjectsExample:
+        error_code: NOT_FOUND
+        error_description: The requested project does not exist.
+
+    PurchaseCarbonCreditsRequestExample:
+      value:
+        account_id: "1c974398-4d2b-44fa-b292-64a46c0e6577"
+        co2_amount_in_g: 2250
+        attribution_month: 2023-06
+
+    PurchaseCarbonCreditsResponseExample:
+      value:
+        checkout_url: "https://checkout.stripe.com/c/pay/cs_test_a11YYufWQzNY63zpQ"
+        order_id: "0df68eda-a491-4dda-9758-ed4b7b05f42c"
+
+    ActionAccessDenied403:
+      value:
+        error_code: FORBIDDEN
+        error_description: Missing privileges to access ecoAction.
+
+    CarbonCreditProjectsResponseExample:
       value:
         projects:
           - id: 5c406074-2fe9-4181-83d9-8dcae764a86b
@@ -92,10 +151,49 @@ components:
                 sustainable_development_goals:
                   - id: "15"
                     description: Protect, restore and promote sustainable use of terrestrial ecosystems, sustainably manage forests, combat desertification, and halt and reverse land degradation and halt biodiversity loss.
-
   schemas:
+    PurchaseCarbonCreditsRequest:
+      type: object
+      required:
+        - account_id
+        - co2_amount_in_g
+      properties:
+        account_id:
+          description: The ID of the account holder/user to attribute the purchase to.
+          type: string
+          maxLength: 64
+          example: 1c974398-4d2b-44fa-b292-64a46c0e6577
+        co2_amount_in_g:
+          type: integer
+          format: int64
+          description: The amount of CO₂ to retire.
+          minimum: 1000
+          maximum: 10000000
+          example: 2250
+        attribution_month:
+          description: |
+            The month in which the CO₂ will be offset statistically. 
+            Month should be formatted as `YYYY-MM` according to ISO 8601.
+            If absent, the current month, depending on the bank's default timezone, will be used.
+          type: string
+          pattern: '^\d{4}-\d{2}$'
+          example: "2023-06"
 
-    ClimateProjectsResponse:
+    PurchaseCarbonCreditsResponse:
+      type: object
+      required:
+        - checkout_url
+        - order_id
+      properties:
+        checkout_url:
+          type: string
+          format: uri
+          description: The URL to redirect the user to Stripe's checkout UI.
+        order_id:
+          type: string
+          description: Order identifier for the created purchase.
+
+    CarbonCreditProjectsResponse:
       type: object
       required:
         - projects
@@ -103,8 +201,9 @@ components:
         projects:
           type: array
           items:
-            $ref: '#/components/schemas/ClimateProjects'
-    ProjectImage:
+            $ref: '#/components/schemas/CarbonCreditProject'
+
+    CarbonCreditProjectImage:
       type: object
       required:
         - image_url
@@ -115,7 +214,7 @@ components:
           description: Url of the project image.
           example: https://example.com/image_01.jpg
 
-    ClimateProjects:
+    CarbonCreditProject:
       type: object
       required:
         - id
@@ -148,14 +247,15 @@ components:
           type: array
           description: Images of the project.
           items:
-            $ref: '#/components/schemas/ProjectImage'
+            $ref: '#/components/schemas/CarbonCreditProjectImage'
         price_per_kg:
           $ref: '#/components/schemas/ActionPositiveAmount'
         translations:
           type: array
           description: Translated content of the project.
           items:
-            $ref: '#/components/schemas/ClimateProjectsTranslation'
+            $ref: '#/components/schemas/CarbonCreditProjectTranslation'
+
     SustainableDevelopmentGoal:
       type: object
       required:
@@ -171,7 +271,7 @@ components:
           description: Description of the SDG.
           example: Protect, restore and promote sustainable use of terrestrial ecosystems, sustainably manage forests, combat desertification, and halt and reverse land degradation and halt biodiversity loss.
 
-    ClimateProjectsTranslation:
+    CarbonCreditProjectTranslation:
       type: object
       required:
         - language_code
@@ -237,9 +337,20 @@ components:
       properties:
         error_code:
           type: string
-          example: PERMISSION_DENIED
+          example: FORBIDDEN
           description: identifies the type of error. See all used codes in [ecolytiq Error Code Summary](#tag/Errors/ecolytiq-Error-Code-Summary)
         error_description:
           type: string
           example: Missing privileges to access projects.
           description: human readable error description
+
+  responses:
+    ActionAccessDeniedResponse:
+      description: Forbidden. No access to ecoAction granted.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ActionErrorResponse'
+          examples:
+            Access denied:
+              $ref: '#/components/examples/ActionAccessDenied403'
