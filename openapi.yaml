@@ -2,7 +2,7 @@ openapi: 3.0.3
 info:
   description: |
     APIs of the ecolytiq SaaS
-  version: v3-2024-06-17
+  version: v3-2024-06-25
   title: ecolytiq SaaS
   contact:
     email: support@ecolytiq.com
@@ -2442,6 +2442,41 @@ paths:
               examples:
                 Project not found:
                   $ref: '#/components/examples/CarbonCreditProjectNotFoundExample'
+  /action/v2/account/{account_id}/carbon-credits/orders:
+    get:
+      operationId: getCarbonCreditOrders
+      security:
+        - BearerAuth: []
+      summary: Get carbon credit orders
+      description: >-
+        Retrieve a list of fulfilled carbon credit orders for a given account in
+        descending order by purchase date.
+      tags:
+        - Action API
+      parameters:
+        - in: path
+          name: account_id
+          schema:
+            $ref: '#/components/schemas/ActionAccountId'
+          required: true
+      responses:
+        '200':
+          description: >-
+            Retrieve a list of fulfilled carbon credit orders for a given
+            account in descending order by purchase date. If no fulfilled orders
+            can be found for a given account or the account does not exist, an
+            empty list is returned.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CarbonCreditOrdersResponse'
+              examples:
+                Get carbon credit projects:
+                  $ref: '#/components/examples/CarbonCreditOrdersResponseExample'
+        '401':
+          description: Unauthorized. Access Token is invalid or expired.
+        '403':
+          $ref: '#/components/responses/ActionAccessDeniedResponse'
 components:
   parameters:
     subCategoryParameter:
@@ -3867,6 +3902,19 @@ components:
                       terrestrial ecosystems, sustainably manage forests, combat
                       desertification, and halt and reverse land degradation and
                       halt biodiversity loss.
+    CarbonCreditOrdersResponseExample:
+      value:
+        orders:
+          - account_id: 1c974398-4d2b-44fa-b292-64a46c0e6577
+            order_id: 0df68eda-a491-4dda-9758-ed4b7b05f42c
+            project_id: 5c406074-2fe9-4181-83d9-8dcae764a86b
+            price: 35.77
+            currency: USD
+            certificate_url: https://some.url.to.cert
+            attribution_month: 2023-06
+            purchase_date: '2023-07-01T18:43:26.000Z'
+            co2_amount_in_g: 1430800
+            project_title: CarbonCapture Direct Air Capture - Project Bison
   schemas:
     CategoryCO2Footprint:
       type: object
@@ -5229,6 +5277,34 @@ components:
           description: >
             A binary answer option, that can be used e.g. for yes/no,
             agree/disagree, or like/don't like type of questions.
+    ActionAccountId:
+      type: string
+      description: The ID of the account holder/user to attribute the purchase to.
+      maxLength: 64
+      example: 1c974398-4d2b-44fa-b292-64a46c0e6577
+    OrderId:
+      type: string
+      description: Order identifier for the created purchase.
+      maxLength: 64
+      example: 1c974398-4d2b-44fa-b292-64a46c0e6577
+    AttributionMonth:
+      description: >
+        The month in which the CO₂ will be offset statistically. 
+
+        Month should be formatted as `YYYY-MM` according to ISO 8601.
+
+        If absent, the current month, depending on the bank's default timezone,
+        will be used.
+      type: string
+      pattern: ^\d{4}-\d{2}$
+      example: 2023-06
+    AttributionMonthResponse:
+      description: |
+        The month in which the CO₂ will be offset statistically. 
+        Month is formatted as `YYYY-MM` according to ISO 8601.
+      type: string
+      pattern: ^\d{4}-\d{2}$
+      example: 2023-06
     PurchaseCarbonCreditsRequest:
       type: object
       required:
@@ -5236,10 +5312,7 @@ components:
         - co2_amount_in_g
       properties:
         account_id:
-          description: The ID of the account holder/user to attribute the purchase to.
-          type: string
-          maxLength: 64
-          example: 1c974398-4d2b-44fa-b292-64a46c0e6577
+          $ref: '#/components/schemas/ActionAccountId'
         co2_amount_in_g:
           type: integer
           format: int64
@@ -5248,16 +5321,7 @@ components:
           maximum: 10000000
           example: 2250
         attribution_month:
-          description: >
-            The month in which the CO₂ will be offset statistically. 
-
-            Month should be formatted as `YYYY-MM` according to ISO 8601.
-
-            If absent, the current month, depending on the bank's default
-            timezone, will be used.
-          type: string
-          pattern: ^\d{4}-\d{2}$
-          example: 2023-06
+          $ref: '#/components/schemas/AttributionMonth'
     PurchaseCarbonCreditsResponse:
       type: object
       required:
@@ -5269,8 +5333,7 @@ components:
           format: uri
           description: The URL to redirect the user to Stripe's checkout UI.
         order_id:
-          type: string
-          description: Order identifier for the created purchase.
+          $ref: '#/components/schemas/OrderId'
     CarbonCreditProjectsResponse:
       type: object
       required:
@@ -5280,6 +5343,15 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/CarbonCreditProject'
+    CarbonCreditOrdersResponse:
+      type: object
+      required:
+        - orders
+      properties:
+        orders:
+          type: array
+          items:
+            $ref: '#/components/schemas/CarbonCreditOrder'
     CarbonCreditProjectImage:
       type: object
       required:
@@ -5290,6 +5362,60 @@ components:
           format: url
           description: Url of the project image.
           example: https://example.com/image_01.jpg
+    CarbonCreditOrder:
+      type: object
+      required:
+        - account_id
+        - order_id
+        - project_id
+        - price
+        - currency
+        - attribution_month
+        - purchase_date
+        - project_title
+        - co2_amount_in_g
+        - seller
+      properties:
+        account_id:
+          $ref: '#/components/schemas/ActionAccountId'
+        order_id:
+          $ref: '#/components/schemas/OrderId'
+        project_id:
+          type: string
+          description: >-
+            The unique identifier of the project from which carbon credits were
+            purchased.
+          example: 5c406074-2fe9-4181-83d9-8dcae764a86b
+        price:
+          type: number
+          description: Total price of the purchase.
+          example: 35.77
+        currency:
+          type: string
+          description: ISO 4217 currency code.
+          example: USD
+        certificate_url:
+          type: string
+          description: Download link of the certificate.
+          example: https://some.url.to.cert
+        attribution_month:
+          $ref: '#/components/schemas/AttributionMonthResponse'
+        purchase_date:
+          type: string
+          format: date-time
+          description: The date when the carbon credits were purchased.
+          example: '2023-06-01T18:43:26.000Z'
+        co2_amount_in_g:
+          type: integer
+          format: int64
+          description: The amount of CO₂ retired in gram.
+          example: 2250
+        project_title:
+          type: string
+          description: Title of the project for which the user purchased carbon credits.
+          example: Super cool carbon project
+        seller:
+          $ref: '#/components/schemas/ProjectSeller'
     CarbonCreditProject:
       type: object
       required:
@@ -5333,6 +5459,12 @@ components:
           description: Translated content of the project.
           items:
             $ref: '#/components/schemas/CarbonCreditProjectTranslation'
+        seller:
+          type: object
+          description: >-
+            Organization offering the project from which carbon credits can be
+            purchased.
+          $ref: '#/components/schemas/ProjectSeller'
     SustainableDevelopmentGoal:
       type: object
       required:
@@ -5414,6 +5546,20 @@ components:
             [SDGs](https://sdgs.un.org/goals).
           items:
             $ref: '#/components/schemas/SustainableDevelopmentGoal'
+    ProjectSeller:
+      type: object
+      required:
+        - name
+        - logoUrl
+      properties:
+        name:
+          type: string
+          description: Name of organization offering the project.
+          example: Clovery
+        logoUrl:
+          type: string
+          description: Link to the organization's logo.
+          example: https://cloverly.com/logo.png
     ActionPositiveAmount:
       description: Price per kg.
       type: object
