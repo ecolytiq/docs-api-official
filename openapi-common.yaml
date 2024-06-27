@@ -1,0 +1,224 @@
+openapi: 3.0.3
+
+info:
+  description: |
+    APIs of the ecolytiq SaaS
+  version: v3
+  title: ecolytiq SaaS
+  contact:
+    email: support@ecolytiq.com
+    name: ecolytiq GmbH
+    url: https://ecolytiq.com
+  termsOfService: https://ecolytiq.com/imprint
+  x-logo:
+    url: "https://developer.ecolytiq.com/static/logo.png"
+    backgroundColor: "#132a38"
+    altText: "ecolytiq GmbH"
+servers:
+  - description: ecolytiq API (Sandbox)
+    url: https://api.sandbox.arm.ecolytiq.network
+tags:
+  - name: General Information
+    description: |
+      This document describes the API of the ecolytiq Sustainability-as-a-Service&reg; platform.
+
+      ecolytiq has developed a method of assigning financial (bank) transactions with a CO<sub>2</sub> footprint, therefore, allowing financial institutions to inform their end customers about the ecological impact of their transactions. 
+      The calculation is based on the amount of the (outgoing) transaction and a category of the transaction which are both components of various region-specific calculation models.
+
+      ## Basic Requirements
+
+      To use the ecolytiq platform a customer is required to have a working pair of client credentials consisting of a `client_id` and a `client_secret`.
+      Those credentials are provided by ecolytiq after a contract is signed.
+
+      The customer is responsible for providing the client application that manages the integration of the ecolytiq services into their systems.
+
+      Certain features may not be available to or necessary for all customers. 
+      Hence, the set of enabled features is bound to a set of client credentials.
+
+      ## Information on Available and Enabled Features
+      
+      As not all features may be relevant to all customers the feature set can vary for different client credentials.
+      The ecolytiq platform provides an [info API](#tag/Info-API) to get information about the features that are available (in general) and accessible/enabled (for the customer).
+
+      ## Processing of Financial Transactions
+
+      ### Transaction Enrichment
+
+      The core functionality is enriching the transactions with the ecological footprint (at present: CO<sub>2</sub>) related to the purchase. 
+      This can be achieved by sending transactions to the [transaction API](#tags/Transaction-API). 
+
+      The ecolytiq platform has the ability to immediately return the calculation result ("synchronous processing") or to only accept the transactions and schedule the calculations until a later point in time ("asynchronous processing").
+      In any case, the [result of the calculation](#operation/getTransactionsTransactions) can also be retrieved at a later point in time.
+
+      ### Refinement of Transactions
+
+      In some cases, the amount of the transaction is not a good indicator of the ecological footprint related to the transaction.
+      In such instances, the transactions can be refined by [answering transaction-specific questions](#operation/postTransactionsQuestions) (e.g., "How many liters was your refill at the gas station?").
+
+      ### Transaction Processing and Refinement Workflow
+      
+      A suggested workflow for processing an end customer's transaction looks as follows:
+      
+      1. Send the transaction to the ecolytiq service for processing:          
+         [`POST /transactions/v1/transactions`](#operation/postTransactionTransaction)
+
+      2. Request a list of references to refinement questions that are available for this transaction:  
+         [`GET /transactions/v1/refinements?transaction_ids=<transaction_ids>`](#operation/getTransactionsRefinements)
+      3. Retrieve the content (questions and answers) associated with the refinement question and answer IDs:          
+         [`GET /transactions/v1/questions?question_ids=<question_ids>`](#operation/getTransactionsQuestions)
+         > #### Note
+         > This step can also be executed in the very beginning by omitting the `question_ids` parameter.
+         In that case, **all available** questions are returned. 
+         The result can then be cached on the client side.
+      
+      4. Have the end customer answer the refinement question(s):  
+         This must be handled in the client application
+
+      5. Send the answers to the refinement questions to the ecolytiq platform:  
+         [`POST /transactions/v1/refinements`](#operation/postTransactionsRefinements)
+      
+      6. Retrieve the calculation result for the refined transaction:  
+         [`GET /transactions/v1/transactions?transaction_ids=<transaction_ids>`](#operation/getTransactionsTransactions) 
+      
+      ### Account Profiling
+
+      For some types of purchases, having additional knowledge about the end customer can be helpful. 
+      For example, the supermarket shopping basket of a person regularly having meat on their plate differs from that of a vegan person. 
+      It is possible to request such information for each individual transaction.
+      However, it can be easier to attribute such information to an end customer once.
+      The [profiling API](#tag/Profiling-API) is available for this.
+      
+      ## Educational and Informational Content
+
+      Another important feature of the ecolytiq Sustainability-as-a-Service&reg; platform is the educational content that allows end customers to gain more knowledge and awareness of the ecological footprint created by their purchase decisions.
+      In the long term informing and educating end customers about their individual impact will help make them more literate choices when consuming goods and services. 
+
+      At present, ecolytiq offers the following types of content: 
+
+        * **Comparables** are small examples that for a given CO<sub>2</sub> footprint show in a concrete and easily graspable way how much of an impact that is.
+      
+        * **Insights** are short and simple tips and tricks that help end customers reduce their impact.
+          In combination with the [profiling API](#tag/Profiling-API), the Insights shown are even more relevant to the end customer.
+      
+        * **Explanations** are content pieces that give information about the ecolytiq calculation method.
+
+      The [profiling API](#tag/Profiling-API) delivers references to the content pieces.
+      Using the [content API](#tag/Content-API) the texts of the educational and informational content pieces can be fetched in various different languages.
+
+      ## Use of the SaaS Platform
+
+      The ecolytiq platform is available as Software-as-a-Service (SaaS) solution shared among different Customers and accessible via public internet. 
+      Other modes of access, such as VPN access or dedicated SaaS platforms may be available upon request.
+
+      The customer is required to build and maintain the client application. Operations of the ecolytiq platform are handled by ecolytiq GmbH.
+
+      ## Security and Data Protection
+      
+      We as ecolytiq GmbH adhere to and are compliant with all relevant data protection standards, such as GDPR, ISO27001, or PCI-DSS. 
+      Our platforms are regularly checked for security vulnerabilities.
+
+      However, financial data contains highly sensitive information about individuals. Therefore, our customers **are not allowed** to send actual personally identifiable information to the ecolytiq SaaS platform.
+      This is especially important for account identifiers -- **Do not use actual bank account numbers or PANs** (personal account numbers, i.e., credit card numbers) as account identifiers!
+
+      Account data must be pseudonymized. We recommend using [UUIDs](https://en.wikipedia.org/wiki/Universally_unique_identifier) as account identifiers. 
+      Mapping the account identifier to the end customer account **must be handled on the customer client application side**.
+
+
+
+  - name: Changelog
+    description: |
+      ### 2024-06-19
+      * Added new endpoint to ecoAction to [Get carbon credit orders by account](#tag/Action-API/operation/getCarbonCreditOrders). 
+      
+      ### 2024-05-29
+      * Added the purchased carbon credits amount into the [Get total or monthly footprints and carbon credits over time](#tag/Statistic-API/operation/getFootprintsOverTime).      
+      
+      ### 2024-04-18
+      * Updated the behaviour of `meta-category` and `sub-category` filters in 
+      [Get transactions per category for one month](#tag/Transaction-API/operation/getTransactionsForMonth), 
+      [Get total or monthly footprints over time](#tag/Statistic-API/operation/getFootprintsOverTime), and 
+      [Get footprints of an account per meta-category for one month](#tag/Statistic-API/operation/getFootprintsForMonth) such that `misc` and `general` are accepted as the meta and sub categories of `ex:general` category. 
+      
+      ### 2024-04-15
+      * Added new error examples for [Get Explanations by ID](#operation/getContentExplanations)
+      * Added new error examples for [Get Explanations (for given categories)](#operation/getContentExplanationsRandom) 
+      
+      ### 2024-04-10
+      * Added new error code description for `INCOMPATIBLE` in [ecolytiq Error Code Summary](#tag/Errors/ecolytiq-Error-Code-Summary)
+      * Added new error examples for [Get Comparables for a Given CO2 Footprint](#operation/getContentComparables)
+      * Added new error examples for [Get Random Comparables for a Given CO2 Footprint](#operation/getContentComparablesRandom)
+      
+      ### 2024-04-08
+      * Added query parameter `sub_account_ids` to [Get footprints of an account per meta-category for one month](#tag/Statistic-API/operation/getFootprintsForMonth). This enables users to aggregate CO<sub>2</sub> footprints for a subset of their sub account IDs. 
+
+      ### 2024-03-05
+      * Modified descriptions of `account_id` and `sub_account_id` to prevent misinterpretation.
+
+      ### 2024-02-26
+      * Added query parameter `sub_account_ids` to [Get transactions per category for one month](#tag/Transaction-API/operation/getTransactionsForMonth). This enables users to filter transactions by sub_account_ids.
+      
+      ### 2024-02-14
+      * Added [Retrieve refinements for account](#tag/Profiling-API/operation/getProfileRefinementsForAccount) endpoint to retrieve profile refinement information for a given account.
+      * Added query parameter `sub_account_ids` to [Get total or monthly footprints over time](#tag/Statistic-API/operation/getFootprintsOverTime). This enables user to aggregate CO<sub>2</sub> footprints for a subset of their sub_account_ids. 
+
+
+  - name: Authentication
+  - name: Errors
+    description: |
+      ## HTTP Status Code Summary
+      | Status Code                        | Description                                                                                      |
+      |------------------------------------|--------------------------------------------------------------------------------------------------|
+      | 200 - OK                           | Everything worked as expected.                                                                   |
+      | 201 - Created                      | Everything worked as expected. Resource created.                                                 |
+      | 204 - No Content                   | Everything worked as expected.                                                                   |
+      | 400 - Bad Request                  | The request was unacceptable, often due to missing a required parameter.                         |
+      | 401 - Unauthorized                 | No valid Access Token provided.                                                                  |
+      | 403 - Forbidden                    | The API key doesn't have permissions to perform the request.                                     |
+      | 404 - Not Found                    | The requested resource doesn't exist.                                                            |
+      | 409 - Conflict                     | The request conflicts with another request (perhaps due to using the same idempotent key).       |
+      | 422 - Unprocessable Entity         | Unprocessable Entity                                                                             |
+      | 500, 502, 503, 504 - Server Errors | Something went wrong on ecolytiq's end.                                                          |
+      
+      ## ecolytiq Error Code Summary
+      ecolytiq errors are used when a request is targeting multiple entities, and the request was unable to be finished fully successful. 
+      In this case, the response will contain both successful results and errors. The error codes used for this type of error are the following. 
+      
+      | Error Code             | Description                                                                       | API                       |
+      |------------------------|-----------------------------------------------------------------------------------|---------------------------|
+      | NOT_FOUND              | Central entity type in request, or anything related to it, is missing.            | [Get Insights by IDs](#operation/getContentInsights) <br/> [Get Insights (for a Given Category)](#operation/getContentInsightsRandom) <br/> [Get Comparables for a Given CO2 Footprint](#operation/getContentComparables) <br/> [Get Random Comparables for a Given CO<sub>2</sub> Footprint](#operation/getContentComparablesRandom) <br/> [Get Explanations by ID](#operation/getContentExplanations) <br/> [Get Explanations (for given categories)](#operation/getContentExplanationsRandom) |
+      | INCOMPATIBLE           | Central entity type in request, or anything related to it, is not compatible with parameters in the request. | [Get Comparables for a Given CO2 Footprint](#operation/getContentComparables) |
+      | CURRENCY_NOT_SUPPORTED | We can't process the transaction because we do not support the provided currency. | [Process transactions](#operation/postTransactionsTransactions) |
+      | INITIATE_PAYMENT_FAILURE | We could not initialize the stripe payment process. | [Purchase carbon credits](#operation/purchaseCarbonCredits) |
+
+  - name: Postman
+    description: |
+      ## Import Request Collection and Environment
+
+      ### Request Collection
+
+      1. In Postman, click on the "Import" button in the upper left corner.
+
+      2. In the opened window click on "Choose Files" under "Import File".
+
+      3. Select the file "preview_ecolytiq_Sandbox.postman_collection.json" and press "open".
+
+      4. The collection is now imported and can be found in the list on the left side of the window.
+
+
+      ### Environment
+
+      1. In Postman, click on the "Import" button in the upper left corner.
+
+      2. Click on "Import" in the lower right corner of the currently opened window.
+
+      3. Click on "Select File", choose then "*.postman_environment.json" (you get the file during the onboarding phase) and press "open".
+
+      4. Close the "Management Environment" window.
+
+      5. Select "Sandbox" from the dropdown in the upper right corner.
+
+      ## Download
+
+      <a href ="https://developer.ecolytiq.com/ecolytiq_Sandbox.postman_collection.json" download>ecolytiq_Sandbox.postman_collection.json</a>
+
+
