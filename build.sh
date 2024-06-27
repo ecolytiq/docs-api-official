@@ -1,7 +1,7 @@
 #!/bin/sh
 set -euxo pipefail
 
-npx -y @redocly/cli@1.14.0 join openapi-gateway.yaml openapi-action.yaml --without-x-tag-groups -o openapi.yaml
+npx -y @redocly/cli@1.14.0 join openapi-common.yaml openapi-gateway.yaml openapi-action.yaml --without-x-tag-groups -o openapi.yaml
 npx -y @redocly/cli@1.14.0 build-docs openapi.yaml  --disableGoogleFont --template ./ecolytiq.hbs --output=index.html --config=./redocly.yaml
 
 # Replace the version in the openapi.yaml file with the current date
