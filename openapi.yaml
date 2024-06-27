@@ -2,7 +2,7 @@ openapi: 3.0.3
 info:
   description: |
     APIs of the ecolytiq SaaS
-  version: v3-2024-06-25
+  version: v3-2024-06-27
   title: ecolytiq SaaS
   contact:
     email: support@ecolytiq.com
@@ -218,6 +218,12 @@ tags:
     x-displayName: General Information
   - name: Changelog
     description: >
+      ### 2024-06-19
+
+      * Added new endpoint to ecoAction to [Get carbon credit orders by
+      account](#tag/Action-API/operation/getCarbonCreditOrders). 
+
+
       ### 2024-05-29
 
       * Added the purchased carbon credits amount into the [Get total or monthly
