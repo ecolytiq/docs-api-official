@@ -90,7 +90,15 @@ paths:
               examples:
                 Project not found:
                   $ref: '#/components/examples/CarbonCreditProjectNotFoundExample'
-
+        '422':
+          description: Unprocessable Entity. The requested Co2 amount is below the project's minimum.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ActionErrorResponse'
+              examples:
+                Co2 amount too small:
+                  $ref: '#/components/examples/PurchaseCarbonCreditsAmountTooSmallExample'
   /action/v2/account/{account_id}/carbon-credits/orders:
     get:
       operationId: getCarbonCreditOrders
@@ -138,6 +146,11 @@ components:
         error_code: NOT_FOUND
         error_description: The requested project does not exist.
 
+    PurchaseCarbonCreditsAmountTooSmallExample:
+      value:
+        error_code: UNPROCESSABLE_ENTITY
+        error_description: "Requested carbon amount 500 below project 5c406074-2fe9-4181-83d9-8dcae764a86b minimum: 1000"
+
     PurchaseCarbonCreditsRequestExample:
       value:
         account_id: "1c974398-4d2b-44fa-b292-64a46c0e6577"
@@ -167,6 +180,8 @@ components:
             price_per_kg:
               value: 0.025
               currency_code: EUR
+            minimum_co2_amount_in_g:
+              value: 1000
             translations:
               - language_code: en
                 title: CarbonCapture Direct Air Capture - Project Bison
@@ -181,6 +196,9 @@ components:
                 sustainable_development_goals:
                   - id: "15"
                     description: Protect, restore and promote sustainable use of terrestrial ecosystems, sustainably manage forests, combat desertification, and halt and reverse land degradation and halt biodiversity loss.
+            seller:
+              name: Cloverly
+              logoUrl: https://cloverly.com/logo.png
 
     CarbonCreditOrdersResponseExample:
       value:
@@ -238,7 +256,6 @@ components:
           type: integer
           format: int64
           description: The amount of CO₂ to retire.
-          minimum: 1000
           maximum: 10000000
           example: 2250
         attribution_month:
@@ -278,6 +295,7 @@ components:
             $ref: '#/components/schemas/CarbonCreditOrder'
 
     CarbonCreditProjectImage:
+      description: Image of the project.
       type: object
       required:
         - image_url
@@ -348,6 +366,7 @@ components:
         - id
         - country
         - price_per_kg
+        - minimum_co2_amount_in_g
         - translations
       properties:
         id:
@@ -378,14 +397,16 @@ components:
             $ref: '#/components/schemas/CarbonCreditProjectImage'
         price_per_kg:
           $ref: '#/components/schemas/ActionPositiveAmount'
+        minimum_co2_amount_in_g:
+          type: integer
+          format: int32
+          description: The minimal purchasable amount of carbon credits for the project in gram.
         translations:
           type: array
           description: Translated content of the project.
           items:
             $ref: '#/components/schemas/CarbonCreditProjectTranslation'
         seller:
-          type: object
-          description: Organization offering the project from which carbon credits can be purchased.
           $ref: '#/components/schemas/ProjectSeller'
 
     SustainableDevelopmentGoal:
@@ -404,6 +425,7 @@ components:
           example: Protect, restore and promote sustainable use of terrestrial ecosystems, sustainably manage forests, combat desertification, and halt and reverse land degradation and halt biodiversity loss.
 
     CarbonCreditProjectTranslation:
+      description: Translated content of the project.
       type: object
       required:
         - language_code
@@ -444,6 +466,7 @@ components:
 
     ProjectSeller:
       type: object
+      description: Organization offering the project from which carbon credits can be purchased.
       required:
         - name
         - logoUrl
@@ -451,7 +474,7 @@ components:
         name:
           type: string
           description: Name of organization offering the project.
-          example: Clovery
+          example: Cloverly
         logoUrl:
           type: string
           description: Link to the organization's logo.
